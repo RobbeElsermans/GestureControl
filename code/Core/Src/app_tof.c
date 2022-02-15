@@ -39,6 +39,8 @@ static int32_t status = 0;
 static uint8_t ToF_Present[RANGING_SENSOR_INSTANCES_NBR] = {0};
 volatile uint8_t ToF_EventDetected = 0;
 
+
+
 static const char *TofDevStr[] =
 {
   [VL53L3A2_DEV_LEFT] = "LEFT",
@@ -50,6 +52,8 @@ static const char *TofDevStr[] =
 static void MX_53L3A2_MultiSensorRanging_Init(void);
 static void MX_53L3A2_MultiSensorRanging_Process(void);
 static void print_result(RANGING_SENSOR_Result_t *Result);
+static void start_sensor(uint8_t sensor);
+static void stop_sensor(uint8_t sensor);
 
 void MX_TOF_Init(void)
 {
@@ -85,19 +89,13 @@ void MX_TOF_Process(void)
 	  bool ObjectPresent = false;
 	  int timeOutmeasurment = 2000; //2 seconden
 
+
 	  uint8_t i;
 
-	  RANGING_SENSOR_ProfileConfig_t Profile;
-
-	  Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
-	  Profile.TimingBudget = 30; /* 16 ms < TimingBudget < 500 ms */
-	  Profile.Frequency = 0; /* not necessary in simple ranging */
-	  Profile.EnableAmbient = 0; /* Enable: 1, Disable: 0 */
-	  Profile.EnableSignal = 1; /* Enable: 1, Disable: 0 */
-
+	  /*
 	  for (i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
 	  {
-	    /* skip this device if not detected */
+	    //skip this device if not detected
 	    if (ToF_Present[i] != 1) continue;
 
 	    VL53L3A2_RANGING_SENSOR_ConfigProfile(i, &Profile);
@@ -108,7 +106,15 @@ void MX_TOF_Process(void)
 	      printf("VL53L3A2_RANGING_SENSOR_Start failed\r\n");
 	      while(1);
 	    }
-	  }
+	  } */
+
+	  //Enkel de 1ste sensor (Center) opstarten
+	  /*	Hier zeggen we welk profiel we willen gebruiken
+	   * 	bv.
+	   *
+	   */
+
+	   start_sensor(VL53L3A2_DEV_CENTER);
 
   /* USER CODE END TOF_Process_PreTreatment */
 
@@ -116,32 +122,51 @@ void MX_TOF_Process(void)
 
   /* USER CODE BEGIN TOF_Process_PostTreatment */
 	  while(1){
-  VL53L3A2_RANGING_SENSOR_GetDistance(1, &Result);
-     dis1 = (long)Result.ZoneResult[0].Distance[0];
+		  VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result);
+		  dis1 = (long)Result.ZoneResult[0].Distance[0];
 
-     if(preDis1 - dis1 > treshhold && (dis1 <= minDistanceObject) ){
-     	//Persoon naderd en staat dicht genoeg
-     	ObjectPresent = true;
-     }
-     else if (preDis1 - dis1 > treshhold){
-     	//Wat dichter komen
-     	//Zolang de distance niet voldoet aan minDistanceObject blijven meten.
-     	//De meting stoppen na een bepaalde timeout
-     	HAL_Delay(500);
-     }
-     else if( (preDis1 + dis1) > treshhold){
-     	ObjectPresent = false;
-     }
+		  //Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
+		  if(dis1 >= 17760520)
+		  {
+			  HAL_Delay(4);
+			  VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result);
+			  dis1 = (long)Result.ZoneResult[0].Distance[0];
+		  }
 
-     //Ticks
-     // long x = HAL_GetTick();
-     //printf("Ticks: %ld ", x);
+		  /*	Als de waarde zakt t.o.v. de vorige waarden m.b.v. een treshhold en het object bevind zich op de minimum afstand.
+		   * 	We kijken ook ofdat de Status niet = 12 (12 staat voor dat de sensor iets kan detecteren maar het signaal is te zwak dus te ver weg))
+		   *
+		   */
+		  if(preDis1 - dis1 > treshhold && (dis1 <= minDistanceObject) && (uint8_t)Result.ZoneResult[0].Status[0] != 12){
+			  //Persoon naderd en staat dicht genoeg
+			  //Start andere sensoren ook op
+			  ObjectPresent = true;
+			  start_sensor(VL53L3A2_DEV_LEFT);
+			  start_sensor(VL53L3A2_DEV_RIGHT);
 
-     HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
-     HAL_GPIO_WritePin(L_O_GPIO_Port, L_O_Pin, ObjectPresent);
+		  }
+		  else if (preDis1 - dis1 > treshhold){
+			  //Wat dichter komen
+			  //Zolang de distance niet voldoet aan minDistanceObject blijven meten.
+			  //De meting stoppen na een bepaalde timeout
+			  HAL_Delay(500);
+		  }
+		  else if( (preDis1 + dis1) > treshhold && ObjectPresent){
+			  ObjectPresent = false;
+			  stop_sensor(VL53L3A2_DEV_LEFT);
+			  stop_sensor(VL53L3A2_DEV_RIGHT);
+			  HAL_Delay(10);
 
+		  }
 
-     preDis1 = dis1;
+		  //Ticks
+		  // long x = HAL_GetTick();
+		  //printf("Ticks: %ld ", x);
+
+		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
+		  HAL_GPIO_WritePin(L_O_GPIO_Port, L_O_Pin, ObjectPresent);
+
+		  preDis1 = dis1;
 	  }
   /* USER CODE END TOF_Process_PostTreatment */
 }
@@ -155,7 +180,7 @@ static void MX_53L3A2_MultiSensorRanging_Init(void)
   /* Initialize Virtual COM Port */
   BSP_COM_Init(COM1);
 
-  printf("53L3A2 Multi Sensor Ranging demo application\r\n");
+  printf("53L3A2 Gesture Control\r\n");
 
   /* put all the devices in shutdown mode */
   for (device = 0; device < RANGING_SENSOR_INSTANCES_NBR; device++)
@@ -192,13 +217,6 @@ static void MX_53L3A2_MultiSensorRanging_Process(void)
 {
 	uint8_t i;
 	RANGING_SENSOR_Result_t Result;
-		  RANGING_SENSOR_ProfileConfig_t Profile;
-
-		  Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
-		  Profile.TimingBudget = 30; /* 16 ms < TimingBudget < 500 ms */
-		  Profile.Frequency = 0; /* not necessary in simple ranging */
-		  Profile.EnableAmbient = 0; /* Enable: 1, Disable: 0 */
-		  Profile.EnableSignal = 1; /* Enable: 1, Disable: 0 */
 
   while (1)
   {
@@ -229,6 +247,41 @@ static void print_result(RANGING_SENSOR_Result_t *Result)
       (long)Result->ZoneResult[i].Distance[0]);
   }
   printf ("\r\n");
+}
+
+static void start_sensor(uint8_t sensor){
+	RANGING_SENSOR_ProfileConfig_t Profile;
+
+	Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
+	Profile.TimingBudget = 30; /* 16 ms < TimingBudget < 500 ms */
+	Profile.Frequency = 0; /* not necessary in simple ranging */
+	Profile.EnableAmbient = 1; /* Enable: 1, Disable: 0 */
+	Profile.EnableSignal = 1; /* Enable: 1, Disable: 0 */
+
+	VL53L3A2_RANGING_SENSOR_ConfigProfile(sensor, &Profile);
+	status = VL53L3A2_RANGING_SENSOR_Start(sensor, RS_MODE_BLOCKING_CONTINUOUS);
+    if (status != BSP_ERROR_NONE)
+    {
+    	printf("VL53L3A2_RANGING_SENSOR_Start failed for sensor %s \r\n", TofDevStr[sensor]);
+		while(1);
+    }
+    else
+	{
+    	printf("sensor %s\t opgestart \r\n", TofDevStr[sensor]);
+	}
+}
+
+static void stop_sensor(uint8_t sensor){
+	status = VL53L3A2_RANGING_SENSOR_Stop(sensor);
+    if (status != BSP_ERROR_NONE)
+    {
+    	printf("VL53L3A2_RANGING_SENSOR_Stop failed\r\n");
+		while(1);
+    }
+    else
+	{
+    	printf("sensor %s\t afgezet \r\n", TofDevStr[sensor]);
+	}
 }
 
 #ifdef __cplusplus
