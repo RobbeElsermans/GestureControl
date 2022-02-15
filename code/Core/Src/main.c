@@ -24,6 +24,7 @@
 #include <string.h>
 #include "53l3a2_ranging_sensor.h"
 #include <stdio.h>
+#include "app_tof.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,7 +34,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define POLLING_PERIOD (250U) /* milliseconds */
 
 /* USER CODE END PD */
 
@@ -43,26 +43,21 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-//Aanmaken van device
-VL53LX_Dev_t 		dev;
+
 
 /* USER CODE BEGIN PV */
 
-UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart3;
 I2C_HandleTypeDef hi2c1;
 
 /* Private variables ---------------------------------------------------------*/
-static RANGING_SENSOR_Capabilities_t Cap;
-static RANGING_SENSOR_ProfileConfig_t Profile;
-static int32_t status = 0;
+
 static volatile uint8_t PushButtonDetected = 0;
-volatile uint8_t ToF_EventDetected = 0;
+
 
 /* Private function prototypes -----------------------------------------------*/
-static void MX_53L3A2_SimpleRanging_Init(void);
-static void MX_53L3A2_SimpleRanging_Process(void);
-static void print_result(RANGING_SENSOR_Result_t *Result);
-static int32_t decimal_part(float_t x);
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -86,21 +81,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-
-	  /* Initialize Virtual COM Port */
-	  BSP_COM_Init(0);
-
-	  /* Initialize button */
-	  BSP_PB_Init(0U, 1);
-
-	  printf("53L3A2 Simple Ranging demo application\n");
-	  status = VL53L3A2_RANGING_SENSOR_Init(VL53L3A2_DEV_CENTER);
-
-	  if (status != BSP_ERROR_NONE)
-	  {
-	    printf("VL53L3A2_RANGING_SENSOR_Init failed\n");
-	    while(1);
-	  }
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -122,8 +102,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+
   /* USER CODE BEGIN 2 */
 
+  MX_TOF_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -133,6 +115,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  MX_TOF_Process();
   }
   /* USER CODE END 3 */
 }
@@ -231,6 +214,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(L_O_GPIO_Port, L_O_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -244,6 +228,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : L_O_Pin */
+   GPIO_InitStruct.Pin = L_O_Pin;
+   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+   GPIO_InitStruct.Pull = GPIO_NOPULL;
+   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+   HAL_GPIO_Init(L_O_GPIO_Port, &GPIO_InitStruct);
 
 }
 
