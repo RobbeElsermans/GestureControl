@@ -24,15 +24,4 @@ F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/da
 	1    7900 5200
 	1    0    0    -1  
 $EndComp
-$Comp
-L Regulator_Linear:AMS1117-3.3 U?
-U 1 1 620D2468
-P 1950 1750
-F 0 "U?" H 1950 1992 50  0000 C CNN
-F 1 "AMS1117-3.3" H 1950 1901 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-223-3_TabPin2" H 1950 1950 50  0001 C CNN
-F 3 "http://www.advanced-monolithic.com/pdf/ds1117.pdf" H 2050 1500 50  0001 C CNN
-	1    1950 1750
-	1    0    0    -1  
-$EndComp
 $EndSCHEMATC
