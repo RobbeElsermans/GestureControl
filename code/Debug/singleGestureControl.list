@@ -843,17 +843,17 @@ void MX_TOF_Process(void)
  80008c4:	e022      	b.n	800090c <MX_TOF_Process+0x2e8>
 		}
 		else{
-			uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].NumberOfZones;
+			uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
  80008c6:	463b      	mov	r3, r7
- 80008c8:	681b      	ldr	r3, [r3, #0]
+ 80008c8:	685b      	ldr	r3, [r3, #4]
  80008ca:	f887 30db 	strb.w	r3, [r7, #219]	; 0xdb
-			uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].NumberOfZones;
+			uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
  80008ce:	463b      	mov	r3, r7
- 80008d0:	6c9b      	ldr	r3, [r3, #72]	; 0x48
+ 80008d0:	6cdb      	ldr	r3, [r3, #76]	; 0x4c
  80008d2:	f887 30da 	strb.w	r3, [r7, #218]	; 0xda
-			uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].NumberOfZones;
+			uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
  80008d6:	463b      	mov	r3, r7
- 80008d8:	f8d3 3090 	ldr.w	r3, [r3, #144]	; 0x90
+ 80008d8:	f8d3 3094 	ldr.w	r3, [r3, #148]	; 0x94
  80008dc:	f887 30d9 	strb.w	r3, [r7, #217]	; 0xd9
 			printf("left: %d obj: %d \t center: %d obj: %d \t right: %d obj: %d",dis0,obj0,dis1,obj1,dis2,obj2);
  80008e0:	f897 10db 	ldrb.w	r1, [r7, #219]	; 0xdb

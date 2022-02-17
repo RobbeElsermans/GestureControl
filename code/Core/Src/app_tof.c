@@ -219,9 +219,9 @@ void MX_TOF_Process(void)
 			printf("\r\n");
 		}
 		else{
-			uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].NumberOfZones;
-			uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].NumberOfZones;
-			uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].NumberOfZones;
+			uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
+			uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
+			uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
 			printf("left: %d obj: %d \t center: %d obj: %d \t right: %d obj: %d",dis0,obj0,dis1,obj1,dis2,obj2);
 			printf("\r\n");
 		}
