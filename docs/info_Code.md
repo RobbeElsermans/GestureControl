@@ -31,17 +31,18 @@ Na de init fase gaan we verder naar de niet eindigende lus die leid naar ```MX_T
 
 Wanneer er een object nadert moet deze aan bepaalde voorwaarden voldoen om als object te worden aanzien:
 
-* Het verschil tussen de huidige en de vorige meeting moet minstens 1000mm bedragen (1m) - **(preDis1 - dis1) > threshold**
-* De maximale afstand dat een object van de sensor mag staan is huidig 500 mm  - **(dis1 <= minDistanceObject)**
-* De sensor moet het object duidelijk kunnen zien - **(uint8_t)Result.ZoneResult[0].Status[0] != 12**
+* De afstand moet onder 1000 liggen - **dis1 < 1000**
+* Het object moet voor een bepaalde tijd er staan  - **(HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout**
+* De sensor moet het object duidelijk kunnen zien - **(uint8_t)Result.ZoneResult[0].Status[0] != 0**
+* Er mocht geen reeds aanwezig object zijn - **!ObjectPresent**
 
 Wanneer het object nu aan deze parameters voldoet, dan gaan we de andere 2 sensoren (links & rechts) aanzetten om later de hand gesture controlling te doen. Ook plaatsen we de boolean ObjectPresent op true.
 
 Wanneer nu een object weer weg gaat zal dit ook aan bepaalde parameters vasthangen:
 
-* De huidige en vorige meeting mogen samen niet minder dan de threshold zijn - **(preDis1 + dis1) > threshold**
+* De afstand moet groter zijn dan 1000 - **dis1 >= maxDistanceObject**
 * Er moet voordien een object gedetecteerd zijn - **ObjectPresent**
 
 Dit zal de 2 buitenste sensoren weer laten stoppen zodat ze geen overbodige zaken doen.
 
-Later gaan we ook een vertraging inbouwen wanneer er een object gedetecteerd wordt. Zo zal bv. het object voor enkele seconden voor de sensor moeten staan om het geheel te activeren.
+Wanneer we nu een object hebben gedetecteerd, gaan we een functie toevoegen met PWM. Nu kunnen we de lichtintensiteit instellen van een LED met onze hand. We doen dit a.d.h.v. de afstand van de linkse sensor. We kijken of dat de afstand onder de 500 zit. Wanneer dit is kunnen we de LED instellen.

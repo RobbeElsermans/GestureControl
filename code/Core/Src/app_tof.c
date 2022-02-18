@@ -59,6 +59,8 @@ bool timerMeasurementSet = false;
 int timerMeasurmentTimeout = 2000; //2 seconden
 bool ObjectPresent = false;
 
+TIM_HandleTypeDef htim3;
+
 
 static const char *TofDevStr[] =
 {
@@ -99,8 +101,9 @@ void MX_TOF_Init(void)
 /*
  * LM background task
  */
-void MX_TOF_Process(void)
+void MX_TOF_Process(void* _htim3)
 {
+	htim3 = *(TIM_HandleTypeDef*)_htim3;
   /* USER CODE BEGIN TOF_Process_PreTreatment */
 
 	/*
@@ -153,10 +156,10 @@ void MX_TOF_Process(void)
 		}
 
 		//Met afstand een led laten dimmen
-		if(ObjectPresent){
-
+		//Op voorwaarde dat de afstand kleiner is dan 500
+		if(ObjectPresent && dis0 <=500){
+			__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (dis0*2) + 23);
 		}
-
 
 		//ObjectPresent();
 		objectPresent();
@@ -191,8 +194,7 @@ void MX_TOF_Process(void)
 		}
 
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
-		HAL_GPIO_WritePin(L_O_GPIO_Port, L_O_Pin, ObjectPresent);
-
+		HAL_GPIO_WritePin(L_Y_GPIO_Port, L_Y_Pin, ObjectPresent);
 	  }
   /* USER CODE END TOF_Process_PostTreatment */
 }
@@ -222,6 +224,9 @@ void objectPresent(){
 					start_sensor(VL53L3A2_DEV_LEFT);
 					start_sensor(VL53L3A2_DEV_RIGHT);
 
+					//PWM timer starten
+					HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+
 #if DEBUGGING
 					printf("Object %d", ObjectPresent);
 					printf("\r\n");
@@ -239,9 +244,7 @@ void objectPresent(){
 				}
 			}
 
-
 			if( (dis1 >= maxDistanceObject) && ObjectPresent){
-
 				if(timerMeasurementSet == false){
 					timerMeasurementSet = true;
 					timerMeasurment = HAL_GetTick();
@@ -259,6 +262,10 @@ void objectPresent(){
 					ObjectPresent = false;
 					stop_sensor(VL53L3A2_DEV_LEFT);
 					stop_sensor(VL53L3A2_DEV_RIGHT);
+
+					//PWM timer starten
+					HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
+
 					HAL_Delay(2);
 #if DEBUGGING
 					printf("Object %d", ObjectPresent);
