@@ -39,6 +39,19 @@ static int32_t status = 0;
 static uint8_t ToF_Present[RANGING_SENSOR_INSTANCES_NBR] = {0};
 volatile uint8_t ToF_EventDetected = 0;
 
+RANGING_SENSOR_Result_t Result[3];
+int dis0 = 0;
+int dis1 = 0;
+int dis2 = 0;
+
+int threshold = 1000;
+int minDistanceObject = 300;
+int maxDistanceObject = 1000;
+
+float timerMeasurment = 0;
+bool timerMeasurementSet = false;
+int timerMeasurmentTimeout = 2000; //2 seconden
+bool ObjectPresent = false;
 
 
 static const char *TofDevStr[] =
@@ -56,6 +69,7 @@ static void start_sensor(uint8_t sensor);
 static void stop_sensor(uint8_t sensor);
 static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t * result);
 static long getDistance(uint8_t sensor, RANGING_SENSOR_Result_t * result);
+static void objectPresent();
 
 void MX_TOF_Init(void)
 {
@@ -82,19 +96,6 @@ void MX_TOF_Init(void)
 void MX_TOF_Process(void)
 {
   /* USER CODE BEGIN TOF_Process_PreTreatment */
-	RANGING_SENSOR_Result_t Result[3];
-	int dis0 = 0;
-	int dis1 = 0;
-	int dis2 = 0;
-
-	int threshold = 1000;
-	int minDistanceObject = 300;
-	int maxDistanceObject = 1000;
-
-	float timerMeasurment = 0;
-	bool timerMeasurementSet = false;
-	int timerMeasurmentTimeout = 2000; //2 seconden
-	bool ObjectPresent = false;
 
 	/*
 	for (i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
@@ -124,9 +125,19 @@ void MX_TOF_Process(void)
 
   /* USER CODE BEGIN TOF_Process_PostTreatment */
 	while(1){
-		HAL_Delay(100);
+		HAL_Delay(5);
 		getResult(VL53L3A2_DEV_CENTER, Result);
-		dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
+
+
+		long int temp1 = 0;
+		int divider = 6;
+		for(int x = 0; x < divider; x++){
+			getResult(VL53L3A2_DEV_CENTER, Result);
+			temp1 += getDistance(VL53L3A2_DEV_CENTER, Result);
+			HAL_Delay(4);
+		}
+		dis1 = (int)(temp1/(double)divider);
+
 
 		if(ObjectPresent)
 		{
@@ -144,71 +155,8 @@ void MX_TOF_Process(void)
 			dis1 = (long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
 		}
 
-		  /*	als dist1 onder de 1000 mm komt voor 3 seconden, dan is er een object.
-		   * 	+ er mag geen foutcode 12 zijn
-		   */
-		if((dis1 <= maxDistanceObject) && (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0] != 12 && !ObjectPresent){
-			if(!timerMeasurementSet){
-				timerMeasurementSet = true;
-				timerMeasurment = HAL_GetTick();
-				printf("Timer object %d ", timerMeasurementSet);
-				printf("Timer object is set");
-				printf("\r\n");
-			}
-			if((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
-			{
-				timerMeasurementSet = false;
-
-				//Persoon naderd en staat dicht genoeg
-				//Start andere sensoren ook op
-				ObjectPresent = true;
-				start_sensor(VL53L3A2_DEV_LEFT);
-				start_sensor(VL53L3A2_DEV_RIGHT);
-
-				printf("Object %d", ObjectPresent);
-				printf("\r\n");
-			}
-		}
-		else
-		{
-			if(timerMeasurementSet && !ObjectPresent){
-				timerMeasurementSet = false;
-				printf("Timer object %d ", timerMeasurementSet);
-				printf("\r\n");
-			}
-		}
-
-
-		if( (dis1 >= maxDistanceObject) && ObjectPresent){
-
-			if(timerMeasurementSet == false){
-				timerMeasurementSet = true;
-				timerMeasurment = HAL_GetTick();
-				printf("Timer no object %d ", timerMeasurementSet);
-				printf("Timer no object is set");
-				printf("\r\n");
-			}
-
-			if((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
-			{
-				timerMeasurementSet = false;
-
-				ObjectPresent = false;
-				stop_sensor(VL53L3A2_DEV_LEFT);
-				stop_sensor(VL53L3A2_DEV_RIGHT);
-				HAL_Delay(10);
-				printf("Object %d", ObjectPresent);
-				printf("\r\n");
-			}
-		}
-		else
-		{
-			if(timerMeasurementSet && ObjectPresent){
-				timerMeasurementSet = false;
-				printf("Timer no object %d ", timerMeasurementSet);
-				printf("\r\n");
-			}
-		}
+		//ObjectPresent();
+		objectPresent();
 
 		  //Ticks
 		  // long x = HAL_GetTick();
@@ -222,8 +170,14 @@ void MX_TOF_Process(void)
 			uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
 			uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
 			uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
-			printf("left: %d obj: %d \t center: %d obj: %d \t right: %d obj: %d",dis0,obj0,dis1,obj1,dis2,obj2);
+
+			uint8_t sta0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
+			uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+			uint8_t sta2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
+			if(sta0 == sta1 == sta2 == 0){
+			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d",dis0,obj0,sta0,dis1,obj1,sta1,dis2,obj2,sta2);
 			printf("\r\n");
+			}
 		}
 
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
@@ -231,6 +185,74 @@ void MX_TOF_Process(void)
 
 	  }
   /* USER CODE END TOF_Process_PostTreatment */
+}
+
+void objectPresent(){
+	  /*	als dist1 onder de 1000 mm komt voor 3 seconden, dan is er een object.
+			   * 	+ er mag geen foutcode 12 zijn
+			   */
+			if((dis1 <= maxDistanceObject) && (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0] == 0	 && !ObjectPresent){
+				if(!timerMeasurementSet){
+					timerMeasurementSet = true;
+					timerMeasurment = HAL_GetTick();
+					printf("Timer object %d ", timerMeasurementSet);
+					printf("Timer object is set");
+					printf("\r\n");
+				}
+				if((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
+				{
+					timerMeasurementSet = false;
+
+					//Persoon naderd en staat dicht genoeg
+					//Start andere sensoren ook op
+					ObjectPresent = true;
+					start_sensor(VL53L3A2_DEV_LEFT);
+					start_sensor(VL53L3A2_DEV_RIGHT);
+
+					printf("Object %d", ObjectPresent);
+					printf("\r\n");
+				}
+			}
+			else
+			{
+				if(timerMeasurementSet && !ObjectPresent){
+					timerMeasurementSet = false;
+					printf("Timer object %d ", timerMeasurementSet);
+					printf("\r\n");
+				}
+			}
+
+
+			if( (dis1 >= maxDistanceObject) && ObjectPresent){
+
+				if(timerMeasurementSet == false){
+					timerMeasurementSet = true;
+					timerMeasurment = HAL_GetTick();
+					printf("Timer no object %d ", timerMeasurementSet);
+					printf("Timer no object is set");
+					printf("\r\n");
+				}
+
+				if((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
+				{
+					timerMeasurementSet = false;
+
+					ObjectPresent = false;
+					stop_sensor(VL53L3A2_DEV_LEFT);
+					stop_sensor(VL53L3A2_DEV_RIGHT);
+					HAL_Delay(10);
+					printf("Object %d", ObjectPresent);
+					printf("\r\n");
+				}
+			}
+			else
+			{
+				if(timerMeasurementSet && ObjectPresent){
+					timerMeasurementSet = false;
+					printf("Timer no object %d ", timerMeasurementSet);
+					printf("\r\n");
+				}
+			}
 }
 
 static void MX_53L3A2_MultiSensorRanging_Init(void)
@@ -274,7 +296,7 @@ static void MX_53L3A2_MultiSensorRanging_Init(void)
     printf("ToF sensor %d - ID: %04lX\r\n", device, (unsigned long)id);
   }
 }
-
+/*
 static void MX_53L3A2_MultiSensorRanging_Process(void)
 {
 	uint8_t i;
@@ -282,7 +304,7 @@ static void MX_53L3A2_MultiSensorRanging_Process(void)
 
   while (1)
   {
-    /* polling mode */
+    //polling mode
     for (i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
     {
       status = VL53L3A2_RANGING_SENSOR_GetDistance(i, &Result);
@@ -297,7 +319,9 @@ static void MX_53L3A2_MultiSensorRanging_Process(void)
     printf ("\r\n");
   }
 }
+*/
 
+/*
 static void print_result(RANGING_SENSOR_Result_t *Result)
 {
   uint8_t i;
@@ -310,6 +334,7 @@ static void print_result(RANGING_SENSOR_Result_t *Result)
   }
   printf ("\r\n");
 }
+*/
 
 static void start_sensor(uint8_t sensor){
 	RANGING_SENSOR_ProfileConfig_t Profile;
