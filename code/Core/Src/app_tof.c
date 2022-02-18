@@ -133,7 +133,7 @@ void MX_TOF_Process(void)
 	while(1){
 		HAL_Delay(5);
 		getResult(VL53L3A2_DEV_CENTER, Result);
-		dis1 = getDistance(VL53L3A2_DEV_CENTER, Result)
+		dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
 
 		//Het meten van de afstand van 2 buitenste sensoren.
 		if(ObjectPresent)
