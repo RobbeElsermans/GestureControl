@@ -22,6 +22,12 @@
 extern "C" {
 #endif
 
+
+#ifndef DEBUGGING
+    #define DEBUGGING true
+#endif
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "app_tof.h"
 #include "main.h"
@@ -63,8 +69,8 @@ static const char *TofDevStr[] =
 
 /* Private function prototypes -----------------------------------------------*/
 static void MX_53L3A2_MultiSensorRanging_Init(void);
-static void MX_53L3A2_MultiSensorRanging_Process(void);
-static void print_result(RANGING_SENSOR_Result_t *Result);
+//static void MX_53L3A2_MultiSensorRanging_Process(void);
+//static void print_result(RANGING_SENSOR_Result_t *Result);
 static void start_sensor(uint8_t sensor);
 static void stop_sensor(uint8_t sensor);
 static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t * result);
@@ -127,18 +133,9 @@ void MX_TOF_Process(void)
 	while(1){
 		HAL_Delay(5);
 		getResult(VL53L3A2_DEV_CENTER, Result);
+		dis1 = getDistance(VL53L3A2_DEV_CENTER, Result)
 
-
-		long int temp1 = 0;
-		int divider = 6;
-		for(int x = 0; x < divider; x++){
-			getResult(VL53L3A2_DEV_CENTER, Result);
-			temp1 += getDistance(VL53L3A2_DEV_CENTER, Result);
-			HAL_Delay(4);
-		}
-		dis1 = (int)(temp1/(double)divider);
-
-
+		//Het meten van de afstand van 2 buitenste sensoren.
 		if(ObjectPresent)
 		{
 			getResult(VL53L3A2_DEV_LEFT, Result);
@@ -155,6 +152,12 @@ void MX_TOF_Process(void)
 			dis1 = (long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
 		}
 
+		//Met afstand een led laten dimmen
+		if(ObjectPresent){
+
+		}
+
+
 		//ObjectPresent();
 		objectPresent();
 
@@ -163,8 +166,12 @@ void MX_TOF_Process(void)
 		  //printf("Ticks: %ld ", x);
 
 		if(!ObjectPresent){
-			printf(" %d ",dis1);
+			uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
+			uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+#if DEBUGGING
+			printf("center: %5d obj: %1d sta: %2d",dis1,obj1,sta1);
 			printf("\r\n");
+#endif
 		}
 		else{
 			uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
@@ -174,10 +181,13 @@ void MX_TOF_Process(void)
 			uint8_t sta0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
 			uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 			uint8_t sta2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
+
+#if DEBUGGING
 			if(sta0 == sta1 == sta2 == 0){
 			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d",dis0,obj0,sta0,dis1,obj1,sta1,dis2,obj2,sta2);
 			printf("\r\n");
 			}
+#endif
 		}
 
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
@@ -195,9 +205,12 @@ void objectPresent(){
 				if(!timerMeasurementSet){
 					timerMeasurementSet = true;
 					timerMeasurment = HAL_GetTick();
+
+#if DEBUGGING
 					printf("Timer object %d ", timerMeasurementSet);
 					printf("Timer object is set");
 					printf("\r\n");
+#endif
 				}
 				if((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
 				{
@@ -209,16 +222,20 @@ void objectPresent(){
 					start_sensor(VL53L3A2_DEV_LEFT);
 					start_sensor(VL53L3A2_DEV_RIGHT);
 
+#if DEBUGGING
 					printf("Object %d", ObjectPresent);
 					printf("\r\n");
+#endif
 				}
 			}
 			else
 			{
 				if(timerMeasurementSet && !ObjectPresent){
 					timerMeasurementSet = false;
+#if DEBUGGING
 					printf("Timer object %d ", timerMeasurementSet);
 					printf("\r\n");
+#endif
 				}
 			}
 
@@ -228,9 +245,11 @@ void objectPresent(){
 				if(timerMeasurementSet == false){
 					timerMeasurementSet = true;
 					timerMeasurment = HAL_GetTick();
+#if DEBUGGING
 					printf("Timer no object %d ", timerMeasurementSet);
 					printf("Timer no object is set");
 					printf("\r\n");
+#endif
 				}
 
 				if((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
@@ -240,17 +259,21 @@ void objectPresent(){
 					ObjectPresent = false;
 					stop_sensor(VL53L3A2_DEV_LEFT);
 					stop_sensor(VL53L3A2_DEV_RIGHT);
-					HAL_Delay(10);
+					HAL_Delay(2);
+#if DEBUGGING
 					printf("Object %d", ObjectPresent);
 					printf("\r\n");
+#endif
 				}
 			}
 			else
 			{
 				if(timerMeasurementSet && ObjectPresent){
 					timerMeasurementSet = false;
+#if DEBUGGING
 					printf("Timer no object %d ", timerMeasurementSet);
 					printf("\r\n");
+#endif
 				}
 			}
 }
@@ -293,7 +316,9 @@ static void MX_53L3A2_MultiSensorRanging_Init(void)
 
     /* check the communication with the device reading the ID */
     VL53L3A2_RANGING_SENSOR_ReadID(device, &id);
+#if DEBUGGING
     printf("ToF sensor %d - ID: %04lX\r\n", device, (unsigned long)id);
+#endif
   }
 }
 /*
@@ -349,12 +374,16 @@ static void start_sensor(uint8_t sensor){
 	status = VL53L3A2_RANGING_SENSOR_Start(sensor, RS_MODE_BLOCKING_CONTINUOUS);
     if (status != BSP_ERROR_NONE)
     {
+#if DEBUGGING
     	printf("VL53L3A2_RANGING_SENSOR_Start failed for sensor %s \r\n", TofDevStr[sensor]);
+#endif
 		while(1);
     }
     else
 	{
+#if DEBUGGING
     	printf("sensor %s\t opgestart \r\n", TofDevStr[sensor]);
+#endif
 	}
 }
 
@@ -362,12 +391,16 @@ static void stop_sensor(uint8_t sensor){
 	status = VL53L3A2_RANGING_SENSOR_Stop(sensor);
     if (status != BSP_ERROR_NONE)
     {
+#if DEBUGGING
     	printf("VL53L3A2_RANGING_SENSOR_Stop failed\r\n");
+#endif
 		while(1);
     }
     else
 	{
+#if DEBUGGING
     	printf("sensor %s\t afgezet \r\n", TofDevStr[sensor]);
+#endif
 	}
 }
 
