@@ -1,5 +1,12 @@
 {
     "files.associations": {
-        "stm32f4xx_hal.h": "c"
+        "stm32f4xx_hal.h": "c",
+        "53l3a2_ranging_sensor.h": "c",
+        "53l3a2.h": "c",
+        "vl53l3cx.h": "c",
+        "vl53lx_def.h": "c",
+        "vl53lx_ll_def.h": "c",
+        "53l3a2_conf.h": "c",
+        "vl53lx_register_structs.h": "c"
     }
 }
