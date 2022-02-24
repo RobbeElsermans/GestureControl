@@ -830,9 +830,9 @@ F 3 "~" H 9100 1300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Text GLabel 8900 1300 0    50   Input ~ 0
-SCL
+SCL2
 Text GLabel 8900 1100 0    50   Input ~ 0
-SDA
+SDA2
 $Comp
 L power:GND #PWR0101
 U 1 1 6247D63B
@@ -1275,4 +1275,157 @@ Text Label 10200 5650 0    50   ~ 0
 PIN29
 Text GLabel 4300 5450 0    50   Input ~ 0
 SDA2
+Text Label 5600 5750 0    50   ~ 0
+PB12
+Text Label 5600 5850 0    50   ~ 0
+PB13
+Text Label 5600 5950 0    50   ~ 0
+PB14
+Text Label 5600 6050 0    50   ~ 0
+PB15
+Text Label 7850 6650 2    50   ~ 0
+PB12
+Text Label 7850 6750 2    50   ~ 0
+PB13
+Text Label 7850 6850 2    50   ~ 0
+PB14
+Text Label 7850 6950 2    50   ~ 0
+PB15
+Text Label 10200 5750 0    50   ~ 0
+PB12
+Text Label 10200 5850 0    50   ~ 0
+PB13
+Text Label 10200 5950 0    50   ~ 0
+PB14
+Text Label 10200 6050 0    50   ~ 0
+PB15
+Text Label 4300 5150 2    50   ~ 0
+PC6
+Text Label 4300 5250 2    50   ~ 0
+PC7
+Text Label 4300 5350 2    50   ~ 0
+PC8
+Text Label 7850 7050 2    50   ~ 0
+PC6
+Text Label 7850 7150 2    50   ~ 0
+PC7
+Text Label 7850 7250 2    50   ~ 0
+PC8
+Text Label 8900 5150 2    50   ~ 0
+PC6
+Text Label 8900 5250 2    50   ~ 0
+PC7
+Text Label 8900 5350 2    50   ~ 0
+PC8
+Text Label 5600 3750 0    50   ~ 0
+PA9
+Text Label 5600 3850 0    50   ~ 0
+PA10
+Text Label 10200 3850 0    50   ~ 0
+PA9
+Text Label 10200 3950 0    50   ~ 0
+PA10
+Text Label 7850 7350 2    50   ~ 0
+PA9
+Text Label 7850 7450 2    50   ~ 0
+PA10
+$Comp
+L Connector_Generic:Conn_01x01 J11
+U 1 1 621B9828
+P 8050 6650
+F 0 "J11" H 8130 6692 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 6650 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 6650 50  0001 C CNN
+F 3 "~" H 8050 6650 50  0001 C CNN
+	1    8050 6650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J12
+U 1 1 621B9E59
+P 8050 6750
+F 0 "J12" H 8130 6792 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 6750 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 6750 50  0001 C CNN
+F 3 "~" H 8050 6750 50  0001 C CNN
+	1    8050 6750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J13
+U 1 1 621BA0A7
+P 8050 6850
+F 0 "J13" H 8130 6892 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 6850 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 6850 50  0001 C CNN
+F 3 "~" H 8050 6850 50  0001 C CNN
+	1    8050 6850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J14
+U 1 1 621BA2A8
+P 8050 6950
+F 0 "J14" H 8130 6992 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 6950 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 6950 50  0001 C CNN
+F 3 "~" H 8050 6950 50  0001 C CNN
+	1    8050 6950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J15
+U 1 1 621BA4E6
+P 8050 7050
+F 0 "J15" H 8130 7092 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 7050 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 7050 50  0001 C CNN
+F 3 "~" H 8050 7050 50  0001 C CNN
+	1    8050 7050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J16
+U 1 1 621BA73A
+P 8050 7150
+F 0 "J16" H 8130 7192 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 7150 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 7150 50  0001 C CNN
+F 3 "~" H 8050 7150 50  0001 C CNN
+	1    8050 7150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J17
+U 1 1 621BA96B
+P 8050 7250
+F 0 "J17" H 8130 7292 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 7250 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 7250 50  0001 C CNN
+F 3 "~" H 8050 7250 50  0001 C CNN
+	1    8050 7250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J18
+U 1 1 621BABBA
+P 8050 7350
+F 0 "J18" H 8130 7392 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 7350 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 7350 50  0001 C CNN
+F 3 "~" H 8050 7350 50  0001 C CNN
+	1    8050 7350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x01 J19
+U 1 1 621BADAB
+P 8050 7450
+F 0 "J19" H 8130 7492 50  0000 L CNN
+F 1 "Conn_01x01" H 8300 7450 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_2.5x2.5mm" H 8050 7450 50  0001 C CNN
+F 3 "~" H 8050 7450 50  0001 C CNN
+	1    8050 7450
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

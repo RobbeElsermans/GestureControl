@@ -1,4 +1,5 @@
 (sym_lib_table
-  (lib (name STM32F401RET6)(type Legacy)(uri /home/robbe/Desktop/Github/GestureControl/pcb/Lib/ul_STM32F401RET6/KiCAD/2022-02-16_11-45-11/STM32F401RET6.lib)(options "")(descr ""))
-  (lib (name VL53L3CX)(type Legacy)(uri /home/robbe/Desktop/Github/GestureControl/pcb/Lib/ul_VL53L3CXV0DH-1/KiCAD/2022-02-16_11-44-17/VL53L3CX.lib)(options "")(descr ""))
+  (lib (name STM32F401RET6)(type Legacy)(uri ${KIPRJMOD}/Lib/STM32F401RET6/KiCAD/2022-02-16_11-45-11/STM23F401RET6.lib)(options "")(descr ""))
+  (lib (name VL53L3CX)(type Legacy)(uri ${KIPRJMOD}/Lib/VL53L3CXV0DH-1/KiCAD/2022-02-16_11-44-17/VL53L3CX.lib)(options "")(descr ""))
+  (lib (name GestureControl-rescue)(type Legacy)(uri ${KIPRJMOD}/GestureControl-rescue.lib)(options "")(descr ""))
 )
