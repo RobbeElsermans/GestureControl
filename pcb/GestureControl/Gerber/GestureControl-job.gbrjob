@@ -5,9 +5,9 @@
     {
       "Vendor":      "KiCad",
       "Application": "Pcbnew",
-      "Version":     "(5.1.10)-1"
+      "Version":     "5.1.12-84ad8e8a86~92~ubuntu20.04.1"
     },
-    "CreationDate":  "2022-02-24T08:52:08+01:00"
+    "CreationDate":  "2022-02-24T18:35:21+01:00"
   },
   "GeneralSpecs":
   {
@@ -52,12 +52,12 @@
       "FilePolarity":  "Positive"
     },
     {
-      "Path":  "GestureControl-GND.gbr",
+      "Path":  "GestureControl-PWR.gbr",
       "FileFunction":  "Copper,L2,Inr",
       "FilePolarity":  "Positive"
     },
     {
-      "Path":  "GestureControl-PWR.gbr",
+      "Path":  "GestureControl-GND.gbr",
       "FileFunction":  "Copper,L3,Inr",
       "FilePolarity":  "Positive"
     },
@@ -127,7 +127,7 @@
     },
     {
       "Type":  "Copper",
-      "Notes":  "Layer GND"
+      "Notes":  "Layer PWR"
     },
     {
       "Type":  "Dielectric",
@@ -136,7 +136,7 @@
     },
     {
       "Type":  "Copper",
-      "Notes":  "Layer PWR"
+      "Notes":  "Layer GND"
     },
     {
       "Type":  "Dielectric",
