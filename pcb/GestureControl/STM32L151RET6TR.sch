@@ -864,7 +864,7 @@ L MCU_ST_STM32F4:STM32F401RETx U7
 U 1 1 624E17AD
 P 9600 4450
 F 0 "U7" H 9550 6331 50  0000 C CNN
-F 1 "STM32F401RETx" H 9600 6700 50  0000 C CNN
+F 1 "STM32F401RETx" H 9000 6200 50  0000 C CNN
 F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 9000 2750 50  0001 R CNN
 F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00102166.pdf" H 9600 4450 50  0001 C CNN
 	1    9600 4450
@@ -1263,7 +1263,7 @@ P 5000 4450
 AR Path="/623BE0FF/623C69FD" Ref="U6"  Part="1" 
 AR Path="/623BC61F/623C69FD" Ref="U?"  Part="1" 
 F 0 "U6" H 4950 6431 50  0000 C CNN
-F 1 "STM32L151RETx" H 4950 6340 50  0000 C CNN
+F 1 "STM32L151RETx" H 4400 6300 50  0000 C CNN
 F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 4400 2750 50  0001 R CNN
 F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00098321.pdf" H 5000 4450 50  0001 C CNN
 	1    5000 4450

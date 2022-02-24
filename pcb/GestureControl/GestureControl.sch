@@ -684,42 +684,42 @@ Wire Notes Line
 	7000 750  8200 750 
 Text Notes 7000 700  0    50   ~ 0
 data
-Text Notes 700  5000 0    50   ~ 0
+Text Notes 700  4400 0    50   ~ 0
 sensors
 $Sheet
-S 2000 5200 1000 700 
+S 2000 4600 1000 700 
 U 62398514
 F0 "VL53L3CX center" 50
 F1 "VL53L3CX_CENTER.sch" 50
 $EndSheet
 $Sheet
-S 3200 5200 1000 700 
+S 3200 4600 1000 700 
 U 623A41A0
 F0 "VL53L3CX right" 50
 F1 "VL53L3CX_RIGHT.sch" 50
 $EndSheet
 $Sheet
-S 800  5200 1000 700 
+S 800  4600 1000 700 
 U 623A3BAC
 F0 "VL53L3CX left" 50
 F1 "VL53L3CX_LEFT.sch" 50
 $EndSheet
 Wire Notes Line
-	700  5050 4350 5050
+	700  4450 4350 4450
 Wire Notes Line
-	4350 5050 4350 6100
+	4350 4450 4350 5500
 Wire Notes Line
-	4350 6100 700  6100
+	4350 5500 700  5500
 Wire Notes Line
-	700  6100 700  5050
-Text Notes 700  6350 0    50   ~ 0
+	700  5500 700  4450
+Text Notes 700  5750 0    50   ~ 0
 mcu
 Wire Notes Line
-	2000 7450 700  7450
+	2000 6850 700  6850
 Wire Notes Line
-	2000 6450 700  6450
+	2000 5850 700  5850
 Wire Notes Line
-	700  6450 700  7450
+	700  5850 700  6850
 $Comp
 L Switch:SW_Push_Dual SW1
 U 1 1 624CC800
@@ -999,71 +999,71 @@ $EndComp
 $Comp
 L Mechanical:MountingHole H6
 U 1 1 622D03BB
-P 10050 4500
-F 0 "H6" H 10150 4546 50  0000 L CNN
-F 1 "MountingHole" H 10150 4455 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 10050 4500 50  0001 C CNN
-F 3 "~" H 10050 4500 50  0001 C CNN
-	1    10050 4500
+P 2950 3850
+F 0 "H6" H 3050 3896 50  0000 L CNN
+F 1 "MountingHole" H 3050 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2950 3850 50  0001 C CNN
+F 3 "~" H 2950 3850 50  0001 C CNN
+	1    2950 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H5
 U 1 1 622D0626
-P 9850 4500
-F 0 "H5" H 9950 4546 50  0000 L CNN
-F 1 "MountingHole" H 9950 4455 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 9850 4500 50  0001 C CNN
-F 3 "~" H 9850 4500 50  0001 C CNN
-	1    9850 4500
+P 2750 3850
+F 0 "H5" H 2850 3896 50  0000 L CNN
+F 1 "MountingHole" H 2850 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2750 3850 50  0001 C CNN
+F 3 "~" H 2750 3850 50  0001 C CNN
+	1    2750 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H4
 U 1 1 622D08F1
-P 9650 4500
-F 0 "H4" H 9750 4546 50  0000 L CNN
-F 1 "MountingHole" H 9750 4455 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 9650 4500 50  0001 C CNN
-F 3 "~" H 9650 4500 50  0001 C CNN
-	1    9650 4500
+P 2550 3850
+F 0 "H4" H 2650 3896 50  0000 L CNN
+F 1 "MountingHole" H 2650 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2550 3850 50  0001 C CNN
+F 3 "~" H 2550 3850 50  0001 C CNN
+	1    2550 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H3
 U 1 1 622D0C25
-P 9450 4500
-F 0 "H3" H 9550 4546 50  0000 L CNN
-F 1 "MountingHole" H 9550 4455 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 9450 4500 50  0001 C CNN
-F 3 "~" H 9450 4500 50  0001 C CNN
-	1    9450 4500
+P 2350 3850
+F 0 "H3" H 2450 3896 50  0000 L CNN
+F 1 "MountingHole" H 2450 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2350 3850 50  0001 C CNN
+F 3 "~" H 2350 3850 50  0001 C CNN
+	1    2350 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H2
 U 1 1 622D0EE3
-P 9250 4500
-F 0 "H2" H 9350 4546 50  0000 L CNN
-F 1 "MountingHole" H 9350 4455 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 9250 4500 50  0001 C CNN
-F 3 "~" H 9250 4500 50  0001 C CNN
-	1    9250 4500
+P 2150 3850
+F 0 "H2" H 2250 3896 50  0000 L CNN
+F 1 "MountingHole" H 2250 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2150 3850 50  0001 C CNN
+F 3 "~" H 2150 3850 50  0001 C CNN
+	1    2150 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H1
 U 1 1 622D11CA
-P 9050 4500
-F 0 "H1" H 9150 4546 50  0000 L CNN
-F 1 "MountingHole" H 9150 4455 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 9050 4500 50  0001 C CNN
-F 3 "~" H 9050 4500 50  0001 C CNN
-	1    9050 4500
+P 1950 3850
+F 0 "H1" H 2050 3896 50  0000 L CNN
+F 1 "MountingHole" H 2050 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 1950 3850 50  0001 C CNN
+F 3 "~" H 1950 3850 50  0001 C CNN
+	1    1950 3850
 	1    0    0    -1  
 $EndComp
 $Sheet
-S 800  6550 1000 700 
+S 800  5950 1000 700 
 U 623BE0FF
 F0 "STM32L151RET6TR" 50
 F1 "STM32L151RET6TR.sch" 50
@@ -1124,4 +1124,6 @@ Wire Notes Line
 	8200 750  8200 2800
 Wire Notes Line
 	7000 750  7000 2800
+Wire Notes Line
+	2000 5850 2000 6850
 $EndSCHEMATC
