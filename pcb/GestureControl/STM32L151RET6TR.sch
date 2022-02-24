@@ -35,19 +35,6 @@ Wire Wire Line
 	1950 2550 1700 2550
 Wire Wire Line
 	1950 2750 1700 2750
-$Comp
-L Device:C C21
-U 1 1 623C6A21
-P 2150 3050
-AR Path="/623BE0FF/623C6A21" Ref="C21"  Part="1" 
-AR Path="/623BC61F/623C6A21" Ref="C?"  Part="1" 
-F 0 "C21" V 1898 3050 50  0000 C CNN
-F 1 "100n" V 1989 3050 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 2188 2900 50  0001 C CNN
-F 3 "~" H 2150 3050 50  0001 C CNN
-	1    2150 3050
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	1700 2550 1700 2750
 Wire Wire Line
@@ -627,7 +614,7 @@ AR Path="/623BE0FF/623C6A0B" Ref="J7"  Part="1"
 AR Path="/623BC61F/623C6A0B" Ref="J?"  Part="1" 
 F 0 "J7" H 7580 992 50  0000 L CNN
 F 1 "FTDI" H 7580 901 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Horizontal" H 7500 1000 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 7500 1000 50  0001 C CNN
 F 3 "~" H 7500 1000 50  0001 C CNN
 	1    7500 1000
 	1    0    0    -1  
@@ -640,7 +627,7 @@ AR Path="/623BE0FF/623C6A0C" Ref="J8"  Part="1"
 AR Path="/623BC61F/623C6A0C" Ref="J?"  Part="1" 
 F 0 "J8" H 7580 1842 50  0000 L CNN
 F 1 "Serial Wire" H 7580 1751 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 7500 1800 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7500 1800 50  0001 C CNN
 F 3 "~" H 7500 1800 50  0001 C CNN
 	1    7500 1800
 	1    0    0    -1  
@@ -1217,7 +1204,7 @@ U 1 1 6287AD78
 P 10500 1100
 F 0 "J10" H 10580 1092 50  0000 L CNN
 F 1 "EXTERN I2C" H 10580 1001 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 10500 1100 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 10500 1100 50  0001 C CNN
 F 3 "~" H 10500 1100 50  0001 C CNN
 	1    10500 1100
 	1    0    0    -1  
@@ -1428,4 +1415,25 @@ F 3 "~" H 8050 7450 50  0001 C CNN
 	1    8050 7450
 	1    0    0    -1  
 $EndComp
+$Comp
+L Device:C C21
+U 1 1 623C6A21
+P 2150 3050
+AR Path="/623BE0FF/623C6A21" Ref="C21"  Part="1" 
+AR Path="/623BC61F/623C6A21" Ref="C?"  Part="1" 
+F 0 "C21" V 1898 3050 50  0000 C CNN
+F 1 "100n" V 1989 3050 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 2188 2900 50  0001 C CNN
+F 3 "~" H 2150 3050 50  0001 C CNN
+	1    2150 3050
+	0    1    1    0   
+$EndComp
+Text GLabel 5600 4650 2    50   Input ~ 0
+SW_1
+Text GLabel 10200 4850 2    50   Input ~ 0
+SW_2
+Text GLabel 10200 4750 2    50   Input ~ 0
+SW_1
+Text GLabel 5600 4750 2    50   Input ~ 0
+SW_2
 $EndSCHEMATC

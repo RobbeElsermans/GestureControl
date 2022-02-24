@@ -1,4 +1,4 @@
-update=Wed 23 Feb 2022 08:05:03 PM CET
+update=24/02/2022 13:43:52
 version=1
 last_client=kicad
 [general]
@@ -78,11 +78,11 @@ Name=SIG1
 Type=0
 Enabled=1
 [pcbnew/Layer.In1.Cu]
-Name=GND
-Type=2
+Name=PWR
+Type=1
 Enabled=1
 [pcbnew/Layer.In2.Cu]
-Name=PWR
+Name=GND
 Type=1
 Enabled=1
 [pcbnew/Layer.In3.Cu]
@@ -243,6 +243,17 @@ Enabled=0
 [pcbnew/Netclasses/Default]
 Name=Default
 Clearance=0.2
+TrackWidth=0.25
+ViaDiameter=0.8
+ViaDrill=0.4
+uViaDiameter=0.3
+uViaDrill=0.1
+dPairWidth=0.2
+dPairGap=0.25
+dPairViaGap=0.25
+[pcbnew/Netclasses/1]
+Name=PWR
+Clearance=0.4
 TrackWidth=0.25
 ViaDiameter=0.8
 ViaDrill=0.4
