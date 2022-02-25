@@ -6,8 +6,8 @@
 #include  <errno.h>
 #include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FILENO
 
+#include "vl53lx_api.h"
 
-#include "app_tof.h"
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
@@ -61,9 +61,6 @@ int main(void)
 		  HAL_GPIO_WritePin(LED_ORANGE_GPIO_Port, LED_ORANGE_Pin, 0);
 	  }
   }
-
-
-
 }
 
 /**
