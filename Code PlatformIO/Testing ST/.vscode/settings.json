@@ -11,6 +11,23 @@
         "main.h": "c",
         "vl53lx_platform_log.h": "c",
         "vl53lx_platform.h": "c",
-        "vl53lx_hist_structs.h": "c"
+        "vl53lx_hist_structs.h": "c",
+        "stm32f4xx_nucleo_bus.h": "c",
+        "stm32f4xx_hal_conf.h": "c",
+        "stm32f4xx_nucleo_conf.h": "c",
+        "stm32f4xx_nucleo_errno.h": "c",
+        "ranging_sensor.h": "c",
+        "vl53lx_platform_user_config.h": "c",
+        "vl53lx_dmax_structs.h": "c",
+        "vl53lx_platform_user_defines.h": "c",
+        "vl53lx_error_codes.h": "c",
+        "vl53lx_ll_device.h": "c",
+        "vl53lx_types.h": "c",
+        "vl53lx_error_exceptions.h": "c",
+        "app_tof.h": "c",
+        "vl53lx_platform_ipp.h": "c",
+        "vl53lx_platform_user_data.h": "c",
+        "stm32f4xx_hal_rcc.h": "c",
+        "stm32f4xx_hal_def.h": "c"
     }
 }

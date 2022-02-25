@@ -7,6 +7,7 @@
 #include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FILENO
 
 
+#include "app_tof.h"
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
