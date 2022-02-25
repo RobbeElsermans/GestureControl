@@ -1,2 +1,0 @@
-vl53lx_platform_init.c:21:14:VL53LX_platform_init	16	static
-vl53lx_platform_init.c:80:14:VL53LX_platform_terminate	8	static

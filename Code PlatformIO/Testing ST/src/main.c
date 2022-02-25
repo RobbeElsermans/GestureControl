@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include  <errno.h>
-#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FILENO
+#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
 
 #include "vl53lx_api.h"
 
@@ -25,6 +25,8 @@ static void MX_TIM3_Init(void);
 int main(void)
 {
 
+
+  VL53L3CX_Init()
   HAL_Init();
 
   SystemClock_Config();
