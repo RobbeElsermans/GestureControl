@@ -162,17 +162,11 @@ F 3 "" H 7300 800 50  0001 C CNN
 $EndComp
 Text Label 7300 1300 2    50   ~ 0
 FTDI_RTS
-Text Label 7300 1800 2    50   ~ 0
-SWDAT
-Text Label 7300 1900 2    50   ~ 0
-SWCLK
 Text Label 2450 3450 2    50   ~ 0
 MCO
 Wire Wire Line
 	2450 3450 2450 3750
 Connection ~ 2450 3750
-Text Label 7300 2000 2    50   ~ 0
-SW0
 Text Label 5600 4150 0    50   ~ 0
 SWDAT
 Text Label 5600 4250 0    50   ~ 0
@@ -618,45 +612,6 @@ F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 7500 1000 50 
 F 3 "~" H 7500 1000 50  0001 C CNN
 	1    7500 1000
 	1    0    0    -1  
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x05 J8
-U 1 1 623C6A0C
-P 7500 1800
-AR Path="/623BE0FF/623C6A0C" Ref="J8"  Part="1" 
-AR Path="/623BC61F/623C6A0C" Ref="J?"  Part="1" 
-F 0 "J8" H 7580 1842 50  0000 L CNN
-F 1 "Serial Wire" H 7580 1751 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 7500 1800 50  0001 C CNN
-F 3 "~" H 7500 1800 50  0001 C CNN
-	1    7500 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR081
-U 1 1 623C6A0D
-P 7300 1700
-AR Path="/623BE0FF/623C6A0D" Ref="#PWR081"  Part="1" 
-AR Path="/623BC61F/623C6A0D" Ref="#PWR?"  Part="1" 
-F 0 "#PWR081" H 7300 1550 50  0001 C CNN
-F 1 "+3.3V" V 7315 1828 50  0000 L CNN
-F 2 "" H 7300 1700 50  0001 C CNN
-F 3 "" H 7300 1700 50  0001 C CNN
-	1    7300 1700
-	0    -1   -1   0   
-$EndComp
-$Comp
-L power:GND #PWR080
-U 1 1 623C6A0E
-P 7300 1600
-AR Path="/623BE0FF/623C6A0E" Ref="#PWR080"  Part="1" 
-AR Path="/623BC61F/623C6A0E" Ref="#PWR?"  Part="1" 
-F 0 "#PWR080" H 7300 1350 50  0001 C CNN
-F 1 "GND" V 7305 1472 50  0000 R CNN
-F 2 "" H 7300 1600 50  0001 C CNN
-F 3 "" H 7300 1600 50  0001 C CNN
-	1    7300 1600
-	0    1    1    0   
 $EndComp
 Text Label 5600 4850 0    50   ~ 0
 SW0
@@ -1436,4 +1391,49 @@ Text GLabel 10200 4750 2    50   Input ~ 0
 SW_1
 Text GLabel 5600 4750 2    50   Input ~ 0
 SW_2
+$Comp
+L Connector_Generic:Conn_01x06 J8
+U 1 1 621F67F1
+P 7500 2550
+F 0 "J8" H 7580 2542 50  0000 L CNN
+F 1 "Conn_01x06" H 7580 2451 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 7500 2550 50  0001 C CNN
+F 3 "~" H 7500 2550 50  0001 C CNN
+	1    7500 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR0114
+U 1 1 621F7626
+P 7300 2350
+AR Path="/623BE0FF/621F7626" Ref="#PWR0114"  Part="1" 
+AR Path="/623BC61F/621F7626" Ref="#PWR?"  Part="1" 
+F 0 "#PWR0114" H 7300 2200 50  0001 C CNN
+F 1 "+3.3V" V 7315 2478 50  0000 L CNN
+F 2 "" H 7300 2350 50  0001 C CNN
+F 3 "" H 7300 2350 50  0001 C CNN
+	1    7300 2350
+	0    -1   -1   0   
+$EndComp
+Text Label 7300 2450 2    50   ~ 0
+SWCLK
+$Comp
+L power:GND #PWR0115
+U 1 1 621F7BD3
+P 7300 2550
+AR Path="/623BE0FF/621F7BD3" Ref="#PWR0115"  Part="1" 
+AR Path="/623BC61F/621F7BD3" Ref="#PWR?"  Part="1" 
+F 0 "#PWR0115" H 7300 2300 50  0001 C CNN
+F 1 "GND" V 7305 2422 50  0000 R CNN
+F 2 "" H 7300 2550 50  0001 C CNN
+F 3 "" H 7300 2550 50  0001 C CNN
+	1    7300 2550
+	0    1    1    0   
+$EndComp
+Text Label 7300 2650 2    50   ~ 0
+SWDAT
+Text Label 7300 2750 2    50   ~ 0
+RST
+Text Label 7300 2850 2    50   ~ 0
+SW0
 $EndSCHEMATC
