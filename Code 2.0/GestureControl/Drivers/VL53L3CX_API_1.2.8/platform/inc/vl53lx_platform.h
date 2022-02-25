@@ -44,7 +44,7 @@ extern "C"
  */
 
 VL53LX_Error VL53LX_CommsInitialise(
-	VL53LX_Dev_t *pdev,
+	VL53LX_DEV    Dev,
 	uint8_t       comms_type,
 	uint16_t      comms_speed_khz);
 
@@ -59,7 +59,7 @@ VL53LX_Error VL53LX_CommsInitialise(
  */
 
 VL53LX_Error VL53LX_CommsClose(
-	VL53LX_Dev_t *pdev);
+	VL53LX_DEV    Dev);
 
 
 /**
@@ -75,7 +75,7 @@ VL53LX_Error VL53LX_CommsClose(
  */
 
 VL53LX_Error VL53LX_WriteMulti(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint8_t      *pdata,
 		uint32_t      count);
@@ -94,7 +94,7 @@ VL53LX_Error VL53LX_WriteMulti(
  */
 
 VL53LX_Error VL53LX_ReadMulti(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint8_t      *pdata,
 		uint32_t      count);
@@ -112,7 +112,7 @@ VL53LX_Error VL53LX_ReadMulti(
  */
 
 VL53LX_Error VL53LX_WrByte(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint8_t       data);
 
@@ -132,7 +132,7 @@ VL53LX_Error VL53LX_WrByte(
  */
 
 VL53LX_Error VL53LX_WrWord(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint16_t      data);
 
@@ -152,7 +152,7 @@ VL53LX_Error VL53LX_WrWord(
  */
 
 VL53LX_Error VL53LX_WrDWord(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint32_t      data);
 
@@ -171,7 +171,7 @@ VL53LX_Error VL53LX_WrDWord(
  */
 
 VL53LX_Error VL53LX_RdByte(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint8_t      *pdata);
 
@@ -190,7 +190,7 @@ VL53LX_Error VL53LX_RdByte(
  */
 
 VL53LX_Error VL53LX_RdWord(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint16_t     *pdata);
 
@@ -209,7 +209,7 @@ VL53LX_Error VL53LX_RdWord(
  */
 
 VL53LX_Error VL53LX_RdDWord(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint16_t      index,
 		uint32_t     *pdata);
 
@@ -226,7 +226,7 @@ VL53LX_Error VL53LX_RdDWord(
  */
 
 VL53LX_Error VL53LX_WaitUs(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		int32_t       wait_us);
 
 
@@ -241,7 +241,7 @@ VL53LX_Error VL53LX_WaitUs(
  */
 
 VL53LX_Error VL53LX_WaitMs(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		int32_t       wait_ms);
 
 
@@ -379,7 +379,7 @@ VL53LX_Error  VL53LX_GpioInterruptDisable(void);
  */
 
 VL53LX_Error VL53LX_GetTickCount(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint32_t *ptime_ms);
 
 
@@ -400,7 +400,7 @@ VL53LX_Error VL53LX_GetTickCount(
  */
 
 VL53LX_Error VL53LX_WaitValueMaskEx(
-		VL53LX_Dev_t *pdev,
+		VL53LX_DEV    Dev,
 		uint32_t      timeout_ms,
 		uint16_t      index,
 		uint8_t       value,

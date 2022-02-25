@@ -1,0 +1,11 @@
+53l3a2.c:576:12:_ExpanderRd	40	static
+53l3a2.c:600:12:_ExpanderWR	40	static
+53l3a2.c:557:12:_ExpandersSetAllIO	8	static
+53l3a2.c:274:5:XNUCLEO53L3A2_I2C1Configure	48	static
+53l3a2.c:313:5:XNUCLEO53L3A2_SetIntrStateId	32	static
+53l3a2.c:385:5:XNUCLEO53L3A2_Init	24	static
+53l3a2.c:431:5:XNUCLEO53L3A2_GetPB1	16	static
+53l3a2.c:448:5:XNUCLEO53L3A2_ResetId	0	static
+53l3a2.c:486:6:VL53L3A2_EXTI_IOConfigure	56	static
+53l3a2.c:527:6:VL53L3A2_EXTI_IOUnconfigure	8	static
+53l3a2.c:764:5:XNUCLEO53L3A2_SetDisplayString	24	static

@@ -17,54 +17,23 @@
 #ifndef __KERNEL__
 #include <stdlib.h>
 #endif
-
+#include "stm32f4xx_hal.h"
 #include "vl53lx_def.h"
+#include "vl53l3cx.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
+typedef VL53L3CX_Object_t* VL53LX_DEV;
 
-
-
-
-typedef struct {
-
-	VL53LX_DevData_t   Data;
-
-
-	uint8_t   i2c_slave_address;
-
-	uint8_t   comms_type;
-
-	uint16_t  comms_speed_khz;
-
-
-	uint32_t  new_data_ready_poll_duration_ms;
-
-} VL53LX_Dev_t;
-
-
-
-typedef VL53LX_Dev_t *VL53LX_DEV;
-
-
-
-#define VL53LXDevDataGet(Dev, field) (Dev->Data.field)
-
-
-
-#define VL53LXDevDataSet(Dev, field, VL53LX_p_003) ((Dev->Data.field) = (VL53LX_p_003))
-
-
-
-#define VL53LXDevStructGetLLDriverHandle(Dev) (&Dev->Data.LLData)
-
-
-
-#define VL53LXDevStructGetLLResultsHandle(Dev) (&Dev->Data.llresults)
-
+#define VL53LXDevDataGet(Obj, field) 			(Obj->Dev.Data.field)
+#define VL53LXDevDataSet(Obj, field, data) 		((Obj->Dev.Data.field) = (data))
+#define PALDevDataGet(Obj, field) 				(Obj->Dev.Data.field)
+#define PALDevDataSet(Obj, field, value) 		(Obj->Dev.Data.field)=(value)
+#define VL53LXDevStructGetLLDriverHandle(Obj) 	(&Obj->Dev.Data.LLData)
+#define VL53LXDevStructGetLLResultsHandle(Obj) 	(&Obj->Dev.Data.llresults)
 
 #ifdef __cplusplus
 }

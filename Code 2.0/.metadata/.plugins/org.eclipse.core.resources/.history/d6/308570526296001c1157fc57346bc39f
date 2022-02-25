@@ -1,0 +1,58 @@
+Drivers/BSP/vl53l3cx/vl53lx_hist_core.o: \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_core.c \
+ ../../Inc/vl53lx_platform_log.h ../../Inc/vl53lx_platform_user_config.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_core_support.h \
+ ../../Inc/vl53lx_types.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_structs.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_ll_device.h \
+ ../../Inc/vl53lx_platform_user_config.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_dmax_structs.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_xtalk.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_ll_def.h \
+ ../../Inc/vl53lx_platform_user_defines.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_error_codes.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_register_structs.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_register_map.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_error_exceptions.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_xtalk_private_structs.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_sigma_estimate.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_core.h \
+ C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_private_structs.h
+
+../../Inc/vl53lx_platform_log.h:
+
+../../Inc/vl53lx_platform_user_config.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_core_support.h:
+
+../../Inc/vl53lx_types.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_structs.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_ll_device.h:
+
+../../Inc/vl53lx_platform_user_config.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_dmax_structs.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_xtalk.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_ll_def.h:
+
+../../Inc/vl53lx_platform_user_defines.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_error_codes.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_register_structs.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_register_map.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_error_exceptions.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_xtalk_private_structs.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_sigma_estimate.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_core.h:
+
+C:/Users/robel/Downloads/en.en.bare_driver_VL53L3CX_v1.2.8/BareDriver/VL53L3CX_API_1.2.8/example/Drivers/BSP/Components/vl53l3cx/vl53lx_hist_private_structs.h:
