@@ -7,6 +7,7 @@
         "vl53lx_def.h": "c",
         "vl53lx_ll_def.h": "c",
         "53l3a2_conf.h": "c",
-        "vl53lx_register_structs.h": "c"
+        "vl53lx_register_structs.h": "c",
+        "main.h": "c"
     }
 }
