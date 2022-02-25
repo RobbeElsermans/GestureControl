@@ -22,11 +22,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "vl53lx_api.h"
-#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
-#include  <errno.h>
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,7 +68,7 @@ static void MX_I2C1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	VL53L
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -105,8 +100,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  printf("Robbe \r\n");
-	  HAL_Delay(1000);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -257,21 +251,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int _write(int file, char *data, int len)
-{
-   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
-   {
-      errno = EBADF;
-      return -1;
-   }
 
-   // arbitrary timeout 1000
-   HAL_StatusTypeDef status =
-      HAL_UART_Transmit(&huart2, (uint8_t*)data, len, 1000);
-
-   // return # of bytes written - as best we can tell
-   return (status == HAL_OK ? len : 0);
-}
 /* USER CODE END 4 */
 
 /**

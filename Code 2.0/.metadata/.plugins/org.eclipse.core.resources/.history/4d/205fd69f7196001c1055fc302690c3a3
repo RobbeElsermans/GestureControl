@@ -22,11 +22,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "vl53lx_api.h"
-#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
-#include  <errno.h>
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
