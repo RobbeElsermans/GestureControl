@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
-//#include <malloc.h>
+#include <malloc.h>
 #include <vl53lx_platform_log.h>
 #include <vl53lx_platform_user_config.h>
 
