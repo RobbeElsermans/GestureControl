@@ -1026,3 +1026,8 @@
 2022-02-25 20:28:10,114 [WARN] IP:2107 - Analog_Filter not found: check if there is a RefParameter without a condition.
 2022-02-25 20:28:32,659 [INFO] DbMcusDocs:143 - JSON generation date=Tue Nov 16 17:17:54 CET 2021 (1637079474)
 2022-02-25 20:28:33,096 [INFO] DbMcusDocs:79 - Found 682 MCUs documents
+2022-02-26 23:36:52,725 [INFO] Activator:177 - 
+
+
+2022-02-26 23:36:52,726 [INFO] Activator:178 - !SESSION log4j initialized
+2022-02-26 23:36:56,909 [ERROR] AnalyticsContext:980 - The ST intranet updater server is unknown: mcucrossselector.codex.cro.st.com
