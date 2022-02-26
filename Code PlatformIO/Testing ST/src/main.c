@@ -26,7 +26,7 @@ int main(void)
 {
 
 
-  VL53L3CX_Init()
+  //VL53L3CX_Init();
   HAL_Init();
 
   SystemClock_Config();
