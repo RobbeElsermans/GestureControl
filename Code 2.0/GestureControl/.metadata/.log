@@ -1,0 +1,18 @@
+!SESSION 2022-02-26 21:47:26.015 -----------------------------------------------
+eclipse.buildId=Version 1.8.0
+java.version=11.0.11
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2022-02-26 21:48:02.946
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-02-26 21:48:02.997
+!MESSAGE Log4j initialized with config file /home/robbe/Desktop/Github/GestureControl/Code 2.0/GestureControl/.metadata/.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-02-26 21:48:05.043
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-02-26 21:49:50.747
+!MESSAGE Indexed 'GestureControl' (24 sources, 84 headers) in 2.5 sec: 5,516 declarations; 33,666 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0051%)

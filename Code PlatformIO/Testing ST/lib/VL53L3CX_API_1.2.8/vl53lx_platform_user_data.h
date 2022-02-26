@@ -26,7 +26,29 @@ extern "C"
 {
 #endif
 
-typedef VL53L3CX_Object_t* VL53LX_DEV;
+
+typedef struct {
+	VL53LX_DevData_t   Data;
+	/*!< Low Level Driver data structure */
+    uint8_t   i2c_slave_address;
+	uint8_t   comms_type;
+	uint16_t  comms_speed_khz;
+	I2C_HandleTypeDef *I2cHandle;
+	uint8_t   I2cDevAddr;
+	int     Present;
+	int 	Enabled;
+	int LoopState;
+	int FirstStreamCountZero;
+	int 	Idle;
+	int		Ready;
+	uint8_t RangeStatus;
+	FixPoint1616_t SignalRateRtnMegaCps;
+	VL53LX_DeviceState   device_state;  /*!< Device State */
+} VL53LX_Dev_t;
+
+
+
+typedef VL53LX_Dev_t* VL53LX_DEV;
 
 #define VL53LXDevDataGet(Obj, field) 			(Obj->Dev.Data.field)
 #define VL53LXDevDataSet(Obj, field, data) 		((Obj->Dev.Data.field) = (data))

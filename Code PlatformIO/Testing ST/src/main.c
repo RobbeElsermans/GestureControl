@@ -6,12 +6,16 @@
 #include  <errno.h>
 #include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
 
+
 #include "vl53lx_api.h"
+#include "stm32f4xx_nucleo_bus.h"
 
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart2;
 
+VL53LX_Dev_t                   dev;
+VL53LX_DEV                     Dev = &dev;
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -25,8 +29,47 @@ static void MX_TIM3_Init(void);
 int main(void)
 {
 
+  //init the device object
 
-  //VL53L3CX_Init();
+//   VL53L3CX_IO_t IODev;
+
+//   IODev.Address = 0x52U;
+//   IODev.Init = BSP_I2C1_Init;
+//   IODev.DeInit = BSP_I2C1_DeInit;
+//   IODev.WriteReg = BSP_I2C1_Send;
+//   IODev.ReadReg = BSP_I2C1_Recv;
+//   IODev.GetTick = BSP_GetTick;
+
+// VL53L3CX_Object_t dev1;
+// dev1.IO = IODev;
+// dev1.IsAmbientEnabled
+  uint8_t byteData;
+  uint16_t wordData;
+  uint8_t ToFSensor = 1; // 0=Left, 1=Center(default), 2=Right
+
+
+  printf("VL53L1X Examples...\n");
+  Dev->I2cHandle = &hi2c1;
+  Dev->I2cDevAddr = 0x52U;
+
+  ToFSensor = 1; // Select ToFSensor: 0=Left, 1=Center, 2=Right
+
+  //De XShut pin hoog zetten
+  int status = XNUCLEO53L3A2_ResetId(ToFSensor, 0); // Reset ToF sensor
+  HAL_Delay(2);
+  //De XShut pin laag zetten
+  status = XNUCLEO53L3A2_ResetId(ToFSensor, 1); // Reset ToF sensor
+  HAL_Delay(2);
+
+
+  VL53LX_RdByte(Dev, 0x010F, &byteData);
+  printf("VL53LX Model_ID: %02X\n\r", byteData);
+  VL53LX_RdByte(Dev, 0x0110, &byteData);
+  printf("VL53LX Module_Type: %02X\n\r", byteData);
+  VL53LX_RdWord(Dev, 0x010F, &wordData);
+  printf("VL53LX: %02X\n\r", wordData);
+
+  VL53L3CX_Init(&dev);
   HAL_Init();
 
   SystemClock_Config();
