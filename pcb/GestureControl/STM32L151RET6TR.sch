@@ -14,60 +14,8 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Connection ~ 5350 6300
-$Comp
-L Switch:SW_Push_Dual SW4
-U 1 1 623C6A20
-P 2650 1050
-AR Path="/623BE0FF/623C6A20" Ref="SW4"  Part="1" 
-AR Path="/623BC61F/623C6A20" Ref="SW?"  Part="1" 
-F 0 "SW4" H 2650 1335 50  0000 C CNN
-F 1 "RST" H 2650 1244 50  0000 C CNN
-F 2 "Button_Switch_SMD:SW_Push_1P1T_NO_6x6mm_H9.5mm" H 2650 1250 50  0001 C CNN
-F 3 "~" H 2650 1250 50  0001 C CNN
-	1    2650 1050
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2850 1050 3100 1050
-Wire Wire Line
-	2850 1250 3100 1250
-Wire Wire Line
-	2450 1050 2200 1050
-Wire Wire Line
-	2450 1250 2200 1250
-Wire Wire Line
-	2200 1050 2200 1250
-Wire Wire Line
-	2200 1250 2200 1550
-Wire Wire Line
-	2200 1550 2500 1550
-Connection ~ 2200 1250
-Wire Wire Line
-	2800 1550 3100 1550
-Wire Wire Line
-	3100 1550 3100 1250
-Wire Wire Line
-	3100 1250 3100 1050
-Connection ~ 3100 1250
-Wire Wire Line
-	3100 1050 3200 1050
-Connection ~ 3100 1050
-Text Label 3200 1050 0    50   ~ 0
+Text Label 1800 1200 0    50   ~ 0
 RST
-$Comp
-L power:GND #PWR068
-U 1 1 623C6A22
-P 2200 1550
-AR Path="/623BE0FF/623C6A22" Ref="#PWR068"  Part="1" 
-AR Path="/623BC61F/623C6A22" Ref="#PWR?"  Part="1" 
-F 0 "#PWR068" H 2200 1300 50  0001 C CNN
-F 1 "GND" H 2205 1377 50  0000 C CNN
-F 2 "" H 2200 1550 50  0001 C CNN
-F 3 "" H 2200 1550 50  0001 C CNN
-	1    2200 1550
-	1    0    0    -1  
-$EndComp
-Connection ~ 2200 1550
 Wire Wire Line
 	4650 2850 4550 2850
 Text Label 4550 2850 2    50   ~ 0
@@ -242,11 +190,11 @@ LED_2
 Text GLabel 5950 3550 2    50   Input ~ 0
 LED_4
 Text GLabel 4650 4550 0    50   Input ~ 0
-XSHUT_0
+_XSHUT_0
 Text GLabel 4650 4650 0    50   Input ~ 0
-XSHUT_1
+_XSHUT_3
 Text GLabel 4650 4750 0    50   Input ~ 0
-XSHUT_2
+_XSHUT_6
 Text GLabel 4650 4850 0    50   Input ~ 0
 GPIOI_0
 Text GLabel 4650 4950 0    50   Input ~ 0
@@ -623,58 +571,7 @@ Text Label 4650 4050 2    50   ~ 0
 OSM_IN
 Text Label 4650 4150 2    50   ~ 0
 OSM_OUT
-$Comp
-L Switch:SW_Push_Dual SW3
-U 1 1 623C6A12
-P 1400 1050
-AR Path="/623BE0FF/623C6A12" Ref="SW3"  Part="1" 
-AR Path="/623BC61F/623C6A12" Ref="SW?"  Part="1" 
-F 0 "SW3" H 1400 1335 50  0000 C CNN
-F 1 "BOOT" H 1400 1244 50  0000 C CNN
-F 2 "Button_Switch_SMD:SW_Push_1P1T_NO_6x6mm_H9.5mm" H 1400 1250 50  0001 C CNN
-F 3 "~" H 1400 1250 50  0001 C CNN
-	1    1400 1050
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1600 1050 1850 1050
-Wire Wire Line
-	1600 1250 1850 1250
-Wire Wire Line
-	1200 1050 950  1050
-Wire Wire Line
-	1200 1250 950  1250
-$Comp
-L Device:C C20
-U 1 1 623C6A13
-P 1400 1550
-AR Path="/623BE0FF/623C6A13" Ref="C20"  Part="1" 
-AR Path="/623BC61F/623C6A13" Ref="C?"  Part="1" 
-F 0 "C20" V 1148 1550 50  0000 C CNN
-F 1 "100n" V 1239 1550 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 1438 1400 50  0001 C CNN
-F 3 "~" H 1400 1550 50  0001 C CNN
-	1    1400 1550
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	950  1050 950  1250
-Wire Wire Line
-	950  1250 950  1550
-Wire Wire Line
-	950  1550 1250 1550
-Connection ~ 950  1250
-Wire Wire Line
-	1550 1550 1850 1550
-Wire Wire Line
-	1850 1550 1850 1250
-Wire Wire Line
-	1850 1250 1850 1050
-Connection ~ 1850 1250
-Wire Wire Line
-	1850 1050 1950 1050
-Connection ~ 1850 1050
-Text Label 1950 1050 0    50   ~ 0
+Text Label 2650 1200 0    50   ~ 0
 BOOT
 Text Label 4300 3050 2    50   ~ 0
 BOOT
@@ -708,20 +605,6 @@ F 3 "" H 3950 2750 50  0001 C CNN
 	1    3950 2750
 	0    1    1    0   
 $EndComp
-$Comp
-L power:+3.3V #PWR067
-U 1 1 62266AF1
-P 950 1050
-AR Path="/623BE0FF/62266AF1" Ref="#PWR067"  Part="1" 
-AR Path="/623BC61F/62266AF1" Ref="#PWR?"  Part="1" 
-F 0 "#PWR067" H 950 900 50  0001 C CNN
-F 1 "+3.3V" H 965 1223 50  0000 C CNN
-F 2 "" H 950 1050 50  0001 C CNN
-F 3 "" H 950 1050 50  0001 C CNN
-	1    950  1050
-	1    0    0    -1  
-$EndComp
-Connection ~ 950  1050
 Text Label 4500 1100 2    50   ~ 0
 FTDI_CTS
 $Comp
@@ -774,63 +657,63 @@ $EndComp
 $Comp
 L MCU_ST_STM32F4:STM32F401RETx U7
 U 1 1 624E17AD
-P 7450 4400
-F 0 "U7" H 7400 6281 50  0000 C CNN
-F 1 "STM32F401RETx" H 6850 6150 50  0000 C CNN
-F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 6850 2700 50  0001 R CNN
-F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00102166.pdf" H 7450 4400 50  0001 C CNN
-	1    7450 4400
+P 7600 4450
+F 0 "U7" H 7550 6331 50  0000 C CNN
+F 1 "STM32F401RETx" H 7000 6200 50  0000 C CNN
+F 2 "Package_QFP:LQFP-64_10x10mm_P0.5mm" H 7000 2750 50  0001 R CNN
+F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/datasheet/DM00102166.pdf" H 7600 4450 50  0001 C CNN
+	1    7600 4450
 	1    0    0    -1  
 $EndComp
-Text Label 6750 2900 2    50   ~ 0
+Text Label 6900 2950 2    50   ~ 0
 RST
-Text Label 6750 3100 2    50   ~ 0
+Text Label 6900 3150 2    50   ~ 0
 BOOT
-Text Label 6750 4000 2    50   ~ 0
+Text Label 6900 4050 2    50   ~ 0
 OSM_IN
-Text Label 6750 4100 2    50   ~ 0
+Text Label 6900 4150 2    50   ~ 0
 OSM_OUT
-Text GLabel 6750 4500 0    50   Input ~ 0
-XSHUT_0
-Text GLabel 6750 4600 0    50   Input ~ 0
-XSHUT_1
-Text GLabel 6750 4700 0    50   Input ~ 0
-XSHUT_2
-Text GLabel 6750 4800 0    50   Input ~ 0
+Text GLabel 6900 4550 0    50   Input ~ 0
+_XSHUT_0
+Text GLabel 6900 4650 0    50   Input ~ 0
+_XSHUT_3
+Text GLabel 6900 4750 0    50   Input ~ 0
+_XSHUT_6
+Text GLabel 6900 4850 0    50   Input ~ 0
 GPIOI_0
-Text GLabel 6750 4900 0    50   Input ~ 0
+Text GLabel 6900 4950 0    50   Input ~ 0
 GPIOI_1
-Text GLabel 6750 5000 0    50   Input ~ 0
+Text GLabel 6900 5050 0    50   Input ~ 0
 GPIOI_2
-Text GLabel 8050 5500 2    50   Input ~ 0
+Text GLabel 8200 5550 2    50   Input ~ 0
 SDA1
-Text GLabel 8050 5400 2    50   Input ~ 0
+Text GLabel 8200 5450 2    50   Input ~ 0
 SCL1
-Text Label 8050 4900 0    50   ~ 0
+Text Label 8200 4950 0    50   ~ 0
 SW0
-Text Label 8050 4300 0    50   ~ 0
+Text Label 8200 4350 0    50   ~ 0
 SWCLK
-Text Label 8050 4200 0    50   ~ 0
+Text Label 8200 4250 0    50   ~ 0
 SWDAT
-Text GLabel 8050 2900 2    50   Input ~ 0
+Text GLabel 8200 2950 2    50   Input ~ 0
 LED_1
-Text GLabel 8050 3000 2    50   Input ~ 0
+Text GLabel 8200 3050 2    50   Input ~ 0
 LED_2
-Text GLabel 8050 3500 2    50   Input ~ 0
+Text GLabel 8200 3550 2    50   Input ~ 0
 LED_3
-Text GLabel 8050 3600 2    50   Input ~ 0
+Text GLabel 8200 3650 2    50   Input ~ 0
 LED_4
-Text GLabel 8050 4600 2    50   Input ~ 0
+Text GLabel 8200 4650 2    50   Input ~ 0
 LED_5
-Text Label 8050 5200 0    50   ~ 0
+Text Label 8200 5250 0    50   ~ 0
 FTDI_TXD
-Text Label 8050 5300 0    50   ~ 0
+Text Label 8200 5350 0    50   ~ 0
 FTDI_RXD
-Text Label 8050 4000 0    50   ~ 0
+Text Label 8200 4050 0    50   ~ 0
 FTDI_CTS
-Text Label 8050 4100 0    50   ~ 0
+Text Label 8200 4150 0    50   ~ 0
 FTDI_RTS
-Text GLabel 6750 5400 0    50   Input ~ 0
+Text GLabel 6900 5450 0    50   Input ~ 0
 SDA2
 Text GLabel 5950 3450 2    50   Input ~ 0
 LED_3
@@ -838,9 +721,9 @@ Text GLabel 5950 4550 2    50   Input ~ 0
 LED_5
 Text Label 5950 3050 0    50   ~ 0
 UART_TX
-Text Label 8050 3100 0    50   ~ 0
+Text Label 8200 3150 0    50   ~ 0
 UART_TX
-Text Label 8050 3200 0    50   ~ 0
+Text Label 8200 3250 0    50   ~ 0
 UART_RX
 Text Label 5950 3150 0    50   ~ 0
 UART_RX
@@ -851,73 +734,73 @@ SDA1
 $Comp
 L power:+3.3V #PWR0104
 U 1 1 626C60B0
-P 7450 2450
+P 7600 2500
 AR Path="/623BE0FF/626C60B0" Ref="#PWR0104"  Part="1" 
 AR Path="/623BC61F/626C60B0" Ref="#PWR?"  Part="1" 
-F 0 "#PWR0104" H 7450 2300 50  0001 C CNN
-F 1 "+3.3V" H 7465 2623 50  0000 C CNN
-F 2 "" H 7450 2450 50  0001 C CNN
-F 3 "" H 7450 2450 50  0001 C CNN
-	1    7450 2450
+F 0 "#PWR0104" H 7600 2350 50  0001 C CNN
+F 1 "+3.3V" H 7615 2673 50  0000 C CNN
+F 2 "" H 7600 2500 50  0001 C CNN
+F 3 "" H 7600 2500 50  0001 C CNN
+	1    7600 2500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7450 2450 7450 2500
+	7600 2500 7600 2550
 Wire Wire Line
-	7450 2500 7550 2500
+	7600 2550 7700 2550
 Wire Wire Line
-	7550 2500 7550 2700
-Connection ~ 7450 2500
+	7700 2550 7700 2750
+Connection ~ 7600 2550
 Wire Wire Line
-	7450 2500 7450 2700
+	7600 2550 7600 2750
 Wire Wire Line
-	7650 2700 7650 2500
+	7800 2750 7800 2550
 Wire Wire Line
-	7650 2500 7550 2500
-Connection ~ 7550 2500
+	7800 2550 7700 2550
+Connection ~ 7700 2550
 Wire Wire Line
-	7350 2700 7350 2500
+	7500 2750 7500 2550
 Wire Wire Line
-	7350 2500 7450 2500
+	7500 2550 7600 2550
 Wire Wire Line
-	7250 6200 7250 6250
+	7400 6250 7400 6300
 Wire Wire Line
-	7250 6250 7350 6250
+	7400 6300 7500 6300
 Wire Wire Line
-	7450 6250 7450 6300
+	7600 6300 7600 6350
 Wire Wire Line
-	7450 6200 7450 6250
-Connection ~ 7450 6250
+	7600 6250 7600 6300
+Connection ~ 7600 6300
 Wire Wire Line
-	7350 6200 7350 6250
-Connection ~ 7350 6250
+	7500 6250 7500 6300
+Connection ~ 7500 6300
 Wire Wire Line
-	7350 6250 7450 6250
+	7500 6300 7600 6300
 Wire Wire Line
-	7550 6200 7550 6250
+	7700 6250 7700 6300
 Wire Wire Line
-	7650 6200 7650 6250
+	7800 6250 7800 6300
 Wire Wire Line
-	7450 6250 7550 6250
-Connection ~ 7550 6250
+	7600 6300 7700 6300
+Connection ~ 7700 6300
 Wire Wire Line
-	7550 6250 7650 6250
+	7700 6300 7800 6300
 $Comp
 L power:+3.3V #PWR0106
 U 1 1 62723D73
-P 6750 3400
+P 6900 3450
 AR Path="/623BE0FF/62723D73" Ref="#PWR0106"  Part="1" 
 AR Path="/623BC61F/62723D73" Ref="#PWR?"  Part="1" 
-F 0 "#PWR0106" H 6750 3250 50  0001 C CNN
-F 1 "+3.3V" V 6750 3650 50  0000 C CNN
-F 2 "" H 6750 3400 50  0001 C CNN
-F 3 "" H 6750 3400 50  0001 C CNN
-	1    6750 3400
+F 0 "#PWR0106" H 6900 3300 50  0001 C CNN
+F 1 "+3.3V" V 6900 3700 50  0000 C CNN
+F 2 "" H 6900 3450 50  0001 C CNN
+F 3 "" H 6900 3450 50  0001 C CNN
+	1    6900 3450
 	0    -1   -1   0   
 $EndComp
 Text Label 5950 5650 0    50   ~ 0
 PIN30
-Text Label 6750 3300 2    50   ~ 0
+Text Label 6900 3350 2    50   ~ 0
 PIN30
 $Comp
 L Device:C C23
@@ -981,15 +864,15 @@ $EndComp
 Wire Wire Line
 	6200 2650 6400 2650
 Wire Wire Line
-	7250 2700 7250 2500
+	7400 2750 7400 2550
 Wire Wire Line
-	7250 2500 7350 2500
-Connection ~ 7350 2500
-Text Label 6750 6000 2    50   ~ 0
+	7400 2550 7500 2550
+Connection ~ 7500 2550
+Text Label 6900 6050 2    50   ~ 0
 OS32_OUT
-Text Label 6750 5900 2    50   ~ 0
+Text Label 6900 5950 2    50   ~ 0
 OS32_IN
-Text Label 8050 3700 0    50   ~ 0
+Text Label 8200 3750 0    50   ~ 0
 PIN41
 Text Label 5950 5550 0    50   ~ 0
 PIN29
@@ -1012,64 +895,27 @@ F 3 "http://www.st.com/st-web-ui/static/active/en/resource/technical/document/da
 $EndComp
 Text Label 5950 3650 0    50   ~ 0
 PIN41
-Text Label 8050 5600 0    50   ~ 0
+Text Label 8200 5650 0    50   ~ 0
 PIN29
 Text GLabel 4650 5450 0    50   Input ~ 0
 SDA2
-Text Label 5950 5750 0    50   ~ 0
-PB12
-Text Label 5950 5850 0    50   ~ 0
-PB13
-Text Label 5950 5950 0    50   ~ 0
-PB14
-Text Label 5950 6050 0    50   ~ 0
-PB15
-Text Label 8050 5700 0    50   ~ 0
-PB12
-Text Label 8050 5800 0    50   ~ 0
-PB13
-Text Label 8050 5900 0    50   ~ 0
-PB14
-Text Label 8050 6000 0    50   ~ 0
-PB15
-Text Label 4650 5150 2    50   ~ 0
-PC6
-Text Label 4650 5250 2    50   ~ 0
-PC7
 Text Label 4650 5350 2    50   ~ 0
 PC8
-Text Label 6750 5100 2    50   ~ 0
-PC6
-Text Label 6750 5200 2    50   ~ 0
-PC7
-Text Label 6750 5300 2    50   ~ 0
+Text Label 6900 5350 2    50   ~ 0
 PC8
 Text Label 5950 3750 0    50   ~ 0
 PA9
 Text Label 5950 3850 0    50   ~ 0
 PA10
-Text Label 8050 3800 0    50   ~ 0
+Text Label 8200 3850 0    50   ~ 0
 PA9
-Text Label 8050 3900 0    50   ~ 0
+Text Label 8200 3950 0    50   ~ 0
 PA10
-$Comp
-L Device:C C21
-U 1 1 623C6A21
-P 2650 1550
-AR Path="/623BE0FF/623C6A21" Ref="C21"  Part="1" 
-AR Path="/623BC61F/623C6A21" Ref="C?"  Part="1" 
-F 0 "C21" V 2398 1550 50  0000 C CNN
-F 1 "100n" V 2489 1550 50  0000 C CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 2688 1400 50  0001 C CNN
-F 3 "~" H 2650 1550 50  0001 C CNN
-	1    2650 1550
-	0    1    1    0   
-$EndComp
 Text GLabel 5950 4650 2    50   Input ~ 0
 SW_1
-Text GLabel 8050 4800 2    50   Input ~ 0
+Text GLabel 8200 4850 2    50   Input ~ 0
 SW_2
-Text GLabel 8050 4700 2    50   Input ~ 0
+Text GLabel 8200 4750 2    50   Input ~ 0
 SW_1
 Text GLabel 5950 4750 2    50   Input ~ 0
 SW_2
@@ -1121,14 +967,14 @@ SW0
 $Comp
 L power:GND #PWR0105
 U 1 1 62707990
-P 7450 6300
+P 7600 6350
 AR Path="/623BE0FF/62707990" Ref="#PWR0105"  Part="1" 
 AR Path="/623BC61F/62707990" Ref="#PWR?"  Part="1" 
-F 0 "#PWR0105" H 7450 6050 50  0001 C CNN
-F 1 "GND" H 7455 6127 50  0000 C CNN
-F 2 "" H 7450 6300 50  0001 C CNN
-F 3 "" H 7450 6300 50  0001 C CNN
-	1    7450 6300
+F 0 "#PWR0105" H 7600 6100 50  0001 C CNN
+F 1 "GND" H 7605 6177 50  0000 C CNN
+F 2 "" H 7600 6350 50  0001 C CNN
+F 3 "" H 7600 6350 50  0001 C CNN
+	1    7600 6350
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1276,90 +1122,12 @@ F 3 "~" H 1300 5150 50  0001 C CNN
 	1    1300 5150
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J16
-U 1 1 621BA73A
-P 1300 5050
-F 0 "J16" H 1380 5092 50  0000 L CNN
-F 1 "Conn_01x01" H 1550 5050 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.5x1.5mm" H 1300 5050 50  0001 C CNN
-F 3 "~" H 1300 5050 50  0001 C CNN
-	1    1300 5050
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J15
-U 1 1 621BA4E6
-P 1300 4950
-F 0 "J15" H 1380 4992 50  0000 L CNN
-F 1 "Conn_01x01" H 1550 4950 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.5x1.5mm" H 1300 4950 50  0001 C CNN
-F 3 "~" H 1300 4950 50  0001 C CNN
-	1    1300 4950
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J14
-U 1 1 621BA2A8
-P 1300 4850
-F 0 "J14" H 1380 4892 50  0000 L CNN
-F 1 "Conn_01x01" H 1550 4850 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.5x1.5mm" H 1300 4850 50  0001 C CNN
-F 3 "~" H 1300 4850 50  0001 C CNN
-	1    1300 4850
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J13
-U 1 1 621BA0A7
-P 1300 4750
-F 0 "J13" H 1380 4792 50  0000 L CNN
-F 1 "Conn_01x01" H 1550 4750 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.5x1.5mm" H 1300 4750 50  0001 C CNN
-F 3 "~" H 1300 4750 50  0001 C CNN
-	1    1300 4750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J12
-U 1 1 621B9E59
-P 1300 4650
-F 0 "J12" H 1380 4692 50  0000 L CNN
-F 1 "Conn_01x01" H 1550 4650 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.5x1.5mm" H 1300 4650 50  0001 C CNN
-F 3 "~" H 1300 4650 50  0001 C CNN
-	1    1300 4650
-	1    0    0    -1  
-$EndComp
-$Comp
-L Connector_Generic:Conn_01x01 J11
-U 1 1 621B9828
-P 1300 4550
-F 0 "J11" H 1380 4592 50  0000 L CNN
-F 1 "Conn_01x01" H 1550 4550 50  0000 L CNN
-F 2 "TestPoint:TestPoint_Pad_1.5x1.5mm" H 1300 4550 50  0001 C CNN
-F 3 "~" H 1300 4550 50  0001 C CNN
-	1    1300 4550
-	1    0    0    -1  
-$EndComp
 Text Label 1100 5350 2    50   ~ 0
 PA10
 Text Label 1100 5250 2    50   ~ 0
 PA9
 Text Label 1100 5150 2    50   ~ 0
 PC8
-Text Label 1100 5050 2    50   ~ 0
-PC7
-Text Label 1100 4950 2    50   ~ 0
-PC6
-Text Label 1100 4850 2    50   ~ 0
-PB15
-Text Label 1100 4750 2    50   ~ 0
-PB14
-Text Label 1100 4650 2    50   ~ 0
-PB13
-Text Label 1100 4550 2    50   ~ 0
-PB12
 Text GLabel 3300 5350 2    50   Input ~ 0
 SDA2
 $Comp
@@ -1436,4 +1204,80 @@ Text Label 3300 4300 0    50   ~ 0
 PIN41
 Text Label 2900 4300 2    50   ~ 0
 PIN29
+Text GLabel 8200 5950 2    50   Input ~ 0
+_XSHUT_1
+Text GLabel 8200 5850 2    50   Input ~ 0
+_XSHUT_4
+Text GLabel 8200 5750 2    50   Input ~ 0
+_XSHUT_7
+Text GLabel 5950 5950 2    50   Input ~ 0
+_XSHUT_1
+Text GLabel 5950 5850 2    50   Input ~ 0
+_XSHUT_4
+Text GLabel 5950 5750 2    50   Input ~ 0
+_XSHUT_7
+Text GLabel 5950 6050 2    50   Input ~ 0
+_XSHUT_8
+Text GLabel 4650 5250 0    50   Input ~ 0
+_XSHUT_2
+Text GLabel 4650 5150 0    50   Input ~ 0
+_XSHUT_5
+Text GLabel 8200 6050 2    50   Input ~ 0
+_XSHUT_8
+Text GLabel 6900 5150 0    50   Input ~ 0
+_XSHUT_5
+Text GLabel 6900 5250 0    50   Input ~ 0
+_XSHUT_2
+Text GLabel 6900 5850 0    50   Input ~ 0
+BUCK_5_EN
+Text GLabel 4650 5850 0    50   Input ~ 0
+BUCK_5_EN
+$Comp
+L power:GND #PWR0196
+U 1 1 62A47336
+P 1800 1300
+AR Path="/623BE0FF/62A47336" Ref="#PWR0196"  Part="1" 
+AR Path="/623BC61F/62A47336" Ref="#PWR?"  Part="1" 
+F 0 "#PWR0196" H 1800 1050 50  0001 C CNN
+F 1 "GND" V 1805 1172 50  0000 R CNN
+F 2 "" H 1800 1300 50  0001 C CNN
+F 3 "" H 1800 1300 50  0001 C CNN
+	1    1800 1300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:+3.3V #PWR0197
+U 1 1 62A47A47
+P 2650 1300
+AR Path="/623BE0FF/62A47A47" Ref="#PWR0197"  Part="1" 
+AR Path="/623BC61F/62A47A47" Ref="#PWR?"  Part="1" 
+F 0 "#PWR0197" H 2650 1150 50  0001 C CNN
+F 1 "+3.3V" V 2665 1428 50  0000 L CNN
+F 2 "" H 2650 1300 50  0001 C CNN
+F 3 "" H 2650 1300 50  0001 C CNN
+	1    2650 1300
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x02 J12
+U 1 1 62A4BA5F
+P 2450 1300
+F 0 "J12" H 2368 975 50  0000 C CNN
+F 1 "Conn_01x02" H 2368 1066 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 2450 1300 50  0001 C CNN
+F 3 "~" H 2450 1300 50  0001 C CNN
+	1    2450 1300
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x02 J11
+U 1 1 62A4FE30
+P 1600 1300
+F 0 "J11" H 1518 975 50  0000 C CNN
+F 1 "Conn_01x02" H 1518 1066 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 1600 1300 50  0001 C CNN
+F 3 "~" H 1600 1300 50  0001 C CNN
+	1    1600 1300
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
