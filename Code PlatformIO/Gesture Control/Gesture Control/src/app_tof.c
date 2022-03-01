@@ -35,7 +35,8 @@ extern "C"
 #include "stm32f4xx_nucleo.h"
 #include "stdbool.h" //Nodig om bool te kunnen gebruiken
 
-#include "GestureDetectObject.h"	//Deze file bevat de detectie van een persoon
+#include "GestureDetectObject.h"  //Deze file bevat de detectie van een persoon
+#include "GestureDetectDimming.h" //Bevat methodes om het dimmen te detecteren + om de value te verkrijgen.
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -55,6 +56,10 @@ extern "C"
 	bool ObjectPresent = false; // flag ofdat er een object aanwezig is
 	bool hasStarted = false;	// Kijken ofdat de linkse & rechte sensor al opgestart zijn of niet
 
+	// Dimming led
+	uint16_t pwmVal = 0;
+	bool dimming = false;
+
 	TIM_HandleTypeDef htim3;
 
 	static const char *TofDevStr[] =
@@ -63,14 +68,12 @@ extern "C"
 			[VL53L3A2_DEV_CENTER] = "CENTER",
 			[VL53L3A2_DEV_RIGHT] = "RIGHT"};
 
-	/* Private function prototypes -----------------------------------------------*/
-	static void MX_53L3A2_MultiSensorRanging_Init(void);
-	// static void MX_53L3A2_MultiSensorRanging_Process(void);
-	// static void print_result(RANGING_SENSOR_Result_t *Result);
-	static void start_sensor(uint8_t sensor);
-	static void stop_sensor(uint8_t sensor);
-	static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t *result);
-	static long getDistance(uint8_t sensor, RANGING_SENSOR_Result_t *result);
+/* Intern functions ----------------------------------------------------------*/
+static void start_sensor(uint8_t sensor);
+static void stop_sensor(uint8_t sensor);
+static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t *result);
+static long getDistance(uint8_t sensor, RANGING_SENSOR_Result_t *result);
+static void MX_53L3A2_MultiSensorRanging_Init(void);
 
 	void MX_TOF_Init(void)
 	{
@@ -83,22 +86,6 @@ extern "C"
 	void MX_TOF_Process(void *_htim3)
 	{
 		htim3 = *(TIM_HandleTypeDef *)_htim3;
-		/* USER CODE BEGIN TOF_Process_PreTreatment */
-
-		/*
-		for (i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
-		{
-		  //skip this device if not detected
-		  if (ToF_Present[i] != 1) continue;
-		   VL53L3A2_RANGING_SENSOR_ConfigProfile(i, &Profile);
-		   status = VL53L3A2_RANGING_SENSOR_Start(i, RS_MODE_BLOCKING_CONTINUOUS);
-
-		   if (status != BSP_ERROR_NONE)
-		   {
-			 printf("VL53L3A2_RANGING_SENSOR_Start failed\r\n");
-			 while(1);
-		   }
-		  } */
 
 		// Enkel de 1ste sensor (Center) opstarten
 		/*	Hier zeggen we welk profiel we willen gebruiken
@@ -113,9 +100,8 @@ extern "C"
 			getResult(VL53L3A2_DEV_CENTER, Result);
 			dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
 
-			ObjectPresent = objectPresent(Result, ObjectPresent);
+			ObjectPresent = ckeckObjectPresent(Result, &ObjectPresent);
 
-			// Het meten van de afstand van 2 buitenste sensoren.
 			if (ObjectPresent)
 			{
 				// Persoon naderd en staat dicht genoeg
@@ -152,19 +138,11 @@ extern "C"
 				}
 			}
 
+			CheckDimmingCommand(&dimming, &ObjectPresent, &dis0);
+			pwmVal = getDimmingValue(&dimming, &pwmVal, &dis0);
 
-			// Met afstand een led laten dimmen
-			// Op voorwaarde dat de afstand kleiner is dan 500
-			if (ObjectPresent && dis0 <= 500)
-			{
-				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (dis0 * 2) + 23);
-			}
-
-			// ObjectPresent();
-
-			// Ticks
-			//  long x = HAL_GetTick();
-			// printf("Ticks: %ld ", x);
+			if (ckeckObjectPresent)
+				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (pwmVal * 2) + 23);
 
 			if (!ObjectPresent)
 			{
@@ -177,6 +155,7 @@ extern "C"
 			}
 			else
 			{
+
 				uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
 				uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
 				uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
@@ -193,11 +172,9 @@ extern "C"
 				}
 #endif
 			}
-
 			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
 			HAL_GPIO_WritePin(L_Y_GPIO_Port, L_Y_Pin, ObjectPresent);
 		}
-		/* USER CODE END TOF_Process_PostTreatment */
 	}
 
 	static void MX_53L3A2_MultiSensorRanging_Init(void)
@@ -244,45 +221,6 @@ extern "C"
 #endif
 		}
 	}
-	/*
-	static void MX_53L3A2_MultiSensorRanging_Process(void)
-	{
-		uint8_t i;
-		RANGING_SENSOR_Result_t Result;
-
-	  while (1)
-	  {
-		//polling mode
-		for (i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
-		{
-		  status = VL53L3A2_RANGING_SENSOR_GetDistance(i, &Result);
-
-		  if (status == BSP_ERROR_NONE)
-		  {
-			printf("%s\t - ", TofDevStr[i]);
-			print_result(&Result);
-			HAL_Delay(POLLING_PERIOD);
-		  }
-		}
-		printf ("\r\n");
-	  }
-	}
-	*/
-
-	/*
-	static void print_result(RANGING_SENSOR_Result_t *Result)
-	{
-	  uint8_t i;
-
-	  for (i = 0; i < RANGING_SENSOR_MAX_NB_ZONES; i++)
-	  {
-		printf("Status = %2ld, Distance = %5ld mm",
-		  (long)Result->ZoneResult[i].Status[0],
-		  (long)Result->ZoneResult[i].Distance[0]);
-	  }
-	  printf ("\r\n");
-	}
-	*/
 
 	static void start_sensor(uint8_t sensor)
 	{

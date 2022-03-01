@@ -327,36 +327,45 @@ int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
   switch (DevNo)
   {
     case VL53L3A2_DEV_CENTER :
-      CurIOVal.bytes[3] &= ~0x80U; /* bit 15 expander 1  => byte #3 */
+      // CurIOVal.bytes[3] &= ~0x80U; /* bit 15 expander 1  => byte #3 */
 
-      if (state)
-      {
-        CurIOVal.bytes[3] |= 0x80U;  /* bit 15 expander 1  => byte #3 */
-      }
+      // if (state)
+      // {
+      //   CurIOVal.bytes[3] |= 0x80U;  /* bit 15 expander 1  => byte #3 */
+      // }
 
-      status = _ExpanderWR(I2C_EXPANDER_ADDR1, GPSR + 1, &CurIOVal.bytes[3], 1);
+      // status = _ExpanderWR(I2C_EXPANDER_ADDR1, GPSR + 1, &CurIOVal.bytes[3], 1);
+      // break;
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, state); //XSHUT staat op pin PA0
+      status = 1;
       break;
 
     case VL53L3A2_DEV_LEFT :
-      CurIOVal.bytes[1] &= ~0x40U; /* bit 14 expander 0 => byte #1*/
+      // CurIOVal.bytes[1] &= ~0x40U; /* bit 14 expander 0 => byte #1*/
 
-      if (state)
-      {
-        CurIOVal.bytes[1] |= 0x40U;  /* bit 14 expander 0 => byte #1*/
-      }
+      // if (state)
+      // {
+      //   CurIOVal.bytes[1] |= 0x40U;  /* bit 14 expander 0 => byte #1*/
+      // }
 
-      status = _ExpanderWR(I2C_EXPANDER_ADDR0, GPSR + 1, &CurIOVal.bytes[1], 1);
+      // status = _ExpanderWR(I2C_EXPANDER_ADDR0, GPSR + 1, &CurIOVal.bytes[1], 1);
+      // break;
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, state); //XSHUT staat op pin PA0
+      status = 1;
       break;
 
     case VL53L3A2_DEV_RIGHT :
-      CurIOVal.bytes[1] &= ~0x80U; /* bit 15 expander 0  => byte #1 */
+      // CurIOVal.bytes[1] &= ~0x80U; /* bit 15 expander 0  => byte #1 */
 
-      if (state)
-      {
-        CurIOVal.bytes[1] |= 0x80U;  /* bit 15 expander 0 => byte #1*/
-      }
+      // if (state)
+      // {
+      //   CurIOVal.bytes[1] |= 0x80U;  /* bit 15 expander 0 => byte #1*/
+      // }
 
-      status = _ExpanderWR(I2C_EXPANDER_ADDR0, GPSR + 1, &CurIOVal.bytes[1], 1);
+      // status = _ExpanderWR(I2C_EXPANDER_ADDR0, GPSR + 1, &CurIOVal.bytes[1], 1);
+      // break;
+      HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, state); //XSHUT staat op pin PA0
+      status = 1;
       break;
 
     default:
