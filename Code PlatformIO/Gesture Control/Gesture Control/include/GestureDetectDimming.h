@@ -3,11 +3,6 @@
 
 #include "stdbool.h" //Nodig om bool te kunnen gebruiken
 
-static int maxDistanceObject = 490;
-static float timerMeasurment = 0;
-static bool timerMeasurementSet = false;
-static int timerMeasurmentTimeout = 1000; // 2 seconden
-
 /**
  * @brief  Detecteerd het dimming commando
  *

@@ -56,6 +56,16 @@ extern "C"
 	bool ObjectPresent = false; // flag ofdat er een object aanwezig is
 	bool hasStarted = false;	// Kijken ofdat de linkse & rechte sensor al opgestart zijn of niet
 
+	// Gesture Right Left
+	bool hasLeft = false;
+	bool hasCenter = false;
+	bool hasRight = false;
+	bool gestureRL = false;
+	int maxDistanceObject = 250;
+	float timerMeasurment = 0;
+	bool timerMeasurementSet = false;
+	int timerMeasurmentTimeout = 1500; // 2 seconden
+
 	// Dimming led
 	uint16_t pwmVal = 0;
 	bool dimming = false;
@@ -68,12 +78,12 @@ extern "C"
 			[VL53L3A2_DEV_CENTER] = "CENTER",
 			[VL53L3A2_DEV_RIGHT] = "RIGHT"};
 
-/* Intern functions ----------------------------------------------------------*/
-static void start_sensor(uint8_t sensor);
-static void stop_sensor(uint8_t sensor);
-static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t *result);
-static long getDistance(uint8_t sensor, RANGING_SENSOR_Result_t *result);
-static void MX_53L3A2_MultiSensorRanging_Init(void);
+	/* Intern functions ----------------------------------------------------------*/
+	static void start_sensor(uint8_t sensor);
+	static void stop_sensor(uint8_t sensor);
+	static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t *result);
+	static long getDistance(uint8_t sensor, RANGING_SENSOR_Result_t *result);
+	static void MX_53L3A2_MultiSensorRanging_Init(void);
 
 	void MX_TOF_Init(void)
 	{
@@ -96,7 +106,7 @@ static void MX_53L3A2_MultiSensorRanging_Init(void);
 
 		while (1)
 		{
-			HAL_Delay(5);
+			// HAL_Delay(5);
 			getResult(VL53L3A2_DEV_CENTER, Result);
 			dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
 
@@ -144,36 +154,90 @@ static void MX_53L3A2_MultiSensorRanging_Init(void);
 			if (ckeckObjectPresent)
 				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (pwmVal * 2) + 23);
 
-			if (!ObjectPresent)
-			{
-				uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
-				uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
-#if DEBUGGING
-				printf("center: %5d obj: %1d sta: %2d", dis1, obj1, sta1);
-				printf("\r\n");
-#endif
-			}
-			else
-			{
+			// if (!ObjectPresent)
+			// {
+			// 	// uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
+			// 	// uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 
-				uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
-				uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
-				uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
+			// 	// printf("center: %5d obj: %1d sta: %2d", dis1, obj1, sta1);
+			// 	// printf("\r\n");
+			// }
+			// else
+			// {
 
+			// 	// uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
+			// 	// uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
+			// 	// uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
+
+			// 	// uint8_t sta0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
+			// 	// uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+			// 	// uint8_t sta2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
+
+			// 	//printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
+			// 	//printf("\r\n");
+			// }
+			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
+
+			// Detecteren commando van rechts naar links
+			// Eerst moet sensor right minder binnen krijgen
+			// Dan sensor center
+			// Als laatste sensor left
+			if (ObjectPresent)
+			{
 				uint8_t sta0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
-				uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+				//uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 				uint8_t sta2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
 
-#if DEBUGGING
-				if (sta0 == sta1 == sta2 == 0)
+				if ((dis2 < maxDistanceObject) && (sta2 == 0) && !hasRight && !hasLeft) // Sensor right
 				{
-					printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
-					printf("\r\n");
+					hasRight = true;
+					printf("right Trigger: \r\n");
 				}
-#endif
+				// else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasRight && !hasCenter && !hasLeft) // Sensor center
+				// {
+				// 	hasCenter = true;
+				// 	printf("center Trigger: \r\n");
+				// }
+				else if ((dis0 < maxDistanceObject) && (sta0 == 0) && hasRight && !hasLeft) // Sensor left
+				{
+					hasLeft = true;
+					gestureRL = true;
+					printf("left Trigger: \r\n");
+				}
 			}
-			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
-			HAL_GPIO_WritePin(L_Y_GPIO_Port, L_Y_Pin, ObjectPresent);
+
+			// Een timeout timer plaatsen
+			if (!timerMeasurementSet && (hasRight || hasCenter || hasLeft))
+			{
+				timerMeasurementSet = true;
+				timerMeasurment = HAL_GetTick();
+				// printf("timer set Trigger: \r\n");
+			}
+
+			// Bij het afgaan van de timer
+			if (timerMeasurementSet)
+				if (((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout))
+				{
+					timerMeasurementSet = false;
+					hasRight = false;
+					hasLeft = false;
+					//hasCenter = false;
+					gestureRL = false;
+					printf("timer Trigger: \r\n");
+				}
+
+			if (gestureRL)
+			{
+				HAL_Delay(2000);
+				printf("gestureCommand: %d \r\n", gestureRL);
+				timerMeasurementSet = false;
+				hasRight = false;
+				hasLeft = false;
+				//hasCenter = false;
+				gestureRL = false;
+			}
+
+			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
 		}
 	}
 
@@ -227,7 +291,7 @@ static void MX_53L3A2_MultiSensorRanging_Init(void);
 		RANGING_SENSOR_ProfileConfig_t Profile;
 
 		Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
-		Profile.TimingBudget = 30; /* 16 ms < TimingBudget < 500 ms */
+		Profile.TimingBudget = 10; /* 16 ms < TimingBudget < 500 ms */
 		Profile.Frequency = 0;	   /* not necessary in simple ranging */
 		Profile.EnableAmbient = 1; /* Enable: 1, Disable: 0 */
 		Profile.EnableSignal = 1;  /* Enable: 1, Disable: 0 */
@@ -276,14 +340,21 @@ static void MX_53L3A2_MultiSensorRanging_Init(void);
 		// Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
 		if ((long)result[sensor].ZoneResult[0].Distance[0] >= 17760520)
 		{
-			HAL_Delay(4);
+			//HAL_Delay(1);
 			VL53L3A2_RANGING_SENSOR_GetDistance(sensor, &result[sensor]);
 		}
 	}
 
 	static long getDistance(uint8_t sensor, RANGING_SENSOR_Result_t *result)
 	{
-		long distance = (long)result[sensor].ZoneResult[0].Distance[0];
+		long distance = 0;
+		// do
+		// {
+		//getResult(sensor, result);
+		distance = (long)result[sensor].ZoneResult[0].Distance[0];
+		// 	HAL_Delay(2);
+		// } while (distance == 0);
+
 		return distance;
 	}
 
