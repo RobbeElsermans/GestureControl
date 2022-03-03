@@ -1,3 +1,4 @@
 (fp_lib_table
   (lib (name VL53L3CX)(type KiCad)(uri ${KIPRJMOD}/Lib/VL53L3CXV0DH-1/KiCAD/2022-02-16_11-44-17/footprints.pretty)(options "")(descr ""))
+  (lib (name "WR-MM Female SMT Connector")(type KiCad)(uri C:/Users/robel/GitHub/GestureControl/pcb/GestureControl/Lib/690367291076)(options "")(descr ""))
 )

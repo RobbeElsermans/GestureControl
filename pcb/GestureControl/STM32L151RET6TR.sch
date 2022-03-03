@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 5 5
+Sheet 3 3
 Title ""
 Date ""
 Rev ""
@@ -190,16 +190,12 @@ LED_2
 Text GLabel 5950 3550 2    50   Input ~ 0
 LED_4
 Text GLabel 4650 4550 0    50   Input ~ 0
-_XSHUT_0
-Text GLabel 4650 4650 0    50   Input ~ 0
-_XSHUT_3
-Text GLabel 4650 4750 0    50   Input ~ 0
-_XSHUT_6
-Text GLabel 4650 4850 0    50   Input ~ 0
+XSHUT_0
+Text GLabel 5950 5750 2    50   Input ~ 0
 GPIOI_0
-Text GLabel 4650 4950 0    50   Input ~ 0
+Text GLabel 5950 5850 2    50   Input ~ 0
 GPIOI_1
-Text GLabel 4650 5050 0    50   Input ~ 0
+Text GLabel 5950 5950 2    50   Input ~ 0
 GPIOI_2
 Wire Wire Line
 	4650 3050 4300 3050
@@ -673,18 +669,6 @@ Text Label 6900 4050 2    50   ~ 0
 OSM_IN
 Text Label 6900 4150 2    50   ~ 0
 OSM_OUT
-Text GLabel 6900 4550 0    50   Input ~ 0
-_XSHUT_0
-Text GLabel 6900 4650 0    50   Input ~ 0
-_XSHUT_3
-Text GLabel 6900 4750 0    50   Input ~ 0
-_XSHUT_6
-Text GLabel 6900 4850 0    50   Input ~ 0
-GPIOI_0
-Text GLabel 6900 4950 0    50   Input ~ 0
-GPIOI_1
-Text GLabel 6900 5050 0    50   Input ~ 0
-GPIOI_2
 Text GLabel 8200 5550 2    50   Input ~ 0
 SDA1
 Text GLabel 8200 5450 2    50   Input ~ 0
@@ -1204,30 +1188,6 @@ Text Label 3300 4300 0    50   ~ 0
 PIN41
 Text Label 2900 4300 2    50   ~ 0
 PIN29
-Text GLabel 8200 5950 2    50   Input ~ 0
-_XSHUT_1
-Text GLabel 8200 5850 2    50   Input ~ 0
-_XSHUT_4
-Text GLabel 8200 5750 2    50   Input ~ 0
-_XSHUT_7
-Text GLabel 5950 5950 2    50   Input ~ 0
-_XSHUT_1
-Text GLabel 5950 5850 2    50   Input ~ 0
-_XSHUT_4
-Text GLabel 5950 5750 2    50   Input ~ 0
-_XSHUT_7
-Text GLabel 5950 6050 2    50   Input ~ 0
-_XSHUT_8
-Text GLabel 4650 5250 0    50   Input ~ 0
-_XSHUT_2
-Text GLabel 4650 5150 0    50   Input ~ 0
-_XSHUT_5
-Text GLabel 8200 6050 2    50   Input ~ 0
-_XSHUT_8
-Text GLabel 6900 5150 0    50   Input ~ 0
-_XSHUT_5
-Text GLabel 6900 5250 0    50   Input ~ 0
-_XSHUT_2
 Text GLabel 6900 5850 0    50   Input ~ 0
 BUCK_5_EN
 Text GLabel 4650 5850 0    50   Input ~ 0
@@ -1280,4 +1240,28 @@ F 3 "~" H 1600 1300 50  0001 C CNN
 	1    1600 1300
 	-1   0    0    1   
 $EndComp
+Text GLabel 5950 6050 2    50   Input ~ 0
+GPIOI_3
+Text GLabel 8200 5750 2    50   Input ~ 0
+GPIOI_0
+Text GLabel 8200 5850 2    50   Input ~ 0
+GPIOI_1
+Text GLabel 8200 5950 2    50   Input ~ 0
+GPIOI_2
+Text GLabel 8200 6050 2    50   Input ~ 0
+GPIOI_3
+Text GLabel 4650 4650 0    50   Input ~ 0
+XSHUT_1
+Text GLabel 4650 4750 0    50   Input ~ 0
+XSHUT_2
+Text GLabel 4650 4850 0    50   Input ~ 0
+XSHUT_3
+Text GLabel 6900 4550 0    50   Input ~ 0
+XSHUT_0
+Text GLabel 6900 4650 0    50   Input ~ 0
+XSHUT_1
+Text GLabel 6900 4750 0    50   Input ~ 0
+XSHUT_2
+Text GLabel 6900 4850 0    50   Input ~ 0
+XSHUT_3
 $EndSCHEMATC

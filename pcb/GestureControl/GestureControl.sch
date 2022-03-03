@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 5
+Sheet 1 3
 Title "Gesture Control"
 Date "2022-02-21"
 Rev "V0.1"
@@ -262,54 +262,30 @@ F 3 "" H 3700 1050 50  0001 C CNN
 	1    3700 1050
 	1    0    0    -1  
 $EndComp
-Text GLabel 9650 4000 2    50   Input ~ 0
+Text GLabel 9600 4000 2    50   Input ~ 0
 SCL1
-Text GLabel 9650 4100 2    50   Input ~ 0
+Text GLabel 9600 4100 2    50   Input ~ 0
 SDA1
 Text GLabel 9650 4300 2    50   Input ~ 0
 GND
-Text GLabel 10550 4900 2    50   Input ~ 0
-XSHUT_1
-Text GLabel 10550 5300 2    50   Input ~ 0
-XSHUT_4
-Text GLabel 10550 5600 2    50   Input ~ 0
-XSHUT_7
-Text GLabel 9650 4800 2    50   Input ~ 0
+Text GLabel 9600 5400 2    50   Input ~ 0
 LED_1
-Text GLabel 9650 5400 2    50   Input ~ 0
+Text GLabel 9600 5500 2    50   Input ~ 0
 LED_2
-Text GLabel 9650 5500 2    50   Input ~ 0
+Text GLabel 9600 5600 2    50   Input ~ 0
 LED_3
 Wire Wire Line
-	9600 5500 9650 5500
-Wire Wire Line
-	9600 4800 9650 4800
-Wire Wire Line
 	9650 4300 9600 4300
-Wire Wire Line
-	9600 4100 9650 4100
-Wire Wire Line
-	9650 4000 9600 4000
-Text GLabel 9650 5700 2    50   Input ~ 0
+Text GLabel 9600 5700 2    50   Input ~ 0
 LED_4
-Text GLabel 9650 5800 2    50   Input ~ 0
+Text GLabel 9600 5800 2    50   Input ~ 0
 LED_5
-Wire Wire Line
-	9650 5800 9600 5800
-Wire Wire Line
-	9600 5700 9650 5700
-Text GLabel 8450 5500 0    50   Input ~ 0
+Text GLabel 9600 4700 2    50   Input ~ 0
 GPIOI_0
-Text GLabel 8450 5600 0    50   Input ~ 0
+Text GLabel 9600 4600 2    50   Input ~ 0
 GPIOI_1
-Text GLabel 8450 5700 0    50   Input ~ 0
+Text GLabel 9600 4500 2    50   Input ~ 0
 GPIOI_2
-Wire Wire Line
-	8500 5700 8450 5700
-Wire Wire Line
-	8450 5600 8500 5600
-Wire Wire Line
-	8500 5500 8450 5500
 Text GLabel 8550 1250 0    50   Input ~ 0
 SDA1
 Text GLabel 8550 1550 0    50   Input ~ 0
@@ -432,22 +408,10 @@ data
 Text Notes 700  4400 0    50   ~ 0
 sensors
 $Sheet
-S 2000 4600 1000 700 
+S 850  4600 1000 700 
 U 62398514
 F0 "VL53L3CX center" 50
 F1 "VL53L3CX_CENTER.sch" 50
-$EndSheet
-$Sheet
-S 3200 4600 1000 700 
-U 623A41A0
-F0 "VL53L3CX right" 50
-F1 "VL53L3CX_RIGHT.sch" 50
-$EndSheet
-$Sheet
-S 800  4600 1000 700 
-U 623A3BAC
-F0 "VL53L3CX left" 50
-F1 "VL53L3CX_LEFT.sch" 50
 $EndSheet
 Wire Notes Line
 	700  4450 4350 4450
@@ -689,67 +653,67 @@ Wire Notes Line
 $Comp
 L Mechanical:MountingHole H6
 U 1 1 622D03BB
-P 2800 3850
-F 0 "H6" H 2900 3896 50  0000 L CNN
-F 1 "MountingHole" H 2900 3805 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2800 3850 50  0001 C CNN
-F 3 "~" H 2800 3850 50  0001 C CNN
-	1    2800 3850
+P 2850 3950
+F 0 "H6" H 2950 3996 50  0000 L CNN
+F 1 "MountingHole" H 2950 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2850 3950 50  0001 C CNN
+F 3 "~" H 2850 3950 50  0001 C CNN
+	1    2850 3950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H5
 U 1 1 622D0626
-P 2600 3850
-F 0 "H5" H 2700 3896 50  0000 L CNN
-F 1 "MountingHole" H 2700 3805 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2600 3850 50  0001 C CNN
-F 3 "~" H 2600 3850 50  0001 C CNN
-	1    2600 3850
+P 2650 3950
+F 0 "H5" H 2750 3996 50  0000 L CNN
+F 1 "MountingHole" H 2750 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2650 3950 50  0001 C CNN
+F 3 "~" H 2650 3950 50  0001 C CNN
+	1    2650 3950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H4
 U 1 1 622D08F1
-P 2400 3850
-F 0 "H4" H 2500 3896 50  0000 L CNN
-F 1 "MountingHole" H 2500 3805 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2400 3850 50  0001 C CNN
-F 3 "~" H 2400 3850 50  0001 C CNN
-	1    2400 3850
+P 2450 3950
+F 0 "H4" H 2550 3996 50  0000 L CNN
+F 1 "MountingHole" H 2550 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2450 3950 50  0001 C CNN
+F 3 "~" H 2450 3950 50  0001 C CNN
+	1    2450 3950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H3
 U 1 1 622D0C25
-P 2200 3850
-F 0 "H3" H 2300 3896 50  0000 L CNN
-F 1 "MountingHole" H 2300 3805 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2200 3850 50  0001 C CNN
-F 3 "~" H 2200 3850 50  0001 C CNN
-	1    2200 3850
+P 2250 3950
+F 0 "H3" H 2350 3996 50  0000 L CNN
+F 1 "MountingHole" H 2350 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2250 3950 50  0001 C CNN
+F 3 "~" H 2250 3950 50  0001 C CNN
+	1    2250 3950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H2
 U 1 1 622D0EE3
-P 2000 3850
-F 0 "H2" H 2100 3896 50  0000 L CNN
-F 1 "MountingHole" H 2100 3805 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 2000 3850 50  0001 C CNN
-F 3 "~" H 2000 3850 50  0001 C CNN
-	1    2000 3850
+P 2050 3950
+F 0 "H2" H 2150 3996 50  0000 L CNN
+F 1 "MountingHole" H 2150 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2050 3950 50  0001 C CNN
+F 3 "~" H 2050 3950 50  0001 C CNN
+	1    2050 3950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H1
 U 1 1 622D11CA
-P 1800 3850
-F 0 "H1" H 1900 3896 50  0000 L CNN
-F 1 "MountingHole" H 1900 3805 50  0000 L CNN
-F 2 "MountingHole:MountingHole_3.2mm_M3" H 1800 3850 50  0001 C CNN
-F 3 "~" H 1800 3850 50  0001 C CNN
-	1    1800 3850
+P 1850 3950
+F 0 "H1" H 1950 3996 50  0000 L CNN
+F 1 "MountingHole" H 1950 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 1850 3950 50  0001 C CNN
+F 3 "~" H 1850 3950 50  0001 C CNN
+	1    1850 3950
 	1    0    0    -1  
 $EndComp
 $Sheet
@@ -1323,18 +1287,6 @@ F 3 "" H 6800 2700 50  0001 C CNN
 	1    6800 2700
 	0    1    1    0   
 $EndComp
-Text GLabel 7800 5800 0    50   Input ~ 0
-XSHUT_0
-Text GLabel 7800 5900 0    50   Input ~ 0
-XSHUT_3
-Text GLabel 7800 6000 0    50   Input ~ 0
-XSHUT_6
-Text GLabel 10550 4500 2    50   Input ~ 0
-XSHUT_2
-Text GLabel 10550 4600 2    50   Input ~ 0
-XSHUT_5
-Text GLabel 10550 4700 2    50   Input ~ 0
-XSHUT_8
 Wire Wire Line
 	3950 3900 4800 3900
 Wire Wire Line
@@ -1429,105 +1381,6 @@ F 3 "~" H 9400 4500 50  0001 C CNN
 	1    9400 4500
 	-1   0    0    1   
 $EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP8
-U 1 1 6248C0FE
-P 10400 4500
-F 0 "JP8" H 9800 4500 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 10445 4568 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 10400 4500 50  0001 C CNN
-F 3 "~" H 10400 4500 50  0001 C CNN
-	1    10400 4500
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP9
-U 1 1 6248D77C
-P 10400 4600
-F 0 "JP9" H 9800 4600 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 10445 4668 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 10400 4600 50  0001 C CNN
-F 3 "~" H 10400 4600 50  0001 C CNN
-	1    10400 4600
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP10
-U 1 1 6248DB53
-P 10400 4700
-F 0 "JP10" H 9800 4700 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 10445 4768 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 10400 4700 50  0001 C CNN
-F 3 "~" H 10400 4700 50  0001 C CNN
-	1    10400 4700
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP12
-U 1 1 62497117
-P 10400 5300
-F 0 "JP12" H 10400 5167 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 10445 5368 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 10400 5300 50  0001 C CNN
-F 3 "~" H 10400 5300 50  0001 C CNN
-	1    10400 5300
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP14
-U 1 1 6249774F
-P 10400 5600
-F 0 "JP14" H 10400 5467 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 10445 5668 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 10400 5600 50  0001 C CNN
-F 3 "~" H 10400 5600 50  0001 C CNN
-	1    10400 5600
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP5
-U 1 1 624BE028
-P 7950 5800
-F 0 "JP5" H 8550 5800 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 7995 5868 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 7950 5800 50  0001 C CNN
-F 3 "~" H 7950 5800 50  0001 C CNN
-	1    7950 5800
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP6
-U 1 1 624BE656
-P 7950 5900
-F 0 "JP6" H 8550 5900 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 7995 5968 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 7950 5900 50  0001 C CNN
-F 3 "~" H 7950 5900 50  0001 C CNN
-	1    7950 5900
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP7
-U 1 1 624BE8A9
-P 7950 6000
-F 0 "JP7" H 8550 6000 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 7995 6068 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 7950 6000 50  0001 C CNN
-F 3 "~" H 7950 6000 50  0001 C CNN
-	1    7950 6000
-	-1   0    0    1   
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP11
-U 1 1 624D95BB
-P 10400 4900
-F 0 "JP11" H 9800 4900 50  0000 C CNN
-F 1 "SolderJumper_2_Open" V 10445 4968 50  0001 L CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 10400 4900 50  0001 C CNN
-F 3 "~" H 10400 4900 50  0001 C CNN
-	1    10400 4900
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	5750 1300 5700 1300
 Wire Wire Line
@@ -1566,111 +1419,10 @@ Wire Wire Line
 	6400 3600 6400 3350
 Wire Wire Line
 	6400 3350 6000 3350
-Wire Wire Line
-	9650 5400 9600 5400
 Text Label 6100 1300 0    50   ~ 0
 OUT3.3
 Text Label 5750 2700 0    50   ~ 0
 OUT5.0
-Wire Wire Line
-	9600 4500 10200 4500
-Wire Wire Line
-	10250 4600 10150 4600
-Wire Wire Line
-	9600 4700 10100 4700
-Wire Wire Line
-	10200 4500 10200 4400
-Wire Wire Line
-	10200 4400 10550 4400
-Connection ~ 10200 4500
-Wire Wire Line
-	10200 4500 10250 4500
-Connection ~ 10150 4600
-Wire Wire Line
-	10150 4600 9600 4600
-Wire Wire Line
-	10100 4700 10100 4200
-Wire Wire Line
-	10100 4200 10550 4200
-Connection ~ 10100 4700
-Wire Wire Line
-	10100 4700 10250 4700
-Wire Wire Line
-	10150 4300 10550 4300
-Wire Wire Line
-	10250 5300 10200 5300
-Wire Wire Line
-	10200 5300 10200 5200
-Wire Wire Line
-	10200 5200 10550 5200
-Connection ~ 10200 5300
-Wire Wire Line
-	10200 5300 9600 5300
-Wire Wire Line
-	8500 5800 8250 5800
-Wire Wire Line
-	8100 5900 8200 5900
-Wire Wire Line
-	8100 6000 8150 6000
-Wire Wire Line
-	8150 6000 8150 6150
-Wire Wire Line
-	8150 6150 7800 6150
-Connection ~ 8150 6000
-Wire Wire Line
-	8150 6000 8500 6000
-Wire Wire Line
-	8200 5900 8200 6250
-Wire Wire Line
-	8200 6250 7800 6250
-Connection ~ 8200 5900
-Wire Wire Line
-	8200 5900 8500 5900
-Wire Wire Line
-	8250 5800 8250 6350
-Wire Wire Line
-	8250 6350 7800 6350
-Connection ~ 8250 5800
-Wire Wire Line
-	8250 5800 8100 5800
-Text GLabel 7800 6150 0    50   Input ~ 0
-_XSHUT_6
-Text GLabel 7800 6250 0    50   Input ~ 0
-_XSHUT_3
-Text GLabel 7800 6350 0    50   Input ~ 0
-_XSHUT_0
-Text GLabel 10550 5700 2    50   Input ~ 0
-_XSHUT_7
-Wire Wire Line
-	9600 5600 10200 5600
-Wire Wire Line
-	10550 5700 10200 5700
-Wire Wire Line
-	10200 5700 10200 5600
-Connection ~ 10200 5600
-Wire Wire Line
-	10200 5600 10250 5600
-Text GLabel 10550 5200 2    50   Input ~ 0
-_XSHUT_4
-Text GLabel 10550 5000 2    50   Input ~ 0
-_XSHUT_1
-Wire Wire Line
-	9600 4900 10200 4900
-Wire Wire Line
-	10550 5000 10200 5000
-Wire Wire Line
-	10200 5000 10200 4900
-Connection ~ 10200 4900
-Wire Wire Line
-	10200 4900 10250 4900
-Text GLabel 10550 4400 2    50   Input ~ 0
-_XSHUT_2
-Text GLabel 10550 4300 2    50   Input ~ 0
-_XSHUT_5
-Text GLabel 10550 4200 2    50   Input ~ 0
-_XSHUT_8
-Wire Wire Line
-	10150 4300 10150 4600
 Wire Notes Line
 	11100 3600 11100 6500
 Wire Notes Line
@@ -1744,4 +1496,128 @@ Wire Notes Line
 	7900 750  7900 2250
 Wire Notes Line
 	7150 4200 3550 4200
+Text GLabel 8500 5500 0    50   Input ~ 0
+XSHUT_0
+Text GLabel 8500 5600 0    50   Input ~ 0
+XSHUT_1
+Text GLabel 8500 5700 0    50   Input ~ 0
+XSHUT_2
+Text GLabel 8500 5800 0    50   Input ~ 0
+XSHUT_3
+Text GLabel 9600 4400 2    50   Input ~ 0
+GPIOI_3
+Text GLabel 8500 6000 0    50   Input ~ 0
+SW_2
+Text GLabel 8500 5900 0    50   Input ~ 0
+SW_1
+$Comp
+L Mechanical:MountingHole H12
+U 1 1 6268AB7C
+P 2850 3750
+F 0 "H12" H 2950 3796 50  0000 L CNN
+F 1 "MountingHole" H 2950 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2850 3750 50  0001 C CNN
+F 3 "~" H 2850 3750 50  0001 C CNN
+	1    2850 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H11
+U 1 1 6268AB82
+P 2650 3750
+F 0 "H11" H 2750 3796 50  0000 L CNN
+F 1 "MountingHole" H 2750 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2650 3750 50  0001 C CNN
+F 3 "~" H 2650 3750 50  0001 C CNN
+	1    2650 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H10
+U 1 1 6268AB88
+P 2450 3750
+F 0 "H10" H 2550 3796 50  0000 L CNN
+F 1 "MountingHole" H 2550 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2450 3750 50  0001 C CNN
+F 3 "~" H 2450 3750 50  0001 C CNN
+	1    2450 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H9
+U 1 1 6268AB8E
+P 2250 3750
+F 0 "H9" H 2350 3796 50  0000 L CNN
+F 1 "MountingHole" H 2350 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2250 3750 50  0001 C CNN
+F 3 "~" H 2250 3750 50  0001 C CNN
+	1    2250 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H8
+U 1 1 6268AB94
+P 2050 3750
+F 0 "H8" H 2150 3796 50  0000 L CNN
+F 1 "MountingHole" H 2150 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 2050 3750 50  0001 C CNN
+F 3 "~" H 2050 3750 50  0001 C CNN
+	1    2050 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H7
+U 1 1 6268AB9A
+P 1850 3750
+F 0 "H7" H 1950 3796 50  0000 L CNN
+F 1 "MountingHole" H 1950 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 1850 3750 50  0001 C CNN
+F 3 "~" H 1850 3750 50  0001 C CNN
+	1    1850 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H16
+U 1 1 62720768
+P 3250 3950
+F 0 "H16" H 3350 3996 50  0000 L CNN
+F 1 "MountingHole" H 3350 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3250 3950 50  0001 C CNN
+F 3 "~" H 3250 3950 50  0001 C CNN
+	1    3250 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H14
+U 1 1 6272076E
+P 3050 3950
+F 0 "H14" H 3150 3996 50  0000 L CNN
+F 1 "MountingHole" H 3150 3905 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3050 3950 50  0001 C CNN
+F 3 "~" H 3050 3950 50  0001 C CNN
+	1    3050 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H15
+U 1 1 62720774
+P 3250 3750
+F 0 "H15" H 3350 3796 50  0000 L CNN
+F 1 "MountingHole" H 3350 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3250 3750 50  0001 C CNN
+F 3 "~" H 3250 3750 50  0001 C CNN
+	1    3250 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H13
+U 1 1 6272077A
+P 3050 3750
+F 0 "H13" H 3150 3796 50  0000 L CNN
+F 1 "MountingHole" H 3150 3705 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 3050 3750 50  0001 C CNN
+F 3 "~" H 3050 3750 50  0001 C CNN
+	1    3050 3750
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

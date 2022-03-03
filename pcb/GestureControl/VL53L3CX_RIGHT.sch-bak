@@ -27,34 +27,6 @@ F 3 "" H 4400 3750 60  0000 C CNN
 	1    4400 3750
 	1    0    0    -1  
 $EndComp
-$Comp
-L VL53L3CX:VL53L3CXV0DH_1 U?
-U 1 1 6227DB1B
-P 4450 4900
-AR Path="/62398514/6227DB1B" Ref="U?"  Part="1" 
-AR Path="/623A41A0/6227DB1B" Ref="U8"  Part="1" 
-AR Path="/6227DB1B" Ref="U?"  Part="1" 
-F 0 "U8" H 5450 5300 60  0000 C CNN
-F 1 "VL53L3CXV0DH_RIGHT" H 5450 5181 60  0000 C CNN
-F 2 "VL53L3CX:VL53L3CXV0DH&slash_1" H 5450 5140 60  0001 C CNN
-F 3 "" H 4450 4900 60  0000 C CNN
-	1    4450 4900
-	1    0    0    -1  
-$EndComp
-$Comp
-L VL53L3CX:VL53L3CXV0DH_1 U?
-U 1 1 62283C99
-P 4400 2600
-AR Path="/62398514/62283C99" Ref="U?"  Part="1" 
-AR Path="/623A41A0/62283C99" Ref="U10"  Part="1" 
-AR Path="/62283C99" Ref="U?"  Part="1" 
-F 0 "U10" H 5250 3000 60  0000 C CNN
-F 1 "VL53L3CXV0DH_RIGHT" H 5400 2881 60  0000 C CNN
-F 2 "VL53L3CX:VL53L3CXV0DH&slash_1" H 5400 2840 60  0001 C CNN
-F 3 "" H 4400 2600 60  0000 C CNN
-	1    4400 2600
-	1    0    0    -1  
-$EndComp
 Text GLabel 6400 4250 2    50   Input ~ 0
 GPIOI_2
 $Comp
@@ -280,354 +252,6 @@ Wire Wire Line
 Wire Wire Line
 	3650 3750 3650 3700
 $Comp
-L Device:C C?
-U 1 1 62513809
-P 8000 2900
-AR Path="/62398514/62513809" Ref="C?"  Part="1" 
-AR Path="/623A3BAC/62513809" Ref="C?"  Part="1" 
-AR Path="/623A41A0/62513809" Ref="C42"  Part="1" 
-F 0 "C42" H 8115 2946 50  0000 L CNN
-F 1 "100n" H 8115 2855 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 8038 2750 50  0001 C CNN
-F 3 "~" H 8000 2900 50  0001 C CNN
-	1    8000 2900
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C?
-U 1 1 6251380F
-P 8450 2900
-AR Path="/62398514/6251380F" Ref="C?"  Part="1" 
-AR Path="/623A3BAC/6251380F" Ref="C?"  Part="1" 
-AR Path="/623A41A0/6251380F" Ref="C53"  Part="1" 
-F 0 "C53" H 8565 2946 50  0000 L CNN
-F 1 "4.7µ" H 8565 2855 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 8488 2750 50  0001 C CNN
-F 3 "~" H 8450 2900 50  0001 C CNN
-	1    8450 2900
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513815
-P 8000 3100
-AR Path="/62398514/62513815" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513815" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513815" Ref="#PWR0164"  Part="1" 
-F 0 "#PWR0164" H 8000 2850 50  0001 C CNN
-F 1 "GND" H 8005 2927 50  0000 C CNN
-F 2 "" H 8000 3100 50  0001 C CNN
-F 3 "" H 8000 3100 50  0001 C CNN
-	1    8000 3100
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 6251381B
-P 8450 3100
-AR Path="/62398514/6251381B" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/6251381B" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/6251381B" Ref="#PWR0165"  Part="1" 
-F 0 "#PWR0165" H 8450 2850 50  0001 C CNN
-F 1 "GND" H 8455 2927 50  0000 C CNN
-F 2 "" H 8450 3100 50  0001 C CNN
-F 3 "" H 8450 3100 50  0001 C CNN
-	1    8450 3100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8000 3100 8000 3050
-Wire Wire Line
-	8000 2750 8000 2700
-Wire Wire Line
-	8450 2700 8450 2750
-Wire Wire Line
-	8450 3050 8450 3100
-$Comp
-L Device:C C?
-U 1 1 62513825
-P 8000 4800
-AR Path="/62398514/62513825" Ref="C?"  Part="1" 
-AR Path="/623A3BAC/62513825" Ref="C?"  Part="1" 
-AR Path="/623A41A0/62513825" Ref="C50"  Part="1" 
-F 0 "C50" H 8115 4846 50  0000 L CNN
-F 1 "100n" H 8115 4755 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 8038 4650 50  0001 C CNN
-F 3 "~" H 8000 4800 50  0001 C CNN
-	1    8000 4800
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C?
-U 1 1 6251382B
-P 8450 4800
-AR Path="/62398514/6251382B" Ref="C?"  Part="1" 
-AR Path="/623A3BAC/6251382B" Ref="C?"  Part="1" 
-AR Path="/623A41A0/6251382B" Ref="C55"  Part="1" 
-F 0 "C55" H 8565 4846 50  0000 L CNN
-F 1 "4.7µ" H 8565 4755 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 8488 4650 50  0001 C CNN
-F 3 "~" H 8450 4800 50  0001 C CNN
-	1    8450 4800
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513831
-P 8000 5000
-AR Path="/62398514/62513831" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513831" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513831" Ref="#PWR0166"  Part="1" 
-F 0 "#PWR0166" H 8000 4750 50  0001 C CNN
-F 1 "GND" H 8005 4827 50  0000 C CNN
-F 2 "" H 8000 5000 50  0001 C CNN
-F 3 "" H 8000 5000 50  0001 C CNN
-	1    8000 5000
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513837
-P 8450 5000
-AR Path="/62398514/62513837" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513837" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513837" Ref="#PWR0167"  Part="1" 
-F 0 "#PWR0167" H 8450 4750 50  0001 C CNN
-F 1 "GND" H 8455 4827 50  0000 C CNN
-F 2 "" H 8450 5000 50  0001 C CNN
-F 3 "" H 8450 5000 50  0001 C CNN
-	1    8450 5000
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8000 5000 8000 4950
-Wire Wire Line
-	8000 4650 8000 4600
-Wire Wire Line
-	8450 4600 8450 4650
-Wire Wire Line
-	8450 4950 8450 5000
-$Comp
-L Device:C C?
-U 1 1 62513841
-P 3650 2950
-AR Path="/62398514/62513841" Ref="C?"  Part="1" 
-AR Path="/623A3BAC/62513841" Ref="C?"  Part="1" 
-AR Path="/623A41A0/62513841" Ref="C39"  Part="1" 
-F 0 "C39" H 3765 2996 50  0000 L CNN
-F 1 "100n" H 3765 2905 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 3688 2800 50  0001 C CNN
-F 3 "~" H 3650 2950 50  0001 C CNN
-	1    3650 2950
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513847
-P 3650 3150
-AR Path="/62398514/62513847" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513847" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513847" Ref="#PWR0168"  Part="1" 
-F 0 "#PWR0168" H 3650 2900 50  0001 C CNN
-F 1 "GND" H 3655 2977 50  0000 C CNN
-F 2 "" H 3650 3150 50  0001 C CNN
-F 3 "" H 3650 3150 50  0001 C CNN
-	1    3650 3150
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3650 3150 3650 3100
-Wire Wire Line
-	3650 2800 3650 2750
-$Comp
-L Device:C C?
-U 1 1 6251384F
-P 3650 4900
-AR Path="/62398514/6251384F" Ref="C?"  Part="1" 
-AR Path="/623A3BAC/6251384F" Ref="C?"  Part="1" 
-AR Path="/623A41A0/6251384F" Ref="C41"  Part="1" 
-F 0 "C41" H 3765 4946 50  0000 L CNN
-F 1 "100n" H 3765 4855 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 3688 4750 50  0001 C CNN
-F 3 "~" H 3650 4900 50  0001 C CNN
-	1    3650 4900
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513855
-P 3650 5100
-AR Path="/62398514/62513855" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513855" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513855" Ref="#PWR0169"  Part="1" 
-F 0 "#PWR0169" H 3650 4850 50  0001 C CNN
-F 1 "GND" H 3655 4927 50  0000 C CNN
-F 2 "" H 3650 5100 50  0001 C CNN
-F 3 "" H 3650 5100 50  0001 C CNN
-	1    3650 5100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3650 5100 3650 5050
-Wire Wire Line
-	3650 4750 3650 4700
-$Comp
-L power:GND #PWR?
-U 1 1 6251385D
-P 4400 2800
-AR Path="/62398514/6251385D" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/6251385D" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/6251385D" Ref="#PWR0170"  Part="1" 
-F 0 "#PWR0170" H 4400 2550 50  0001 C CNN
-F 1 "GND" V 4405 2672 50  0000 R CNN
-F 2 "" H 4400 2800 50  0001 C CNN
-F 3 "" H 4400 2800 50  0001 C CNN
-	1    4400 2800
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513863
-P 4400 2900
-AR Path="/62398514/62513863" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513863" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513863" Ref="#PWR0171"  Part="1" 
-F 0 "#PWR0171" H 4400 2650 50  0001 C CNN
-F 1 "GND" V 4405 2772 50  0000 R CNN
-F 2 "" H 4400 2900 50  0001 C CNN
-F 3 "" H 4400 2900 50  0001 C CNN
-	1    4400 2900
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513869
-P 4400 3100
-AR Path="/62398514/62513869" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513869" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513869" Ref="#PWR0172"  Part="1" 
-F 0 "#PWR0172" H 4400 2850 50  0001 C CNN
-F 1 "GND" V 4405 2972 50  0000 R CNN
-F 2 "" H 4400 3100 50  0001 C CNN
-F 3 "" H 4400 3100 50  0001 C CNN
-	1    4400 3100
-	0    1    1    0   
-$EndComp
-Text GLabel 4400 3000 0    50   Input ~ 0
-XSHUT_2
-$Comp
-L power:GND #PWR?
-U 1 1 62513870
-P 4400 2700
-AR Path="/62398514/62513870" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513870" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513870" Ref="#PWR0173"  Part="1" 
-F 0 "#PWR0173" H 4400 2450 50  0001 C CNN
-F 1 "GND" V 4405 2572 50  0000 R CNN
-F 2 "" H 4400 2700 50  0001 C CNN
-F 3 "" H 4400 2700 50  0001 C CNN
-	1    4400 2700
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513876
-P 4450 5100
-AR Path="/62398514/62513876" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513876" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513876" Ref="#PWR0174"  Part="1" 
-F 0 "#PWR0174" H 4450 4850 50  0001 C CNN
-F 1 "GND" V 4455 4972 50  0000 R CNN
-F 2 "" H 4450 5100 50  0001 C CNN
-F 3 "" H 4450 5100 50  0001 C CNN
-	1    4450 5100
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 6251387C
-P 4450 5200
-AR Path="/62398514/6251387C" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/6251387C" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/6251387C" Ref="#PWR0175"  Part="1" 
-F 0 "#PWR0175" H 4450 4950 50  0001 C CNN
-F 1 "GND" V 4455 5072 50  0000 R CNN
-F 2 "" H 4450 5200 50  0001 C CNN
-F 3 "" H 4450 5200 50  0001 C CNN
-	1    4450 5200
-	0    1    1    0   
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 62513882
-P 4450 5400
-AR Path="/62398514/62513882" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513882" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513882" Ref="#PWR0176"  Part="1" 
-F 0 "#PWR0176" H 4450 5150 50  0001 C CNN
-F 1 "GND" V 4455 5272 50  0000 R CNN
-F 2 "" H 4450 5400 50  0001 C CNN
-F 3 "" H 4450 5400 50  0001 C CNN
-	1    4450 5400
-	0    1    1    0   
-$EndComp
-Text GLabel 4450 5300 0    50   Input ~ 0
-XSHUT_8
-$Comp
-L power:GND #PWR?
-U 1 1 62513889
-P 4450 5000
-AR Path="/62398514/62513889" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513889" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513889" Ref="#PWR0177"  Part="1" 
-F 0 "#PWR0177" H 4450 4750 50  0001 C CNN
-F 1 "GND" V 4455 4872 50  0000 R CNN
-F 2 "" H 4450 5000 50  0001 C CNN
-F 3 "" H 4450 5000 50  0001 C CNN
-	1    4450 5000
-	0    1    1    0   
-$EndComp
-Text GLabel 6450 5400 2    50   Input ~ 0
-GPIOI_2
-$Comp
-L power:GND #PWR?
-U 1 1 62513890
-P 6450 4900
-AR Path="/62398514/62513890" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513890" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513890" Ref="#PWR0178"  Part="1" 
-F 0 "#PWR0178" H 6450 4650 50  0001 C CNN
-F 1 "GND" V 6455 4772 50  0000 R CNN
-F 2 "" H 6450 4900 50  0001 C CNN
-F 3 "" H 6450 4900 50  0001 C CNN
-	1    6450 4900
-	0    -1   -1   0   
-$EndComp
-Text GLabel 6750 5100 2    50   Input ~ 0
-SCL1
-Text GLabel 6750 5200 2    50   Input ~ 0
-SDA1
-Text GLabel 6400 3100 2    50   Input ~ 0
-GPIOI_2
-$Comp
-L power:GND #PWR?
-U 1 1 62513899
-P 6400 2600
-AR Path="/62398514/62513899" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62513899" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62513899" Ref="#PWR0179"  Part="1" 
-F 0 "#PWR0179" H 6400 2350 50  0001 C CNN
-F 1 "GND" V 6405 2472 50  0000 R CNN
-F 2 "" H 6400 2600 50  0001 C CNN
-F 3 "" H 6400 2600 50  0001 C CNN
-	1    6400 2600
-	0    -1   -1   0   
-$EndComp
-Text GLabel 6700 2800 2    50   Input ~ 0
-SCL1
-Text GLabel 6700 2900 2    50   Input ~ 0
-SDA1
-$Comp
 L Device:R R?
 U 1 1 625138A1
 P 9450 4250
@@ -644,35 +268,6 @@ $EndComp
 Text GLabel 9300 4250 0    50   Input ~ 0
 XSHUT_5
 $Comp
-L Device:R R?
-U 1 1 625138A8
-P 9450 4550
-AR Path="/62398514/625138A8" Ref="R?"  Part="1" 
-AR Path="/623A3BAC/625138A8" Ref="R?"  Part="1" 
-AR Path="/623A41A0/625138A8" Ref="R34"  Part="1" 
-F 0 "R34" V 9243 4550 50  0000 C CNN
-F 1 "10k" V 9334 4550 50  0000 C CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 9380 4550 50  0001 C CNN
-F 3 "~" H 9450 4550 50  0001 C CNN
-	1    9450 4550
-	0    1    1    0   
-$EndComp
-Text GLabel 9300 4550 0    50   Input ~ 0
-XSHUT_8
-$Comp
-L Jumper:SolderJumper_2_Open JP?
-U 1 1 625138AF
-P 2550 2900
-AR Path="/623A3BAC/625138AF" Ref="JP?"  Part="1" 
-AR Path="/623A41A0/625138AF" Ref="JP27"  Part="1" 
-F 0 "JP27" H 2550 3013 50  0000 C CNN
-F 1 "SolderJumper_2_Open" H 2550 3014 50  0001 C CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 2550 2900 50  0001 C CNN
-F 3 "~" H 2550 2900 50  0001 C CNN
-	1    2550 2900
-	1    0    0    -1  
-$EndComp
-$Comp
 L Jumper:SolderJumper_2_Open JP?
 U 1 1 625138B5
 P 2550 3900
@@ -685,45 +280,6 @@ F 3 "~" H 2550 3900 50  0001 C CNN
 	1    2550 3900
 	1    0    0    -1  
 $EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP?
-U 1 1 625138BB
-P 2550 4850
-AR Path="/623A3BAC/625138BB" Ref="JP?"  Part="1" 
-AR Path="/623A41A0/625138BB" Ref="JP29"  Part="1" 
-F 0 "JP29" H 2550 4963 50  0000 C CNN
-F 1 "SolderJumper_2_Open" H 2550 4964 50  0001 C CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 2550 4850 50  0001 C CNN
-F 3 "~" H 2550 4850 50  0001 C CNN
-	1    2550 4850
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR?
-U 1 1 625138C1
-P 2400 2900
-AR Path="/62398514/625138C1" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/625138C1" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/625138C1" Ref="#PWR0180"  Part="1" 
-F 0 "#PWR0180" H 2400 2750 50  0001 C CNN
-F 1 "+3.3V" V 2415 3028 50  0000 L CNN
-F 2 "" H 2400 2900 50  0001 C CNN
-F 3 "" H 2400 2900 50  0001 C CNN
-	1    2400 2900
-	0    -1   -1   0   
-$EndComp
-Text Label 2700 2900 0    50   ~ 0
-PWR0
-Text Label 4400 2600 2    50   ~ 0
-PWR0
-Text Label 6400 2700 0    50   ~ 0
-PWR0
-Text Label 3650 2750 2    50   ~ 0
-PWR0
-Text Label 8000 2700 2    50   ~ 0
-PWR0
-Text Label 8450 2700 2    50   ~ 0
-PWR0
 Text Label 9600 3900 0    50   ~ 0
 PWR0
 $Comp
@@ -742,8 +298,6 @@ F 3 "" H 2400 3900 50  0001 C CNN
 $EndComp
 Text Label 2700 3900 0    50   ~ 0
 PWR1
-Text Label 2700 4850 0    50   ~ 0
-PWR2
 Text Label 4400 3750 2    50   ~ 0
 PWR1
 Text Label 6400 3850 0    50   ~ 0
@@ -756,44 +310,6 @@ Text Label 8450 3650 2    50   ~ 0
 PWR1
 Text Label 9600 4250 0    50   ~ 0
 PWR1
-Text Label 3650 4700 2    50   ~ 0
-PWR2
-Text Label 4450 4900 2    50   ~ 0
-PWR2
-Text Label 6450 5000 0    50   ~ 0
-PWR2
-Text Label 8000 4600 2    50   ~ 0
-PWR2
-Text Label 8450 4600 2    50   ~ 0
-PWR2
-Text Label 9600 4550 0    50   ~ 0
-PWR2
-$Comp
-L Jumper:SolderJumper_2_Open JP?
-U 1 1 625138E8
-P 6600 5200
-AR Path="/623A3BAC/625138E8" Ref="JP?"  Part="1" 
-AR Path="/623A41A0/625138E8" Ref="JP35"  Part="1" 
-F 0 "JP35" H 6600 5100 50  0000 C CNN
-F 1 "SolderJumper_2_Open" H 6600 5314 50  0001 C CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 6600 5200 50  0001 C CNN
-F 3 "~" H 6600 5200 50  0001 C CNN
-	1    6600 5200
-	1    0    0    -1  
-$EndComp
-$Comp
-L Jumper:SolderJumper_2_Open JP?
-U 1 1 625138EE
-P 6600 5100
-AR Path="/623A3BAC/625138EE" Ref="JP?"  Part="1" 
-AR Path="/623A41A0/625138EE" Ref="JP34"  Part="1" 
-F 0 "JP34" H 6750 5200 50  0000 C CNN
-F 1 "SolderJumper_2_Open" H 6600 5214 50  0001 C CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 6600 5100 50  0001 C CNN
-F 3 "~" H 6600 5100 50  0001 C CNN
-	1    6600 5100
-	1    0    0    -1  
-$EndComp
 $Comp
 L Jumper:SolderJumper_2_Open JP?
 U 1 1 625138F4
@@ -821,17 +337,125 @@ F 3 "~" H 6550 3950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
+L power:GND #PWR?
+U 1 1 622409AB
+P 5650 1050
+AR Path="/623A3BAC/622409AB" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/622409AB" Ref="#PWR0200"  Part="1" 
+F 0 "#PWR0200" H 5650 800 50  0001 C CNN
+F 1 "GND" V 5655 922 50  0000 R CNN
+F 2 "" H 5650 1050 50  0001 C CNN
+F 3 "" H 5650 1050 50  0001 C CNN
+	1    5650 1050
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 622409B7
+P 5650 1250
+AR Path="/623A3BAC/622409B7" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/622409B7" Ref="#PWR0201"  Part="1" 
+F 0 "#PWR0201" H 5650 1000 50  0001 C CNN
+F 1 "GND" V 5655 1122 50  0000 R CNN
+F 2 "" H 5650 1250 50  0001 C CNN
+F 3 "" H 5650 1250 50  0001 C CNN
+	1    5650 1250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 622409BD
+P 5650 1450
+AR Path="/623A3BAC/622409BD" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/622409BD" Ref="#PWR0202"  Part="1" 
+F 0 "#PWR0202" H 5650 1200 50  0001 C CNN
+F 1 "GND" V 5655 1322 50  0000 R CNN
+F 2 "" H 5650 1450 50  0001 C CNN
+F 3 "" H 5650 1450 50  0001 C CNN
+	1    5650 1450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 622409C3
+P 5250 1950
+AR Path="/623A3BAC/622409C3" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/622409C3" Ref="#PWR0203"  Part="1" 
+F 0 "#PWR0203" H 5250 1700 50  0001 C CNN
+F 1 "GND" V 5255 1822 50  0000 R CNN
+F 2 "" H 5250 1950 50  0001 C CNN
+F 3 "" H 5250 1950 50  0001 C CNN
+	1    5250 1950
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 622409C9
+P 5650 1650
+AR Path="/623A3BAC/622409C9" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/622409C9" Ref="#PWR0204"  Part="1" 
+F 0 "#PWR0204" H 5650 1400 50  0001 C CNN
+F 1 "GND" V 5655 1522 50  0000 R CNN
+F 2 "" H 5650 1650 50  0001 C CNN
+F 3 "" H 5650 1650 50  0001 C CNN
+	1    5650 1650
+	0    -1   -1   0   
+$EndComp
+Text GLabel 4950 1150 0    50   Input ~ 0
+SCL1
+Text GLabel 4950 1350 0    50   Input ~ 0
+SDA1
+$Comp
 L Jumper:SolderJumper_2_Open JP?
-U 1 1 62513900
-P 6550 2900
-AR Path="/623A3BAC/62513900" Ref="JP?"  Part="1" 
-AR Path="/623A41A0/62513900" Ref="JP31"  Part="1" 
-F 0 "JP31" H 6550 2800 50  0000 C CNN
-F 1 "SolderJumper_2_Open" H 6550 3014 50  0001 C CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 6550 2900 50  0001 C CNN
-F 3 "~" H 6550 2900 50  0001 C CNN
-	1    6550 2900
-	1    0    0    -1  
+U 1 1 622409D1
+P 5100 1350
+AR Path="/623A3BAC/622409D1" Ref="JP?"  Part="1" 
+AR Path="/623A41A0/622409D1" Ref="JP24"  Part="1" 
+F 0 "JP24" H 5600 1350 50  0000 C CNN
+F 1 "SolderJumper_2_Open" H 5100 1464 50  0001 C CNN
+F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 5100 1350 50  0001 C CNN
+F 3 "~" H 5100 1350 50  0001 C CNN
+	1    5100 1350
+	-1   0    0    1   
+$EndComp
+$Comp
+L Jumper:SolderJumper_2_Open JP?
+U 1 1 622409D7
+P 5100 1150
+AR Path="/623A3BAC/622409D7" Ref="JP?"  Part="1" 
+AR Path="/623A41A0/622409D7" Ref="JP13"  Part="1" 
+F 0 "JP13" H 5600 1150 50  0000 C CNN
+F 1 "SolderJumper_2_Open" H 5100 1264 50  0001 C CNN
+F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 5100 1150 50  0001 C CNN
+F 3 "~" H 5100 1150 50  0001 C CNN
+	1    5100 1150
+	-1   0    0    1   
+$EndComp
+Text GLabel 5250 1550 0    50   Input ~ 0
+XSHUT_5
+Text GLabel 5250 1750 0    50   Input ~ 0
+GPIOI_2
+Text Label 5650 1850 0    50   ~ 0
+PWR1
+$Comp
+L WR-MM_Female_SMT_Connector:690367291076 J13
+U 1 1 622528EB
+P 5450 1450
+F 0 "J13" V 6067 1450 50  0000 C CNN
+F 1 "690367291076" V 5976 1450 50  0000 C CNN
+F 2 "WR-MM Female SMT Connector:WR-MM Female SMT Connector" H 5450 1450 50  0001 L BNN
+F 3 "" H 5450 1450 50  0001 L BNN
+F 4 "690367291076" H 5450 1450 50  0001 L BNN "VALUE"
+F 5 "Straight" H 5450 1450 50  0001 L BNN "TYPE"
+F 6 "2.54" H 5450 1450 50  0001 L BNN "PITCH"
+F 7 "Tape and Reel" H 5450 1450 50  0001 L BNN "PACKAGING"
+F 8 "https://www.we-online.com/catalog/datasheet/690367291076.pdf" H 5450 1450 50  0001 L BNN "DATASHEET-URL"
+F 9 "Female" H 5450 1450 50  0001 L BNN "GENDER"
+F 10 "10" H 5450 1450 50  0001 L BNN "PINS"
+F 11 "1.5A" H 5450 1450 50  0001 L BNN "IR"
+F 12 "690367291076" H 5450 1450 50  0001 L BNN "PART-NUMBER"
+	1    5450 1450
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Jumper:SolderJumper_2_Open JP?
@@ -847,17 +471,243 @@ F 3 "~" H 6550 2800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
+L Jumper:SolderJumper_2_Open JP?
+U 1 1 62513900
+P 6550 2900
+AR Path="/623A3BAC/62513900" Ref="JP?"  Part="1" 
+AR Path="/623A41A0/62513900" Ref="JP31"  Part="1" 
+F 0 "JP31" H 6550 2800 50  0000 C CNN
+F 1 "SolderJumper_2_Open" H 6550 3014 50  0001 C CNN
+F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 6550 2900 50  0001 C CNN
+F 3 "~" H 6550 2900 50  0001 C CNN
+	1    6550 2900
+	1    0    0    -1  
+$EndComp
+Text Label 8450 2700 2    50   ~ 0
+PWR0
+Text Label 8000 2700 2    50   ~ 0
+PWR0
+Text Label 3650 2750 2    50   ~ 0
+PWR0
+Text Label 6400 2700 0    50   ~ 0
+PWR0
+Text Label 4400 2600 2    50   ~ 0
+PWR0
+Text Label 2700 2900 0    50   ~ 0
+PWR0
+$Comp
 L power:+3.3V #PWR?
-U 1 1 62553A25
-P 2400 4850
-AR Path="/62398514/62553A25" Ref="#PWR?"  Part="1" 
-AR Path="/623A3BAC/62553A25" Ref="#PWR?"  Part="1" 
-AR Path="/623A41A0/62553A25" Ref="#PWR0182"  Part="1" 
-F 0 "#PWR0182" H 2400 4700 50  0001 C CNN
-F 1 "+3.3V" V 2415 4978 50  0000 L CNN
-F 2 "" H 2400 4850 50  0001 C CNN
-F 3 "" H 2400 4850 50  0001 C CNN
-	1    2400 4850
+U 1 1 625138C1
+P 2400 2900
+AR Path="/62398514/625138C1" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/625138C1" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/625138C1" Ref="#PWR0180"  Part="1" 
+F 0 "#PWR0180" H 2400 2750 50  0001 C CNN
+F 1 "+3.3V" V 2415 3028 50  0000 L CNN
+F 2 "" H 2400 2900 50  0001 C CNN
+F 3 "" H 2400 2900 50  0001 C CNN
+	1    2400 2900
 	0    -1   -1   0   
+$EndComp
+$Comp
+L Jumper:SolderJumper_2_Open JP?
+U 1 1 625138AF
+P 2550 2900
+AR Path="/623A3BAC/625138AF" Ref="JP?"  Part="1" 
+AR Path="/623A41A0/625138AF" Ref="JP27"  Part="1" 
+F 0 "JP27" H 2550 3013 50  0000 C CNN
+F 1 "SolderJumper_2_Open" H 2550 3014 50  0001 C CNN
+F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 2550 2900 50  0001 C CNN
+F 3 "~" H 2550 2900 50  0001 C CNN
+	1    2550 2900
+	1    0    0    -1  
+$EndComp
+Text GLabel 6700 2900 2    50   Input ~ 0
+SDA1
+Text GLabel 6700 2800 2    50   Input ~ 0
+SCL1
+$Comp
+L power:GND #PWR?
+U 1 1 62513899
+P 6400 2600
+AR Path="/62398514/62513899" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/62513899" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/62513899" Ref="#PWR0179"  Part="1" 
+F 0 "#PWR0179" H 6400 2350 50  0001 C CNN
+F 1 "GND" V 6405 2472 50  0000 R CNN
+F 2 "" H 6400 2600 50  0001 C CNN
+F 3 "" H 6400 2600 50  0001 C CNN
+	1    6400 2600
+	0    -1   -1   0   
+$EndComp
+Text GLabel 6400 3100 2    50   Input ~ 0
+GPIOI_2
+$Comp
+L power:GND #PWR?
+U 1 1 62513870
+P 4400 2700
+AR Path="/62398514/62513870" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/62513870" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/62513870" Ref="#PWR0173"  Part="1" 
+F 0 "#PWR0173" H 4400 2450 50  0001 C CNN
+F 1 "GND" V 4405 2572 50  0000 R CNN
+F 2 "" H 4400 2700 50  0001 C CNN
+F 3 "" H 4400 2700 50  0001 C CNN
+	1    4400 2700
+	0    1    1    0   
+$EndComp
+Text GLabel 4400 3000 0    50   Input ~ 0
+XSHUT_2
+$Comp
+L power:GND #PWR?
+U 1 1 62513869
+P 4400 3100
+AR Path="/62398514/62513869" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/62513869" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/62513869" Ref="#PWR0172"  Part="1" 
+F 0 "#PWR0172" H 4400 2850 50  0001 C CNN
+F 1 "GND" V 4405 2972 50  0000 R CNN
+F 2 "" H 4400 3100 50  0001 C CNN
+F 3 "" H 4400 3100 50  0001 C CNN
+	1    4400 3100
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 62513863
+P 4400 2900
+AR Path="/62398514/62513863" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/62513863" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/62513863" Ref="#PWR0171"  Part="1" 
+F 0 "#PWR0171" H 4400 2650 50  0001 C CNN
+F 1 "GND" V 4405 2772 50  0000 R CNN
+F 2 "" H 4400 2900 50  0001 C CNN
+F 3 "" H 4400 2900 50  0001 C CNN
+	1    4400 2900
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 6251385D
+P 4400 2800
+AR Path="/62398514/6251385D" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/6251385D" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/6251385D" Ref="#PWR0170"  Part="1" 
+F 0 "#PWR0170" H 4400 2550 50  0001 C CNN
+F 1 "GND" V 4405 2672 50  0000 R CNN
+F 2 "" H 4400 2800 50  0001 C CNN
+F 3 "" H 4400 2800 50  0001 C CNN
+	1    4400 2800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3650 2800 3650 2750
+Wire Wire Line
+	3650 3150 3650 3100
+$Comp
+L power:GND #PWR?
+U 1 1 62513847
+P 3650 3150
+AR Path="/62398514/62513847" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/62513847" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/62513847" Ref="#PWR0168"  Part="1" 
+F 0 "#PWR0168" H 3650 2900 50  0001 C CNN
+F 1 "GND" H 3655 2977 50  0000 C CNN
+F 2 "" H 3650 3150 50  0001 C CNN
+F 3 "" H 3650 3150 50  0001 C CNN
+	1    3650 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 62513841
+P 3650 2950
+AR Path="/62398514/62513841" Ref="C?"  Part="1" 
+AR Path="/623A3BAC/62513841" Ref="C?"  Part="1" 
+AR Path="/623A41A0/62513841" Ref="C39"  Part="1" 
+F 0 "C39" H 3765 2996 50  0000 L CNN
+F 1 "100n" H 3765 2905 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 3688 2800 50  0001 C CNN
+F 3 "~" H 3650 2950 50  0001 C CNN
+	1    3650 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8450 3050 8450 3100
+Wire Wire Line
+	8450 2700 8450 2750
+Wire Wire Line
+	8000 2750 8000 2700
+Wire Wire Line
+	8000 3100 8000 3050
+$Comp
+L power:GND #PWR?
+U 1 1 6251381B
+P 8450 3100
+AR Path="/62398514/6251381B" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/6251381B" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/6251381B" Ref="#PWR0165"  Part="1" 
+F 0 "#PWR0165" H 8450 2850 50  0001 C CNN
+F 1 "GND" H 8455 2927 50  0000 C CNN
+F 2 "" H 8450 3100 50  0001 C CNN
+F 3 "" H 8450 3100 50  0001 C CNN
+	1    8450 3100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 62513815
+P 8000 3100
+AR Path="/62398514/62513815" Ref="#PWR?"  Part="1" 
+AR Path="/623A3BAC/62513815" Ref="#PWR?"  Part="1" 
+AR Path="/623A41A0/62513815" Ref="#PWR0164"  Part="1" 
+F 0 "#PWR0164" H 8000 2850 50  0001 C CNN
+F 1 "GND" H 8005 2927 50  0000 C CNN
+F 2 "" H 8000 3100 50  0001 C CNN
+F 3 "" H 8000 3100 50  0001 C CNN
+	1    8000 3100
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 6251380F
+P 8450 2900
+AR Path="/62398514/6251380F" Ref="C?"  Part="1" 
+AR Path="/623A3BAC/6251380F" Ref="C?"  Part="1" 
+AR Path="/623A41A0/6251380F" Ref="C53"  Part="1" 
+F 0 "C53" H 8565 2946 50  0000 L CNN
+F 1 "4.7µ" H 8565 2855 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 8488 2750 50  0001 C CNN
+F 3 "~" H 8450 2900 50  0001 C CNN
+	1    8450 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 62513809
+P 8000 2900
+AR Path="/62398514/62513809" Ref="C?"  Part="1" 
+AR Path="/623A3BAC/62513809" Ref="C?"  Part="1" 
+AR Path="/623A41A0/62513809" Ref="C42"  Part="1" 
+F 0 "C42" H 8115 2946 50  0000 L CNN
+F 1 "100n" H 8115 2855 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 8038 2750 50  0001 C CNN
+F 3 "~" H 8000 2900 50  0001 C CNN
+	1    8000 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L VL53L3CX:VL53L3CXV0DH_1 U?
+U 1 1 62283C99
+P 4400 2600
+AR Path="/62398514/62283C99" Ref="U?"  Part="1" 
+AR Path="/623A41A0/62283C99" Ref="U10"  Part="1" 
+AR Path="/62283C99" Ref="U?"  Part="1" 
+F 0 "U10" H 5250 3000 60  0000 C CNN
+F 1 "VL53L3CXV0DH_RIGHT" H 5400 2881 60  0000 C CNN
+F 2 "VL53L3CX:VL53L3CXV0DH&slash_1" H 5400 2840 60  0001 C CNN
+F 3 "" H 4400 2600 60  0000 C CNN
+	1    4400 2600
+	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
