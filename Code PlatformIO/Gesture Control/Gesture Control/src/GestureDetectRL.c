@@ -38,7 +38,7 @@ bool CheckGestureRL(bool *_gestureRL, bool *_object, RANGING_SENSOR_Result_t *Re
             hasLeft = true;
         }
 
-        printf("left %2d, center %2d, right %2d \r\n", hasLeft, hasCenter, hasRight);
+        //printf("left %2d, center %2d, right %2d \r\n", hasLeft, hasCenter, hasRight);
     }
 
     // Een timeout timer plaatsen

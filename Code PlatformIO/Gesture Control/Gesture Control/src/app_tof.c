@@ -58,6 +58,7 @@ extern "C"
 	bool hasStarted = false;	// Kijken ofdat de linkse & rechte sensor al opgestart zijn of niet
 
 	// Gesture Right Left
+	bool prevGestureRL = false;
 	bool gestureRL = false;
 
 	// Dimming led
@@ -153,22 +154,25 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-			if (!gestureRL)
+			if (!gestureRL && !prevGestureRL)
 			{
 				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis0);
 				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis0);
 			}
 
 			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
-
-			if (gestureRL)
+			
+			if (gestureRL && !prevGestureRL)
 			{
-				HAL_Delay(2000);
+				prevGestureRL = gestureRL;
+				HAL_Delay(500);
 				printf("gestureCommand: %d \r\n", gestureRL);
-				gestureRL = false;
+				//gestureRL = false;
 			}
-
+			
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
+
+			prevGestureRL = gestureRL; //fix debouncing van gestureRL
 		}
 	}
 
