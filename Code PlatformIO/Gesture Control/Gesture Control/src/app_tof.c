@@ -37,6 +37,7 @@ extern "C"
 
 #include "GestureDetectObject.h"  //Deze file bevat de detectie van een persoon
 #include "GestureDetectDimming.h" //Bevat methodes om het dimmen te detecteren + om de value te verkrijgen.
+#include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts links te herkennen.
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -53,22 +54,15 @@ extern "C"
 	int dis1 = 0;
 	int dis2 = 0;
 
-	bool ObjectPresent = false; // flag ofdat er een object aanwezig is
+	bool objectPresent = false; // flag ofdat er een object aanwezig is
 	bool hasStarted = false;	// Kijken ofdat de linkse & rechte sensor al opgestart zijn of niet
 
 	// Gesture Right Left
-	bool hasLeft = false;
-	bool hasCenter = false;
-	bool hasRight = false;
 	bool gestureRL = false;
-	int maxDistanceObject = 250;
-	float timerMeasurment = 0;
-	bool timerMeasurementSet = false;
-	int timerMeasurmentTimeout = 1500; // 2 seconden
 
 	// Dimming led
 	uint16_t pwmVal = 0;
-	bool dimming = false;
+	bool gestureDimming = false;
 
 	TIM_HandleTypeDef htim3;
 
@@ -97,11 +91,6 @@ extern "C"
 	{
 		htim3 = *(TIM_HandleTypeDef *)_htim3;
 
-		// Enkel de 1ste sensor (Center) opstarten
-		/*	Hier zeggen we welk profiel we willen gebruiken
-		 * 	bv.
-		 *
-		 */
 		start_sensor(VL53L3A2_DEV_CENTER);
 
 		while (1)
@@ -110,9 +99,9 @@ extern "C"
 			getResult(VL53L3A2_DEV_CENTER, Result);
 			dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
 
-			ObjectPresent = ckeckObjectPresent(Result, &ObjectPresent);
+			objectPresent = ckeckObjectPresent(Result, &objectPresent);
 
-			if (ObjectPresent)
+			if (objectPresent)
 			{
 				// Persoon naderd en staat dicht genoeg
 				// Start andere sensoren ook op
@@ -148,92 +137,34 @@ extern "C"
 				}
 			}
 
-			CheckDimmingCommand(&dimming, &ObjectPresent, &dis0);
-			pwmVal = getDimmingValue(&dimming, &pwmVal, &dis0);
-
-			if (ckeckObjectPresent)
+			if (objectPresent)
 				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (pwmVal * 2) + 23);
 
-			// if (!ObjectPresent)
-			// {
-			// 	// uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
-			// 	// uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+			// int sta0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
+			// int sta1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+			// int sta2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
+			// int dis0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Distance[0];
+			// int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
+			// int dis2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Distance[0];
+			// int obj0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
+			// int obj1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
+			// int obj2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
 
-			// 	// printf("center: %5d obj: %1d sta: %2d", dis1, obj1, sta1);
-			// 	// printf("\r\n");
-			// }
-			// else
-			// {
+			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
+			// printf("\r\n");
 
-			// 	// uint8_t obj0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
-			// 	// uint8_t obj1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
-			// 	// uint8_t obj2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
-
-			// 	// uint8_t sta0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
-			// 	// uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
-			// 	// uint8_t sta2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
-
-			// 	//printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
-			// 	//printf("\r\n");
-			// }
-			HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, ObjectPresent);
-
-			// Detecteren commando van rechts naar links
-			// Eerst moet sensor right minder binnen krijgen
-			// Dan sensor center
-			// Als laatste sensor left
-			if (ObjectPresent)
+			if (!gestureRL)
 			{
-				uint8_t sta0 = (uint8_t)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
-				//uint8_t sta1 = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
-				uint8_t sta2 = (uint8_t)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
-
-				if ((dis2 < maxDistanceObject) && (sta2 == 0) && !hasRight && !hasLeft) // Sensor right
-				{
-					hasRight = true;
-					printf("right Trigger: \r\n");
-				}
-				// else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasRight && !hasCenter && !hasLeft) // Sensor center
-				// {
-				// 	hasCenter = true;
-				// 	printf("center Trigger: \r\n");
-				// }
-				else if ((dis0 < maxDistanceObject) && (sta0 == 0) && hasRight && !hasLeft) // Sensor left
-				{
-					hasLeft = true;
-					gestureRL = true;
-					printf("left Trigger: \r\n");
-				}
+				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis0);
+				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis0);
 			}
 
-			// Een timeout timer plaatsen
-			if (!timerMeasurementSet && (hasRight || hasCenter || hasLeft))
-			{
-				timerMeasurementSet = true;
-				timerMeasurment = HAL_GetTick();
-				// printf("timer set Trigger: \r\n");
-			}
-
-			// Bij het afgaan van de timer
-			if (timerMeasurementSet)
-				if (((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout))
-				{
-					timerMeasurementSet = false;
-					hasRight = false;
-					hasLeft = false;
-					//hasCenter = false;
-					gestureRL = false;
-					printf("timer Trigger: \r\n");
-				}
+			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
 
 			if (gestureRL)
 			{
 				HAL_Delay(2000);
 				printf("gestureCommand: %d \r\n", gestureRL);
-				timerMeasurementSet = false;
-				hasRight = false;
-				hasLeft = false;
-				//hasCenter = false;
 				gestureRL = false;
 			}
 
@@ -340,7 +271,7 @@ extern "C"
 		// Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
 		if ((long)result[sensor].ZoneResult[0].Distance[0] >= 17760520)
 		{
-			//HAL_Delay(1);
+			// HAL_Delay(1);
 			VL53L3A2_RANGING_SENSOR_GetDistance(sensor, &result[sensor]);
 		}
 	}
@@ -350,7 +281,7 @@ extern "C"
 		long distance = 0;
 		// do
 		// {
-		//getResult(sensor, result);
+		// getResult(sensor, result);
 		distance = (long)result[sensor].ZoneResult[0].Distance[0];
 		// 	HAL_Delay(2);
 		// } while (distance == 0);

@@ -5,7 +5,7 @@ static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
 static int timerMeasurmentTimeout = 1000; // 2 seconden
 
-	void CheckDimmingCommand(bool *_dimming,bool *_objectPresent, int *_dis)
+	bool CheckDimmingCommand(bool *_dimming,bool *_objectPresent, int *_dis)
 	{
 		if (*_objectPresent && (*_dis <= maxDistanceObject) && !*_dimming)
 		{
@@ -17,7 +17,7 @@ static int timerMeasurmentTimeout = 1000; // 2 seconden
 			if ((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
 			{
 				timerMeasurementSet = false;
-				*_dimming = true;
+				return  true;
 			}
 		}
 		else
