@@ -125,10 +125,7 @@ extern "C"
 
 			if (objectPresent)
 			{
-				// Persoon naderd en staat dicht genoeg
-				// Start andere sensoren ook op
-
-				if (!hasStarted)
+				if (!hasStarted)// Start andere sensoren ook op
 				{
 					hasStarted = true;
 					start_sensor(VL53L3A2_DEV_LEFT);
@@ -138,9 +135,10 @@ extern "C"
 					HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 				}
 
+				//Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_LEFT, Result);
 				dis0 = getDistance(VL53L3A2_DEV_LEFT, Result);
-
+				//Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_RIGHT, Result);
 				dis2 = getDistance(VL53L3A2_DEV_RIGHT, Result);
 			}
@@ -175,19 +173,17 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-
 			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1);
+
+			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
+
+			gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
 
 			if(gestureDimming)
 			{
 				commando = DIM;
 				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
 			}
-
-			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
-
-			gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
-
 
 			if (gestureRL && !prevGestureRL)
 			{
@@ -314,6 +310,7 @@ extern "C"
 
 	static void start_sensor(uint8_t sensor)
 	{
+		
 		RANGING_SENSOR_ProfileConfig_t Profile;
 
 		Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
