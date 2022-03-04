@@ -61,6 +61,10 @@ extern "C"
 	bool prevGestureRL = false;
 	bool gestureRL = false;
 
+	// Gesture Left Right
+	bool prevGestureLR = false;
+	bool gestureLR = false;
+
 	// Dimming led
 	uint16_t pwmVal = 0;
 	bool gestureDimming = false;
@@ -171,31 +175,39 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-			// if (!gestureRL && !prevGestureRL)
-			// {
-				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis0);
-				
-			// }
+
+			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1);
 
 			if(gestureDimming)
 			{
 				commando = DIM;
-				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis0);
+				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
 			}
 
 			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
 
+			gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
+
+
 			if (gestureRL && !prevGestureRL)
 			{
 				prevGestureRL = gestureRL;
-				printf("gestureCommand: %d \r\n", gestureRL);
+				printf("gestureCommand RL: %d \r\n", gestureRL);
 				commando = RL;
+			}
+
+			if (gestureLR && !prevGestureLR)
+			{
+				prevGestureLR = gestureLR;
+				printf("gestureCommand LR: %d \r\n", gestureLR);
+				commando = LR;
 			}
 
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
 
 			prevGestureRL = gestureRL; // fix debouncing van gestureRL
-
+			prevGestureLR = gestureLR; // fix debouncing van gestureLR
+			
 			// Timer om leds even aan te laten
 			/* 	Timer om leds even aan te laten
 				Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
