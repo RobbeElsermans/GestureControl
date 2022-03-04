@@ -27,6 +27,7 @@ static int timerMeasurmentTimeout = 2000; // 2 seconden
 				timerMeasurementSet = false;
 			}
 		}
+		return *_dimming;
 	}
 
 	int getDimmingValue(bool *_dimming, int *_prevVal, int *_dis){

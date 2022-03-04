@@ -67,6 +67,23 @@ extern "C"
 
 	TIM_HandleTypeDef htim3;
 
+	static enum commands {
+		DIM,
+		RL,
+		LR,
+		UD,
+		DU,
+		NONE
+	};
+	typedef enum commands command_t;
+
+	command_t commando = NONE;
+
+	// Timer command
+	static float timerCommand = 0;
+	static bool timerCommandSet = false;
+	static int timerCommandTimeout = 3000; // 2 seconden
+
 	static const char *TofDevStr[] =
 		{
 			[VL53L3A2_DEV_LEFT] = "LEFT",
@@ -154,25 +171,87 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-			if (!gestureRL && !prevGestureRL)
-			{
+			// if (!gestureRL && !prevGestureRL)
+			// {
 				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis0);
+				
+			// }
+
+			if(gestureDimming)
+			{
+				commando = DIM;
 				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis0);
 			}
 
 			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
-			
+
 			if (gestureRL && !prevGestureRL)
 			{
 				prevGestureRL = gestureRL;
-				HAL_Delay(500);
 				printf("gestureCommand: %d \r\n", gestureRL);
-				//gestureRL = false;
+				commando = RL;
 			}
-			
+
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
 
-			prevGestureRL = gestureRL; //fix debouncing van gestureRL
+			prevGestureRL = gestureRL; // fix debouncing van gestureRL
+
+			// Timer om leds even aan te laten
+			/* 	Timer om leds even aan te laten
+				Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
+				Dan zetten we een timer
+				Wanneer de timer afloopt wordt het commando gereset
+			*/
+		if (!timerCommandSet && commando != NONE)
+        {
+            timerCommandSet = true;
+            timerCommand = HAL_GetTick();
+        }
+        if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
+        {
+            timerCommandSet = false;
+            commando = NONE;
+        }
+			// Commando's uitsturen
+			switch (commando)
+			{
+			case NONE:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
+				break;
+			case RL:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
+				break;
+			case LR:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
+				break;
+			case UD:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_SET);
+				break;
+			case DU:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_SET);
+				break;
+			case DIM:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_SET);
+				break;
+
+			default:
+				HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
+				break;
+			}
 		}
 	}
 
