@@ -1,3 +1,16 @@
+/**
+ ******************************************************************************
+ * @file          : GestureDetectLR.c
+ * @author        : Robbe Elsermans
+ * @brief         : Dit bestand bevat de methodes om een Links Rechts gesture te detecteren
+ ******************************************************************************
+ *
+ * @attention
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
+
 #include "GestureDetectLR.h"
 
 // Gesture Right Left

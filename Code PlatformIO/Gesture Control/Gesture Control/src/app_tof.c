@@ -23,9 +23,9 @@ extern "C"
 {
 #endif
 
-#ifndef DEBUGGING
-#define DEBUGGING true
-#endif
+// #ifndef DEBUGGING
+// #define DEBUGGING
+// #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "app_tof.h"
@@ -318,7 +318,7 @@ extern "C"
 
 			/* check the communication with the device reading the ID */
 			VL53L3A2_RANGING_SENSOR_ReadID(device, &id);
-#if DEBUGGING
+#ifdef DEBUGGING
 			printf("ToF sensor %d - ID: %04lX\r\n", device, (unsigned long)id);
 #endif
 		}
@@ -339,7 +339,7 @@ extern "C"
 		status = VL53L3A2_RANGING_SENSOR_Start(sensor, RS_MODE_BLOCKING_CONTINUOUS);
 		if (status != BSP_ERROR_NONE)
 		{
-#if DEBUGGING
+#ifdef DEBUGGING
 			printf("VL53L3A2_RANGING_SENSOR_Start failed for sensor %s \r\n", TofDevStr[sensor]);
 #endif
 			while (1)
@@ -347,7 +347,7 @@ extern "C"
 		}
 		else
 		{
-#if DEBUGGING
+#ifdef DEBUGGING
 			printf("sensor %s\t opgestart \r\n", TofDevStr[sensor]);
 #endif
 		}
@@ -358,7 +358,7 @@ extern "C"
 		status = VL53L3A2_RANGING_SENSOR_Stop(sensor);
 		if (status != BSP_ERROR_NONE)
 		{
-#if DEBUGGING
+#ifdef DEBUGGING
 			printf("VL53L3A2_RANGING_SENSOR_Stop failed\r\n");
 #endif
 			while (1)
@@ -366,7 +366,7 @@ extern "C"
 		}
 		else
 		{
-#if DEBUGGING
+#ifdef DEBUGGING
 			printf("sensor %s\t afgezet \r\n", TofDevStr[sensor]);
 #endif
 		}

@@ -1,3 +1,17 @@
+/**
+ ******************************************************************************
+ * @file          : GestureDetectDimming.c
+ * @author        : Robbe Elsermans
+ * @brief         : Dit bestand bevat de methodes om het dimmen te 
+ * 					detecteren en de waarde hiervan op te vragen.
+ ******************************************************************************
+ *
+ * @attention
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
+
 #include "GestureDetectDimming.h"
 
 static int maxDistanceObject = 490;

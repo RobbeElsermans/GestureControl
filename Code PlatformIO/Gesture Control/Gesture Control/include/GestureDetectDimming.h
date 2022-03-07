@@ -1,3 +1,17 @@
+/**
+ ******************************************************************************
+ * @file          : GestureDetectDimming.h
+ * @author        : Robbe Elsermans
+ * @brief         : Dit bestand bevat de methodes om het dimmen te 
+ * 					detecteren en de waarde hiervan op te vragen.
+ ******************************************************************************
+ *
+ * @attention
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
+
 #ifndef _GESTUREDETECTDIMMING_H
 #define _GESTUREDETECTDIMMING_H
 

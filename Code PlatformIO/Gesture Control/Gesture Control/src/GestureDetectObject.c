@@ -1,3 +1,16 @@
+/**
+ ******************************************************************************
+ * @file          : GestureDetectObject.c
+ * @author        : Robbe Elsermans
+ * @brief         : Dit bestand bevat de methodes om een object te detecteren
+ ******************************************************************************
+ *
+ * @attention
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
+
 #include "GestureDetectObject.h"
 
 // De maximale afstand dat een object kan staan om gedetecteerd te worden.

@@ -1,3 +1,16 @@
+/**
+ ******************************************************************************
+ * @file          : GestureDetectObject.h
+ * @author        : Robbe Elsermans
+ * @brief         : Dit bestand bevat de methodes om een object te detecteren
+ ******************************************************************************
+ *
+ * @attention
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
+
 #ifndef _GESTUREDETECTOBJECT_H
 #define _GESTUREDETECTOBJECT_H
 
