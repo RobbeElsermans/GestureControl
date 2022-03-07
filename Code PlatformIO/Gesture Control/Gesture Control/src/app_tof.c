@@ -166,7 +166,7 @@ extern "C"
 				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (pwmVal * 2) + 23);
 
 			// int sta0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
-			// int sta1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+			int sta1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 			// int sta2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
 			// int dis0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Distance[0];
 			// int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
@@ -178,12 +178,13 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-			if (objectPresent)
-			{
-				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1);
 
+				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
+
+				if(!gestureDimming)
 				gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
 
+				if(!gestureDimming)
 				gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
 
 				if (gestureDimming)
@@ -205,12 +206,13 @@ extern "C"
 					printf("gestureCommand LR: %d \r\n", gestureLR);
 					commando = LR;
 				}
-			}
+				prevGestureRL = gestureRL; // fix debouncing van gestureRL
+				prevGestureLR = gestureLR; // fix debouncing van gestureLR
+
 
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
 
-			prevGestureRL = gestureRL; // fix debouncing van gestureRL
-			prevGestureLR = gestureLR; // fix debouncing van gestureLR
+			
 
 			// Timer om leds even aan te laten
 			/* 	Timer om leds even aan te laten

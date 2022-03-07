@@ -3,11 +3,12 @@
 static int maxDistanceObject = 490;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
-static int timerMeasurmentTimeout = 2000; // 2 seconden
+static int timerMeasurmentTimeout = 4000; // 2 seconden
 
-	bool CheckDimmingCommand(bool *_dimming,bool *_objectPresent, int *_dis)
+
+	bool CheckDimmingCommand(bool *_dimming,bool *_objectPresent, int *_dis, int* _status)
 	{
-		if (*_objectPresent && (*_dis <= maxDistanceObject) && !*_dimming)
+		if (*_objectPresent && (*_dis <= maxDistanceObject) && !*_dimming && (*_status == 0))
 		{
 			if (!timerMeasurementSet)
 			{
@@ -20,7 +21,10 @@ static int timerMeasurmentTimeout = 2000; // 2 seconden
 				return  true;
 			}
 		}
-		else
+		else if((*_dis >= maxDistanceObject) && *_objectPresent){
+			return false;
+		}
+		else 
 		{
 			if (timerMeasurementSet)
 			{

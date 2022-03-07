@@ -25,29 +25,20 @@ bool CheckGestureLR(bool *_gestureLR, bool *_object, RANGING_SENSOR_Result_t *Re
         int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
         int dis2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Distance[0];
 
-        // if ((dis2 < maxDistanceObject) && (dis0 > maxDistanceObject) && (sta2 == 0) && !hasRight && !hasCenter &&  !hasLeft) // Sensor right
-        // {
-        //     hasRight = true;
-        // }
-        // else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasRight && !hasCenter && !hasLeft) // Sensor center
-        // {
-        //     hasCenter = true;
-        // }
-        // else if ((dis0 < maxDistanceObject) && (sta0 == 0) && hasRight && hasCenter && !hasLeft) // Sensor left
-        // {
-        //     hasLeft = true;
-        // }
-         if ((dis0 < maxDistanceObject) && (dis2 > maxDistanceObject) && (sta0 == 0) && !hasLeft && !hasCenter &&  !hasRight) // Sensor right
+        if ((dis0 < maxDistanceObject) && (dis2 > maxDistanceObject) && (sta0 == 0) && !hasLeft && !hasCenter &&  !hasRight) // Sensor right
         {
             hasLeft = true;
+            //printf("left \r\n");
         }
         else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasLeft && !hasCenter && !hasRight) // Sensor center
         {
             hasCenter = true;
+            //printf("center \r\n");
         }
         else if ((dis2 < maxDistanceObject) && (sta2 == 0) && hasLeft && hasCenter && !hasRight) // Sensor left
         {
             hasRight = true;
+            //printf("right \r\n");
         }
     }
 

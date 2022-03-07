@@ -14,7 +14,7 @@ static int *prevDistances;                      // opslag buffer
 static uint8_t counter_prevDistances = 0;       // counter om de buffer te vullen
 static bool prevDistancesEqual = false;         // Een flag die zegt dat de buffer bestaat uit gelijke waardes
 
-static uint8_t x = 0; // DEBUG
+//static uint8_t x = 0; // DEBUG
 
 static uint8_t zone = 0;
 
@@ -42,9 +42,9 @@ bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistance
 
     memset(prevDistances, 0, sizeof(int)*max_prevDistances);    //De array proper maken 
 
-  for(int i = 0; i <= max_prevDistances; ++i) {      //DEBUG
-    printf("Element %d: %d\r\n", i, prevDistances[i]);
-  }
+//   for(int i = 0; i <= max_prevDistances; ++i) {      //DEBUG
+//     printf("Element %d: %d\r\n", i, prevDistances[i]);
+//   }
 
     return true;
 }
@@ -79,12 +79,12 @@ bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent,
             prevDistancesEqual = true;
     }
 
-    if (x == 0)
-    {
-        printf("Zone result %1d: %2d \t", VL53L3A2_DEV_CENTER, zone);
-        printf("Dist result %1d: %2d \r\n", VL53L3A2_DEV_CENTER, *dist);
-    }
-    x++;
+    // if (x == 0)
+    // {
+    //     printf("Zone result %1d: %2d \t", VL53L3A2_DEV_CENTER, zone);
+    //     printf("Dist result %1d: %2d \r\n", VL53L3A2_DEV_CENTER, *dist);
+    // }
+    // x++;
 
     /*	als dist1 onder de 1000 mm komt voor 3 seconden, dan is er een object.
      * 	+ er mag geen foutcode zijn

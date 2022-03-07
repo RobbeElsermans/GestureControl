@@ -14,7 +14,7 @@
  * @note   Wanneer een object onder deze afstand + tijd komt, is het dimming command aanwezig
  * @retval  bool Dimming Command Active
  */
-bool CheckDimmingCommand(bool *_dimming, bool *_objectPresent, int *_dis);
+bool CheckDimmingCommand(bool *_dimming, bool *_objectPresent, int *_dis, int* _status);
 
 /**
  * @brief  Geeft de waarde terug die gebruikt kan worden als PWMVal tussen 0 - maxDistanceObject.
