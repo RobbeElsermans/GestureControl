@@ -54,4 +54,5 @@ static int timerMeasurmentTimeout = 2000; // 2 seconden
 				*_dimming = false;
                 return *_prevVal;
 			}
+			return *_prevVal;
 	}

@@ -38,6 +38,7 @@ extern "C"
 #include "GestureDetectObject.h"  //Deze file bevat de detectie van een persoon
 #include "GestureDetectDimming.h" //Bevat methodes om het dimmen te detecteren + om de value te verkrijgen.
 #include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts links te herkennen.
+#include "GestureDetectLR.h"	  //Bevat methode om gesture Rechts links te herkennen.
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -66,12 +67,12 @@ extern "C"
 	bool gestureLR = false;
 
 	// Dimming led
-	uint16_t pwmVal = 0;
+	int pwmVal = 0;
 	bool gestureDimming = false;
 
 	TIM_HandleTypeDef htim3;
 
-	static enum commands {
+	enum commands {
 		DIM,
 		RL,
 		LR,
@@ -79,6 +80,7 @@ extern "C"
 		DU,
 		NONE
 	};
+
 	typedef enum commands command_t;
 
 	command_t commando = NONE;
@@ -87,6 +89,7 @@ extern "C"
 	static float timerCommand = 0;
 	static bool timerCommandSet = false;
 	static int timerCommandTimeout = 3000; // 2 seconden
+
 
 	static const char *TofDevStr[] =
 		{
@@ -104,6 +107,8 @@ extern "C"
 	void MX_TOF_Init(void)
 	{
 		MX_53L3A2_MultiSensorRanging_Init();
+
+		initObjectPresent(-1,-1,-1);
 	}
 
 	/*
@@ -121,7 +126,7 @@ extern "C"
 			getResult(VL53L3A2_DEV_CENTER, Result);
 			dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
 
-			objectPresent = ckeckObjectPresent(Result, &objectPresent);
+			objectPresent = ckeckObjectPresent(Result, &objectPresent, &dis1);
 
 			if (objectPresent)
 			{

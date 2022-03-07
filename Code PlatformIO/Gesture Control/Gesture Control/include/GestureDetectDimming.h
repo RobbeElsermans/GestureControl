@@ -26,6 +26,6 @@ bool CheckDimmingCommand(bool *_dimming, bool *_objectPresent, int *_dis);
  * @note   De tijd wanneer er een object gedetecteerd wordt is gedefinieerd in timerMeasurmentTimeout.
  * @retval int waarde van 0 - 1023
  */
-int getDimmingValue(bool *_dimming, int *_prevVal, int *_dis);
+int getDimmingValue(bool *_dimming, int* _prevVal, int *_dis);
 
 #endif

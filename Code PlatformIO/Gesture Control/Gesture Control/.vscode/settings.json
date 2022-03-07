@@ -4,6 +4,7 @@
         "53l3a2.h": "c",
         "gesturedetectobject.h": "c",
         "gesturedetectdimming.h": "c",
-        "gesturedetectrl.h": "c"
+        "gesturedetectrl.h": "c",
+        "gesturedetectlr.h": "c"
     }
 }

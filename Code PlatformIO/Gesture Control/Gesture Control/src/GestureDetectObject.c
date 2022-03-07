@@ -1,62 +1,95 @@
 #include "GestureDetectObject.h"
 
-//De maximale afstand dat een object kan staan om gedetecteerd te worden.
-static int maxDistanceObject = 1000;
+// De maximale afstand dat een object kan staan om gedetecteerd te worden.
+static int maxDistanceObject = 0;           // Maximale afstand dat een object mag zijn om als object gedetecteerd te worden
 
-//Timer om een object te herkennen
+// Timer om een object te herkennen
 static float timerMeasurment = 0;           // opsalg van timer waarde
 static bool timerMeasurementSet = false;    // de flag wanneer de timer gezet is
-static int timerMeasurmentTimeout = 2000;   // 2 seconden moet het object voor het toestel staan
+static int timerMeasurmentTimeout = 0;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
 
+// Bug wanneer de sensor niets detecteerd maar de afstand blijft hetzelfde en er zij geen foutcodes aanwezig (zone == 0)
+static uint8_t max_prevDistances = 0;           // x metingen opslaan
+static int *prevDistances;                      // opslag buffer
+static uint8_t counter_prevDistances = 0;       // counter om de buffer te vullen
+static bool prevDistancesEqual = false;         // Een flag die zegt dat de buffer bestaat uit gelijke waardes
 
-//Bug wanneer de sensor niets detecteerd maar de afstand blijft hetzelfde en er zij geen foutcodes aanwezig (zone == 0)
-static uint8_t max_prevDistances = 9;       // 10 metingen opslaan
-static int prevDistances [10];              // opslag buffer
-static uint8_t counter_prevDistances = 0;   // counter om de buffer te vullen
-static bool prevDistancesEqual = false;     // Een flag die zegt dat de buffer bestaat uit gelijke waardes
+static uint8_t x = 0; // DEBUG
 
+static uint8_t zone = 0;
 
-uint8_t x = 0;  //DEBUG
+bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistances){
+    if(_maxDistance >= 1)
+    maxDistanceObject = _maxDistance;
+    else
+    maxDistanceObject = 1000;
 
-int dist1 = 0;
-uint8_t zone = 0;
+    if(_timerTimeout >= 1)
+    timerMeasurmentTimeout = _timerTimeout;
+    else
+    timerMeasurmentTimeout = 2000;
 
-bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent)
+    if(_maxPrevDistances >= 1)
+    max_prevDistances = _maxPrevDistances;
+    else
+    max_prevDistances = 9;
+
+    //Het maken van de array waarin we prevValues in plaatsen
+    prevDistances = malloc(sizeof(int) * max_prevDistances); //Memory aanmaken van max_prevDistances lang
+    if (!prevDistances) {   //kijken of dat het aanmaken gelukt is
+        return false;
+    }
+
+    memset(prevDistances, 0, sizeof(int)*max_prevDistances);    //De array proper maken 
+
+  for(int i = 0; i <= max_prevDistances; ++i) {      //DEBUG
+    printf("Element %d: %d\r\n", i, prevDistances[i]);
+  }
+
+    return true;
+}
+
+bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent, int *dist)
 {
-    //De afstand en zone results ophalen uite Result
-    dist1 = (long)Result[1].ZoneResult[0].Distance[0];
+    // De afstand en zone results ophalen uite Result
     zone = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 
-    if(counter_prevDistances == max_prevDistances)
-    counter_prevDistances = 0;
+    if (counter_prevDistances == max_prevDistances)
+        counter_prevDistances = 0;
+    else
+        counter_prevDistances++;
 
-    //opslaan van data
-    prevDistances[counter_prevDistances] = dist1;
+    // opslaan van data
+    prevDistances[counter_prevDistances] = *dist;
     for (uint8_t i = 0; i <= max_prevDistances; i++)
     {
-        if(i > 0)
-        if(prevDistances[i] != prevDistances[i-1])
+        if (i > 0)
         {
-            prevDistancesEqual = false;
-            break;
+            int a = prevDistances[i] ;
+            int b = prevDistances[i - 1];
+            if (a != b)
+            {
+                prevDistancesEqual = false;
+                break;
+            }
         }
 
-        //einde van de loop en nog steeds allemaal hetzelfde
-        if(x == max_prevDistances)
+        // einde van de loop en nog steeds allemaal hetzelfde
+        if (i == max_prevDistances)
             prevDistancesEqual = true;
     }
 
     if (x == 0)
     {
         printf("Zone result %1d: %2d \t", VL53L3A2_DEV_CENTER, zone);
-        printf("Dist result %1d: %2d \r\n", VL53L3A2_DEV_CENTER, dist1);
+        printf("Dist result %1d: %2d \r\n", VL53L3A2_DEV_CENTER, *dist);
     }
     x++;
 
     /*	als dist1 onder de 1000 mm komt voor 3 seconden, dan is er een object.
      * 	+ er mag geen foutcode zijn
      */
-    if (((dist1 <= maxDistanceObject) && zone == 0 && !*WasObjectPresent && !prevDistancesEqual))
+    if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent && !prevDistancesEqual))
     {
         if (!timerMeasurementSet)
         {
@@ -81,7 +114,7 @@ bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent)
      *   als het object verder is dan maxDistanceObject en het object was er dan is het object weg
      *   of als er een foutcode 12 of 4 is en de Objectresult is true, dan is het object weg.
      */
-    if (((dist1 >= maxDistanceObject) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent) || (prevDistancesEqual && *WasObjectPresent))
+    if (((*dist >= maxDistanceObject) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent) || (prevDistancesEqual && *WasObjectPresent))
     {
         if (timerMeasurementSet == false)
         {
@@ -103,4 +136,45 @@ bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent)
         }
     }
     return *WasObjectPresent;
+}
+
+uint16_t get_maxDistanceObject()
+{
+    return maxDistanceObject;
+}
+bool set_maxDistanceObject(uint16_t *max)
+{
+    if (*max != 0)
+        maxDistanceObject = *max;
+    else
+        return false;
+    return true;
+}
+
+uint16_t get_timerTimeout()
+{
+    return timerMeasurmentTimeout;
+}
+
+bool set_timerTimeout(uint16_t *time)
+{
+    if (*time != 0)
+        timerMeasurmentTimeout = *time;
+    else
+        return false;
+    return true;
+}
+
+uint16_t get_maxPrevDistances()
+{
+    return max_prevDistances;
+}
+
+bool set_maxPrevDistances(uint16_t *max)
+{
+    if (*max != 0)
+        max_prevDistances = *max;
+    else
+        return false;
+    return true;
 }

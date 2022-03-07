@@ -1,5 +1,5 @@
-#ifndef _GESTUREDETECTRL_H
-#define _GESTUREDETECTRL_H
+#ifndef _GESTUREDETECTLRH
+#define _GESTUREDETECTLR_H
 
 #include "stm32f4xx_nucleo.h"
 #include "stdbool.h" //Nodig om bool te kunnen gebruiken
