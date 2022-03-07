@@ -72,7 +72,8 @@ extern "C"
 
 	TIM_HandleTypeDef htim3;
 
-	enum commands {
+	enum commands
+	{
 		DIM,
 		RL,
 		LR,
@@ -89,7 +90,6 @@ extern "C"
 	static float timerCommand = 0;
 	static bool timerCommandSet = false;
 	static int timerCommandTimeout = 3000; // 2 seconden
-
 
 	static const char *TofDevStr[] =
 		{
@@ -108,7 +108,7 @@ extern "C"
 	{
 		MX_53L3A2_MultiSensorRanging_Init();
 
-		initObjectPresent(-1,-1,-1);
+		initObjectPresent(-1, -1, -1);
 	}
 
 	/*
@@ -130,7 +130,7 @@ extern "C"
 
 			if (objectPresent)
 			{
-				if (!hasStarted)// Start andere sensoren ook op
+				if (!hasStarted) // Start andere sensoren ook op
 				{
 					hasStarted = true;
 					start_sensor(VL53L3A2_DEV_LEFT);
@@ -140,10 +140,10 @@ extern "C"
 					HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 				}
 
-				//Resultaten opvragen sensoren
+				// Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_LEFT, Result);
 				dis0 = getDistance(VL53L3A2_DEV_LEFT, Result);
-				//Resultaten opvragen sensoren
+				// Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_RIGHT, Result);
 				dis2 = getDistance(VL53L3A2_DEV_RIGHT, Result);
 			}
@@ -178,53 +178,56 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1);
-
-			gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
-
-			gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
-
-			if(gestureDimming)
+			if (objectPresent)
 			{
-				commando = DIM;
-				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
-			}
+				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1);
 
-			if (gestureRL && !prevGestureRL)
-			{
-				prevGestureRL = gestureRL;
-				printf("gestureCommand RL: %d \r\n", gestureRL);
-				commando = RL;
-			}
+				gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
 
-			if (gestureLR && !prevGestureLR)
-			{
-				prevGestureLR = gestureLR;
-				printf("gestureCommand LR: %d \r\n", gestureLR);
-				commando = LR;
+				gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
+
+				if (gestureDimming)
+				{
+					commando = DIM;
+					pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
+				}
+
+				if (gestureRL && !prevGestureRL)
+				{
+					prevGestureRL = gestureRL;
+					printf("gestureCommand RL: %d \r\n", gestureRL);
+					commando = RL;
+				}
+
+				if (gestureLR && !prevGestureLR)
+				{
+					prevGestureLR = gestureLR;
+					printf("gestureCommand LR: %d \r\n", gestureLR);
+					commando = LR;
+				}
 			}
 
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
 
 			prevGestureRL = gestureRL; // fix debouncing van gestureRL
 			prevGestureLR = gestureLR; // fix debouncing van gestureLR
-			
+
 			// Timer om leds even aan te laten
 			/* 	Timer om leds even aan te laten
 				Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
 				Dan zetten we een timer
 				Wanneer de timer afloopt wordt het commando gereset
 			*/
-		if (!timerCommandSet && commando != NONE)
-        {
-            timerCommandSet = true;
-            timerCommand = HAL_GetTick();
-        }
-        if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
-        {
-            timerCommandSet = false;
-            commando = NONE;
-        }
+			if (!timerCommandSet && commando != NONE)
+			{
+				timerCommandSet = true;
+				timerCommand = HAL_GetTick();
+			}
+			if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
+			{
+				timerCommandSet = false;
+				commando = NONE;
+			}
 			// Commando's uitsturen
 			switch (commando)
 			{
@@ -265,6 +268,7 @@ extern "C"
 				HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
 				break;
 			}
+			HAL_GPIO_WritePin(L_R_GPIO_Port, L_R_Pin, objectPresent);
 		}
 	}
 
@@ -315,7 +319,7 @@ extern "C"
 
 	static void start_sensor(uint8_t sensor)
 	{
-		
+
 		RANGING_SENSOR_ProfileConfig_t Profile;
 
 		Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
