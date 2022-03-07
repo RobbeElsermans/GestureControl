@@ -89,7 +89,7 @@ extern "C"
 	// Timer command
 	static float timerCommand = 0;
 	static bool timerCommandSet = false;
-	static int timerCommandTimeout = 3000; // 2 seconden
+	static int timerCommandTimeout = 2000; // 2 seconden
 
 	static const char *TofDevStr[] =
 		{
@@ -178,21 +178,25 @@ extern "C"
 			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			// printf("\r\n");
 
-
+				//Kijken ofdat er een dimming commando aanwezig is
 				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
-
+				
+				//Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
 				if(!gestureDimming)
 				gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
 
+				//Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Left Right beweging aanwezig is
 				if(!gestureDimming)
 				gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
 
+				//Het commando dimming activeren
 				if (gestureDimming)
 				{
 					commando = DIM;
 					pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
 				}
 
+				//Het commando RL activeren
 				if (gestureRL && !prevGestureRL)
 				{
 					prevGestureRL = gestureRL;
@@ -200,6 +204,7 @@ extern "C"
 					commando = RL;
 				}
 
+				//Het commando LR activeren
 				if (gestureLR && !prevGestureLR)
 				{
 					prevGestureLR = gestureLR;
@@ -210,11 +215,11 @@ extern "C"
 				prevGestureLR = gestureLR; // fix debouncing van gestureLR
 
 
+			//Refreshrate van schakeling zichtbaar maken
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
 
 			
 
-			// Timer om leds even aan te laten
 			/* 	Timer om leds even aan te laten
 				Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
 				Dan zetten we een timer
