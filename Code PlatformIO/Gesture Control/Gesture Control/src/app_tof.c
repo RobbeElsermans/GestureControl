@@ -35,8 +35,8 @@ extern "C"
 #include "stm32f4xx_nucleo.h"
 #include "stdbool.h" //Nodig om bool te kunnen gebruiken
 
-#include "vl53lx_api.h" //Om calibration methodes te kunnen gebruiken
-#include "53l3a2_ranging_sensor.h"	//Om dev obj te kunnen gebruiken
+#include "vl53lx_api.h"			   //Om calibration methodes te kunnen gebruiken
+#include "53l3a2_ranging_sensor.h" //Om dev obj te kunnen gebruiken
 
 #include "GestureDetectObject.h"  //Deze file bevat de detectie van een persoon
 #include "GestureDetectDimming.h" //Bevat methodes om het dimmen te detecteren + om de value te verkrijgen.
@@ -113,66 +113,115 @@ extern "C"
 
 		initObjectPresent(-1, -1, -1);
 
-		//Calibratie van SPAD uitvoeren uitvoeren
-		VL53LX_CalibrationData_t callData;
-		printf((int)VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]));
+		// Calibratie van SPAD uitvoeren uitvoeren
+		VL53LX_CalibrationData_t callData_LEFT;
+		VL53LX_CalibrationData_t callData_CENTER;
+		VL53LX_CalibrationData_t callData_RIGHT;
+		VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT]);
+		VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
+		VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT]);
 
-		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData);
+		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], &callData_LEFT);
+		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData_CENTER);
+		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], &callData_RIGHT);
 
+		// Crosstalk data voor coverglas
+		/**
+		 * Dit moeten we herhalen bij telkens een nieuw coverglas op verschillende afstanden
+		 * Kijk hier file:///C:/Users/robel/Desktop/testing%20Nucleo/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf
+		 * voor meer uitleg (Voor mezelf)
+		 *
+		 */
 
-//Crosstalk data voor coverglas
-/**
- * Dit moeten we herhalen bij telkens een nieuw coverglas op verschillende afstanden 
- * Kijk hier file:///C:/Users/robel/Desktop/testing%20Nucleo/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf
- * voor meer uitleg (Voor mezelf)
- * 
- */
-		int xtalk_kcps[] = {739,1429,2119,2809,3499,4190};
-		int xtalk_bin_data[] = {21,416,462,125,0,0,0,0,0,0,0,0};
+		int xtalk_kcps_LEFT[] = {243, 493, 743, 993, 1243, 1494};
+		int xtalk_bin_data_LEFT[] = {11, 327, 506, 180, 0, 0, 0, 0, 0, 0, 0, 0};
 
-		for (uint8_t i = 0; i < 6; i++)
+		int xtalk_kcps_CENTER[] = {941, 1878, 2815, 3752, 4689, 5627};
+		int xtalk_bin_data_CENTER[] = {20, 429, 454, 121, 0, 0, 0, 0, 0, 0, 0, 0};
+
+		int xtalk_kcps_RIGHT[] = {611, 1209, 1807, 2405, 3003, 3601};
+		int xtalk_bin_data_RIGHT[] = {14, 425, 461, 124, 0, 0, 0, 0, 0, 0, 0, 0};
+
+for (uint8_t i = 0; i < 6; i++)
 		{
-			callData.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[i];
+			callData_LEFT.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps_LEFT[i];
 		}
 
 		for (uint8_t i = 0; i < 12; i++)
 		{
-			callData.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[i];
+			callData_LEFT.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data_LEFT[i];
 		}
-		
-		//callData.algo__xtalk_cpo_HistoMerge_kcps = {739,1429,2119,2809,3499,4190};
-		//callData.xtalkhisto.xtalk_shape.bin_data = {21,416,462,125,0,0,0,0,0,0,0,0};
-		//callData.xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10352;
-		//callData.xtalkhisto.xtalk_shape.phasecal_result__vcsel_start = 6;
-		//callData.xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
-		//callData.xtalkhisto.xtalk_shape.vcsel_width = 40;
-		//callData.xtalkhisto.xtalk_shape.VL53LX_p_019 = 0;
-		//callData.xtalkhisto.xtalk_shape.VL53LX_p_020 = 12;
-		//callData.xtalkhisto.xtalk_shape.VL53LX_p_021 = 12;
-		//callData.xtalkhisto.xtalk_shape.VL53LX_p_015 = 48455;
-		callData.xtalkhisto.xtalk_shape.zero_distance_phase = 4208;
 
-		callData.per_vcsel_cal_data.long_a_offset_mm = -23;
-		callData.per_vcsel_cal_data.long_b_offset_mm = -28;
-		callData.per_vcsel_cal_data.medium_a_offset_mm = -27;
-		callData.per_vcsel_cal_data.medium_b_offset_mm = -30;
-		callData.per_vcsel_cal_data.short_a_offset_mm = 378;
-		callData.per_vcsel_cal_data.short_b_offset_mm = 0;
-		
-		
-		//Callibratie van crosstalk (coverglas)
-		//VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
-		//De offset bepalen zodat deze juist is is.
-		//VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 600);
+		for (uint8_t i = 0; i < 6; i++)
+		{
+			callData_CENTER.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps_CENTER[i];
+		}
 
-		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData);
-		
-		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], (VL53LX_OffsetCorrectionModes) VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		for (uint8_t i = 0; i < 12; i++)
+		{
+			callData_CENTER.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data_CENTER[i];
+		}
+
+		for (uint8_t i = 0; i < 6; i++)
+		{
+			callData_RIGHT.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps_RIGHT[i];
+		}
+
+		for (uint8_t i = 0; i < 12; i++)
+		{
+			callData_RIGHT.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data_RIGHT[i];
+		}
+
+		callData_LEFT.xtalkhisto.xtalk_shape.zero_distance_phase = 4481;
+		callData_LEFT.per_vcsel_cal_data.long_a_offset_mm = -33;
+		callData_LEFT.per_vcsel_cal_data.long_b_offset_mm = 35;
+		callData_LEFT.per_vcsel_cal_data.medium_a_offset_mm = -46;
+		callData_LEFT.per_vcsel_cal_data.medium_b_offset_mm = -46;
+		callData_LEFT.per_vcsel_cal_data.short_a_offset_mm = 43;
+		callData_LEFT.per_vcsel_cal_data.short_b_offset_mm = -43;
+
+		callData_CENTER.xtalkhisto.xtalk_shape.zero_distance_phase = 4186;
+		callData_CENTER.per_vcsel_cal_data.long_a_offset_mm = -25;
+		callData_CENTER.per_vcsel_cal_data.long_b_offset_mm = -25;
+		callData_CENTER.per_vcsel_cal_data.medium_a_offset_mm = -28;
+		callData_CENTER.per_vcsel_cal_data.medium_b_offset_mm = -30;
+		callData_CENTER.per_vcsel_cal_data.short_a_offset_mm = -31;
+		callData_CENTER.per_vcsel_cal_data.short_b_offset_mm = -27;
+
+		callData_RIGHT.xtalkhisto.xtalk_shape.zero_distance_phase = 4204;
+		callData_RIGHT.per_vcsel_cal_data.long_a_offset_mm = -32;
+		callData_RIGHT.per_vcsel_cal_data.long_b_offset_mm = -34;
+		callData_RIGHT.per_vcsel_cal_data.medium_a_offset_mm = -34;
+		callData_RIGHT.per_vcsel_cal_data.medium_b_offset_mm = -38;
+		callData_RIGHT.per_vcsel_cal_data.short_a_offset_mm = -40;
+		callData_RIGHT.per_vcsel_cal_data.short_b_offset_mm = -40;
+
+		//// Callibratie van crosstalk (coverglas)
+		// VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT]);
+		// VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
+		// VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT]);
+		//// De offset bepalen zodat deze juist is is.
+		// VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], 600);
+		// VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 600);
+		// VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], 600);
+		//// Waardes opvragen
+		// VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], &callData_LEFT);
+		// VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData_CENTER);
+		// VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], &callData_RIGHT);
+
+
+		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], &callData_LEFT);
+		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData_CENTER);
+		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], &callData_RIGHT);
+
+		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], 1);
+
+		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 1);
 
-		
-		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData);
-
+		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], 1);
 	}
 
 	/*
@@ -242,47 +291,44 @@ extern "C"
 			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
 			printf("\r\n");
 
-				//Kijken ofdat er een dimming commando aanwezig is
-				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
-				
-				//Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
-				if(!gestureDimming)
+			// Kijken ofdat er een dimming commando aanwezig is
+			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
+
+			// Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
+			if (!gestureDimming)
 				gestureRL = CheckGestureRL(&gestureRL, &objectPresent, Result);
 
-				//Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Left Right beweging aanwezig is
-				if(!gestureDimming)
+			// Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Left Right beweging aanwezig is
+			if (!gestureDimming)
 				gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
 
-				//Het commando dimming activeren
-				if (gestureDimming)
-				{
-					commando = DIM;
-					pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
-				}
+			// Het commando dimming activeren
+			if (gestureDimming)
+			{
+				commando = DIM;
+				pwmVal = getDimmingValue(&gestureDimming, &pwmVal, &dis1);
+			}
 
-				//Het commando RL activeren
-				if (gestureRL && !prevGestureRL)
-				{
-					prevGestureRL = gestureRL;
-					printf("gestureCommand RL: %d \r\n", gestureRL);
-					commando = RL;
-				}
+			// Het commando RL activeren
+			if (gestureRL && !prevGestureRL)
+			{
+				prevGestureRL = gestureRL;
+				printf("gestureCommand RL: %d \r\n", gestureRL);
+				commando = RL;
+			}
 
-				//Het commando LR activeren
-				if (gestureLR && !prevGestureLR)
-				{
-					prevGestureLR = gestureLR;
-					printf("gestureCommand LR: %d \r\n", gestureLR);
-					commando = LR;
-				}
-				prevGestureRL = gestureRL; // fix debouncing van gestureRL
-				prevGestureLR = gestureLR; // fix debouncing van gestureLR
+			// Het commando LR activeren
+			if (gestureLR && !prevGestureLR)
+			{
+				prevGestureLR = gestureLR;
+				printf("gestureCommand LR: %d \r\n", gestureLR);
+				commando = LR;
+			}
+			prevGestureRL = gestureRL; // fix debouncing van gestureRL
+			prevGestureLR = gestureLR; // fix debouncing van gestureLR
 
-
-			//Refreshrate van schakeling zichtbaar maken
+			// Refreshrate van schakeling zichtbaar maken
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
-
-			
 
 			/* 	Timer om leds even aan te laten
 				Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
