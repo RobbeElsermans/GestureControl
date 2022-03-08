@@ -35,6 +35,9 @@ extern "C"
 #include "stm32f4xx_nucleo.h"
 #include "stdbool.h" //Nodig om bool te kunnen gebruiken
 
+#include "vl53lx_api.h" //Om calibration methodes te kunnen gebruiken
+#include "53l3a2_ranging_sensor.h"	//Om dev obj te kunnen gebruiken
+
 #include "GestureDetectObject.h"  //Deze file bevat de detectie van een persoon
 #include "GestureDetectDimming.h" //Bevat methodes om het dimmen te detecteren + om de value te verkrijgen.
 #include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts links te herkennen.
@@ -109,6 +112,67 @@ extern "C"
 		MX_53L3A2_MultiSensorRanging_Init();
 
 		initObjectPresent(-1, -1, -1);
+
+		//Calibratie van SPAD uitvoeren uitvoeren
+		VL53LX_CalibrationData_t callData;
+		printf((int)VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]));
+
+		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData);
+
+
+//Crosstalk data voor coverglas
+/**
+ * Dit moeten we herhalen bij telkens een nieuw coverglas op verschillende afstanden 
+ * Kijk hier file:///C:/Users/robel/Desktop/testing%20Nucleo/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf
+ * voor meer uitleg (Voor mezelf)
+ * 
+ */
+		int xtalk_kcps[] = {739,1429,2119,2809,3499,4190};
+		int xtalk_bin_data[] = {21,416,462,125,0,0,0,0,0,0,0,0};
+
+		for (uint8_t i = 0; i < 6; i++)
+		{
+			callData.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[i];
+		}
+
+		for (uint8_t i = 0; i < 12; i++)
+		{
+			callData.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[i];
+		}
+		
+		//callData.algo__xtalk_cpo_HistoMerge_kcps = {739,1429,2119,2809,3499,4190};
+		//callData.xtalkhisto.xtalk_shape.bin_data = {21,416,462,125,0,0,0,0,0,0,0,0};
+		//callData.xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10352;
+		//callData.xtalkhisto.xtalk_shape.phasecal_result__vcsel_start = 6;
+		//callData.xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
+		//callData.xtalkhisto.xtalk_shape.vcsel_width = 40;
+		//callData.xtalkhisto.xtalk_shape.VL53LX_p_019 = 0;
+		//callData.xtalkhisto.xtalk_shape.VL53LX_p_020 = 12;
+		//callData.xtalkhisto.xtalk_shape.VL53LX_p_021 = 12;
+		//callData.xtalkhisto.xtalk_shape.VL53LX_p_015 = 48455;
+		callData.xtalkhisto.xtalk_shape.zero_distance_phase = 4208;
+
+		callData.per_vcsel_cal_data.long_a_offset_mm = -23;
+		callData.per_vcsel_cal_data.long_b_offset_mm = -28;
+		callData.per_vcsel_cal_data.medium_a_offset_mm = -27;
+		callData.per_vcsel_cal_data.medium_b_offset_mm = -30;
+		callData.per_vcsel_cal_data.short_a_offset_mm = 378;
+		callData.per_vcsel_cal_data.short_b_offset_mm = 0;
+		
+		
+		//Callibratie van crosstalk (coverglas)
+		//VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
+		//De offset bepalen zodat deze juist is is.
+		//VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 600);
+
+		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData);
+		
+		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], (VL53LX_OffsetCorrectionModes) VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 1);
+
+		
+		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData);
+
 	}
 
 	/*
@@ -165,18 +229,18 @@ extern "C"
 			if (objectPresent)
 				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, (pwmVal * 2) + 23);
 
-			// int sta0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
+			int sta0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
 			int sta1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
-			// int sta2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
-			// int dis0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Distance[0];
-			// int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
-			// int dis2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Distance[0];
-			// int obj0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
-			// int obj1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
-			// int obj2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
+			int sta2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
+			int dis0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Distance[0];
+			int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
+			int dis2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Distance[0];
+			int obj0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
+			int obj1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
+			int obj2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
 
-			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
-			// printf("\r\n");
+			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
+			printf("\r\n");
 
 				//Kijken ofdat er een dimming commando aanwezig is
 				gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
