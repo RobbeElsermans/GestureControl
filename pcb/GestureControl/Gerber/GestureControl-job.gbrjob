@@ -1,165 +1,170 @@
 {
-  "Header":
-  {
-    "GenerationSoftware":
-    {
-      "Vendor":      "KiCad",
+  "Header": {
+    "GenerationSoftware": {
+      "Vendor": "KiCad",
       "Application": "Pcbnew",
-      "Version":     "(5.1.10)-1"
+      "Version": "(6.0.2)"
     },
-    "CreationDate":  "2022-03-04T09:48:17+01:00"
+    "CreationDate": "2022-03-10T15:52:04+01:00"
   },
-  "GeneralSpecs":
-  {
-    "ProjectId":
-    {
+  "GeneralSpecs": {
+    "ProjectId": {
       "Name": "GestureControl",
       "GUID": "47657374-7572-4654-936f-6e74726f6c2e",
       "Revision": "V0.1"
     },
-    "Size":
-    {
-      "X": 214.807,
-      "Y": 54.660
+    "Size": {
+      "X": 215.823,
+      "Y": 54.66
     },
     "LayerNumber": 4,
-    "BoardThickness":  1.600
+    "BoardThickness": 1.6,
+    "Finish": "None"
   },
-  "DesignRules":
-  [
+  "DesignRules": [
     {
       "Layers": "Outer",
-      "PadToPad":  0.200,
-      "PadToTrack":  0.200,
-      "TrackToTrack":  0.200,
-      "MinLineWidth":  0.250,
-      "TrackToRegion":  0.200,
-      "RegionToRegion":  0.200
+      "PadToPad": 0.0,
+      "PadToTrack": 0.0,
+      "TrackToTrack": 0.2,
+      "MinLineWidth": 0.2,
+      "TrackToRegion": 0.2,
+      "RegionToRegion": 0.2
     },
     {
       "Layers": "Inner",
-      "PadToPad":  0.200,
-      "PadToTrack":  0.200,
-      "TrackToTrack":  0.200,
-      "MinLineWidth":  0.250,
-      "TrackToRegion":  0.200,
-      "RegionToRegion":  0.200
+      "PadToPad": 0.0,
+      "PadToTrack": 0.0,
+      "TrackToTrack": 0.2,
+      "MinLineWidth": 0.25,
+      "TrackToRegion": 0.2,
+      "RegionToRegion": 0.2
     }
   ],
-  "FilesAttributes":
-  [
+  "FilesAttributes": [
     {
-      "Path":  "GestureControl-SIG1.gbr",
-      "FileFunction":  "Copper,L1,Top",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-F_Cu.gbr",
+      "FileFunction": "Copper,L1,Top",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-PWR.gbr",
-      "FileFunction":  "Copper,L2,Inr",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-I1_Cu.gbr",
+      "FileFunction": "Copper,L2,Inr",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-GND.gbr",
-      "FileFunction":  "Copper,L3,Inr",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-I2_Cu.gbr",
+      "FileFunction": "Copper,L3,Inr",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-SIG2.gbr",
-      "FileFunction":  "Copper,L4,Bot",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-B_Cu.gbr",
+      "FileFunction": "Copper,L4,Bot",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-F_Paste.gbr",
-      "FileFunction":  "SolderPaste,Top",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-F_Paste.gbr",
+      "FileFunction": "SolderPaste,Top",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-B_Paste.gbr",
-      "FileFunction":  "SolderPaste,Bot",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-B_Paste.gbr",
+      "FileFunction": "SolderPaste,Bot",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-F_SilkS.gbr",
-      "FileFunction":  "Legend,Top",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-F_Silkscreen.gbr",
+      "FileFunction": "Legend,Top",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-B_SilkS.gbr",
-      "FileFunction":  "Legend,Bot",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-B_Silkscreen.gbr",
+      "FileFunction": "Legend,Bot",
+      "FilePolarity": "Positive"
     },
     {
-      "Path":  "GestureControl-F_Mask.gbr",
-      "FileFunction":  "SolderMask,Top",
-      "FilePolarity":  "Negative"
+      "Path": "GestureControl-F_Mask.gbr",
+      "FileFunction": "SolderMask,Top",
+      "FilePolarity": "Negative"
     },
     {
-      "Path":  "GestureControl-B_Mask.gbr",
-      "FileFunction":  "SolderMask,Bot",
-      "FilePolarity":  "Negative"
+      "Path": "GestureControl-B_Mask.gbr",
+      "FileFunction": "SolderMask,Bot",
+      "FilePolarity": "Negative"
     },
     {
-      "Path":  "GestureControl-Edge_Cuts.gbr",
-      "FileFunction":  "Profile",
-      "FilePolarity":  "Positive"
+      "Path": "GestureControl-Edge_Cuts.gbr",
+      "FileFunction": "Profile",
+      "FilePolarity": "Positive"
     }
   ],
-  "MaterialStackup":
-  [
+  "MaterialStackup": [
     {
-      "Type":  "Legend",
-      "Notes":  "Layer F.SilkS"
+      "Type": "Legend",
+      "Name": "Top Silk Screen"
     },
     {
-      "Type":  "SolderPaste",
-      "Notes":  "Layer F.Paste"
+      "Type": "SolderPaste",
+      "Name": "Top Solder Paste"
     },
     {
-      "Type":  "SolderMask",
-      "Notes":  "Layer F.Mask"
+      "Type": "SolderMask",
+      "Thickness": 0.01,
+      "Name": "Top Solder Mask"
     },
     {
-      "Type":  "Copper",
-      "Notes":  "Layer SIG1"
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "F.Cu"
     },
     {
-      "Type":  "Dielectric",
-      "Material":  "FR4",
-      "Notes":  "Layers L1/L2"
+      "Type": "Dielectric",
+      "Thickness": 0.48,
+      "Material": "FR4",
+      "Name": "F.Cu/I1.Cu",
+      "Notes": "Type: dielectric layer 1 (from F.Cu to I1.Cu)"
     },
     {
-      "Type":  "Copper",
-      "Notes":  "Layer PWR"
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "I1.Cu"
     },
     {
-      "Type":  "Dielectric",
-      "Material":  "FR4",
-      "Notes":  "Layers L2/L3"
+      "Type": "Dielectric",
+      "Thickness": 0.48,
+      "Material": "FR4",
+      "Name": "I1.Cu/I2.Cu",
+      "Notes": "Type: dielectric layer 2 (from I1.Cu to I2.Cu)"
     },
     {
-      "Type":  "Copper",
-      "Notes":  "Layer GND"
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "I2.Cu"
     },
     {
-      "Type":  "Dielectric",
-      "Material":  "FR4",
-      "Notes":  "Layers L3/L4"
+      "Type": "Dielectric",
+      "Thickness": 0.48,
+      "Material": "FR4",
+      "Name": "I2.Cu/B.Cu",
+      "Notes": "Type: dielectric layer 3 (from I2.Cu to B.Cu)"
     },
     {
-      "Type":  "Copper",
-      "Notes":  "Layer SIG2"
+      "Type": "Copper",
+      "Thickness": 0.035,
+      "Name": "B.Cu"
     },
     {
-      "Type":  "SolderMask",
-      "Notes":  "Layer B.Mask"
+      "Type": "SolderMask",
+      "Thickness": 0.01,
+      "Name": "Bottom Solder Mask"
     },
     {
-      "Type":  "SolderPaste",
-      "Notes":  "Layer B.Paste"
+      "Type": "SolderPaste",
+      "Name": "Bottom Solder Paste"
     },
     {
-      "Type":  "Legend",
-      "Notes":  "Layer B.SilkS"
+      "Type": "Legend",
+      "Name": "Bottom Silk Screen"
     }
   ]
 }
