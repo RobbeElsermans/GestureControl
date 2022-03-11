@@ -43,6 +43,8 @@ extern "C"
 #include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts links te herkennen.
 #include "GestureDetectLR.h"	  //Bevat methode om gesture Rechts links te herkennen.
 
+#include "calibrationData.h" 		//bevat methodes en instellingen om de sensoren te calibreren.
+
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -113,115 +115,48 @@ extern "C"
 
 		initObjectPresent(-1, -1, -1);
 
-		// Calibratie van SPAD uitvoeren uitvoeren
-		VL53LX_CalibrationData_t callData_LEFT;
-		VL53LX_CalibrationData_t callData_CENTER;
-		VL53LX_CalibrationData_t callData_RIGHT;
-		VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT]);
-		VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
-		VL53LX_PerformRefSpadManagement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT]);
 
-		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], &callData_LEFT);
-		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData_CENTER);
-		VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], &callData_RIGHT);
+		//Calibraties uitvoeren
+		VL53LX_CalibrationData_t callData[3];
 
-		// Crosstalk data voor coverglas
-		/**
-		 * Dit moeten we herhalen bij telkens een nieuw coverglas op verschillende afstanden
-		 * Kijk hier file:///C:/Users/robel/Desktop/testing%20Nucleo/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf
-		 * voor meer uitleg (Voor mezelf)
-		 *
-		 */
+		RefSpadCal(VL53L3A2_DEV_LEFT);
+		RefSpadCal(VL53L3A2_DEV_CENTER);
+		RefSpadCal(VL53L3A2_DEV_RIGHT);
 
-		int xtalk_kcps_LEFT[] = {243, 493, 743, 993, 1243, 1494};
-		int xtalk_bin_data_LEFT[] = {11, 327, 506, 180, 0, 0, 0, 0, 0, 0, 0, 0};
-
-		int xtalk_kcps_CENTER[] = {941, 1878, 2815, 3752, 4689, 5627};
-		int xtalk_bin_data_CENTER[] = {20, 429, 454, 121, 0, 0, 0, 0, 0, 0, 0, 0};
-
-		int xtalk_kcps_RIGHT[] = {611, 1209, 1807, 2405, 3003, 3601};
-		int xtalk_bin_data_RIGHT[] = {14, 425, 461, 124, 0, 0, 0, 0, 0, 0, 0, 0};
-
-for (uint8_t i = 0; i < 6; i++)
-		{
-			callData_LEFT.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps_LEFT[i];
-		}
-
-		for (uint8_t i = 0; i < 12; i++)
-		{
-			callData_LEFT.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data_LEFT[i];
-		}
-
-		for (uint8_t i = 0; i < 6; i++)
-		{
-			callData_CENTER.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps_CENTER[i];
-		}
-
-		for (uint8_t i = 0; i < 12; i++)
-		{
-			callData_CENTER.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data_CENTER[i];
-		}
-
-		for (uint8_t i = 0; i < 6; i++)
-		{
-			callData_RIGHT.algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps_RIGHT[i];
-		}
-
-		for (uint8_t i = 0; i < 12; i++)
-		{
-			callData_RIGHT.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data_RIGHT[i];
-		}
-
-		callData_LEFT.xtalkhisto.xtalk_shape.zero_distance_phase = 4481;
-		callData_LEFT.per_vcsel_cal_data.long_a_offset_mm = -33;
-		callData_LEFT.per_vcsel_cal_data.long_b_offset_mm = 35;
-		callData_LEFT.per_vcsel_cal_data.medium_a_offset_mm = -46;
-		callData_LEFT.per_vcsel_cal_data.medium_b_offset_mm = -46;
-		callData_LEFT.per_vcsel_cal_data.short_a_offset_mm = 43;
-		callData_LEFT.per_vcsel_cal_data.short_b_offset_mm = -43;
-
-		callData_CENTER.xtalkhisto.xtalk_shape.zero_distance_phase = 4186;
-		callData_CENTER.per_vcsel_cal_data.long_a_offset_mm = -25;
-		callData_CENTER.per_vcsel_cal_data.long_b_offset_mm = -25;
-		callData_CENTER.per_vcsel_cal_data.medium_a_offset_mm = -28;
-		callData_CENTER.per_vcsel_cal_data.medium_b_offset_mm = -30;
-		callData_CENTER.per_vcsel_cal_data.short_a_offset_mm = -31;
-		callData_CENTER.per_vcsel_cal_data.short_b_offset_mm = -27;
-
-		callData_RIGHT.xtalkhisto.xtalk_shape.zero_distance_phase = 4204;
-		callData_RIGHT.per_vcsel_cal_data.long_a_offset_mm = -32;
-		callData_RIGHT.per_vcsel_cal_data.long_b_offset_mm = -34;
-		callData_RIGHT.per_vcsel_cal_data.medium_a_offset_mm = -34;
-		callData_RIGHT.per_vcsel_cal_data.medium_b_offset_mm = -38;
-		callData_RIGHT.per_vcsel_cal_data.short_a_offset_mm = -40;
-		callData_RIGHT.per_vcsel_cal_data.short_b_offset_mm = -40;
-
-		//// Callibratie van crosstalk (coverglas)
-		// VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT]);
-		// VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
-		// VL53LX_PerformXTalkCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT]);
-		//// De offset bepalen zodat deze juist is is.
-		// VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], 600);
-		// VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 600);
-		// VL53LX_PerformOffsetPerVcselCalibration(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], 600);
-		//// Waardes opvragen
-		// VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], &callData_LEFT);
-		// VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData_CENTER);
-		// VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], &callData_RIGHT);
+		callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
+		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
+		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
 
 
-		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], &callData_LEFT);
-		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], &callData_CENTER);
-		VL53LX_SetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], &callData_RIGHT);
 
-		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
-		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_LEFT], 1);
+		// Callibratie van crosstalk (coverglas)
+		xTalkCal(VL53L3A2_DEV_LEFT);
+		xTalkCal(VL53L3A2_DEV_CENTER);
+		xTalkCal(VL53L3A2_DEV_RIGHT);
 
-		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
-		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER], 1);
+		// De offset bepalen zodat deze juist is is.
+		offsetPerVcselCal(VL53L3A2_DEV_LEFT, 600);
+		offsetPerVcselCal(VL53L3A2_DEV_CENTER, 600);
+		offsetPerVcselCal(VL53L3A2_DEV_RIGHT, 600);
+		// Waardes opvragen
+		callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
+		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
+		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
 
-		VL53LX_SetOffsetCorrectionMode(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
-		VL53LX_SetXTalkCompensationEnable(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_RIGHT], 1);
+
+		setCalibrationData(VL53L3A2_DEV_LEFT, callData[VL53L3A2_DEV_LEFT]);
+		setCalibrationData(VL53L3A2_DEV_CENTER, callData[VL53L3A2_DEV_CENTER]);
+		setCalibrationData(VL53L3A2_DEV_RIGHT, callData[VL53L3A2_DEV_RIGHT]);
+
+
+		setOffsetCorrectionMode(VL53L3A2_DEV_LEFT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		setXTalkCompensation(VL53L3A2_DEV_LEFT, 1);
+
+		setOffsetCorrectionMode(VL53L3A2_DEV_CENTER, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		setXTalkCompensation(VL53L3A2_DEV_CENTER, 1);
+
+		setOffsetCorrectionMode(VL53L3A2_DEV_RIGHT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		setXTalkCompensation(VL53L3A2_DEV_RIGHT, 1);
 	}
 
 	/*
