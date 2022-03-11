@@ -246,25 +246,39 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(L_Y_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : XSHUT_0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Pin = XSHUT_0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(XSHUT_0_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : XSHUT_1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Pin = XSHUT_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(XSHUT_1_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pin : XSHUT_2 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Pin = XSHUT_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(XSHUT_2_Port, &GPIO_InitStruct);
+
+      /*Configure GPIO pin : XSHUT_3 */
+  GPIO_InitStruct.Pin = XSHUT_3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(XSHUT_3_Port, &GPIO_InitStruct);
+
+      /*Configure GPIO pin : XSHUT_4 */
+  GPIO_InitStruct.Pin = XSHUT_4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(XSHUT_4_Port, &GPIO_InitStruct);
 
       /*Configure GPIO pin : SMD1 */
   GPIO_InitStruct.Pin = SMD1_Pin;
@@ -297,9 +311,11 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(L_Y_GPIO_Port, L_Y_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(XSHUT_0_Port, XSHUT_0_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(XSHUT_1_Port, XSHUT_1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(XSHUT_2_Port, XSHUT_2_Pin, GPIO_PIN_RESET);  
+  HAL_GPIO_WritePin(XSHUT_3_Port, XSHUT_3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(XSHUT_4_Port, XSHUT_4_Pin, GPIO_PIN_RESET);
 
   HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);

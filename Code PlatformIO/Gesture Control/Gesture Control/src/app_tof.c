@@ -43,7 +43,7 @@ extern "C"
 #include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts links te herkennen.
 #include "GestureDetectLR.h"	  //Bevat methode om gesture Rechts links te herkennen.
 
-#include "calibrationData.h" 		//bevat methodes en instellingen om de sensoren te calibreren.
+#include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -55,10 +55,12 @@ extern "C"
 	static uint8_t ToF_Present[RANGING_SENSOR_INSTANCES_NBR] = {0};
 	volatile uint8_t ToF_EventDetected = 0;
 
-	RANGING_SENSOR_Result_t Result[3];
+	RANGING_SENSOR_Result_t Result[RANGING_SENSOR_INSTANCES_NBR];
 	int dis0 = 0;
 	int dis1 = 0;
 	int dis2 = 0;
+	int dis3 = 0;
+	int dis4 = 0;
 
 	bool objectPresent = false; // flag ofdat er een object aanwezig is
 	bool hasStarted = false;	// Kijken ofdat de linkse & rechte sensor al opgestart zijn of niet
@@ -115,8 +117,7 @@ extern "C"
 
 		initObjectPresent(-1, -1, -1);
 
-
-		//Calibraties uitvoeren
+		// Calibraties uitvoeren
 		VL53LX_CalibrationData_t callData[3];
 
 		RefSpadCal(VL53L3A2_DEV_LEFT);
@@ -127,27 +128,24 @@ extern "C"
 		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
 		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
 
+		// // Callibratie van crosstalk (coverglas)
+		// xTalkCal(VL53L3A2_DEV_LEFT);
+		// xTalkCal(VL53L3A2_DEV_CENTER);
+		// xTalkCal(VL53L3A2_DEV_RIGHT);
 
+		// // De offset bepalen zodat deze juist is is.
+		// offsetPerVcselCal(VL53L3A2_DEV_LEFT, 600);
+		// offsetPerVcselCal(VL53L3A2_DEV_CENTER, 600);
+		// offsetPerVcselCal(VL53L3A2_DEV_RIGHT, 600);
 
-		// Callibratie van crosstalk (coverglas)
-		xTalkCal(VL53L3A2_DEV_LEFT);
-		xTalkCal(VL53L3A2_DEV_CENTER);
-		xTalkCal(VL53L3A2_DEV_RIGHT);
-
-		// De offset bepalen zodat deze juist is is.
-		offsetPerVcselCal(VL53L3A2_DEV_LEFT, 600);
-		offsetPerVcselCal(VL53L3A2_DEV_CENTER, 600);
-		offsetPerVcselCal(VL53L3A2_DEV_RIGHT, 600);
 		// Waardes opvragen
 		callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
 		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
 		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
 
-
 		setCalibrationData(VL53L3A2_DEV_LEFT, callData[VL53L3A2_DEV_LEFT]);
 		setCalibrationData(VL53L3A2_DEV_CENTER, callData[VL53L3A2_DEV_CENTER]);
 		setCalibrationData(VL53L3A2_DEV_RIGHT, callData[VL53L3A2_DEV_RIGHT]);
-
 
 		setOffsetCorrectionMode(VL53L3A2_DEV_LEFT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		setXTalkCompensation(VL53L3A2_DEV_LEFT, 1);
@@ -184,6 +182,9 @@ extern "C"
 					start_sensor(VL53L3A2_DEV_LEFT);
 					start_sensor(VL53L3A2_DEV_RIGHT);
 
+					start_sensor(VL53L3A2_DEV_TOP);
+					start_sensor(VL53L3A2_DEV_BOTTOM);
+
 					// PWM timer starten
 					HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 				}
@@ -194,6 +195,12 @@ extern "C"
 				// Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_RIGHT, Result);
 				dis2 = getDistance(VL53L3A2_DEV_RIGHT, Result);
+
+				getResult(VL53L3A2_DEV_TOP, Result);
+				dis3 = getDistance(VL53L3A2_DEV_TOP, Result);
+
+				getResult(VL53L3A2_DEV_BOTTOM, Result);
+				dis4 = getDistance(VL53L3A2_DEV_BOTTOM, Result);
 			}
 			else
 			{
@@ -202,6 +209,9 @@ extern "C"
 					hasStarted = false;
 					stop_sensor(VL53L3A2_DEV_LEFT);
 					stop_sensor(VL53L3A2_DEV_RIGHT);
+
+					stop_sensor(VL53L3A2_DEV_TOP);
+					stop_sensor(VL53L3A2_DEV_BOTTOM);
 
 					// PWM timer starten
 					HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
@@ -216,14 +226,16 @@ extern "C"
 			int sta0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
 			int sta1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 			int sta2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
-			int dis0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Distance[0];
-			int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
-			int dis2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Distance[0];
+			int sta3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].Status[0];
+			int sta4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Status[0];
+			
 			int obj0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
 			int obj1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
 			int obj2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
+			int obj3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].NumberOfTargets;
+			int obj4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].NumberOfTargets;
 
-			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2);
+			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
 			printf("\r\n");
 
 			// Kijken ofdat er een dimming commando aanwezig is
@@ -357,8 +369,9 @@ extern "C"
 			if (ToF_Present[device] == 0)
 				continue;
 
-			/* left: 0x54, center: 0x56, right: 0x58 */
+			/* left: 0x54, center: 0x56, right: 0x58,  */
 			i2c_addr = (RANGING_SENSOR_VL53L3CX_ADDRESS + (device + 1) * 2);
+			printf(i2c_addr);
 			VL53L3A2_RANGING_SENSOR_SetAddress(device, i2c_addr);
 
 			/* check the communication with the device reading the ID */

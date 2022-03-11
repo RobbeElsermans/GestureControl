@@ -39,9 +39,11 @@
 /* XNUCLEO-53L3A2 Device selector */
 enum VL53L3A2_dev_e
 {
-  VL53L3A2_DEV_LEFT    =  0,   /* !< left satellite device P21 header */
-  VL53L3A2_DEV_CENTER  =  1,   /* !< center (built-in) device */
-  VL53L3A2_DEV_RIGHT   =  2    /* !< Right satellite device P22 header */
+  VL53L3A2_DEV_LEFT    =  0,
+  VL53L3A2_DEV_CENTER  =  1,
+  VL53L3A2_DEV_RIGHT   =  2,
+  VL53L3A2_DEV_TOP     =  3,
+  VL53L3A2_DEV_BOTTOM  =  4
 };
 
 /** @defgroup XNUCLEO_53L3A2_COMMON_Exported_Functions Exported Functions

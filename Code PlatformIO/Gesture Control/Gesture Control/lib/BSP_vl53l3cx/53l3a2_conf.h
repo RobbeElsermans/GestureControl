@@ -39,7 +39,7 @@ extern "C" {
  * if you are only using the on-board sensor without break-out boards
  * change its to (1U) in order to save space in RAM memory
  */
-#define RANGING_SENSOR_INSTANCES_NBR    (3U)
+#define RANGING_SENSOR_INSTANCES_NBR    (5U)
 
 #define VL53L3A2_hi2c                   (hi2c1)
 
