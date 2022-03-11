@@ -6,6 +6,7 @@
         "gesturedetectdimming.h": "c",
         "gesturedetectrl.h": "c",
         "gesturedetectlr.h": "c",
-        "app_tof.h": "c"
+        "app_tof.h": "c",
+        "vl53lx_api.h": "c"
     }
 }

@@ -118,7 +118,7 @@ extern "C"
 		initObjectPresent(-1, -1, -1);
 
 		// Calibraties uitvoeren
-		VL53LX_CalibrationData_t callData[3];
+		VL53LX_CalibrationData_t callData[RANGING_SENSOR_INSTANCES_NBR];
 
 		RefSpadCal(VL53L3A2_DEV_LEFT);
 		RefSpadCal(VL53L3A2_DEV_CENTER);
@@ -127,25 +127,36 @@ extern "C"
 		callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
 		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
 		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
+		// callData[VL53L3A2_DEV_TOP] = getCalibrationData(VL53L3A2_DEV_TOP);
+		// callData[VL53L3A2_DEV_BOTTOM] = getCalibrationData(VL53L3A2_DEV_BOTTOM);
 
 		// // Callibratie van crosstalk (coverglas)
 		// xTalkCal(VL53L3A2_DEV_LEFT);
 		// xTalkCal(VL53L3A2_DEV_CENTER);
 		// xTalkCal(VL53L3A2_DEV_RIGHT);
+		// xTalkCal(VL53L3A2_DEV_TOP);
+		// xTalkCal(VL53L3A2_DEV_BOTTOM);
 
 		// // De offset bepalen zodat deze juist is is.
 		// offsetPerVcselCal(VL53L3A2_DEV_LEFT, 600);
 		// offsetPerVcselCal(VL53L3A2_DEV_CENTER, 600);
 		// offsetPerVcselCal(VL53L3A2_DEV_RIGHT, 600);
+		// offsetPerVcselCal(VL53L3A2_DEV_TOP, 600);
+		// offsetPerVcselCal(VL53L3A2_DEV_BOTTOM, 600);
+
 
 		// Waardes opvragen
-		callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
-		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
-		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
+		// callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
+		// callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
+		// callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
+		// callData[VL53L3A2_DEV_TOP] = getCalibrationData(VL53L3A2_DEV_TOP);
+		// callData[VL53L3A2_DEV_BOTTOM] = getCalibrationData(VL53L3A2_DEV_BOTTOM);
 
 		setCalibrationData(VL53L3A2_DEV_LEFT, callData[VL53L3A2_DEV_LEFT]);
 		setCalibrationData(VL53L3A2_DEV_CENTER, callData[VL53L3A2_DEV_CENTER]);
 		setCalibrationData(VL53L3A2_DEV_RIGHT, callData[VL53L3A2_DEV_RIGHT]);
+		// setCalibrationData(VL53L3A2_DEV_TOP, callData[VL53L3A2_DEV_TOP]);
+		// setCalibrationData(VL53L3A2_DEV_BOTTOM, callData[VL53L3A2_DEV_BOTTOM]);
 
 		setOffsetCorrectionMode(VL53L3A2_DEV_LEFT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		setXTalkCompensation(VL53L3A2_DEV_LEFT, 1);
@@ -155,6 +166,12 @@ extern "C"
 
 		setOffsetCorrectionMode(VL53L3A2_DEV_RIGHT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		setXTalkCompensation(VL53L3A2_DEV_RIGHT, 1);
+
+		// setOffsetCorrectionMode(VL53L3A2_DEV_TOP, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		// setXTalkCompensation(VL53L3A2_DEV_TOP, 1);
+
+		// setOffsetCorrectionMode(VL53L3A2_DEV_BOTTOM, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		// setXTalkCompensation(VL53L3A2_DEV_BOTTOM, 1);
 	}
 
 	/*
@@ -192,6 +209,7 @@ extern "C"
 				// Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_LEFT, Result);
 				dis0 = getDistance(VL53L3A2_DEV_LEFT, Result);
+
 				// Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_RIGHT, Result);
 				dis2 = getDistance(VL53L3A2_DEV_RIGHT, Result);

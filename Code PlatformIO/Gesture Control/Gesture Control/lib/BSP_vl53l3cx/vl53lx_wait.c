@@ -233,12 +233,10 @@ VL53LX_Error VL53LX_is_firmware_ready(
 	return status;
 }
 
-
 VL53LX_Error VL53LX_is_new_data_ready(
 	VL53LX_DEV     Dev,
 	uint8_t       *pready)
 {
-
 
 	VL53LX_Error status = VL53LX_ERROR_NONE;
 	VL53LX_LLDriverData_t *pdev = VL53LXDevStructGetLLDriverHandle(Dev);
@@ -276,7 +274,6 @@ VL53LX_Error VL53LX_is_new_data_ready(
 
 	return status;
 }
-
 
 
 
