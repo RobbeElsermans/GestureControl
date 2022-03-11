@@ -26,7 +26,7 @@ VL53LX_CalibrationData_t getCalibrationData(uint8_t dev)
     VL53LX_GetCalibrationData(VL53L3A2_RANGING_SENSOR_CompObj[dev], &callData);
     return callData;
 }
-bool setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
+void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
 {
     int xtalk_kcps[3][6] = {
         {243, 493, 743, 993, 1243, 1494},
