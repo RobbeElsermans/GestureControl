@@ -7,6 +7,9 @@
         "gesturedetectrl.h": "c",
         "gesturedetectlr.h": "c",
         "app_tof.h": "c",
-        "vl53lx_api.h": "c"
+        "vl53lx_api.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "ranging_sensor.h": "c",
+        "53l3a2_conf.h": "c"
     }
 }
