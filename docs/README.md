@@ -123,15 +123,14 @@ int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
     break;
 
     ...
+    ...
 
   }
   return status;
 }
 ```
 
-?> Zoals de [documentatie](https://www.st.com/resource/en/user_manual/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf) ons voorschrijft gebruiken we de XSHUT pin om de ToF-sensor in HW-Standby te plaatsen. We gebruiken deze methode later in ons programma om de ToF-sensoren van een uniek adres te voorzien.
-
-!> We moeten dit dus voor elke XSHUT pin doen!
+!> Zoals de [documentatie](https://www.st.com/resource/en/user_manual/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf) ons voorschrijft gebruiken we de XSHUT pin om de ToF-sensor in HW-Standby te plaatsen. We gebruiken deze methode later in ons programma om de ToF-sensoren van een uniek adres te voorzien. We moeten dit dus voor elke XSHUT pin doen!
 
 Om het aantal ToF-sensoren te verhogen naar 5 i.p.v. 3, gaan we in de bestanden *53l3a2_conf.h* en in *53l3a2.h* enkele wijzigingen doorvoeren.
 
