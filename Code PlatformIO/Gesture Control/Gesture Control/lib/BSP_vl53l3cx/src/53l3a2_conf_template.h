@@ -20,9 +20,9 @@
   */
 
 /* Replace the header file names with the ones of the target platform */
-#include "stm32yyxx_hal.h"
-#include "nucleo_xyyyzz_bus.h"
-#include "nucleo_xyyyzz_errno.h"
+// #include "stm32yyxx_hal.h"
+// #include "nucleo_xyyyzz_bus.h"
+// #include "nucleo_xyyyzz_errno.h"
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __53L3A2_CONF_H__

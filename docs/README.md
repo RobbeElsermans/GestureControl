@@ -19,7 +19,10 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [PinOut](#pinout)
   - [Importeren API VL53LXC](#importeren-api-vl53lxc)
   - [Importeer Andere Bestanden](#importeer-andere-bestanden)
-  - [importeren HAL bibliotheek](#importeren-hal-bibliotheek)
+  - [Installeer Platform & Board](#installeer-platform--board)
+  - [configureer platformio.ini file](#configureer-platformioini-file)
+  - [importeren include & src bestanden](#importeren-include--src-bestanden)
+  - [Build & Upload](#build--upload)
 
 ----
 
@@ -27,6 +30,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 
 Dit markdown document zal de geschreven code wat verduidelijken in beste maten mogelijk. Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de software omgeving op te zetten en te kunnen gebruiken. 
 Ook wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
+Als laatste wordt er ook een sectie voorzien over de hardware specificaties opgelijst van de gemaakte PCB.
 
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
 
@@ -59,6 +63,7 @@ Deze sectie zal de gebruikte software bevatten en waarom we deze gebruikt hebben
 |   Visual Code   |V1.65.2   | Een "open source" editor die een groot ecosysteem heeft van plugins. Deze editor is vooral gekozen omdat ik hier ervaring mee heb. Ook omdat dit draait op Linux.|[link](https://code.visualstudio.com/)|
 | PlatformIO  IDE | Home: V3.4.1  Core: V5.2.5 | Een plugin van Visual Code om de STM32Nucleo te programmeren en hardware debugging uit te voeren.  | [link](https://platformio.org/install/ide?install=vscode)
 |Docsify|V4.4.4|Om deze documentatie te schrijven is er gebruik gemaakt van Docsify die de markdown bestanden omzet in een interactieve website. |[link](https://docsify.js.org/)|
+|ST STM32 PLatform| V15.2.0 | PlatformIO ST STM32 platform | [link](https://github.com/platformio/platform-ststm32?utm_source=platformio&utm_medium=piohome)|
 </div>
 
 ----
@@ -71,6 +76,8 @@ Nadien zag ik de mogelijkheid om met PlatformIO IDE (plugin van Visual Code) ver
 
 Omdat de gegenereerde code in STM32CubeIDE wel heel handig is, heb ik het project eerst in STM32CubeIDE opgezet (configuratie I²C, GPIO, ...) en nadien de bestanden overgeplaatst naar het PlatformIO project. uiteraard heeft PLatformIO ook de nodige HAL(Hardware Abstraction Layer) bibliotheken nodig om de gegenereerde code te compileren. Later bespreken we hoe we deze installeren.
 
+----
+
 ## PinOut
 
 In onderstaande Miro sheets worden de pinouts weergegeven van zowel de MCU als de arduino header pinout
@@ -82,11 +89,13 @@ PCB Pinout
 Arduino Header pinout
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_cksw=/?moveToViewport=-1651,-1262,3867,2149" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
+----
+
 ## Importeren API VL53LXC
 
-Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **inc** en **src** folder waarin we de .h en .c  bestanden hebben staan. Deze bestanden moeten we overbrengen naar de **lib** folder waar we de **inc** en **src** bestanden kopiëren in de map **BSP_vl53l3cx**. 
+Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **inc** en **src** folder waarin we de .h en .c  bestanden hebben staan. Deze bestanden moeten we overbrengen naar de **lib** folder waar we de **inc** en **src** bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
 
-!> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PLatformIo's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder.
+!> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PLatformIo's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
 
 Wanneer we het example project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden in die van belang zijn. Dit zijn:
 
@@ -98,6 +107,15 @@ Wanneer we het example project opendoen met de VL53L3CX sensoren, staan er nog e
 * ranging_sensor.h
 * vl53l3cx.h
 * vl53l3cx.c
+* stm32f4xx_hal_conf.h
+* stm32f4xx_hal_msp.c
+* stm32f4xx_it.h
+* stm32f4xx_it.c
+* stm32f4xx_nucleo_bus.h
+* stm32f4xx_nucleo_bus.c
+* stm32f4xx_nucleo_conf.h
+* stm32f4xx_nucleo.h
+* stm32f4xx_nucleo.c
 
 Deze bestanden moeten eveneens in de folder **BSP_vl53l3cx** geplaatst worden.
 
@@ -107,7 +125,7 @@ Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st
 
 De veranderingen die we dus moeten doorvoeren is de manier waarop we de XSHUT pinnen gaan aansturen. Dit zal i.p.v. via de GPIO Expanders (die I²C verbinding hebben met de MCU) via gewone GPIO pinnen verlopen op de MCU.
 
-Het desbetreffende bestand is *53l3a2.c* waarin we de wijzigingen gaan doorvoeren. De methode genaamd *int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)* gaan we vervangen door een switch case waarin we de HAL bibliotheek gebruiken om ene GPIO op *state* te plaatsen.
+Het desbetreffende bestand is *53l3a2.c* waarin we de wijzigingen gaan doorvoeren. De methode genaamd *int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)* gaan we vervangen door een switch case waarin we de HAL bibliotheek gebruiken om de GPIO's op *state* te plaatsen.
 
 ``` 53l3a2.h
 int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
@@ -122,7 +140,6 @@ int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
     status = 1;
     break;
 
-    ...
     ...
 
   }
@@ -152,6 +169,8 @@ enum VL53L3A2_dev_e
 };
 ```
 
+----
+
 ## Importeer Andere Bestanden
 
 Naast de gekregen API van ST, hebben we ook zelf een aantal bestanden gecreëerd om de code wat ordelijker en gestructureerder te maken. Zo hebben we voor elke gesture, calibratie, en extra rand methodes een aparte .c & .h bestand aangemaakt die ook van belang zijn in het project. Dit zijn de bestanden:
@@ -171,7 +190,67 @@ Naast de gekregen API van ST, hebben we ook zelf een aantal bestanden gecreëerd
 * GestureDetectObject.h
 * GestureDetectObject.c
 
-Al deze bestanden gaan eveneens onder de **lib** folder plaatsen in het bestand **Gesture_Detect**.
+Al deze bestanden gaan eveneens onder de **lib** folder plaatsen in de folder **Gesture_Detect/src**.
 
-## importeren HAL bibliotheek
+----
 
+## Installeer Platform & Board
+
+Om PlatformIO goed te kunnen gebruiken moeten we het platform **ST STM32** installeren zodat we de software kunnen compileren.
+
+<div style="display:inline">
+<img src="../foto's/platformio_platforms.jpg" alt="picture of monitor"width="25%">
+<img src="../foto's/platformio_platforms_2.jpg" alt="picture of monitor" width="70%">
+</div>
+<!-- <img src="../foto's/platformio_platforms.jpg" alt="picture of monitor"
+style=" display: block;
+        margin-left: auto;
+        margin-right: auto;"> -->
+
+In de figuur (die linksboven afgebeeld is) is de 1<sup>ste</sup> kader de kader om de dropdown te openen waarin we de 2<sup>de</sup> kader vinden. We selecteren hier *platforms*.
+
+Nadien komen we op de figuur rechtsboven uit. We selecteren *Embedded* bovenaan en we zoeken naar *ST*. We zien dan in de lijst *ST STM32* verschijnen. Wanneer we hier op drukken, kunnen we het platform installeren met de juiste versie gebruikt in dit project (V15.2.0).
+
+----
+
+## configureer platformio.ini file
+
+Het platform.ini bestand is een belangrijk bestand. Hierin wordt de configuratie van het project geplaatst.
+
+Hieronder is het genen dat je in dit bestand moet plaatsen.
+
+```platformio.ini
+[env:nucleo_f401re]
+platform = ststm32
+board = nucleo_f401re
+framework = stm32cube
+monitor_speed = 115200
+```
+
+Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* moet gebruiken. Zo worden de HAL-bibliotheken aangesproken. Ook wordt er gedefinieerde welk board dat we gebruiken. Voor debug redenen zal de baudrate ingesteld worden op 115200. Het voorafgaande platform dat geïnstalleerd is, plaatsen we hier ook in.
+
+----
+
+## importeren include & src bestanden
+
+Als laatste gaan we de bestanden importeren die het eigelijke project tot leven brengen. Dit zijn de bestanden:
+
+* main.h
+* main.c
+* app_tof.h
+* app_tof.c
+* syscalls.c
+* sysmem.c
+
+Hier plaatsen we de .h bestanden in de *include* folder en de .c bestanden in de *src* folder.
+
+----
+
+## Build & Upload
+
+Het project is nu compleet om gebuild te worden en nadien geupload naar het bordje.
+
+![foto build & upload knop](foto's/platformio_platforms_3.jpg)
+
+Op bovestaande foto is te zien dat we enkele knoppen ter beschikking hebben om zaken uit te voeren. Zo staat er naast het huisje een vinkje dat de code zal compileren.
+Daarnaast staat een pijl naar rechts die de code zal uploaden.

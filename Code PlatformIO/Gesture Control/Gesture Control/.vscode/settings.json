@@ -10,6 +10,7 @@
         "vl53lx_api.h": "c",
         "stm32f4xx_hal.h": "c",
         "ranging_sensor.h": "c",
-        "53l3a2_conf.h": "c"
+        "53l3a2_conf.h": "c",
+        "stm32f4xx_nucleo_bus.h": "c"
     }
 }

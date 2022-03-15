@@ -98,12 +98,6 @@ extern "C"
 	static bool timerCommandSet = false;
 	static int timerCommandTimeout = 2000; // 2 seconden
 
-	static const char *TofDevStr[] =
-		{
-			[VL53L3A2_DEV_LEFT] = "LEFT",
-			[VL53L3A2_DEV_CENTER] = "CENTER",
-			[VL53L3A2_DEV_RIGHT] = "RIGHT"};
-
 	/* Intern functions ----------------------------------------------------------*/
 	static void start_sensor(uint8_t sensor);
 	static void stop_sensor(uint8_t sensor);
@@ -389,7 +383,7 @@ extern "C"
 
 			/* left: 0x54, center: 0x56, right: 0x58,  */
 			i2c_addr = (RANGING_SENSOR_VL53L3CX_ADDRESS + (device + 1) * 2);
-			printf(i2c_addr);
+			//printf(i2c_addr);
 			VL53L3A2_RANGING_SENSOR_SetAddress(device, i2c_addr);
 
 			/* check the communication with the device reading the ID */
