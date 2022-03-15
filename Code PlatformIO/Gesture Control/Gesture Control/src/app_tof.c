@@ -40,8 +40,9 @@ extern "C"
 
 #include "GestureDetectObject.h"  //Deze file bevat de detectie van een persoon
 #include "GestureDetectDimming.h" //Bevat methodes om het dimmen te detecteren + om de value te verkrijgen.
-#include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts links te herkennen.
-#include "GestureDetectLR.h"	  //Bevat methode om gesture Rechts links te herkennen.
+#include "GestureDetectRL.h"	  //Bevat methode om gesture Rechts Links te herkennen.
+#include "GestureDetectLR.h"	  //Bevat methode om gesture Links Rechts te herkennen.
+#include "GestureDetectDU.h"	  //Bevat methode om gesture Onder Boven te herkennen.
 
 #include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 
@@ -72,6 +73,14 @@ extern "C"
 	// Gesture Left Right
 	bool prevGestureLR = false;
 	bool gestureLR = false;
+
+	// Gesture Down Up
+	bool prevGestureDU = false;
+	bool gestureDU = false;
+
+	// Gesture Up Down
+	bool prevGestureUD = false;
+	bool gestureUD = false;
 
 	// Dimming led
 	int pwmVal = 0;
@@ -247,8 +256,8 @@ extern "C"
 			int obj3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].NumberOfTargets;
 			int obj4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].NumberOfTargets;
 
-			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
-			printf("\r\n");
+			//printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
+			//printf("\r\n");
 
 			// Kijken ofdat er een dimming commando aanwezig is
 			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
@@ -261,6 +270,14 @@ extern "C"
 			if (!gestureDimming)
 				gestureLR = CheckGestureLR(&gestureLR, &objectPresent, Result);
 
+			// Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Down Up beweging aanwezig is
+			if (!gestureDimming)
+				gestureDU = CheckGestureDU(&gestureDU, &objectPresent, Result);
+
+			// Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Down Up beweging aanwezig is
+			if (!gestureDimming)
+				gestureUD = CheckGestureUD(&gestureUD, &objectPresent, Result);
+
 			// Het commando dimming activeren
 			if (gestureDimming)
 			{
@@ -272,7 +289,7 @@ extern "C"
 			if (gestureRL && !prevGestureRL)
 			{
 				prevGestureRL = gestureRL;
-				printf("gestureCommand RL: %d \r\n", gestureRL);
+				//printf("gestureCommand RL: %d \r\n", gestureRL);
 				commando = RL;
 			}
 
@@ -280,11 +297,30 @@ extern "C"
 			if (gestureLR && !prevGestureLR)
 			{
 				prevGestureLR = gestureLR;
-				printf("gestureCommand LR: %d \r\n", gestureLR);
+				//printf("gestureCommand LR: %d \r\n", gestureLR);
 				commando = LR;
 			}
+
+			// Het commando DU activeren
+			if (gestureDU && !prevGestureDU)
+			{
+				prevGestureDU = gestureDU;
+				//printf("gestureCommand DU: %d \r\n", gestureDU);
+				commando = DU;
+			}
+
+			// Het commando UD activeren
+			if (gestureUD && !prevGestureUD)
+			{
+				prevGestureUD = gestureUD;
+				//printf("gestureCommand UD: %d \r\n", gestureUD);
+				commando = UD;
+			}
+
 			prevGestureRL = gestureRL; // fix debouncing van gestureRL
 			prevGestureLR = gestureLR; // fix debouncing van gestureLR
+			prevGestureDU = gestureDU; // fix debouncing van gestureDU
+			prevGestureUD = gestureUD; // fix debouncing van gestureUD
 
 			// Refreshrate van schakeling zichtbaar maken
 			HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
@@ -357,7 +393,7 @@ extern "C"
 		/* Initialize Virtual COM Port */
 		BSP_COM_Init(COM1);
 
-		printf("53L3A2 Gesture Control\r\n");
+		//printf("53L3A2 Gesture Control\r\n");
 
 		/* put all the devices in shutdown mode */
 		for (device = 0; device < RANGING_SENSOR_INSTANCES_NBR; device++)

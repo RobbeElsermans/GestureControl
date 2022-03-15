@@ -41,17 +41,17 @@ bool CheckGestureRL(bool *_gestureRL, bool *_object, RANGING_SENSOR_Result_t *Re
         if ((dis2 < maxDistanceObject) && (dis0 > maxDistanceObject) && (sta2 == 0) && !hasRight && !hasCenter &&  !hasLeft) // Sensor right
         {
             hasRight = true;
-            printf("right \r\n");
+            //printf("right \r\n");
         }
         else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasRight && !hasCenter && !hasLeft) // Sensor center
         {
             hasCenter = true;
-            printf("center \r\n");
+            //printf("center \r\n");
         }
         else if ((dis0 < maxDistanceObject) && (sta0 == 0) && hasRight && hasCenter && !hasLeft) // Sensor left
         {
             hasLeft = true;
-            printf("left \r\n");
+            //printf("left \r\n");
         }
 
         //printf("left %2d, center %2d, right %2d \r\n", hasLeft, hasCenter, hasRight);
