@@ -1,7 +1,0 @@
-(sym_lib_table
-  (lib (name STM32F401RET6)(type Legacy)(uri ${KIPRJMOD}/Lib/STM32F401RET6/KiCAD/2022-02-16_11-45-11/STM23F401RET6.lib)(options "")(descr ""))
-  (lib (name VL53L3CX)(type Legacy)(uri ${KIPRJMOD}/Lib/VL53L3CXV0DH-1/KiCAD/2022-02-16_11-44-17/VL53L3CX.lib)(options "")(descr ""))
-  (lib (name GestureControl-rescue)(type Legacy)(uri ${KIPRJMOD}/GestureControl-rescue.lib)(options "")(descr ""))
-  (lib (name AP5100)(type Legacy)(uri ${KIPRJMOD}/Lib/AP5100/AP5100.lib)(options "")(descr ""))
-  (lib (name WR-MM_Female_SMT_Connector)(type Legacy)(uri "C:/Users/robel/GitHub/GestureControl/pcb/GestureControl/Lib/690367291076/WR-MM Female SMT Connector.lib")(options "")(descr ""))
-)
