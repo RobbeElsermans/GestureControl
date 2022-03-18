@@ -15,6 +15,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 - [Inleiding](#inleiding)
 - [Project Definitie](#project-definitie)
 - [Gebruikte Software](#gebruikte-software)
+- [Gebruikte Hardware](#gebruikte-hardware)
 - [Opbouw Project](#opbouw-project)
   - [PinOut](#pinout)
   - [Importeren API VL53LXC](#importeren-api-vl53lxc)
@@ -39,7 +40,7 @@ STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide item
 
 De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in dit document aangehaald. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
 
-De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook al een reeds werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControl/lib] .
+De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook al een reeds werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControl/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/Gesture%20Control/lib) .
 
 ----
 
@@ -66,6 +67,20 @@ Deze sectie zal de gebruikte software bevatten en waarom we deze gebruikt hebben
 |Docsify|V4.4.4|Om deze documentatie te schrijven is er gebruik gemaakt van Docsify die de markdown bestanden omzet in een interactieve website. |[link](https://docsify.js.org/)|
 |ST STM32 PLatform| V15.2.0 | PlatformIO ST STM32 platform | [link](https://github.com/platformio/platform-ststm32?utm_source=platformio&utm_medium=piohome)|
 </div>
+
+----
+
+# Gebruikte Hardware
+
+We lijsten in volgende tabel op wat we precies gebruikt hebben om onze hardware te vervaardigen (aka BOM). Ook staat hierbij de plaats op de PCB.
+
+<div style="color:black; background-color:white">
+
+<iframe src="./Hardware/ibom.html" title="BOM PCB1.2" height="1000"></iframe>
+</div>
+
+<a href="./Hardware/ibom.html" target="_blank">Hier</a>  de link om het op een aparte pagina te bekijken.
+
 
 ----
 
