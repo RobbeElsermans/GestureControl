@@ -279,12 +279,22 @@ Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 
 # Hardware specificaties
 
+
+
 # LED Controller
 
 <img src="foto's/Smart%20Object.jpg" width="70%">
 
 In bovenstaande foto is te zien hoe we de Gesture Controller (Systeem B) aansluiten met de LED Controller. De communicatie verloopt over I²C waarbij de LED Controller de master is en de Gesture Controller de slave. 
 
-Zoals beschreven in de [blueprint](Documenten/Blueprint_V1_Robbe_Elsermans.pdf)
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1_Robbe_Elsermans.pdf" download>download</a>) zal de master een commando versturen *(0x01)* waarop de slave een aantal commando's kan terug sturen.
 
-<a href="Documenten/Blueprint_V1_Robbe_Elsermans.pdf" type="pdf" download>
+* **0x10** -> Geen object aanwezig
+* **0x20** -> Een object aanwezig
+* **0x21** -> Er is in de afgelopen 3 seconden een gesture geweest die van links naar rechts ging.
+* **0x22** -> Er is in de afgelopen 3 seconden een gesture geweest die van recht naar links ging.
+* **0x23** -> Er is in de afgelopen 3 seconden een gesture geweest die van boven naar onder ging.
+* **0x24** -> Er is in de afgelopen 3 seconden een gesture geweest die van onder naar boven ging.
+* **0x25** -> Er is een hand op en neer aan het bewegen. Dit wordt gevolgd door een waarde van 10-bits groot. (0->1024)
+* **0x26** -> ... 
+
