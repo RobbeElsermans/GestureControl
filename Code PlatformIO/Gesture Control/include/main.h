@@ -32,8 +32,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
+
+#define DEBUGGING
 
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
@@ -46,6 +46,21 @@ void Error_Handler(void);
 
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
+
+/** drukknoppen **/
+
+#define B1_Pin GPIO_PIN_13
+#define B1_GPIO_Port GPIOC
+
+#define BTN1_Pin GPIO_PIN_6
+#define BTN1_GPIO_Port GPIOB
+
+#define BTN2_Pin GPIO_PIN_5
+#define BTN2_GPIO_Port GPIOB
+
+#define BTN3_Pin GPIO_PIN_4
+#define BTN3_GPIO_Port GPIOB
+
 
 /** LED PINNEN **/
 
@@ -98,9 +113,6 @@ void Error_Handler(void);
 #define GPIOI_4_Pin GPIO_PIN_8
 #define GPIOI_4_Port GPIOA
 
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -25,6 +25,9 @@
 #include "53l3a2_ranging_sensor.h"
 #include <stdio.h>
 #include "app_tof.h"
+#include "stdbool.h"    //Nodig om bool te kunnen gebruiken
+#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
+#include <errno.h>
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -54,9 +57,9 @@ static void MX_I2C3_Init(void);
 /* Private user code ---------------------------------------------------------*/
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
   /* MCU Configuration--------------------------------------------------------*/
@@ -75,29 +78,57 @@ int main(void)
 
   MX_TOF_Init();
 
-  while (1)
+  /**
+   * BTN1 bepaald of dat er gekalibreerd wordt of niet.
+   * True zal kalibratie opstarten en de gegevens dumpen naar serial monitor
+   * False zal de opgeslagen (hardcoded) values doorvoeren naar de sensoren
+   */
+  bool BTN2_state = false;
+
+  BTN2_state = HAL_GPIO_ReadPin(BTN2_GPIO_Port, BTN2_Pin);
+
+  if (!BTN2_state)
   {
-	  printf("Hallo \r\n");
-	  MX_TOF_Process(&htim3);
+    while (1)
+    {
+      printf("Starting  \r\n");
+      MX_TOF_Process(&htim3);
+    }
+  }
+  else
+  {
+    //Stuur alle SMD leds aan en blink 8 om de seconden (16 seconden).
+    //Na de 15 seconden wordt de kalibratie uitgevoerd
+    //Calibratie uitvoeren en plotten in serial monitor
+
+    for (size_t i = 0; i < 16; i++)
+    {
+      HAL_GPIO_TogglePin(SMD1_Port, SMD1_Pin);
+      HAL_GPIO_TogglePin(SMD2_Port, SMD2_Pin);
+      HAL_GPIO_TogglePin(SMD3_Port, SMD3_Pin);
+      HAL_Delay(1000);
+    }
+
+    while(1);
   }
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -112,9 +143,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -127,10 +157,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C3_Init(void)
 {
   hi2c3.Instance = I2C3;
@@ -149,10 +179,10 @@ static void MX_I2C3_Init(void)
 }
 
 /**
-  * @brief TIM3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM3_Init(void)
 {
 
@@ -185,14 +215,13 @@ static void MX_TIM3_Init(void)
   }
 
   HAL_TIM_MspPostInit(&htim3);
-
 }
 
 /**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART2_UART_Init(void)
 {
   huart2.Instance = USART2;
@@ -210,10 +239,10 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -230,6 +259,24 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : BTN1_Pin */
+  GPIO_InitStruct.Pin = BTN1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BTN1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BTN2_Pin */
+  GPIO_InitStruct.Pin = BTN2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BTN2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BTN3_Pin */
+  GPIO_InitStruct.Pin = BTN3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BTN3_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -237,83 +284,83 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
-
   /*Configure GPIO pin : L_Y_Pin */
   GPIO_InitStruct.Pin = L_Y_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(L_Y_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : XSHUT_0 */
   GPIO_InitStruct.Pin = XSHUT_0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(XSHUT_0_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : XSHUT_1 */
   GPIO_InitStruct.Pin = XSHUT_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(XSHUT_1_Port, &GPIO_InitStruct);
 
-    /*Configure GPIO pin : XSHUT_2 */
+  /*Configure GPIO pin : XSHUT_2 */
   GPIO_InitStruct.Pin = XSHUT_2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(XSHUT_2_Port, &GPIO_InitStruct);
 
-      /*Configure GPIO pin : XSHUT_3 */
+  /*Configure GPIO pin : XSHUT_3 */
   GPIO_InitStruct.Pin = XSHUT_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(XSHUT_3_Port, &GPIO_InitStruct);
 
-      /*Configure GPIO pin : XSHUT_4 */
+  /*Configure GPIO pin : XSHUT_4 */
   GPIO_InitStruct.Pin = XSHUT_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(XSHUT_4_Port, &GPIO_InitStruct);
 
-      /*Configure GPIO pin : SMD1 */
+  /*Configure GPIO pin : SMD1 */
   GPIO_InitStruct.Pin = SMD1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SMD1_Port, &GPIO_InitStruct);
 
-      /*Configure GPIO pin : SMD2 */
+  /*Configure GPIO pin : SMD2 */
   GPIO_InitStruct.Pin = SMD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SMD2_Port, &GPIO_InitStruct);
 
-      /*Configure GPIO pin : SMD3 */
+  /*Configure GPIO pin : SMD3 */
   GPIO_InitStruct.Pin = SMD3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SMD3_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : RED */
   GPIO_InitStruct.Pin = L_R_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(L_R_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin Output Level */
+
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(L_Y_GPIO_Port, L_Y_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(XSHUT_0_Port, XSHUT_0_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(XSHUT_1_Port, XSHUT_1_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(XSHUT_2_Port, XSHUT_2_Pin, GPIO_PIN_RESET);  
+  HAL_GPIO_WritePin(XSHUT_2_Port, XSHUT_2_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(XSHUT_3_Port, XSHUT_3_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(XSHUT_4_Port, XSHUT_4_Pin, GPIO_PIN_RESET);
 
@@ -324,13 +371,28 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+int _write(int file, char *data, int len)
+{
+  if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
+  {
+    errno = EBADF;
+    return -1;
+  }
 
+  // arbitrary timeout 1000
+  HAL_StatusTypeDef status =
+      HAL_UART_Transmit(&huart2, (uint8_t *)data, len, 1000);
+
+  // return # of bytes written - as best we can tell
+  return (status == HAL_OK ? len : 0);
+}
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
+
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -342,14 +404,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
@@ -358,4 +420,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-

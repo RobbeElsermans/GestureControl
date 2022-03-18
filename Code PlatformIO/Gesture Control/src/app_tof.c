@@ -147,7 +147,6 @@ extern "C"
 		// offsetPerVcselCal(VL53L3A2_DEV_TOP, 600);
 		// offsetPerVcselCal(VL53L3A2_DEV_BOTTOM, 600);
 
-
 		// Waardes opvragen
 		// callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
 		// callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
@@ -249,15 +248,15 @@ extern "C"
 			int sta2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
 			int sta3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].Status[0];
 			int sta4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Status[0];
-			
+
 			int obj0 = (int)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].NumberOfTargets;
 			int obj1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].NumberOfTargets;
 			int obj2 = (int)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].NumberOfTargets;
 			int obj3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].NumberOfTargets;
 			int obj4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].NumberOfTargets;
 
-			//printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
-			//printf("\r\n");
+			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
+			// printf("\r\n");
 
 			// Kijken ofdat er een dimming commando aanwezig is
 			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
@@ -289,7 +288,7 @@ extern "C"
 			if (gestureRL && !prevGestureRL)
 			{
 				prevGestureRL = gestureRL;
-				//printf("gestureCommand RL: %d \r\n", gestureRL);
+				// printf("gestureCommand RL: %d \r\n", gestureRL);
 				commando = RL;
 			}
 
@@ -297,7 +296,7 @@ extern "C"
 			if (gestureLR && !prevGestureLR)
 			{
 				prevGestureLR = gestureLR;
-				//printf("gestureCommand LR: %d \r\n", gestureLR);
+				// printf("gestureCommand LR: %d \r\n", gestureLR);
 				commando = LR;
 			}
 
@@ -305,7 +304,7 @@ extern "C"
 			if (gestureDU && !prevGestureDU)
 			{
 				prevGestureDU = gestureDU;
-				//printf("gestureCommand DU: %d \r\n", gestureDU);
+				// printf("gestureCommand DU: %d \r\n", gestureDU);
 				commando = DU;
 			}
 
@@ -313,7 +312,7 @@ extern "C"
 			if (gestureUD && !prevGestureUD)
 			{
 				prevGestureUD = gestureUD;
-				//printf("gestureCommand UD: %d \r\n", gestureUD);
+				// printf("gestureCommand UD: %d \r\n", gestureUD);
 				commando = UD;
 			}
 
@@ -393,7 +392,7 @@ extern "C"
 		/* Initialize Virtual COM Port */
 		BSP_COM_Init(COM1);
 
-		//printf("53L3A2 Gesture Control\r\n");
+		// printf("53L3A2 Gesture Control\r\n");
 
 		/* put all the devices in shutdown mode */
 		for (device = 0; device < RANGING_SENSOR_INSTANCES_NBR; device++)
@@ -419,14 +418,11 @@ extern "C"
 
 			/* left: 0x54, center: 0x56, right: 0x58,  */
 			i2c_addr = (RANGING_SENSOR_VL53L3CX_ADDRESS + (device + 1) * 2);
-			//printf(i2c_addr);
+			// printf(i2c_addr);
 			VL53L3A2_RANGING_SENSOR_SetAddress(device, i2c_addr);
 
 			/* check the communication with the device reading the ID */
 			VL53L3A2_RANGING_SENSOR_ReadID(device, &id);
-#ifdef DEBUGGING
-			printf("ToF sensor %d - ID: %04lX\r\n", device, (unsigned long)id);
-#endif
 		}
 	}
 
@@ -444,38 +440,16 @@ extern "C"
 		VL53L3A2_RANGING_SENSOR_ConfigProfile(sensor, &Profile);
 		status = VL53L3A2_RANGING_SENSOR_Start(sensor, RS_MODE_BLOCKING_CONTINUOUS);
 		if (status != BSP_ERROR_NONE)
-		{
-#ifdef DEBUGGING
-			printf("VL53L3A2_RANGING_SENSOR_Start failed for sensor %s \r\n", TofDevStr[sensor]);
-#endif
 			while (1)
 				;
-		}
-		else
-		{
-#ifdef DEBUGGING
-			printf("sensor %s\t opgestart \r\n", TofDevStr[sensor]);
-#endif
-		}
 	}
 
 	static void stop_sensor(uint8_t sensor)
 	{
 		status = VL53L3A2_RANGING_SENSOR_Stop(sensor);
 		if (status != BSP_ERROR_NONE)
-		{
-#ifdef DEBUGGING
-			printf("VL53L3A2_RANGING_SENSOR_Stop failed\r\n");
-#endif
 			while (1)
 				;
-		}
-		else
-		{
-#ifdef DEBUGGING
-			printf("sensor %s\t afgezet \r\n", TofDevStr[sensor]);
-#endif
-		}
 	}
 
 	static void getResult(uint8_t sensor, RANGING_SENSOR_Result_t *result)

@@ -28,9 +28,10 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 
 # Inleiding
 
-Dit markdown document zal de geschreven code wat verduidelijken in beste maten mogelijk. Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de software omgeving op te zetten en te kunnen gebruiken. 
-Ook wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
-Als laatste wordt er ook een sectie voorzien over de hardware specificaties opgelijst van de gemaakte PCB.
+Dit markdown document zal de geschreven code wat verduidelijken in beste maten mogelijk. Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de software omgeving op te zetten en te kunnen gebruiken.
+Ook wordt er ook een sectie voorzien over de hardware specificaties opgelijst van de gemaakte PCB.
+Als laatste wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
+
 
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
 
@@ -38,7 +39,7 @@ STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide item
 
 De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in dit document aangehaald. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
 
-De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook al een reeds werkende bibliotheek aanwezig in de repo onder ... .
+De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook al een reeds werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControl/lib] .
 
 ----
 
