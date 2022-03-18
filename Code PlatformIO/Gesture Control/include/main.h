@@ -58,8 +58,8 @@ void Error_Handler(void);
 #define BTN2_Pin GPIO_PIN_5
 #define BTN2_GPIO_Port GPIOB
 
-#define BTN3_Pin GPIO_PIN_4
-#define BTN3_GPIO_Port GPIOB
+#define BTN3_Pin GPIO_PIN_2
+#define BTN3_GPIO_Port GPIOA
 
 
 /** LED PINNEN **/
@@ -110,7 +110,7 @@ void Error_Handler(void);
 #define GPIOI_3_Pin GPIO_PIN_9
 #define GPIOI_3_Port GPIOA
 
-#define GPIOI_4_Pin GPIO_PIN_8
+#define GPIOI_4_Pin GPIO_PIN_9
 #define GPIOI_4_Port GPIOA
 
 

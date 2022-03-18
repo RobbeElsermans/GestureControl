@@ -91,12 +91,12 @@ extern "C"
 
 	enum commands
 	{
-		DIM,
-		RL,
-		LR,
-		UD,
-		DU,
-		NONE
+		DIM = 0x25,
+		RL = 0x22,
+		LR = 0x21,
+		UD = 0x23,
+		DU = 0x24,
+		NONE = 0x10
 	};
 
 	typedef enum commands command_t;
@@ -107,6 +107,10 @@ extern "C"
 	static float timerCommand = 0;
 	static bool timerCommandSet = false;
 	static int timerCommandTimeout = 2000; // 2 seconden
+
+	bool toggleReading = false;
+
+	int8_t buf;
 
 	/* Intern functions ----------------------------------------------------------*/
 	static void start_sensor(uint8_t sensor);
@@ -187,10 +191,6 @@ extern "C"
 
 		// I2C slave stuff
 		HAL_StatusTypeDef status = HAL_ERROR;
-		uint8_t buf = 0;
-		uint8_t buf2 = 0;
-		uint8_t x = 0;
-		uint8_t tekst[12];
 
 		start_sensor(VL53L3A2_DEV_CENTER);
 
@@ -216,6 +216,7 @@ extern "C"
 					// PWM timer starten
 					HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 				}
+
 
 				// Resultaten opvragen sensoren
 				getResult(VL53L3A2_DEV_LEFT, Result);
@@ -390,16 +391,9 @@ extern "C"
 			}
 			HAL_GPIO_WritePin(L_R_GPIO_Port, L_R_Pin, objectPresent);
 
-			//I2C Slave spelen met delay
-			status = HAL_I2C_Slave_Receive(&hi2c3, &buf, 1, HAL_MAX_DELAY);
-
-			if (status == HAL_OK)
-			{
-				//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-				// x = !HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin);
-				buf2 = ~buf;
-				HAL_I2C_Slave_Transmit(&hi2c3, &buf2, 1, HAL_MAX_DELAY);
-			}
+			// I2C Slave spelen zonder delay
+			HAL_I2C_Slave_Receive_IT(&hi2c3, &buf, sizeof(buf));
+			HAL_Delay(30);
 		}
 	}
 
@@ -495,6 +489,11 @@ extern "C"
 		// } while (distance == 0);
 
 		return distance;
+	}
+
+	void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
+	{
+		HAL_I2C_Slave_Transmit(&hi2c3, &commando, sizeof(commando), 50);
 	}
 
 #ifdef __cplusplus
