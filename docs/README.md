@@ -24,6 +24,8 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [configureer platformio.ini file](#configureer-platformioini-file)
   - [importeren include & src bestanden](#importeren-include--src-bestanden)
   - [Build & Upload](#build--upload)
+- [Hardware specificaties](#hardware-specificaties)
+- [LED Controller](#led-controller)
 
 ----
 
@@ -35,12 +37,13 @@ Als laatste wordt er een sectie voorzien hoe dit systeem met een ander systeem k
 
 
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
-
 STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide items duidelijk geworden.
+
+Tijdens het middelbaar en hoger onderwijs heb ik de basis mee gekregen om een ordelijke PCB op te stellen. in dit project is de zelfzekerheid en het kritisch denken over hoe en wat we waar leggen/ tekenen, verhoogt.
 
 De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in dit document aangehaald. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
 
-De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook al een reeds werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControl/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/Gesture%20Control/lib) .
+De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook een werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControl/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/Gesture%20Control/lib).
 
 ----
 
@@ -65,7 +68,7 @@ Deze sectie zal de gebruikte software bevatten en waarom we deze gebruikt hebben
 |   Visual Code   |V1.65.2   | Een "open source" editor die een groot ecosysteem heeft van plugins. Deze editor is vooral gekozen omdat ik hier ervaring mee heb. Ook omdat dit draait op Linux.|[link](https://code.visualstudio.com/)|
 | PlatformIO  IDE | Home: V3.4.1  Core: V5.2.5 | Een plugin van Visual Code om de STM32Nucleo te programmeren en hardware debugging uit te voeren.  | [link](https://platformio.org/install/ide?install=vscode)
 |Docsify|V4.4.4|Om deze documentatie te schrijven is er gebruik gemaakt van Docsify die de markdown bestanden omzet in een interactieve website. |[link](https://docsify.js.org/)|
-|ST STM32 PLatform| V15.2.0 | PlatformIO ST STM32 platform | [link](https://github.com/platformio/platform-ststm32?utm_source=platformio&utm_medium=piohome)|
+|ST STM32 Platform| V15.2.0 | PlatformIO ST STM32 platform | [link](https://github.com/platformio/platform-ststm32?utm_source=platformio&utm_medium=piohome)|
 </div>
 
 ----
@@ -80,7 +83,6 @@ We lijsten in volgende tabel op wat we precies gebruikt hebben om onze hardware 
 </div>
 
 <a href="./Hardware/ibom.html" target="_blank">Hier</a>  de link om het op een aparte pagina te bekijken.
-
 
 ----
 
@@ -109,7 +111,9 @@ Arduino Header pinout
 
 ## Importeren API VL53LXC
 
-Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **inc** en **src** folder waarin we de .h en .c  bestanden hebben staan. Deze bestanden moeten we overbrengen naar de **lib** folder waar we de **inc** en **src** bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
+Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **inc** en **src** folder waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we de **inc** en **src** bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
+
+
 
 !> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PLatformIo's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
 
@@ -268,5 +272,19 @@ Het project is nu compleet om gebuild te worden en nadien geupload naar het bord
 
 ![foto build & upload knop](foto's/platformio_platforms_3.jpg)
 
-Op bovestaande foto is te zien dat we enkele knoppen ter beschikking hebben om zaken uit te voeren. Zo staat er naast het huisje een vinkje dat de code zal compileren.
-Daarnaast staat een pijl naar rechts die de code zal uploaden.
+Op bovestaande foto is te zien dat we enkele knoppen ter beschikking hebben om zaken uit te voeren. Zo staat er naast het **huisje** een **vinkje** dat de code zal compileren.
+Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
+
+----
+
+# Hardware specificaties
+
+# LED Controller
+
+<img src="foto's/Smart%20Object.jpg" width="70%">
+
+In bovenstaande foto is te zien hoe we de Gesture Controller (Systeem B) aansluiten met de LED Controller. De communicatie verloopt over I²C waarbij de LED Controller de master is en de Gesture Controller de slave. 
+
+Zoals beschreven in de [blueprint](Documenten/Blueprint_V1_Robbe_Elsermans.pdf)
+
+<a href="Documenten/Blueprint_V1_Robbe_Elsermans.pdf" type="pdf" download>
