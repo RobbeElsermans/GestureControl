@@ -32,7 +32,7 @@
 
 /* Exported functions --------------------------------------------------------*/
 void MX_TOF_Init(void);
-void MX_TOF_Process(void* htim3);
+void MX_TOF_Process(void *_htim3, void *_hi2c3);
 
 
 #ifdef __cplusplus

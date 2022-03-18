@@ -87,6 +87,7 @@ extern "C"
 	bool gestureDimming = false;
 
 	TIM_HandleTypeDef htim3;
+	I2C_HandleTypeDef hi2c3;
 
 	enum commands
 	{
@@ -179,9 +180,17 @@ extern "C"
 	/*
 	 * LM background task
 	 */
-	void MX_TOF_Process(void *_htim3)
+	void MX_TOF_Process(void *_htim3, void *_hi2c3)
 	{
 		htim3 = *(TIM_HandleTypeDef *)_htim3;
+		hi2c3 = *(I2C_HandleTypeDef *)_hi2c3;
+
+		// I2C slave stuff
+		HAL_StatusTypeDef status = HAL_ERROR;
+		uint8_t buf = 0;
+		uint8_t buf2 = 0;
+		uint8_t x = 0;
+		uint8_t tekst[12];
 
 		start_sensor(VL53L3A2_DEV_CENTER);
 
@@ -380,6 +389,17 @@ extern "C"
 				break;
 			}
 			HAL_GPIO_WritePin(L_R_GPIO_Port, L_R_Pin, objectPresent);
+
+			//I2C Slave spelen met delay
+			status = HAL_I2C_Slave_Receive(&hi2c3, &buf, 1, HAL_MAX_DELAY);
+
+			if (status == HAL_OK)
+			{
+				//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+				// x = !HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin);
+				buf2 = ~buf;
+				HAL_I2C_Slave_Transmit(&hi2c3, &buf2, 1, HAL_MAX_DELAY);
+			}
 		}
 	}
 
