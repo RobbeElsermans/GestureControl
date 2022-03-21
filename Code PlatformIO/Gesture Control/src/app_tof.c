@@ -209,14 +209,20 @@ extern "C"
 		{
 			timerTicks = HAL_GetTick();
 
-			if (isReady)
+			if (!isReady && !HAL_GPIO_ReadPin(GPIOI_1_Port, GPIOI_1_Pin))
 			{
 
-				// getResult(VL53L3A2_DEV_CENTER, Result);
-				isReady = false;
+				//getResult(VL53L3A2_DEV_CENTER, Result);
+				//isReady = false;
 
-				// VL53LX_ClearInterruptAndStartMeasurement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
+				VL53LX_ClearInterruptAndStartMeasurement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
+				HAL_Delay(2);
 			}
+
+			if(isReady)
+			isReady = false;
+
+
 			dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
 
 			objectPresent = ckeckObjectPresent(Result, &objectPresent, &dis1);
@@ -283,8 +289,10 @@ extern "C"
 			int obj3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].NumberOfTargets;
 			int obj4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].NumberOfTargets;
 
-			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
-			// printf("\r\n");
+			//printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
+			//printf("\r\n");
+
+			printf("dist1: %5d \r\n",dis1);
 
 			// Kijken ofdat er een dimming commando aanwezig is
 			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
