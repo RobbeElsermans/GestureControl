@@ -5,13 +5,13 @@
       "Application": "Pcbnew",
       "Version": "(6.0.2)"
     },
-    "CreationDate": "2022-03-21T08:26:01+01:00"
+    "CreationDate": "2022-03-21T08:33:36+01:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
       "Name": "GestureControl",
       "GUID": "47657374-7572-4654-936f-6e74726f6c2e",
-      "Revision": "V0.1"
+      "Revision": "V0.21"
     },
     "Size": {
       "X": 253.923,
