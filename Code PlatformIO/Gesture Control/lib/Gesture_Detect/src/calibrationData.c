@@ -28,19 +28,19 @@ VL53LX_CalibrationData_t getCalibrationData(uint8_t dev)
 }
 void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
 {
-    int xtalk_kcps[5][6] = {
-        {243, 493, 743, 993, 1243, 1494},
-        {941, 1878, 2815, 3752, 4689, 5627},
-        {611, 1209, 1807, 2405, 3003, 3601},
-        {611, 1209, 1807, 2405, 3003, 3601},
-        {611, 1209, 1807, 2405, 3003, 3601}};
+    int xtalk_kcps[RANGING_SENSOR_INSTANCES_NBR][6] = {
+        {754, 1533, 2312, 3091, 3870, 4651},
+        {1385, 2823, 4261, 5699, 7137, 8578},
+        {839, 1644, 2449, 3254, 4059, 4865},
+        {0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0}};
 
-    int xtalk_bin_data[5][12] = {
-        {11, 327, 506, 180, 0, 0, 0, 0, 0, 0, 0, 0},
-        {20, 429, 454, 121, 0, 0, 0, 0, 0, 0, 0, 0},
-        {14, 425, 461, 124, 0, 0, 0, 0, 0, 0, 0, 0},
-        {14, 425, 461, 124, 0, 0, 0, 0, 0, 0, 0, 0},
-        {14, 425, 461, 124, 0, 0, 0, 0, 0, 0, 0, 0}};
+    int xtalk_bin_data[RANGING_SENSOR_INSTANCES_NBR][12] = {
+        {14, 435, 450, 125, 0, 0, 0, 0, 0, 0, 0, 0},
+        {22, 432, 451, 119, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 376, 481, 167, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     switch (dev)
     {
@@ -56,13 +56,15 @@ void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
             data.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[dev][i];
         }
 
-        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4481;
-        data.per_vcsel_cal_data.long_a_offset_mm = -33;
-        data.per_vcsel_cal_data.long_b_offset_mm = 35;
-        data.per_vcsel_cal_data.medium_a_offset_mm = -46;
-        data.per_vcsel_cal_data.medium_b_offset_mm = -46;
-        data.per_vcsel_cal_data.short_a_offset_mm = 43;
-        data.per_vcsel_cal_data.short_b_offset_mm = -43;
+        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4208;
+        
+        data.per_vcsel_cal_data.short_a_offset_mm = -27;
+        data.per_vcsel_cal_data.short_b_offset_mm = -28;
+        data.per_vcsel_cal_data.medium_a_offset_mm = -24;
+        data.per_vcsel_cal_data.medium_b_offset_mm = -26;
+        data.per_vcsel_cal_data.long_a_offset_mm = -18;
+        data.per_vcsel_cal_data.long_b_offset_mm = -21;
+        
         break;
     case 1: // CENTER
 
@@ -76,13 +78,13 @@ void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
             data.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[dev][i];
         }
 
-        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4186;
-        data.per_vcsel_cal_data.long_a_offset_mm = -25;
-        data.per_vcsel_cal_data.long_b_offset_mm = -25;
-        data.per_vcsel_cal_data.medium_a_offset_mm = -28;
-        data.per_vcsel_cal_data.medium_b_offset_mm = -30;
+        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4177;
         data.per_vcsel_cal_data.short_a_offset_mm = -31;
         data.per_vcsel_cal_data.short_b_offset_mm = -27;
+        data.per_vcsel_cal_data.medium_a_offset_mm = -21;
+        data.per_vcsel_cal_data.medium_b_offset_mm = -26;
+        data.per_vcsel_cal_data.long_a_offset_mm = -23;
+        data.per_vcsel_cal_data.long_b_offset_mm = -24;
         break;
     case 2: // RIGHT
         for (uint8_t i = 0; i < 6; i++)
@@ -95,13 +97,13 @@ void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
             data.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[dev][i];
         }
 
-        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4204;
-        data.per_vcsel_cal_data.long_a_offset_mm = -32;
-        data.per_vcsel_cal_data.long_b_offset_mm = -34;
-        data.per_vcsel_cal_data.medium_a_offset_mm = -34;
-        data.per_vcsel_cal_data.medium_b_offset_mm = -38;
-        data.per_vcsel_cal_data.short_a_offset_mm = -40;
-        data.per_vcsel_cal_data.short_b_offset_mm = -40;
+        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4446;
+        data.per_vcsel_cal_data.short_a_offset_mm = -27;
+        data.per_vcsel_cal_data.short_b_offset_mm = -27;
+        data.per_vcsel_cal_data.medium_a_offset_mm = -24;
+        data.per_vcsel_cal_data.medium_b_offset_mm = -25;
+        data.per_vcsel_cal_data.long_a_offset_mm = -19;
+        data.per_vcsel_cal_data.long_b_offset_mm = -20;
         break;
 
     case 3: // TOP
@@ -115,13 +117,13 @@ void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
             data.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[dev][i];
         }
 
-        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4204;
-        data.per_vcsel_cal_data.long_a_offset_mm = -32;
-        data.per_vcsel_cal_data.long_b_offset_mm = -34;
-        data.per_vcsel_cal_data.medium_a_offset_mm = -34;
-        data.per_vcsel_cal_data.medium_b_offset_mm = -38;
-        data.per_vcsel_cal_data.short_a_offset_mm = -40;
+        data.xtalkhisto.xtalk_shape.zero_distance_phase = 0;
+        data.per_vcsel_cal_data.short_a_offset_mm = -37;
         data.per_vcsel_cal_data.short_b_offset_mm = -40;
+        data.per_vcsel_cal_data.medium_a_offset_mm = -48;
+        data.per_vcsel_cal_data.medium_b_offset_mm = -48;
+        data.per_vcsel_cal_data.long_a_offset_mm = -33;
+        data.per_vcsel_cal_data.long_b_offset_mm = -35;
         break;
 
     case 4: // BOTTOM
@@ -135,13 +137,13 @@ void setCalibrationData(uint8_t dev, VL53LX_CalibrationData_t data)
             data.xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[dev][i];
         }
 
-        data.xtalkhisto.xtalk_shape.zero_distance_phase = 4204;
-        data.per_vcsel_cal_data.long_a_offset_mm = -32;
-        data.per_vcsel_cal_data.long_b_offset_mm = -34;
-        data.per_vcsel_cal_data.medium_a_offset_mm = -34;
-        data.per_vcsel_cal_data.medium_b_offset_mm = -38;
-        data.per_vcsel_cal_data.short_a_offset_mm = -40;
-        data.per_vcsel_cal_data.short_b_offset_mm = -40;
+        data.xtalkhisto.xtalk_shape.zero_distance_phase = 0;
+        data.per_vcsel_cal_data.short_a_offset_mm = -68;
+        data.per_vcsel_cal_data.short_b_offset_mm = -70;
+        data.per_vcsel_cal_data.medium_a_offset_mm = -56;
+        data.per_vcsel_cal_data.medium_b_offset_mm = -58;
+        data.per_vcsel_cal_data.long_a_offset_mm = -58;
+        data.per_vcsel_cal_data.long_b_offset_mm = -61;
         break;
 
     default:

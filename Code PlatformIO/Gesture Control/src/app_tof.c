@@ -131,12 +131,14 @@ extern "C"
 		RefSpadCal(VL53L3A2_DEV_LEFT);
 		RefSpadCal(VL53L3A2_DEV_CENTER);
 		RefSpadCal(VL53L3A2_DEV_RIGHT);
+		RefSpadCal(VL53L3A2_DEV_TOP);
+		RefSpadCal(VL53L3A2_DEV_BOTTOM);
 
 		callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
 		callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
 		callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
-		// callData[VL53L3A2_DEV_TOP] = getCalibrationData(VL53L3A2_DEV_TOP);
-		// callData[VL53L3A2_DEV_BOTTOM] = getCalibrationData(VL53L3A2_DEV_BOTTOM);
+		callData[VL53L3A2_DEV_TOP] = getCalibrationData(VL53L3A2_DEV_TOP);
+		callData[VL53L3A2_DEV_BOTTOM] = getCalibrationData(VL53L3A2_DEV_BOTTOM);
 
 		// // Callibratie van crosstalk (coverglas)
 		// xTalkCal(VL53L3A2_DEV_LEFT);
@@ -152,7 +154,7 @@ extern "C"
 		// offsetPerVcselCal(VL53L3A2_DEV_TOP, 600);
 		// offsetPerVcselCal(VL53L3A2_DEV_BOTTOM, 600);
 
-		// Waardes opvragen
+		// // Waardes opvragen
 		// callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
 		// callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
 		// callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
@@ -162,8 +164,8 @@ extern "C"
 		setCalibrationData(VL53L3A2_DEV_LEFT, callData[VL53L3A2_DEV_LEFT]);
 		setCalibrationData(VL53L3A2_DEV_CENTER, callData[VL53L3A2_DEV_CENTER]);
 		setCalibrationData(VL53L3A2_DEV_RIGHT, callData[VL53L3A2_DEV_RIGHT]);
-		// setCalibrationData(VL53L3A2_DEV_TOP, callData[VL53L3A2_DEV_TOP]);
-		// setCalibrationData(VL53L3A2_DEV_BOTTOM, callData[VL53L3A2_DEV_BOTTOM]);
+		setCalibrationData(VL53L3A2_DEV_TOP, callData[VL53L3A2_DEV_TOP]);
+		setCalibrationData(VL53L3A2_DEV_BOTTOM, callData[VL53L3A2_DEV_BOTTOM]);
 
 		setOffsetCorrectionMode(VL53L3A2_DEV_LEFT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		setXTalkCompensation(VL53L3A2_DEV_LEFT, 1);
@@ -174,10 +176,10 @@ extern "C"
 		setOffsetCorrectionMode(VL53L3A2_DEV_RIGHT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		setXTalkCompensation(VL53L3A2_DEV_RIGHT, 1);
 
-		// setOffsetCorrectionMode(VL53L3A2_DEV_TOP, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		setOffsetCorrectionMode(VL53L3A2_DEV_TOP, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		// setXTalkCompensation(VL53L3A2_DEV_TOP, 1);
 
-		// setOffsetCorrectionMode(VL53L3A2_DEV_BOTTOM, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+		setOffsetCorrectionMode(VL53L3A2_DEV_BOTTOM, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
 		// setXTalkCompensation(VL53L3A2_DEV_BOTTOM, 1);
 	}
 
@@ -265,8 +267,8 @@ extern "C"
 			int obj3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].NumberOfTargets;
 			int obj4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].NumberOfTargets;
 
-			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
-			// printf("\r\n");
+			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
+			printf("\r\n");
 
 			// Kijken ofdat er een dimming commando aanwezig is
 			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
@@ -393,7 +395,9 @@ extern "C"
 
 			// I2C Slave spelen zonder delay
 			HAL_I2C_Slave_Receive_IT(&hi2c3, &buf, sizeof(buf));
-			HAL_Delay(30);
+			
+			
+			//HAL_Delay(30);
 		}
 	}
 

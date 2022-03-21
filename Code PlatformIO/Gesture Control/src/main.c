@@ -28,6 +28,7 @@
 #include "stdbool.h"    //Nodig om bool te kunnen gebruiken
 #include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
 #include <errno.h>
+#include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -76,7 +77,7 @@ int main(void)
   MX_TIM3_Init();
   MX_I2C3_Init();
 
-  if(HAL_I2C_EnableListen_IT(&hi2c3) != HAL_OK)
+  if (HAL_I2C_EnableListen_IT(&hi2c3) != HAL_OK)
   {
     /* Transfer error in reception process */
     Error_Handler();
@@ -98,14 +99,14 @@ int main(void)
     while (1)
     {
       printf("Starting  \r\n");
-      MX_TOF_Process(&htim3, & hi2c3);
+      MX_TOF_Process(&htim3, &hi2c3);
     }
   }
   else
   {
-    //Stuur alle SMD leds aan en blink 8 om de seconden (16 seconden).
-    //Na de 15 seconden wordt de kalibratie uitgevoerd
-    //Calibratie uitvoeren en plotten in serial monitor
+    // Stuur alle SMD leds aan en blink 8 om de seconden (16 seconden).
+    // Na de 15 seconden wordt de kalibratie uitgevoerd
+    // Calibratie uitvoeren en plotten in serial monitor
 
     for (size_t i = 0; i < 16; i++)
     {
@@ -115,7 +116,135 @@ int main(void)
       HAL_Delay(1000);
     }
 
-    while(1);
+    // Calibraties uitvoeren
+    VL53LX_CalibrationData_t callData[RANGING_SENSOR_INSTANCES_NBR];
+
+    RefSpadCal(VL53L3A2_DEV_LEFT);
+    RefSpadCal(VL53L3A2_DEV_CENTER);
+    RefSpadCal(VL53L3A2_DEV_RIGHT);
+    HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, 1);
+    // Callibratie van crosstalk (coverglas)
+    xTalkCal(VL53L3A2_DEV_LEFT);
+    xTalkCal(VL53L3A2_DEV_CENTER);
+    xTalkCal(VL53L3A2_DEV_RIGHT);
+    HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, 1);
+    // xTalkCal(VL53L3A2_DEV_TOP);
+    // xTalkCal(VL53L3A2_DEV_BOTTOM);
+
+    // De offset bepalen zodat deze juist is is.
+    offsetPerVcselCal(VL53L3A2_DEV_LEFT, 600);
+    offsetPerVcselCal(VL53L3A2_DEV_CENTER, 600);
+    offsetPerVcselCal(VL53L3A2_DEV_RIGHT, 600);
+    offsetPerVcselCal(VL53L3A2_DEV_TOP, 600);
+    offsetPerVcselCal(VL53L3A2_DEV_BOTTOM, 600);
+    HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, 1);
+    // Waardes opvragen
+    callData[VL53L3A2_DEV_LEFT] = getCalibrationData(VL53L3A2_DEV_LEFT);
+    callData[VL53L3A2_DEV_CENTER] = getCalibrationData(VL53L3A2_DEV_CENTER);
+    callData[VL53L3A2_DEV_RIGHT] = getCalibrationData(VL53L3A2_DEV_RIGHT);
+    callData[VL53L3A2_DEV_TOP] = getCalibrationData(VL53L3A2_DEV_TOP);
+    callData[VL53L3A2_DEV_BOTTOM] = getCalibrationData(VL53L3A2_DEV_BOTTOM);
+
+    setOffsetCorrectionMode(VL53L3A2_DEV_LEFT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(VL53L3A2_DEV_LEFT, 1);
+
+    setOffsetCorrectionMode(VL53L3A2_DEV_CENTER, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(VL53L3A2_DEV_CENTER, 1);
+
+    setOffsetCorrectionMode(VL53L3A2_DEV_RIGHT, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(VL53L3A2_DEV_RIGHT, 1);
+
+    setOffsetCorrectionMode(VL53L3A2_DEV_TOP, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    // setXTalkCompensation(VL53L3A2_DEV_TOP, 1);
+
+    setOffsetCorrectionMode(VL53L3A2_DEV_BOTTOM, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    // setXTalkCompensation(VL53L3A2_DEV_BOTTOM, 1);
+
+    setCalibrationData(VL53L3A2_DEV_LEFT, callData[VL53L3A2_DEV_LEFT]);
+    setCalibrationData(VL53L3A2_DEV_CENTER, callData[VL53L3A2_DEV_CENTER]);
+    setCalibrationData(VL53L3A2_DEV_RIGHT, callData[VL53L3A2_DEV_RIGHT]);
+    setCalibrationData(VL53L3A2_DEV_TOP, callData[VL53L3A2_DEV_TOP]);
+    setCalibrationData(VL53L3A2_DEV_BOTTOM, callData[VL53L3A2_DEV_BOTTOM]);
+
+    HAL_GPIO_WritePin(SMD1_Port, SMD1_Pin, 0);
+    HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, 0);
+    HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, 0);
+
+    // Omzetten naar variabelen
+    int xtalk_bin_data[RANGING_SENSOR_INSTANCES_NBR][12];
+    int xtalk_kcps[RANGING_SENSOR_INSTANCES_NBR][6];
+    int xtalk_zero_distance[RANGING_SENSOR_INSTANCES_NBR];
+    int offset[RANGING_SENSOR_INSTANCES_NBR][6];
+
+    for (uint8_t i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
+    {
+      for (uint8_t j = 0; j < 6; j++)
+      {
+        xtalk_kcps[i][j] = callData[i].algo__xtalk_cpo_HistoMerge_kcps[j];
+      }
+    }
+
+    for (uint8_t i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
+    {
+      for (uint8_t j = 0; j < 12; j++)
+      {
+        xtalk_bin_data[i][j] = callData[i].xtalkhisto.xtalk_shape.bin_data[j];
+      }
+    }
+
+    for (uint8_t i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
+    {
+      offset[i][0] = callData[i].per_vcsel_cal_data.short_a_offset_mm;
+      offset[i][1] = callData[i].per_vcsel_cal_data.short_b_offset_mm;
+      offset[i][2] = callData[i].per_vcsel_cal_data.medium_a_offset_mm;
+      offset[i][3] = callData[i].per_vcsel_cal_data.medium_b_offset_mm;
+      offset[i][4] = callData[i].per_vcsel_cal_data.long_a_offset_mm;
+      offset[i][5] = callData[i].per_vcsel_cal_data.long_b_offset_mm;
+    }
+
+    for (uint8_t i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
+    {
+      xtalk_zero_distance[i] = callData[i].xtalkhisto.xtalk_shape.zero_distance_phase;
+    }
+
+    // plotten naar serial monitor
+
+    for (uint8_t i = 0; i < RANGING_SENSOR_INSTANCES_NBR; i++)
+    {
+      printf("instance %1d \r\n", i);
+
+      // xtalk_bin_data
+      printf("\r\n\txtalk_bin_data \r\n");
+      for (size_t j = 0; j < 12; j++)
+      {
+        printf("%2d: %5d\r\n", j, xtalk_bin_data[i][j]);
+      }
+
+      // xtalk_kcps
+      printf("\r\n\t xtalk_kcps \r\n");
+      for (size_t j = 0; j < 6; j++)
+      {
+        printf("%2d: %5d\r\n", j, xtalk_kcps[i][j]);
+      }
+
+      // offset
+      printf("\r\n\t offset \r\n");
+      for (size_t j = 0; j < 6; j++)
+      {
+        printf("%2d: %5d\r\n", j, offset[i][j]);
+      }
+
+      // xtalk_zero_distance
+      printf("\r\n\t xtalk_zero_distance \r\n");
+      printf("%5d\r\n", xtalk_zero_distance[i]);
+
+      printf("---------------------------------------------\r\n");
+    }
+
+    printf(" \r\n");
+
+    while (1)
+      ;
   }
 }
 
