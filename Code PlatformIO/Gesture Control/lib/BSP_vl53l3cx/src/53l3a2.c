@@ -347,13 +347,13 @@ int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
 
   case VL53L3A2_DEV_TOP:
 
-    HAL_GPIO_WritePin(XSHUT_4_Port, XSHUT_4_Pin, state); // XSHUT staat op pin PA0
+    HAL_GPIO_WritePin(XSHUT_4_Port, XSHUT_4_Pin, state);
     status = 1;
     break;
 
   case VL53L3A2_DEV_BOTTOM:
  
-    HAL_GPIO_WritePin(XSHUT_3_Port, XSHUT_3_Pin, state); // XSHUT staat op pin PA0
+    HAL_GPIO_WritePin(XSHUT_3_Port, XSHUT_3_Pin, state);
     status = 1;
     break;
 

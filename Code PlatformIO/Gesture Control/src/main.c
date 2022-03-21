@@ -83,6 +83,8 @@ int main(void)
     Error_Handler();
   }
 
+  //while(1);
+
   MX_TOF_Init();
 
   /**
@@ -489,6 +491,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(L_R_GPIO_Port, &GPIO_InitStruct);
 
+  /* GPIO Interrupt : GPIOI_1*/
+    /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = GPIOI_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOI_1_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin Output Level */
 
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
@@ -503,6 +512,10 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SMD2_Port, SMD2_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(L_R_GPIO_Port, L_R_Pin, GPIO_PIN_RESET);
+
+    /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

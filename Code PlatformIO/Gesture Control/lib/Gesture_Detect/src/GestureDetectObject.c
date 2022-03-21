@@ -19,7 +19,7 @@ static int maxDistanceObject = 1000;           // Maximale afstand dat een objec
 // Timer om een object te herkennen
 static float timerMeasurment = 0;           // opsalg van timer waarde
 static bool timerMeasurementSet = false;    // de flag wanneer de timer gezet is
-static int timerMeasurmentTimeout = 2000;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
+static int timerMeasurmentTimeout = 2000/30;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
 
 // Bug wanneer de sensor niets detecteerd maar de afstand blijft hetzelfde en er zij geen foutcodes aanwezig (zone == 0)
 static uint8_t max_prevDistances = 9;           // x metingen opslaan
@@ -61,30 +61,30 @@ bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent,
     // De afstand en zone results ophalen uite Result
     zone = (uint8_t)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
 
-    if (counter_prevDistances == max_prevDistances)
-        counter_prevDistances = 0;
-    else
-        counter_prevDistances++;
+    // if (counter_prevDistances == max_prevDistances)
+    //     counter_prevDistances = 0;
+    // else
+    //     counter_prevDistances++;
 
-    // opslaan van data
-    prevDistances[counter_prevDistances] = *dist;
-    for (uint8_t i = 0; i <= max_prevDistances; i++)
-    {
-        if (i > 0)
-        {
-            int a = prevDistances[i] ;
-            int b = prevDistances[i - 1];
-            if (a != b)
-            {
-                prevDistancesEqual = false;
-                break;
-            }
-        }
+    // // opslaan van data
+    // prevDistances[counter_prevDistances] = *dist;
+    // for (uint8_t i = 0; i <= max_prevDistances; i++)
+    // {
+    //     if (i > 0)
+    //     {
+    //         int a = prevDistances[i] ;
+    //         int b = prevDistances[i - 1];
+    //         if (a != b)
+    //         {
+    //             prevDistancesEqual = false;
+    //             break;
+    //         }
+    //     }
 
-        // einde van de loop en nog steeds allemaal hetzelfde
-        if (i == max_prevDistances)
-            prevDistancesEqual = true;
-    }
+    //     // einde van de loop en nog steeds allemaal hetzelfde
+    //     if (i == max_prevDistances)
+    //         prevDistancesEqual = true;
+    // }
 
     // if (x == 0)
     // {
@@ -93,18 +93,23 @@ bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent,
     // }
     // x++;
 
-    /*	als dist1 onder de 1000 mm komt voor 3 seconden, dan is er een object.
+    /*	als dist1 onder de 1000 mm komt voor x seconden, dan is er een object.
      * 	+ er mag geen foutcode zijn
      */
-    if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent && !prevDistancesEqual))
+    //if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent && !prevDistancesEqual))
+    if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent))
     {
         if (!timerMeasurementSet)
         {
             timerMeasurementSet = true;
             timerMeasurment = HAL_GetTick();
         }
-        if ((HAL_GetTick() - timerMeasurment) >= timerMeasurmentTimeout)
+
+        int diff = HAL_GetTick() - timerMeasurment;
+
+        if (diff >= timerMeasurmentTimeout)
         {
+            printf("Object! \r\n");
             timerMeasurementSet = false;
             return true;
         }
@@ -121,7 +126,8 @@ bool ckeckObjectPresent(RANGING_SENSOR_Result_t *Result, bool *WasObjectPresent,
      *   als het object verder is dan maxDistanceObject en het object was er dan is het object weg
      *   of als er een foutcode 12 of 4 is en de Objectresult is true, dan is het object weg.
      */
-    if (((*dist >= maxDistanceObject) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent) || (prevDistancesEqual && *WasObjectPresent))
+    //if (((*dist >= maxDistanceObject) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent) || (prevDistancesEqual && *WasObjectPresent))
+    if (((*dist >= maxDistanceObject) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent))
     {
         if (timerMeasurementSet == false)
         {
