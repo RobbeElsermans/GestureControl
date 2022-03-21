@@ -14,7 +14,7 @@
 
 #include "GestureDetectDimming.h"
 
-static int maxDistanceObject = 490;
+static int maxDistanceObject = 400;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
 static int timerMeasurmentTimeout = 4000; // 2 seconden

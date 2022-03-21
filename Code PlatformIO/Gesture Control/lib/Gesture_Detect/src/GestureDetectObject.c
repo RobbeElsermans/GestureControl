@@ -14,15 +14,15 @@
 #include "GestureDetectObject.h"
 
 // De maximale afstand dat een object kan staan om gedetecteerd te worden.
-static int maxDistanceObject = 0;           // Maximale afstand dat een object mag zijn om als object gedetecteerd te worden
+static int maxDistanceObject = 1000;           // Maximale afstand dat een object mag zijn om als object gedetecteerd te worden
 
 // Timer om een object te herkennen
 static float timerMeasurment = 0;           // opsalg van timer waarde
 static bool timerMeasurementSet = false;    // de flag wanneer de timer gezet is
-static int timerMeasurmentTimeout = 0;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
+static int timerMeasurmentTimeout = 2000;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
 
 // Bug wanneer de sensor niets detecteerd maar de afstand blijft hetzelfde en er zij geen foutcodes aanwezig (zone == 0)
-static uint8_t max_prevDistances = 0;           // x metingen opslaan
+static uint8_t max_prevDistances = 9;           // x metingen opslaan
 static int *prevDistances;                      // opslag buffer
 static uint8_t counter_prevDistances = 0;       // counter om de buffer te vullen
 static bool prevDistancesEqual = false;         // Een flag die zegt dat de buffer bestaat uit gelijke waardes
@@ -34,18 +34,12 @@ static uint8_t zone = 0;
 bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistances){
     if(_maxDistance >= 1)
     maxDistanceObject = _maxDistance;
-    else
-    maxDistanceObject = 1000;
 
     if(_timerTimeout >= 1)
     timerMeasurmentTimeout = _timerTimeout;
-    else
-    timerMeasurmentTimeout = 2000;
 
     if(_maxPrevDistances >= 1)
     max_prevDistances = _maxPrevDistances;
-    else
-    max_prevDistances = 9;
 
     //Het maken van de array waarin we prevValues in plaatsen
     prevDistances = malloc(sizeof(int) * max_prevDistances); //Memory aanmaken van max_prevDistances lang

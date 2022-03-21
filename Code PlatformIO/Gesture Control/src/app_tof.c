@@ -108,6 +108,11 @@ extern "C"
 	static bool timerCommandSet = false;
 	static int timerCommandTimeout = 2000; // 2 seconden
 
+	// Timer Ticks
+	static float timerTicks = 0;
+	static uint8_t timerTicksCount = 0;
+	int timeTicks = 0;
+
 	bool toggleReading = false;
 
 	int8_t buf;
@@ -198,6 +203,7 @@ extern "C"
 
 		while (1)
 		{
+			timerTicks = HAL_GetTick();
 			// HAL_Delay(5);
 			getResult(VL53L3A2_DEV_CENTER, Result);
 			dis1 = getDistance(VL53L3A2_DEV_CENTER, Result);
@@ -267,8 +273,8 @@ extern "C"
 			int obj3 = (int)Result[VL53L3A2_DEV_TOP].ZoneResult[0].NumberOfTargets;
 			int obj4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].NumberOfTargets;
 
-			printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
-			printf("\r\n");
+			// printf("left: %5d obj: %1d sta: %2d \t center: %5d obj: %1d sta: %2d \t right: %5d obj: %d sta: %2d \t top: %5d obj: %d sta: %2d \t bottom: %5d obj: %d sta: %2d", dis0, obj0, sta0, dis1, obj1, sta1, dis2, obj2, sta2, dis3, obj3, sta3, dis4, obj4, sta4);
+			// printf("\r\n");
 
 			// Kijken ofdat er een dimming commando aanwezig is
 			gestureDimming = CheckDimmingCommand(&gestureDimming, &objectPresent, &dis1, &sta1);
@@ -398,6 +404,13 @@ extern "C"
 			
 			
 			//HAL_Delay(30);
+			if(timerTicksCount == 0){
+				timeTicks = 0;
+				timeTicks = (HAL_GetTick() - timerTicks);
+				timerTicks = 0;
+			printf("time: %5d ms \r\n", timeTicks);
+			}
+			timerTicksCount++;
 		}
 	}
 

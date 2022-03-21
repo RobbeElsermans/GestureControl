@@ -18,7 +18,7 @@ static bool hasTop = false;
 static bool hasCenter = false;
 static bool hasBottom = false;
 
-static int maxDistanceObject = 300;
+static int maxDistanceObject = 500;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
 static int timerMeasurmentTimeout = 1200; // 1 seconden
