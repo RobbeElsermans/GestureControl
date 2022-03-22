@@ -55,6 +55,12 @@ static void MX_USART2_UART_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_I2C3_Init(void);
 
+
+//INterrupt testen
+RANGING_SENSOR_Result_t volatile Result[RANGING_SENSOR_INSTANCES_NBR];
+bool volatile isStarted = false;
+
+
 /* Private user code ---------------------------------------------------------*/
 
 /**
@@ -101,7 +107,28 @@ int main(void)
     while (1)
     {
       printf("Starting  \r\n");
-      MX_TOF_Process(&htim3, &hi2c3);
+      //MX_TOF_Process(&htim3, &hi2c3);
+
+      //Interrupt testen
+      RANGING_SENSOR_ProfileConfig_t Profile;
+      //Sensor starten
+      Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
+			Profile.TimingBudget = 0;  /* 16 ms < TimingBudget < 500 ms */
+			Profile.Frequency = 0;	   /* not necessary in simple ranging */
+			Profile.EnableAmbient = 1; /* Enable: 1, Disable: 0 */
+			Profile.EnableSignal = 1;  /* Enable: 1, Disable: 0 */
+
+			VL53L3A2_RANGING_SENSOR_ConfigProfile(VL53L3A2_DEV_CENTER, &Profile);
+			//status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+			VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_CENTER, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+
+      isStarted = true;
+
+      while(1){
+      printf("ranging: %5d", Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0]);
+      hal_delay(500);
+      }
+
     }
   }
   else
@@ -519,6 +546,24 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+	void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+	{
+		if (GPIO_Pin == GPIOI_1_Pin && isStarted == true)
+		{
+			//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+			
+      VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
+
+		// Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
+		if ((long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0] >= 17760520)
+		{
+			HAL_Delay(2);
+			VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
+		}
+		}
+	}
+
+
 int _write(int file, char *data, int len)
 {
   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
