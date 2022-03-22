@@ -64,19 +64,20 @@ int led_columns[led_matrix_width][2] = {
 int posx = 0;
 int posy = 0;
 
-	enum commands
-	{
-		DIM = 0x25,
-		RL = 0x22,
-		LR = 0x21,
-		UD = 0x23,
-		DU = 0x24,
-		NONE = 0x10
-	};
+enum commands
+{
+  DIM = 0x25,
+  RL = 0x22,
+  LR = 0x21,
+  UD = 0x23,
+  DU = 0x24,
+  NONE = 0x10
+};
 
-	typedef enum commands command_t;
+typedef enum commands command_t;
 
-	command_t commando = NONE;
+command_t commando = NONE;
+command_t prevCommando = NONE;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -201,18 +202,20 @@ int main()
     // I2C stuff
     status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, 500);
 
-    if(status == HAL_OK){
-      status = HAL_I2C_Master_Receive(&hi2c1, addrs, &commando, 1, 500);
+    if (status == HAL_OK)
+    {
+      status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 500);
     }
 
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     printf("buf: %3d \r\n", buf);
+    commando = (command_t)buf;
     int x = 0;
     while (x < 50)
     {
       for (uint8_t col = 0; col < led_matrix_width; col++)
       {
-        //Reset de rijen
+        // Reset de rijen
         for (uint8_t col1 = 0; col1 < led_matrix_height; col1++)
         {
           HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
@@ -231,33 +234,36 @@ int main()
       x++;
     }
 
-    //HAL_Delay(500);
+    // HAL_Delay(500);
 
     led_matrix[posy][posx] = 0;
 
     // Ontvang data
-if(commando == RL)
-    posx--;
+    if (commando == RL && prevCommando == NONE)
+      posx--;
 
-    if(commando == LR)
-    posx++;
-    
-    
+    if (commando == LR && prevCommando == NONE)
+      posx++;
+
     if (posx >= led_matrix_width)
       posx = 0;
+    if (posx < 0)
+      posx = led_matrix_width-1;
 
-    if (commando == UD)
+    if (commando == UD && prevCommando == NONE )
       posy++;
 
-    if (commando == DU)
+    if (commando == DU && prevCommando == NONE)
       posy--;
 
     if (posy >= led_matrix_height)
       posy = 0;
+    if (posy < 0)
+      posy = led_matrix_height-1;
 
     led_matrix[posy][posx] = 1;
 
-    commando = NONE;
+    prevCommando = commando;
   }
 }
 
