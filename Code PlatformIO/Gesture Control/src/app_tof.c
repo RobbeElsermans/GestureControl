@@ -547,7 +547,7 @@ extern "C"
 		HAL_I2C_Slave_Transmit(&hi2c3, &commando, sizeof(commando), 50);
 	}
 
-	void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+__weak void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	{
 		if (GPIO_Pin == GPIOI_1_Pin && isReadySensor)
 		{

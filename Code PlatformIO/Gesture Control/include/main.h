@@ -110,7 +110,7 @@ void Error_Handler(void);
 #define GPIOI_3_Pin GPIO_PIN_9
 #define GPIOI_3_Port GPIOA
 
-#define GPIOI_4_Pin GPIO_PIN_9
+#define GPIOI_4_Pin GPIO_PIN_8
 #define GPIOI_4_Port GPIOA
 
 
