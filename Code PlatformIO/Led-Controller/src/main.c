@@ -1,50 +1,82 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 
-#include <stdio.h>		//Om printf te gebruiken
-#include <stdlib.h>		//Bibliotheken om met string conversies te werken
-#include <string.h>		//Om met strings te kunnen werken
-#include "stdbool.h" 	//Nodig om bool te kunnen gebruiken
-#include  <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
-#include  <errno.h>
+#include <stdio.h>      //Om printf te gebruiken
+#include <stdlib.h>     //Bibliotheken om met string conversies te werken
+#include <string.h>     //Om met strings te kunnen werken
+#include "stdbool.h"    //Nodig om bool te kunnen gebruiken
+#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
+#include <errno.h>
 
 I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef huart2;
 
-#define led_matrix_width 5    // 0->4
-#define led_matrix_height 7   // 0->6
+#define led_matrix_width 5  // 0->4
+#define led_matrix_height 7 // 0->6
 
-int led_matrix[led_matrix_height][led_matrix_width] = 
+int led_matrix[led_matrix_height][led_matrix_width] =
     {
-		{0,0,0,0,0},
-		{0,0,0,0,0},
-		{0,0,0,0,0},
-		{0,0,0,0,0},
-		{0,0,0,0,0},
-		{0,0,0,0,0},
-		{0,0,0,0,0}
-    };
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}};
+
+int led_rows[led_matrix_height][2] = {
+    {GPIOC, GPIO_PIN_2},
+    {GPIOC, GPIO_PIN_0},
+    {GPIOC, GPIO_PIN_11},
+    {GPIOC, GPIO_PIN_13},
+    {GPIOA, GPIO_PIN_4},
+    {GPIOC, GPIO_PIN_1},
+    {GPIOB, GPIO_PIN_0}};
+
+int led_columns[led_matrix_width][2] = {
+    {GPIOC, GPIO_PIN_10},
+    {GPIOC, GPIO_PIN_12},
+    {GPIOC, GPIO_PIN_3},
+    {GPIOA, GPIO_PIN_15},
+    {GPIOB, GPIO_PIN_7}};
+
+int posx = 0;
+int posy = 0;
+
+	enum commands
+	{
+		DIM = 0x25,
+		RL = 0x22,
+		LR = 0x21,
+		UD = 0x23,
+		DU = 0x24,
+		NONE = 0x10
+	};
+
+	typedef enum commands command_t;
+
+	command_t commando = NONE;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -54,11 +86,10 @@ static void MX_I2C1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 
-
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main()
 {
   /* MCU Configuration--------------------------------------------------------*/
@@ -77,40 +108,175 @@ int main()
   HAL_StatusTypeDef status = HAL_ERROR;
   uint8_t buf = 0;
   uint8_t counter = 0;
-  uint8_t addrs = 0x20<<1;
+  uint8_t addrs = 0x20 << 1;
 
+  // int A[led_matrix_height][(led_matrix_width * 3) + 3] =
+  //     {
+  //         {1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0},
+  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
+  //         {1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0},
+  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0},
+  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0},
+  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
+  //         {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0}};
+
+  for (uint8_t row = 0; row < led_matrix_height; row++)
+  {
+    HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 0);
+  }
+  for (uint8_t col = 0; col < led_matrix_width; col++)
+  {
+    HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
+  }
+  // while (1)
+  // {
+  // for (uint8_t row = 0; row < led_matrix_height; row++)
+  // {
+  //   for (uint8_t col = 0; col < led_matrix_width; col++)
+  //   {
+
+  //     for (uint8_t row1 = 0; row1 < led_matrix_height; row1++)
+  //     {
+  //       HAL_GPIO_WritePin(led_rows[row1][0], led_rows[row1][1], 1);
+  //     }
+  //     for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
+  //     {
+  //       HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
+  //     }
+
+  //     HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 0);
+  //     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+  //     HAL_Delay(100);
+  //   }
+  // }
+  // for (uint8_t col = 0; col < led_matrix_width; col++)
+  // {
+  //   for (uint8_t row = 0; row < led_matrix_height; row++)
+  //   {
+
+  //     for (uint8_t col1 = 0; col1 < led_matrix_height; col1++)
+  //     {
+  //       HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
+  //     }
+  //     for (uint8_t row1 = 0; row1 < led_matrix_height; row1++)
+  //     {
+  //       HAL_GPIO_WritePin(led_rows[row1][0], led_rows[row1][1], 1);
+  //     }
+
+  //     HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 0);
+  //     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+  //     HAL_Delay(100);
+  //   }
+  // }
+  // while (1)
+  //   for (uint8_t i = 0; i < ((led_matrix_width * 3) + 3); i++)
+  //   {
+  //     int x = 0;
+  //     while (x < 20)
+  //     {
+  //       for (uint8_t col = 0; col < led_matrix_width; col++)
+  //       {
+  //         // Zet de rij klaar
+  //         for (uint8_t row = 0; row < led_matrix_height; row++)
+  //         {
+  //           HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], !A[row][col + i]);
+  //         }
+
+  //         // voer de rij door
+  //         HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+  //         HAL_Delay(1);
+  //         HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
+  //       }
+  //       x++;
+  //     }
+
+  //   }
+  //   while (1)
+  //     ;
+  // }
   while (1)
   {
-	  counter++;
+    counter++;
 
-	  status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, HAL_MAX_DELAY);
+    // I2C stuff
+    status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, 500);
 
-	  if(status == HAL_OK){
-		  status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, HAL_MAX_DELAY);
-	  }
+    if(status == HAL_OK){
+      status = HAL_I2C_Master_Receive(&hi2c1, addrs, &commando, 1, 500);
+    }
 
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	  printf("buf: %3d \r\n", buf);
-	  HAL_Delay(2000);
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    printf("buf: %3d \r\n", buf);
+    int x = 0;
+    while (x < 50)
+    {
+      for (uint8_t col = 0; col < led_matrix_width; col++)
+      {
+        //Reset de rijen
+        for (uint8_t col1 = 0; col1 < led_matrix_height; col1++)
+        {
+          HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
+        }
+        // Zet de kolommen klaar
+        for (uint8_t row = 0; row < led_matrix_height; row++)
+        {
+          HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], !led_matrix[row][col]);
+        }
+
+        // voer de rij door
+        HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+        HAL_Delay(1);
+        // HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
+      }
+      x++;
+    }
+
+    //HAL_Delay(500);
+
+    led_matrix[posy][posx] = 0;
+
+    // Ontvang data
+if(commando == RL)
+    posx--;
+
+    if(commando == LR)
+    posx++;
+    
+    
+    if (posx >= led_matrix_width)
+      posx = 0;
+
+    if (commando == UD)
+      posy++;
+
+    if (commando == DU)
+      posy--;
+
+    if (posy >= led_matrix_height)
+      posy = 0;
+
+    led_matrix[posy][posx] = 1;
+
+    commando = NONE;
   }
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -125,9 +291,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -140,10 +305,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C1_Init(void)
 {
   hi2c1.Instance = I2C1;
@@ -162,10 +327,10 @@ static void MX_I2C1_Init(void)
 }
 
 /**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART2_UART_Init(void)
 {
   huart2.Instance = USART2;
@@ -183,10 +348,10 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -198,45 +363,70 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(B1_GPIO_Port, B1_Pin, GPIO_PIN_RESET);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13 | GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : B1_Pin */
-  GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1 | LD2_Pin | GPIO_PIN_15, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_7, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PC13 PC0 PC1 PC2
+                           PC3 PC10 PC11 PC12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13 | GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PA1 PAPin PA15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1 | LD2_Pin | GPIO_PIN_15 | GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB0 PB7 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_7;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : GPIOD Matrix */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 4 */
 int _write(int file, char *data, int len)
 {
-   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
-   {
-      errno = EBADF;
-      return -1;
-   }
+  if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
+  {
+    errno = EBADF;
+    return -1;
+  }
 
-   // arbitrary timeout 1000
-   HAL_StatusTypeDef status =
-      HAL_UART_Transmit(&huart2, (uint8_t*)data, len, 1000);
+  // arbitrary timeout 1000
+  HAL_StatusTypeDef status =
+      HAL_UART_Transmit(&huart2, (uint8_t *)data, len, 1000);
 
-   // return # of bytes written - as best we can tell
-   return (status == HAL_OK ? len : 0);
+  // return # of bytes written - as best we can tell
+  return (status == HAL_OK ? len : 0);
 }
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* User can add his own implementation to report the HAL error return state */
@@ -246,14 +436,14 @@ void Error_Handler(void)
   }
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
@@ -262,4 +452,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-

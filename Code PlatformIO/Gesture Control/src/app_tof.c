@@ -208,16 +208,17 @@ extern "C"
 		while (1)
 		{
 			timerTicks = HAL_GetTick();
+			getResult(VL53L3A2_DEV_CENTER, Result);
 
-			if (!isReady && !HAL_GPIO_ReadPin(GPIOI_1_Port, GPIOI_1_Pin))
-			{
+			// if (!isReady && !HAL_GPIO_ReadPin(GPIOI_1_Port, GPIOI_1_Pin))
+			// {
 
-				//getResult(VL53L3A2_DEV_CENTER, Result);
-				//isReady = false;
+			// 	//getResult(VL53L3A2_DEV_CENTER, Result);
+			// 	//isReady = false;
 
-				VL53LX_ClearInterruptAndStartMeasurement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
-				HAL_Delay(2);
-			}
+			// 	VL53LX_ClearInterruptAndStartMeasurement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
+			// 	HAL_Delay(2);
+			// }
 
 			if(isReady)
 			isReady = false;
@@ -489,7 +490,8 @@ extern "C"
 			Profile.EnableSignal = 1;  /* Enable: 1, Disable: 0 */
 
 			VL53L3A2_RANGING_SENSOR_ConfigProfile(sensor, &Profile);
-			status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+			//status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+			status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_BLOCKING_CONTINUOUS);
 		}
 		else
 		{
@@ -549,9 +551,12 @@ extern "C"
 	{
 		if (GPIO_Pin == GPIOI_1_Pin && isReadySensor)
 		{
-			HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-			isReady = true;
-			getResult(VL53L3A2_DEV_CENTER, Result);
+			//HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+			//isReady = true;
+			//getResult(VL53L3A2_DEV_CENTER, Result);
+			
+			
+			
 			// // getResult(VL53L3A2_DEV_CENTER, Result);
 			// // VL53LX_ClearInterruptAndStartMeasurement(VL53L3A2_RANGING_SENSOR_CompObj[VL53L3A2_DEV_CENTER]);
 			// int32_t ret;
