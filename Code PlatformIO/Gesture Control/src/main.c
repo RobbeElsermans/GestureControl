@@ -58,6 +58,8 @@ static void MX_I2C3_Init(void);
 // INterrupt testen
 RANGING_SENSOR_Result_t volatile Result[RANGING_SENSOR_INSTANCES_NBR];
 bool volatile isStarted = false;
+bool volatile isReady1 = false;
+bool volatile isReady3 = false;
 
 /* Private user code ---------------------------------------------------------*/
 
@@ -108,6 +110,13 @@ int main(void)
       // MX_TOF_Process(&htim3, &hi2c3);
 
       // Interrupt testen
+
+      unsigned long timer = 0;
+      unsigned long timerTotal = 0;
+      int totalTime = 0;
+
+      timer = HAL_GetTick();
+
       RANGING_SENSOR_ProfileConfig_t Profile;
       // Sensor starten
       Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
@@ -117,15 +126,57 @@ int main(void)
       Profile.EnableSignal = 1;  /* Enable: 1, Disable: 0 */
 
       VL53L3A2_RANGING_SENSOR_ConfigProfile(VL53L3A2_DEV_CENTER, &Profile);
-      // status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      HAL_Delay(4);
+      VL53L3A2_RANGING_SENSOR_ConfigProfile(VL53L3A2_DEV_TOP, &Profile);
+      HAL_Delay(4);
+      //  status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS);
       VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_CENTER, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      while (HAL_GetTick() - timer < 2000)
+        ;
+      timer = HAL_GetTick();
 
-      isStarted = true;
+      VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_TOP, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      while (HAL_GetTick() - timer < 2000)
+        ;
+      timer = HAL_GetTick();
+      // HAL_Delay(4);
+
+      // isStarted = true;
 
       while (1)
       {
-        printf("ranging 1: %5d \r\n", Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0]);
-        HAL_Delay(500);
+        timerTotal = HAL_GetTick();
+        if (isReady1)
+        {
+          // HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+          isReady1 = false;
+          VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
+
+          // Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
+          if ((long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0] >= 17760520)
+          {
+            HAL_Delay(2);
+            VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
+          }
+        }
+        if (isReady3)
+        {
+          VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_TOP, &Result[VL53L3A2_DEV_TOP]);
+
+          // Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
+          if ((long)Result[VL53L3A2_DEV_TOP].ZoneResult[0].Distance[0] >= 17760520)
+          {
+            HAL_Delay(2);
+            VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_TOP, &Result[VL53L3A2_DEV_TOP]);
+          }
+        }
+
+        if ((HAL_GetTick() - timer) >= 2000)
+        {
+          timer = HAL_GetTick();
+          printf("ranging 1: %5d \t ranging 3: %5d \t totalTime: %5d\r\n", Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0], Result[VL53L3A2_DEV_TOP].ZoneResult[0].Distance[0],totalTime);
+        }
+        totalTime = HAL_GetTick() - timerTotal; 
       }
     }
   }
@@ -517,20 +568,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(L_R_GPIO_Port, &GPIO_InitStruct);
 
   /* GPIO Interrupt : GPIOI_1*/
-  GPIO_InitStruct.Pin = GPIOI_1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOI_1_Port, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIOI_3_Pin;
+  GPIO_InitStruct.Pin = GPIOI_3_Pin|GPIOI_0_Pin|GPIOI_2_Pin|GPIOI_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOI_3_Port, &GPIO_InitStruct);
-
-  GPIO_InitStruct.Pin = GPIOI_4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOI_4_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin Output Level */
 
@@ -547,41 +589,24 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SMD3_Port, SMD3_Pin, GPIO_PIN_RESET);
   HAL_GPIO_WritePin(L_R_GPIO_Port, L_R_Pin, GPIO_PIN_RESET);
 
-  /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 
-  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  if (GPIO_Pin == GPIOI_1_Pin && isStarted == true)
+  if (GPIO_Pin == GPIOI_1_Pin)
+  {
+    isReady1 = true;
+  }
+  else if (GPIO_Pin == GPIOI_3_Pin)
   {
     // HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-
-    VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
-
-    // Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
-    if ((long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0] >= 17760520)
-    {
-      HAL_Delay(2);
-      VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
-    }
-  }
-  else if(GPIO_Pin == GPIOI_3_Pin && isStarted == true){
-  // HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-
-    VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_CENTER, &Result[VL53L3A2_DEV_CENTER]);
-
-    // Bug van 1ste meeting dat deze fout is (Een te hoge waarden)
-    if ((long)Result[VL53L3A2_DEV_TOP].ZoneResult[0].Distance[0] >= 17760520)
-    {
-      HAL_Delay(2);
-      VL53L3A2_RANGING_SENSOR_GetDistance(VL53L3A2_DEV_TOP, &Result[VL53L3A2_DEV_CENTER]);
-    }
+    isReady3 = true;
   }
 }
 
