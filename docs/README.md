@@ -101,8 +101,11 @@ Omdat de gegenereerde code in STM32CubeIDE wel heel handig is, heb ik het projec
 In onderstaande Miro sheets worden de pinouts weergegeven van zowel de MCU als de arduino header pinout
 
 
-PCB Pinout
+PCB Pinout F401
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_Iavc=/?moveToViewport=-1493,-812,2822,1560" frameBorder="0" scrolling="no" allowFullScreen></iframe>
+
+PCB Pinout F151
+<iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVOC73SG8=/?moveToViewport=-794,-502,1535,853" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
 Arduino Header pinout
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_cksw=/?moveToViewport=-1651,-1262,3867,2149" frameBorder="0" scrolling="no" allowFullScreen></iframe>
