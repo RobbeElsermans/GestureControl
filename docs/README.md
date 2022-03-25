@@ -26,6 +26,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Build & Upload](#build--upload)
 - [Hardware specificaties](#hardware-specificaties)
 - [LED Controller](#led-controller)
+- [Onderzoek](#onderzoek)
 
 ----
 
@@ -79,7 +80,7 @@ We lijsten in volgende tabel op wat we precies gebruikt hebben om onze hardware 
 
 <div style="color:black; background-color:white">
 
-<iframe src="./Hardware/ibom.html" title="BOM PCB1.2" height="1000"></iframe>
+<iframe src="./Hardware/ibom.html" title="BOM PCB0.3" height="1000"></iframe>
 </div>
 
 <a href="./Hardware/ibom.html" target="_blank">Hier</a>  de link om het op een aparte pagina te bekijken.
@@ -298,3 +299,5 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 * **0x25** -> Er is een hand op en neer aan het bewegen. Dit wordt gevolgd door een waarde van 10-bits groot. (0->1024)
 * **0x26** -> ... 
 
+# Onderzoek
+[link](Onderzoek.md)
