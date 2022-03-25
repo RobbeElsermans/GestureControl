@@ -217,11 +217,19 @@ void I2C3_EV_IRQHandler(void)
   */
 void EXTI4_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI4_IRQn 0 */
-
-  /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIOI_1_Pin);
-  /* USER CODE BEGIN EXTI4_IRQn 1 */
+}
 
-  /* USER CODE END EXTI4_IRQn 1 */
+void EXTI15_10_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI15_10_IRQn 0 */
+
+  /* USER CODE END EXTI15_10_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIOI_3_Pin);
+  HAL_GPIO_EXTI_IRQHandler(GPIOI_0_Pin);
+  HAL_GPIO_EXTI_IRQHandler(GPIOI_2_Pin);
+  HAL_GPIO_EXTI_IRQHandler(GPIOI_4_Pin);
+  /* USER CODE BEGIN EXTI15_10_IRQn 1 */
+
+  /* USER CODE END EXTI15_10_IRQn 1 */
 }

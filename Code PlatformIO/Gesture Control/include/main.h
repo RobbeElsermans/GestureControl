@@ -106,12 +106,23 @@ void Error_Handler(void);
 
 #define GPIOI_1_Pin GPIO_PIN_4
 #define GPIOI_1_Port GPIOA
+#define GPIOI_1_EXTI_IRQn EXTI4_IRQn
 
-#define GPIOI_3_Pin GPIO_PIN_9
-#define GPIOI_3_Port GPIOA
+#define GPIOI_3_Pin GPIO_PIN_12
+#define GPIOI_3_Port GPIOB
+#define GPIOI_3_EXTI_IRQn EXTI15_10_IRQn
 
-#define GPIOI_4_Pin GPIO_PIN_9
-#define GPIOI_4_Port GPIOA
+#define GPIOI_0_Pin GPIO_PIN_13
+#define GPIOI_0_Port GPIOB
+#define GPIOI_0_EXTI_IRQn EXTI15_10_IRQn
+
+#define GPIOI_2_Pin GPIO_PIN_14
+#define GPIOI_2_Port GPIOB
+#define GPIOI_2_EXTI_IRQn EXTI15_10_IRQn
+
+#define GPIOI_4_Pin GPIO_PIN_15
+#define GPIOI_4_Port GPIOB
+#define GPIOI_4_EXTI_IRQn EXTI15_10_IRQn
 
 
 #ifdef __cplusplus
