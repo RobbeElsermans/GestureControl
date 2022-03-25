@@ -129,10 +129,10 @@ int main(void)
       RANGING_SENSOR_ProfileConfig_t Profile;
       // Sensor starten
       Profile.RangingProfile = RS_MULTI_TARGET_MEDIUM_RANGE;
-      Profile.TimingBudget = 500;  /* 16 ms < TimingBudget < 500 ms */
-      Profile.Frequency = 0;     /* not necessary in simple ranging */
-      Profile.EnableAmbient = 1; /* Enable: 1, Disable: 0 */
-      Profile.EnableSignal = 1;  /* Enable: 1, Disable: 0 */
+      Profile.TimingBudget = 100; /* 16 ms < TimingBudget < 500 ms */
+      Profile.Frequency = 0;      /* not necessary in simple ranging */
+      Profile.EnableAmbient = 1;  /* Enable: 1, Disable: 0 */
+      Profile.EnableSignal = 1;   /* Enable: 1, Disable: 0 */
 
       VL53L3A2_RANGING_SENSOR_ConfigProfile(VL53L3A2_DEV_LEFT, &Profile);
       VL53L3A2_RANGING_SENSOR_ConfigProfile(VL53L3A2_DEV_CENTER, &Profile);
@@ -142,10 +142,15 @@ int main(void)
 
       //  status = VL53L3A2_RANGING_SENSOR_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS);
       VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_LEFT, VL53L3CX_MODE_ASYNC_CONTINUOUS);
-      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_RIGHT, VL53L3CX_MODE_ASYNC_CONTINUOUS);
-      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_CENTER, VL53L3CX_MODE_ASYNC_CONTINUOUS);
-      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_TOP, VL53L3CX_MODE_ASYNC_CONTINUOUS);
-      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_BOTTOM, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_RIGHT, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_CENTER, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_TOP, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_BOTTOM, VL53L3CX_MODE_ASYNC_CONTINUOUS);
+      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_LEFT, VL53L3CX_MODE_BLOCKING_CONTINUOUS);
+      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_RIGHT, VL53L3CX_MODE_BLOCKING_CONTINUOUS);
+      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_CENTER, VL53L3CX_MODE_BLOCKING_CONTINUOUS);
+      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_TOP, VL53L3CX_MODE_BLOCKING_CONTINUOUS);
+      // VL53L3A2_RANGING_SENSOR_Start(VL53L3A2_DEV_BOTTOM, VL53L3CX_MODE_BLOCKING_CONTINUOUS);
 
       timer = HAL_GetTick();
       // HAL_Delay(4);
@@ -155,12 +160,16 @@ int main(void)
       {
         timerTotal = HAL_GetTick();
 
-        //getResults(VL53L3A2_DEV_LEFT, Result);
+        // getResults(VL53L3A2_DEV_LEFT, Result);
+        // getResults(VL53L3A2_DEV_CENTER, Result);
+        // getResults(VL53L3A2_DEV_RIGHT, Result);
+        // getResults(VL53L3A2_DEV_TOP, Result);
+        // getResults(VL53L3A2_DEV_BOTTOM, Result);
         checkSensorReady(isStarted0, isReady0, VL53L3A2_DEV_LEFT, Result);
-        // checkSensorReady(isStarted1, isReady1, VL53L3A2_DEV_CENTER, Result);
-        // checkSensorReady(isStarted2, isReady2, VL53L3A2_DEV_RIGHT, Result);
-        // checkSensorReady(isStarted3, isReady3, VL53L3A2_DEV_TOP, Result);
-        // checkSensorReady(isStarted4, isReady4, VL53L3A2_DEV_BOTTOM, Result);
+        checkSensorReady(isStarted1, isReady1, VL53L3A2_DEV_CENTER, Result);
+        checkSensorReady(isStarted2, isReady2, VL53L3A2_DEV_RIGHT, Result);
+        checkSensorReady(isStarted3, isReady3, VL53L3A2_DEV_TOP, Result);
+        checkSensorReady(isStarted4, isReady4, VL53L3A2_DEV_BOTTOM, Result);
 
         if ((HAL_GetTick() - timer) >= 2000)
         {
@@ -170,16 +179,16 @@ int main(void)
           int dis3 = Result[VL53L3A2_DEV_TOP].ZoneResult[0].Distance[0];
           int dis4 = Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Distance[0];
           timer = HAL_GetTick();
-          
-          printf("dis 0: %5ld \t dis 1: %5ld \t dis 2: %5ld \t dis 3: %5ld \t dis 4: %5ld \t totalTime: %5d\r\n", dis0, dis1,dis2,dis3,dis4, prevTotalTime);
+
+          printf("dis 0: %5ld \t dis 1: %5ld \t dis 2: %5ld \t dis 3: %5ld \t dis 4: %5ld \t totalTime: %5d\r\n", dis0, dis1, dis2, dis3, dis4, prevTotalTime);
           prevTotalTime = 0;
         }
         totalTime = HAL_GetTick() - timerTotal;
-        if(prevTotalTime < totalTime)
+        if (prevTotalTime < totalTime)
           prevTotalTime = totalTime;
-        
+
         HAL_GPIO_TogglePin(L_Y_GPIO_Port, L_Y_Pin);
-        //HAL_Delay(2);
+        // HAL_Delay(2);
       }
     }
   }
