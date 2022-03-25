@@ -1,20 +1,3 @@
-/* USER CODE BEGIN Header */
-/**
- ******************************************************************************
- * @file           : main.c
- * @brief          : Main program body
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -25,8 +8,8 @@
 #include <stdlib.h>     //Bibliotheken om met string conversies te werken
 #include <string.h>     //Om met strings te kunnen werken
 #include "stdbool.h"    //Nodig om bool te kunnen gebruiken
-#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
-#include <errno.h>
+#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI _wirte onderdeel
+#include <errno.h>      //_wirte onderdeel
 
 I2C_HandleTypeDef hi2c1;
 
@@ -85,16 +68,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_I2C1_Init(void);
 
-/* Private user code ---------------------------------------------------------*/
-
-/**
- * @brief  The application entry point.
- * @retval int
- */
 int main()
 {
-  /* MCU Configuration--------------------------------------------------------*/
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -111,90 +86,21 @@ int main()
   uint8_t counter = 0;
   uint8_t addrs = 0x20 << 1;
 
-  // int A[led_matrix_height][(led_matrix_width * 3) + 3] =
-  //     {
-  //         {1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0},
-  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
-  //         {1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0},
-  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0},
-  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0},
-  //         {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
-  //         {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0}};
-
   for (uint8_t row = 0; row < led_matrix_height; row++)
   {
-    HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 0);
+    HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 1);
   }
+  for (uint8_t col = 0; col < led_matrix_width; col++)
+  {
+    HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+    HAL_Delay(200);
+  }
+HAL_Delay(200);
   for (uint8_t col = 0; col < led_matrix_width; col++)
   {
     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
   }
-  // while (1)
-  // {
-  // for (uint8_t row = 0; row < led_matrix_height; row++)
-  // {
-  //   for (uint8_t col = 0; col < led_matrix_width; col++)
-  //   {
 
-  //     for (uint8_t row1 = 0; row1 < led_matrix_height; row1++)
-  //     {
-  //       HAL_GPIO_WritePin(led_rows[row1][0], led_rows[row1][1], 1);
-  //     }
-  //     for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
-  //     {
-  //       HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
-  //     }
-
-  //     HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 0);
-  //     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
-  //     HAL_Delay(100);
-  //   }
-  // }
-  // for (uint8_t col = 0; col < led_matrix_width; col++)
-  // {
-  //   for (uint8_t row = 0; row < led_matrix_height; row++)
-  //   {
-
-  //     for (uint8_t col1 = 0; col1 < led_matrix_height; col1++)
-  //     {
-  //       HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
-  //     }
-  //     for (uint8_t row1 = 0; row1 < led_matrix_height; row1++)
-  //     {
-  //       HAL_GPIO_WritePin(led_rows[row1][0], led_rows[row1][1], 1);
-  //     }
-
-  //     HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 0);
-  //     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
-  //     HAL_Delay(100);
-  //   }
-  // }
-  // while (1)
-  //   for (uint8_t i = 0; i < ((led_matrix_width * 3) + 3); i++)
-  //   {
-  //     int x = 0;
-  //     while (x < 20)
-  //     {
-  //       for (uint8_t col = 0; col < led_matrix_width; col++)
-  //       {
-  //         // Zet de rij klaar
-  //         for (uint8_t row = 0; row < led_matrix_height; row++)
-  //         {
-  //           HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], !A[row][col + i]);
-  //         }
-
-  //         // voer de rij door
-  //         HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
-  //         HAL_Delay(1);
-  //         HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
-  //       }
-  //       x++;
-  //     }
-
-  //   }
-  //   while (1)
-  //     ;
-  // }
   while (1)
   {
     counter++;
@@ -229,13 +135,9 @@ int main()
         // voer de rij door
         HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
         HAL_Delay(1);
-        // HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
       }
       x++;
     }
-
-    // HAL_Delay(500);
-
     led_matrix[posy][posx] = 0;
 
     // Ontvang data

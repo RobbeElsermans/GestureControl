@@ -18,7 +18,7 @@ static bool hasTop = false;
 static bool hasCenter = false;
 static bool hasBottom = false;
 
-static int maxDistanceObject = 500;
+static int maxDistanceObject = 300;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
 static int timerMeasurmentTimeout = 1200; // 1 seconden
@@ -38,17 +38,17 @@ bool CheckGestureUD(bool *_gestureUD, bool *_object, RANGING_SENSOR_Result_t *Re
         int dis1 = (int)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
         int dis4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Distance[0];
 
-        if ((dis3 < maxDistanceObject) && (dis4 > maxDistanceObject) && (sta3 == 0) && !hasBottom && !hasCenter &&  !hasTop) // Sensor top
+        if ((dis3 < maxDistanceObject) && (dis4 > maxDistanceObject) && (sta3 == 0) && !hasBottom && !hasCenter &&  !hasTop && dis3 != 0) // Sensor top
         {
             hasTop = true;
             //printf("Bottom \r\n");
         }
-        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && !hasBottom && !hasCenter && hasTop) // Sensor center
+        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && !hasBottom && !hasCenter && hasTop && dis1 != 0) // Sensor center
         {
             hasCenter = true;
             //printf("center \r\n");
         }
-        else if ((dis4 < maxDistanceObject) && (sta4 == 0) && !hasBottom && hasCenter && hasTop) // Sensor top
+        else if ((dis4 < maxDistanceObject) && (sta4 == 0) && !hasBottom && hasCenter && hasTop && dis4 != 0) // Sensor top
         {
             hasBottom = true;
             //printf("Top \r\n");
