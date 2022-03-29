@@ -322,7 +322,6 @@ static void MX_I2C3_Init(void)
  */
 static void MX_TIM3_Init(void)
 {
-
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
