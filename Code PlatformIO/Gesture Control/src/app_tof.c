@@ -213,6 +213,7 @@ extern "C"
 
 		// I2C slave stuff
 		HAL_StatusTypeDef status = HAL_ERROR;
+		
 
 		start_sensor(VL53L3A2_DEV_CENTER);
 

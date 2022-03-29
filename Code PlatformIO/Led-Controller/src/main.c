@@ -95,7 +95,7 @@ int main()
     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
     HAL_Delay(200);
   }
-HAL_Delay(200);
+  HAL_Delay(200);
   for (uint8_t col = 0; col < led_matrix_width; col++)
   {
     HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
@@ -106,38 +106,38 @@ HAL_Delay(200);
     counter++;
 
     // I2C stuff
-    status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, 500);
+    status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, 100);
 
     if (status == HAL_OK)
     {
-      status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 500);
+      status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
     }
 
     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     printf("buf: %3d \r\n", buf);
     commando = (command_t)buf;
-    int x = 0;
-    while (x < 50)
+    // int x = 0;
+    // while (x < 50)
+    // {
+    for (uint8_t col = 0; col < led_matrix_width; col++)
     {
-      for (uint8_t col = 0; col < led_matrix_width; col++)
+      // Reset de rijen als commando veranderd is
+      for (uint8_t col1 = 0; col1 < led_matrix_height; col1++)
       {
-        // Reset de rijen
-        for (uint8_t col1 = 0; col1 < led_matrix_height; col1++)
-        {
-          HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
-        }
-        // Zet de kolommen klaar
-        for (uint8_t row = 0; row < led_matrix_height; row++)
-        {
-          HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], !led_matrix[row][col]);
-        }
-
-        // voer de rij door
-        HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
-        HAL_Delay(1);
+        HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
       }
-      x++;
+      // Zet de kolommen klaar
+      for (uint8_t row = 0; row < led_matrix_height; row++)
+      {
+        HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], led_matrix[row][col]);
+      }
+
+      // voer de rij door
+      HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+      HAL_Delay(1);
     }
+    //   x++;
+    // }
     led_matrix[posy][posx] = 0;
 
     // Ontvang data
@@ -150,9 +150,9 @@ HAL_Delay(200);
     if (posx >= led_matrix_width)
       posx = 0;
     if (posx < 0)
-      posx = led_matrix_width-1;
+      posx = led_matrix_width - 1;
 
-    if (commando == UD && prevCommando == NONE )
+    if (commando == UD && prevCommando == NONE)
       posy++;
 
     if (commando == DU && prevCommando == NONE)
@@ -161,7 +161,7 @@ HAL_Delay(200);
     if (posy >= led_matrix_height)
       posy = 0;
     if (posy < 0)
-      posy = led_matrix_height-1;
+      posy = led_matrix_height - 1;
 
     led_matrix[posy][posx] = 1;
 

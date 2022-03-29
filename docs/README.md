@@ -106,7 +106,7 @@ PCB Pinout F401
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_Iavc=/?moveToViewport=-1493,-812,2822,1560" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
 PCB Pinout F151
-<iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVOC73SG8=/?moveToViewport=-794,-502,1535,853" frameBorder="0" scrolling="no" allowFullScreen></iframe>
+<iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOC73SG8=/?moveToViewport=-794,-502,1535,853" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
 Arduino Header pinout
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_cksw=/?moveToViewport=-1651,-1262,3867,2149" frameBorder="0" scrolling="no" allowFullScreen></iframe>
@@ -291,7 +291,7 @@ Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 
 In bovenstaande foto is te zien hoe we de Gesture Controller (Systeem B) aansluiten met de LED Controller. De communicatie verloopt over I²C waarbij de LED Controller de master is en de Gesture Controller de slave. 
 
-Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1_Robbe_Elsermans.pdf" download>download</a>) zal de master een commando versturen *(0x01)* waarop de slave een aantal commando's kan terug sturen.
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de master een commando versturen *(0x01)* waarop de slave een aantal commando's kan terug sturen.
 
 * **0x10** -> Geen object aanwezig
 * **0x20** -> Een object aanwezig
@@ -304,7 +304,7 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 
 De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een 2de NUCLEO_F401RE die zich gedraagt als LED-Controller.
 
-Hieronder zal ik de werking code uitleggen die [hier](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/Led-Controller/src/main.c) te vinden is. 
+Hieronder zal ik de werking van de code uitleggen die [hier](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/Led-Controller/src/main.c) te vinden is. 
 
 We starten in de code bij de ```int main()``` functie waar alles wordt opgestart van de MCU. Ook resetten we alle rijen en kolommen van onze led matrix gedefiniëerd bovenaan.
 

@@ -10,18 +10,20 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
 
 - [Onderzoek](#onderzoek)
 - [Inhoudsopgaven](#inhoudsopgaven)
-  - [plaats sensoren](#plaats-sensoren)
-  - [Snelheid Metingen 1 sensor](#snelheid-metingen-1-sensor)
+- [plaats sensoren](#plaats-sensoren)
+- [Snelheid Metingen](#snelheid-metingen)
+  - [Eén sensor](#eén-sensor)
     - [BLOCKING_CONTINUOUS](#blocking_continuous)
     - [ASYNC_CONTINUOUS](#async_continuous)
-  - [Snelheid Metingen 5 sensoren](#snelheid-metingen-5-sensoren)
+  - [Vijf sensoren](#vijf-sensoren)
     - [BLOCKING_CONTINUOUS](#blocking_continuous-1)
     - [ASYNC_CONTINUOUS](#async_continuous-1)
+- [Coverglas](#coverglas)
 
 
 ----
 
-## plaats sensoren
+# plaats sensoren
 
 Dit project is ontworpen om te reageren op bewegingen gegeven door een gebruiker. Omdat dit meestal een hand zal zijn, moet er gekeken worden hoe de sensoren juist t.o.v. elkaar moeten staan (kruis, ster, cirkel, ...).
 
@@ -58,7 +60,8 @@ Dat uiteindelijk uitkomt op dit:
 De printplaat waarop de Nucleo-F401RE bevestigd is, wordt op een houten plaat bevestigd zodat deze verticaal staat. Op deze printplaat staan ook nog extra led's en drukknoppen om de analyse wat zichtbaar te maken.
 
 
-## Snelheid Metingen 1 sensor
+# Snelheid Metingen 
+## Eén sensor
 
 ### BLOCKING_CONTINUOUS
 
@@ -186,9 +189,9 @@ while (1)
 
 Voor onze applicatie is snelheid van metingen belangrijk zodat de user hierdoor geen hinder door ondervind.
 
-## Snelheid Metingen 5 sensoren
+## Vijf sensoren
 
-Omdat ons systeem met 5 sensoren werkt zullen we dit ook even onderzoeken of dat we wel degelijk met interrupts de snelheid verhogen of niet. Idem als hierboven late we eerst de terminal screenshots zien in modus *BLOCKING_CONTINUOUS* en nadien de modus *ASYNC_CONTINUOUS* die met interrupts werkt.
+Omdat ons systeem met 5 sensoren werkt zullen we dit ook even onderzoeken of dat we wel degelijk met interrupts de snelheid verhogen of niet. Idem als hierboven laten we eerst de terminal screenshots zien in modus *BLOCKING_CONTINUOUS* en nadien de modus *ASYNC_CONTINUOUS* die met interrupts werkt.
 
 ### BLOCKING_CONTINUOUS
 
@@ -298,3 +301,7 @@ while (1)
 We kunnen concluderen dat snelheid niet het beste is wanneer we met meerdere sensoren werken. We gaan een balans moeten zoeken tussen de snelheid van het meten en de snelheid van verwerken.
 
 We nemen hier 100 als waarde voor *TimingBudget* wat ons een software delay geeft van +-60ms.
+
+# Coverglas
+
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder calibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
