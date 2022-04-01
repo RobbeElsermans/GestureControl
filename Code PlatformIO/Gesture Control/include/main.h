@@ -33,8 +33,12 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 
+#define BREADBOARD
+
 #define DEBUGGING
 
+
+#ifdef BREADBOARD
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 
@@ -124,6 +128,22 @@ void Error_Handler(void);
 #define GPIOI_4_Port GPIOB
 #define GPIOI_4_EXTI_IRQn EXTI15_10_IRQn
 
+#else
+#define LED_0_Pin GPIO_PIN_10
+#define LED_0_Port GPIOB
+
+#define LED_1_Pin GPIO_PIN_4
+#define LED_1_Port GPIOB
+
+#define LED_2_Pin GPIO_PIN_5
+#define LED_2_Port GPIOB
+
+#define LED_3_Pin GPIO_PIN_7
+#define LED_3_Port GPIOA
+
+#define LED_4_Pin GPIO_PIN_10
+#define LED_4_Port GPIOA
+#endif
 
 #ifdef __cplusplus
 }
