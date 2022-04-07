@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stm32f3xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,55 +57,42 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define SW_2_Pin GPIO_PIN_0
-#define SW_2_GPIO_Port GPIOC
-#define SW_1_Pin GPIO_PIN_1
-#define SW_1_GPIO_Port GPIOC
-#define XSHUT_1_Pin GPIO_PIN_0
-#define XSHUT_1_GPIO_Port GPIOA
-#define XSHUT_2_Pin GPIO_PIN_1
-#define XSHUT_2_GPIO_Port GPIOA
-#define USART_TX_Pin GPIO_PIN_2
-#define USART_TX_GPIO_Port GPIOA
-#define USART_RX_Pin GPIO_PIN_3
-#define USART_RX_GPIO_Port GPIOA
-#define XSHUT_3_Pin GPIO_PIN_4
-#define XSHUT_3_GPIO_Port GPIOA
-#define GPIOI_4_Pin GPIO_PIN_5
-#define GPIOI_4_GPIO_Port GPIOA
-#define GPIOI_4_EXTI_IRQn EXTI9_5_IRQn
-#define XSHUT_0_Pin GPIO_PIN_6
-#define XSHUT_0_GPIO_Port GPIOA
+#define BUCK5V_EN_Pin GPIO_PIN_13
+#define BUCK5V_EN_GPIO_Port GPIOC
+#define XSHUT_0_Pin GPIO_PIN_0
+#define XSHUT_0_GPIO_Port GPIOC
+#define XSHUT_1_Pin GPIO_PIN_1
+#define XSHUT_1_GPIO_Port GPIOC
+#define XSHUT_2_Pin GPIO_PIN_2
+#define XSHUT_2_GPIO_Port GPIOC
+#define XSHUT_3_Pin GPIO_PIN_3
+#define XSHUT_3_GPIO_Port GPIOC
+#define LED_0_Pin GPIO_PIN_0
+#define LED_0_GPIO_Port GPIOA
+#define LED_1_Pin GPIO_PIN_1
+#define LED_1_GPIO_Port GPIOA
+#define LED_2_Pin GPIO_PIN_6
+#define LED_2_GPIO_Port GPIOA
 #define LED_3_Pin GPIO_PIN_7
 #define LED_3_GPIO_Port GPIOA
-#define XSHUT_4_Pin GPIO_PIN_0
-#define XSHUT_4_GPIO_Port GPIOB
-#define LED_0_Pin GPIO_PIN_10
-#define LED_0_GPIO_Port GPIOB
-#define GPIOI_2_Pin GPIO_PIN_7
-#define GPIOI_2_GPIO_Port GPIOC
-#define GPIOI_2_EXTI_IRQn EXTI9_5_IRQn
-#define GPIOI_0_Pin GPIO_PIN_8
-#define GPIOI_0_GPIO_Port GPIOC
-#define GPIOI_0_EXTI_IRQn EXTI9_5_IRQn
-#define GPIOI_1_Pin GPIO_PIN_9
-#define GPIOI_1_GPIO_Port GPIOA
-#define GPIOI_1_EXTI_IRQn EXTI9_5_IRQn
-#define LED_4_Pin GPIO_PIN_10
-#define LED_4_GPIO_Port GPIOA
-#define TMS_Pin GPIO_PIN_13
-#define TMS_GPIO_Port GPIOA
-#define TCK_Pin GPIO_PIN_14
-#define TCK_GPIO_Port GPIOA
-#define SWO_Pin GPIO_PIN_3
-#define SWO_GPIO_Port GPIOB
-#define LED_1_Pin GPIO_PIN_4
-#define LED_1_GPIO_Port GPIOB
-#define LED_2_Pin GPIO_PIN_5
-#define LED_2_GPIO_Port GPIOB
-#define GPIOI_3_Pin GPIO_PIN_6
+#define XSHUT_4_Pin GPIO_PIN_4
+#define XSHUT_4_GPIO_Port GPIOC
+#define LED_4_Pin GPIO_PIN_0
+#define LED_4_GPIO_Port GPIOB
+#define SW_1_Pin GPIO_PIN_1
+#define SW_1_GPIO_Port GPIOB
+#define SW_2_Pin GPIO_PIN_2
+#define SW_2_GPIO_Port GPIOB
+#define GPIOI_0_Pin GPIO_PIN_12
+#define GPIOI_0_GPIO_Port GPIOB
+#define GPIOI_1_Pin GPIO_PIN_13
+#define GPIOI_1_GPIO_Port GPIOB
+#define GPIOI_2_Pin GPIO_PIN_14
+#define GPIOI_2_GPIO_Port GPIOB
+#define GPIOI_3_Pin GPIO_PIN_15
 #define GPIOI_3_GPIO_Port GPIOB
-#define GPIOI_3_EXTI_IRQn EXTI9_5_IRQn
+#define GPIOI_4_Pin GPIO_PIN_6
+#define GPIOI_4_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
