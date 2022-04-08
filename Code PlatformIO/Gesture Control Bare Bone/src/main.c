@@ -88,12 +88,12 @@ int main(void)
 
   for (uint8_t i = 0; i < 5; i++)
   {
-    sensors[i]->IO.Init = &BSP_I2C1_Init;
-    sensors[i]->IO.DeInit = &BSP_I2C1_DeInit;
-    sensors[i]->IO.GetTick = &BSP_GetTick;
-    sensors[i]->IO.ReadReg = &BSP_I2C1_Recv;
-    sensors[i]->IO.WriteReg = &BSP_I2C1_Send;
-    sensors[i]->IO.Address = 0x50 + i;
+    sensors[i]->IO.Init = BSP_I2C1_Init;
+    sensors[i]->IO.DeInit = BSP_I2C1_DeInit;
+    sensors[i]->IO.GetTick = BSP_GetTick;
+    sensors[i]->IO.ReadReg = BSP_I2C1_Recv;
+    sensors[i]->IO.WriteReg = BSP_I2C1_Send;
+    sensors[i]->IO.Address = 0x52;
   }
 
   // De sensoren allemaal afzetten
@@ -105,7 +105,8 @@ int main(void)
 
   // 1 voor 1 opzetten en adress toewijzigen
   HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, 1);
-  VL53L3CX_SetAddress(sensors[0], sensors[0]->IO.Address);
+  VL53L3CX_SetAddress(sensors[0], 0x53);
+  sensors[0]->IO.Address = 0x53;
 
   VL53L3CX_Init(sensors[0]);
 

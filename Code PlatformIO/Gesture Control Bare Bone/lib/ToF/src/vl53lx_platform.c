@@ -46,12 +46,21 @@ unsigned char SPI2C_Buffer[256];
 static VL53LX_Error VL53LX_Delay(VL53LX_DEV Dev, uint32_t Delay);
 
 int _I2CWrite(VL53LX_DEV Dev, uint8_t *pdata, uint32_t count) {
-	return Dev->IO.WriteReg(Dev->IO.Address, pdata, count);
+  int ret = BSP_I2C1_Send(Dev->IO.Address, pdata, count);
+	return ret;
 }
 
 int _I2CRead(VL53LX_DEV Dev, uint8_t *pdata, uint32_t count) {
-	return Dev->IO.ReadReg(Dev->IO.Address, pdata, count);
+	return BSP_I2C1_Recv(Dev->IO.Address, pdata, count);
 }
+
+// int _I2CWrite(VL53LX_DEV Dev, uint8_t *pdata, uint32_t count) {
+// 	return Dev->IO.WriteReg(Dev->IO.Address, pdata, count);
+// }
+
+// int _I2CRead(VL53LX_DEV Dev, uint8_t *pdata, uint32_t count) {
+// 	return Dev->IO.ReadReg(Dev->IO.Address, pdata, count);
+// }
 
 VL53LX_Error VL53LX_WriteMulti(VL53LX_DEV Dev, uint16_t index, uint8_t *pdata, uint32_t count) {
     int status_int;
