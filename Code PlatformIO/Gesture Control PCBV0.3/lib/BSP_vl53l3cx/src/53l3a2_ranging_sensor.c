@@ -514,7 +514,7 @@ int32_t VL53L3A2_RANGING_SENSOR_XTalkCalibration(uint32_t Instance)
   */
 static int32_t VL53L3CX_Probe(uint32_t Instance)
 {
-  int32_t ret;
+  int32_t ret = 0;
   VL53L3CX_IO_t              IOCtx;
   uint32_t                   id;
   static VL53L3CX_Object_t   VL53L3CXObj[RANGING_SENSOR_INSTANCES_NBR];

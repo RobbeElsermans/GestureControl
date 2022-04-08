@@ -1,10 +1,11 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    i2c.h
-  * @brief   This file contains all the function prototypes for
-  *          the i2c.c file
+  * @file          : app_tof.h
+  * @author        : IMG SW Application Team
+  * @brief         : This file provides code for the configuration
+  *                  of the STMicroelectronics.X-CUBE-TOF1.3.0.0 instances.
   ******************************************************************************
+  *
   * @attention
   *
   * Copyright (c) 2022 STMicroelectronics.
@@ -16,37 +17,26 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __I2C_H__
-#define __I2C_H__
+#ifndef __APP_TOF_H
+#define __APP_TOF_H
 
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 
-/* USER CODE BEGIN Includes */
+/* Exported defines ----------------------------------------------------------*/
 
-/* USER CODE END Includes */
+/* Exported functions --------------------------------------------------------*/
+void MX_TOF_Init(void);
+void MX_TOF_Process(void *_htim3, void *_hi2c3);
 
-extern I2C_HandleTypeDef hi2c1;
-extern I2C_HandleTypeDef hi2c3;
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-void MX_I2C3_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-
-/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __I2C_H__ */
-
+#endif /* __APP_TOF_H */

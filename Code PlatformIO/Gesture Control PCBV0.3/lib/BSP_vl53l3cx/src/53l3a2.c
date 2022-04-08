@@ -239,57 +239,6 @@ int32_t VL53L3A2_Init(void)
     {
       goto done_err;
     }
-
-    status = _ExpanderRd(I2C_EXPANDER_ADDR0, 0, ExpanderData, 2);
-
-    if ((status != 0) || (ExpanderData[0] != 0x00U) || (ExpanderData[1] != 0x16U))
-    {
-      VL53L3A2_ErrLog("I2C Expander @0x%02X not detected", (int)I2C_EXPANDER_ADDR0);
-      goto done_err;
-    }
-
-    status = _ExpanderRd(I2C_EXPANDER_ADDR1, 0, ExpanderData, 2);
-
-    if ((status != 0) || (ExpanderData[0] != 0x00U) || (ExpanderData[1] != 0x16U))
-    {
-      VL53L3A2_ErrLog("I2C Expander @0x%02X not detected", (int)I2C_EXPANDER_ADDR1);
-      goto done_err;
-    }
-
-    CurIOVal.u32 = 0x0U;
-
-    /* setup expander   i/o direction  all output but exp1 bit 14*/
-    ExpanderData[0] = 0xFFU;
-    ExpanderData[1] = 0xFFU;
-
-    status = _ExpanderWR(I2C_EXPANDER_ADDR0, GPDR, ExpanderData, 2);
-
-    if (status)
-    {
-      VL53L3A2_ErrLog("Set Expander @0x%02X DR", I2C_EXPANDER_ADDR0);
-      goto done_err;
-    }
-
-    ExpanderData[0] = 0xFFU;
-    ExpanderData[1] = 0xBFU; /* all but bit 14-15 that is pb1 and xhurt */
-
-    status = _ExpanderWR(I2C_EXPANDER_ADDR1, GPDR, ExpanderData, 2);
-
-    if (status)
-    {
-      VL53L3A2_ErrLog("Set Expander @0x%02X DR", I2C_EXPANDER_ADDR1);
-      goto done_err;
-    }
-
-    /* shut down all segment and all device */
-    CurIOVal.u32 = 0x7FU + (0x7FU << 7) + (0x7FU << 16) + (0x7FU << (16 + 7));
-
-    status = _ExpandersSetAllIO();
-
-    if (status)
-    {
-      VL53L3A2_ErrLog("Set initial i/o ");
-    }
   }
 
 done_err:
@@ -329,31 +278,31 @@ int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
   {
   case VL53L3A2_DEV_CENTER:
 
-    HAL_GPIO_WritePin(XSHUT_1_Port, XSHUT_1_Pin, state);
+    HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, state);
     status = 1;
     break;
 
   case VL53L3A2_DEV_LEFT:
 
-    HAL_GPIO_WritePin(XSHUT_2_Port, XSHUT_2_Pin, state); 
+    HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, state); 
     status = 1;
     break;
 
   case VL53L3A2_DEV_RIGHT:
   
-    HAL_GPIO_WritePin(XSHUT_0_Port, XSHUT_0_Pin, state); 
+    HAL_GPIO_WritePin(XSHUT_2_GPIO_Port, XSHUT_2_Pin, state); 
     status = 1;
     break;
 
   case VL53L3A2_DEV_TOP:
 
-    HAL_GPIO_WritePin(XSHUT_4_Port, XSHUT_4_Pin, state);
+    HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, state);
     status = 1;
     break;
 
   case VL53L3A2_DEV_BOTTOM:
  
-    HAL_GPIO_WritePin(XSHUT_3_Port, XSHUT_3_Pin, state);
+    HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, state);
     status = 1;
     break;
 
