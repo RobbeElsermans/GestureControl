@@ -88,7 +88,7 @@ static int32_t vl53l3cx_get_result(VL53L3CX_Object_t *pObj, VL53L3CX_Result_t *p
   * @param pIO     BSP IO struct.
   * @retval VL53L3CX status
   */
-int32_t VL53L3CX_RegisterBusIO(VL53L3CX_Object_t *pObj, VL53L3CX_IO_t *pIO)
+int32_t  VL53L3CX_RegisterBusIO(VL53L3CX_Object_t *pObj, VL53L3CX_IO_t *pIO)
 {
   int32_t ret;
 

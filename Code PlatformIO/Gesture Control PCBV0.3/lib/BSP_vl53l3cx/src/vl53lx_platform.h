@@ -12,6 +12,8 @@
 #ifndef _VL53LX_PLATFORM_H_
 #define _VL53LX_PLATFORM_H_
 
+#define SMALL_FOOTPRINT
+
 #include "vl53lx_ll_def.h"
 #include "vl53lx_platform_log.h"
 
