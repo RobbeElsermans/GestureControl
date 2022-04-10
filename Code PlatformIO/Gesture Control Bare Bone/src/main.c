@@ -114,9 +114,10 @@ int main(void)
   HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, 0);
   HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, 0);
 
+  HAL_Delay(20);
   sensor.IsInitialized = 0;
 
-  HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, 1);
+  HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, 1);
   CUSTOM_VL53L3CX_I2C_Init();
   VL53L3CX_Init(&sensor);
   VL53L3CX_SetAddress(&sensor, 0x53);
@@ -144,18 +145,55 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  VL53LX_ClearInterruptAndStartMeasurement(&sensor);
+  // VL53LX_ClearInterruptAndStartMeasurement(&sensor);
   while (1)
   {
     /* USER CODE END WHILE */
     // VL53L3CX_GetDistance(&sensor, &results);
     // printf("distance: %4d\r\n", (long)results.ZoneResult[0].Distance[0]);
-    if (isReady)
+    if (isReady || (!isReady && !HAL_GPIO_ReadPin(GPIOI_4_Pin, GPIOI_4_GPIO_Port)))
     {
       isReady = false;
       VL53L3CX_GetDistance(&sensor, &results);
+      HAL_Delay(1);
+      distance = (long)results.ZoneResult[0].Distance[0];
     }
-    HAL_Delay(1000);
+
+    if (distance >= 50 && distance <= 300)
+    {
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 1);
+      HAL_Delay(200);
+    }
+
+    if (distance > 300 && distance <= 600)
+    {
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
+      HAL_Delay(200);
+    }
+
+    if (distance > 600 && distance <= 800)
+    {
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
+      HAL_Delay(200);
+    }
+
+    if (distance > 800 && distance <= 1200)
+    {
+      HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
+      HAL_Delay(200);
+    }
+    if (distance > 1200)
+    {
+      HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
+      HAL_Delay(200);
+    }
+
+    HAL_Delay(2);
+    HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
+    HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 0);
+    HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 0);
+    HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 0);
+    HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 0);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -228,34 +266,53 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   switch (GPIO_Pin)
   {
   case GPIOI_0_Pin:
-    VL53L3CX_GetDistance(&sensor, &results);
-    isReady = true;
+    if (!hasRead)
+    {
+      hasRead = true;
+      VL53L3CX_GetDistance(&sensor, &results);
+    }
+    else
+      isReady = true;
     break;
 
   case GPIOI_1_Pin:
-    if(!hasRead){
+    if (!hasRead)
+    {
       hasRead = true;
       VL53L3CX_GetDistance(&sensor, &results);
-  }
+    }
     else
-    isReady = true;
-
-    //VL53L3CX_GetDistance(&sensor, &results);
+      isReady = true;
     break;
 
   case GPIOI_2_Pin:
-    VL53L3CX_GetDistance(&sensor, &results);
-    isReady = true;
+    if (!hasRead)
+    {
+      hasRead = true;
+      VL53L3CX_GetDistance(&sensor, &results);
+    }
+    else
+      isReady = true;
     break;
 
   case GPIOI_3_Pin:
-    VL53L3CX_GetDistance(&sensor, &results);
-    isReady = true;
+    if (!hasRead)
+    {
+      hasRead = true;
+      VL53L3CX_GetDistance(&sensor, &results);
+    }
+    else
+      isReady = true;
     break;
 
   case GPIOI_4_Pin:
-    VL53L3CX_GetDistance(&sensor, &results);
-    isReady = true;
+    if (!hasRead)
+    {
+      hasRead = true;
+      VL53L3CX_GetDistance(&sensor, &results);
+    }
+    else
+      isReady = true;
     break;
   default:
     break;
