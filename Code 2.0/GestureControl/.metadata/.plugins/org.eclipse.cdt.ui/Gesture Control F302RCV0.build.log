@@ -1,0 +1,27 @@
+19:23:19 **** Incremental Build of configuration Debug for project Gesture Control F302RCV0 ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F302xC -c -I"/home/robbe/Desktop/Github/GestureControl/Code 2.0/GestureControl/Gesture Control F302RCV0/Drivers/BSP/Components" -I"/home/robbe/Desktop/Github/GestureControl/Code 2.0/GestureControl/Gesture Control F302RCV0/Drivers/BSP/Components/vl53l3cx/modules" -I"/home/robbe/Desktop/Github/GestureControl/Code 2.0/GestureControl/Gesture Control F302RCV0/Drivers/BSP/Components/vl53l3cx" -I../Core/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc -I../Drivers/STM32F3xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F3xx/Include -I../Drivers/CMSIS/Include -I../X-CUBE-TOF1/Target -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:148:24: warning: format '%d' expects argument of type 'int', but argument 2 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
+  148 |    printf("distance: %4d\r\n", results.ZoneResult[0].Distance[0]);
+      |                      ~~^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                        |                                     |
+      |                        int                                   uint32_t {aka long unsigned int}
+      |                      %4ld
+arm-none-eabi-gcc -o "Gesture Control F302RCV0.elf" @"objects.list"   -mcpu=cortex-m4 -T"/home/robbe/Desktop/Github/GestureControl/Code 2.0/GestureControl/Gesture Control F302RCV0/STM32F302RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Gesture Control F302RCV0.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Gesture Control F302RCV0.elf
+ 
+arm-none-eabi-size   Gesture\ Control\ F302RCV0.elf 
+arm-none-eabi-objdump -h -S  Gesture\ Control\ F302RCV0.elf  > "Gesture Control F302RCV0.list"
+arm-none-eabi-objcopy  -O binary  Gesture\ Control\ F302RCV0.elf  "Gesture Control F302RCV0.bin"
+   text	   data	    bss	    dec	    hex	filename
+  85260	    164	   2532	  87956	  15794	Gesture Control F302RCV0.elf
+Finished building: default.size.stdout
+ 
+Finished building: Gesture Control F302RCV0.bin
+ 
+Finished building: Gesture Control F302RCV0.list
+ 
+
+19:23:20 Build Finished. 0 errors, 1 warnings. (took 635ms)
+
