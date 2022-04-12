@@ -64,6 +64,12 @@ extern "C"
 	int dis3 = 0;
 	int dis4 = 0;
 
+	int sta0 = 0;
+	int sta1 = 0;
+	int sta2 = 0;
+	int sta3 = 0;
+	int sta4 = 0;
+
 	bool objectPresent = false; // flag ofdat er een object aanwezig is
 	bool hasStarted = false;	// Kijken ofdat de linkse & rechte sensor al opgestart zijn of niet
 
@@ -231,11 +237,21 @@ extern "C"
 			checkSensorReady(&isStarted3, &isReady3, VL53L3A2_DEV_TOP, Result);
 			checkSensorReady(&isStarted4, &isReady4, VL53L3A2_DEV_BOTTOM, Result);
 			//HAL_Delay(20);
+			dis0 = (long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Distance[0];
+			dis1 = (long)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Distance[0];
+			dis2 = (long)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Distance[0];
+			dis3 = (long)Result[VL53L3A2_DEV_TOP].ZoneResult[0].Distance[0];
 			dis4 = (long)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Distance[0];
-			sta4 = (int)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Status[0];
+
+			sta0 = (long)Result[VL53L3A2_DEV_CENTER].ZoneResult[0].Status[0];
+			sta1 = (long)Result[VL53L3A2_DEV_LEFT].ZoneResult[0].Status[0];
+			sta2 = (long)Result[VL53L3A2_DEV_RIGHT].ZoneResult[0].Status[0];
+			sta3 = (long)Result[VL53L3A2_DEV_TOP].ZoneResult[0].Status[0];
+			sta4 = (long)Result[VL53L3A2_DEV_BOTTOM].ZoneResult[0].Status[0];
+
 			//HAL_Delay(500);
 			HAL_GPIO_TogglePin(LED_2_GPIO_Port, LED_2_Pin);
-			printf("dis: %4d, stat: %2d \r\n",dis4,sta4);
+			printf("dis0: %4d, %2d \tdis1: %4d, %2d \tdis2: %4d, %2d \tdis3: %4d, %2d \tdis4: %4d, %2d \r\n",dis0,sta0,dis1,sta1,dis2,sta2,dis3,sta3,dis4,sta4);
 			HAL_Delay(200);
 		}
 	}
@@ -249,7 +265,7 @@ extern "C"
 		/* Initialize Virtual COM Port */
 		BSP_COM_Init(COM1);
 
-		// printf("53L3A2 Gesture Control\r\n");
+		printf("53L3A2 Gesture Control\r\n");
 
 		/* put all the devices in shutdown mode */
 		for (device = 0; device < RANGING_SENSOR_INSTANCES_NBR; device++)
