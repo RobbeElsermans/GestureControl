@@ -83,7 +83,10 @@ int main(void)
     Error_Handler();
   }
 
-  // while(1);
+  while(1){
+    HAL_Delay(1000);
+    HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+  }
 
   MX_TOF_Init();
 
