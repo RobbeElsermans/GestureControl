@@ -1,0 +1,42 @@
+{
+    "build": {
+      "core": "stm32",
+      "cpu": "cortex-m4",
+      "extra_flags": "-DSTM32F302xE",
+      "f_cpu": "8000000",
+      "mcu": "stm32f302ret6",
+      "product_line": "STM32F302xE",
+      "variant": "STM32F3xx/F302R(B-C-D-E)T"
+    },
+    "debug": {
+      "default_tools": [
+        "stlink"
+      ],
+      "jlink_device": "STM32F302RE",
+      "openocd_target": "stm32f3x",
+      "svd_path": "STM32F302x.svd"
+    },
+    "frameworks": [
+      "arduino",
+      "cmsis",
+      "mbed",
+      "stm32cube",
+      "libopencm3",
+      "zephyr"
+    ],
+    "name": "ST Nucleo F302RE (64k RAM. 512k Flash)",
+    "upload": {
+      "maximum_ram_size": 65536,
+      "maximum_size": 524288,
+      "protocol": "stlink",
+      "protocols": [
+        "jlink",
+        "cmsis-dap",
+        "stlink",
+        "blackmagic",
+        "mbed"
+      ]
+    },
+    "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f302.html",
+    "vendor": "ST"
+  }
