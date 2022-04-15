@@ -28,14 +28,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
-#include "custom_tof_conf.h"
-#include "vl53l3cx.h"
-#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
-#include <errno.h>
-#include "stdbool.h"
-#include "vl53lx_api.h"
-#include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
-
 
 typedef enum SensorDef
 {
@@ -45,6 +37,8 @@ typedef enum SensorDef
   TOP = 2,
   BOTTOM = 3,
 } sensorDev;
+
+#define amountSensor 5
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

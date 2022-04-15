@@ -24,7 +24,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stm32f3xx_hal.h"
+#include "custom_tof_conf.h"
+#include "vl53l3cx.h"
+#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
+#include <errno.h>
+#include "stdbool.h"
+#include "vl53lx_api.h"
+#include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +75,9 @@ void SystemClock_Config(void);
 void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address);
 uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isReady);
 void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index);
+void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index);
 void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index);
+void Stop_Sensor(VL53L3CX_Object_t *sensor);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -122,6 +131,12 @@ int main(void)
   HAL_Delay(20);
 
   CUSTOM_VL53L3CX_I2C_Init();
+
+  Init_Sensor(&sensor[CENTER], CENTER);
+  Init_Sensor(&sensor[LEFT], LEFT);
+  Init_Sensor(&sensor[RIGHT], RIGHT);
+  Init_Sensor(&sensor[TOP], TOP);
+  Init_Sensor(&sensor[BOTTOM], BOTTOM);
 
   Start_Sensor(&sensor[CENTER], CENTER);
   Start_Sensor(&sensor[LEFT], LEFT);
@@ -185,34 +200,34 @@ int main(void)
       HAL_Delay(2);
     }
 
-    if (distance[BOTTOM] >= 50 && distance[BOTTOM] <= 300)
+    if (distance[BOTTOM] >= 20 && distance[BOTTOM] <= 300)
     {
       HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 1);
-      HAL_Delay(50);
+      HAL_Delay(20);
     }
 
-    if (distance[TOP] >= 50 && distance[TOP] <= 300)
+    if (distance[TOP] >= 20 && distance[TOP] <= 300)
     {
       HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
-      HAL_Delay(50);
+      HAL_Delay(20);
     }
 
-    if (distance[LEFT] >= 50 && distance[LEFT] <= 300)
+    if (distance[LEFT] >= 20 && distance[LEFT] <= 300)
     {
       HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
-      HAL_Delay(50);
+      HAL_Delay(20);
     }
 
-    if (distance[RIGHT] >= 50 && distance[RIGHT] <= 300)
+    if (distance[RIGHT] >= 20 && distance[RIGHT] <= 300)
     {
       HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
-      HAL_Delay(50);
+      HAL_Delay(20);
     }
 
-    if (distance[CENTER] >= 50 && distance[CENTER] <= 300)
+    if (distance[CENTER] >= 20 && distance[CENTER] <= 300)
     {
       HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
-      HAL_Delay(50);
+      HAL_Delay(20);
     }
 
     HAL_Delay(2);
@@ -222,7 +237,7 @@ int main(void)
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 0);
     HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 0);
     printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\t distance TOP: %4d %3d\t distance BOTTOM: %4d %3d\r\n",
-     (int)distance[CENTER], status[CENTER], (int)distance[LEFT], status[LEFT], (int)distance[RIGHT], status[RIGHT], (int)distance[TOP], status[TOP], (int)distance[BOTTOM], status[BOTTOM]);
+           (int)distance[CENTER], status[CENTER], (int)distance[LEFT], status[LEFT], (int)distance[RIGHT], status[RIGHT], (int)distance[TOP], status[TOP], (int)distance[BOTTOM], status[BOTTOM]);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -373,7 +388,7 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   }
   HAL_Delay(2);
   VL53L3CX_Init(sensor);
-  VL53L3CX_SetAddress(sensor, address);
+  VL53L3CX_SetAddress(sensor, (uint32_t)address);
 
   // Config profile
   VL53L3CX_ProfileConfig_t Profile;
@@ -456,7 +471,7 @@ void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index)
 
   VL53L3CX_GetDistance(sensor, &results); // 1ste meeting weg gooien
 }
-void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
+void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 {
   uint32_t id;
   int ret;
@@ -485,8 +500,18 @@ void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 
   ret = VL53L3CX_ReadID(sensor, &id);
   printf("%d\r\n", ret);
+}
+
+
+void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
+{
   VL53L3CX_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS); // Sensor staren met meten
   Wait_For_GPIOI(sensor, index);
+}
+
+void Stop_Sensor(VL53L3CX_Object_t *sensor)
+{
+  VL53L3CX_Stop(sensor); // Sensor staren met meten
 }
 /* USER CODE END 4 */
 
