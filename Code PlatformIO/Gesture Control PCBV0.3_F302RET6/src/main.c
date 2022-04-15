@@ -502,6 +502,7 @@ void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
   printf("%d\r\n", ret);
 }
 
+
 void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 {
   VL53L3CX_Start(sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS); // Sensor staren met meten
