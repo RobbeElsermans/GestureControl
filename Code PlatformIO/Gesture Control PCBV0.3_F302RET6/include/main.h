@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.h
+ * @brief          : Header for main.c file.
+ *                   This file contains the common defines of the application.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -23,45 +23,56 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
 
-typedef enum SensorDef
-{
-  CENTER = 0,
-  LEFT = 4,
-  RIGHT = 1,
-  TOP = 2,
-  BOTTOM = 3,
-} sensorDev;
+  typedef enum SensorDef
+  {
+    CENTER = 0,
+    LEFT = 4,
+    RIGHT = 1,
+    TOP = 2,
+    BOTTOM = 3,
+  } sensorDev;
+
+  typedef enum commands
+  {
+    DIM = 0x25,
+    RL = 0x22,
+    LR = 0x21,
+    UD = 0x23,
+    DU = 0x24,
+    NONE = 0x10
+  } commands;
 
 #define amountSensor 5
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+  /* Private includes ----------------------------------------------------------*/
+  /* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+  /* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+  /* Exported types ------------------------------------------------------------*/
+  /* USER CODE BEGIN ET */
 
-/* USER CODE END ET */
+  /* USER CODE END ET */
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+  /* Exported constants --------------------------------------------------------*/
+  /* USER CODE BEGIN EC */
 
-/* USER CODE END EC */
+  /* USER CODE END EC */
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
+  /* Exported macro ------------------------------------------------------------*/
+  /* USER CODE BEGIN EM */
 
-/* USER CODE END EM */
+  /* USER CODE END EM */
 
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+  /* Exported functions prototypes ---------------------------------------------*/
+  void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
@@ -109,9 +120,9 @@ void Error_Handler(void);
 #define GPIOI_4_Pin GPIO_PIN_6
 #define GPIOI_4_GPIO_Port GPIOC
 #define GPIOI_4_EXTI_IRQn EXTI9_5_IRQn
-/* USER CODE BEGIN Private defines */
+  /* USER CODE BEGIN Private defines */
 
-/* USER CODE END Private defines */
+  /* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

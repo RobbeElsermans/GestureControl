@@ -11,142 +11,236 @@
  *
  */
 
-void RefSpadCal(VL53L3CX_Object_t* dev)
+void RefSpadCal(VL53L3CX_Object_t *dev)
 {
     VL53LX_PerformRefSpadManagement(dev);
 }
-void xTalkCal(VL53L3CX_Object_t* dev)
+void xTalkCal(VL53L3CX_Object_t *dev)
 {
     VL53LX_PerformXTalkCalibration(dev);
 }
-void offsetPerVcselCal(VL53L3CX_Object_t* dev, uint16_t distance)
+void offsetPerVcselCal(VL53L3CX_Object_t *dev, uint16_t distance)
 {
     VL53LX_PerformOffsetPerVcselCalibration(dev, distance);
 }
-VL53LX_CalibrationData_t getCalibrationData(VL53L3CX_Object_t* dev)
+VL53LX_CalibrationData_t getCalibrationData(VL53L3CX_Object_t *dev)
 {
     VL53LX_CalibrationData_t data;
     VL53LX_GetCalibrationData(dev, &data);
     return data;
 }
-void setCalibrationData(VL53L3CX_Object_t* dev,sensorDev index, VL53LX_CalibrationData_t* data)
+void setCalibrationData(VL53L3CX_Object_t *dev, sensorDev index, VL53LX_CalibrationData_t *data)
 {
     int xtalk_kcps[amountSensor][6] = {
-        {7917, 1807, 4303, -10413, -16523, -22633},
-        {1385, 2823, 4261, 5699, 7137, 8578},
-        {839, 1644, 2449, 3254, 4059, 4865},
-        {0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0}};
+        {2549, 5182, 7815, 10448, 13081, 15715},
+        {4062, 8006, 11950, 15894, 19838, 23784},
+        {9767, 19686, 29605, 39524, 49443, 59366},
+        {5957, 11919, 17881, 23843, 29805, 35769},
+        {6185, 12293, 18401, 24509, 0, 134276756}};
 
     int xtalk_bin_data[amountSensor][12] = {
-        {0, 300, 505, 219, 0, 0, 0, 0, 0, 0, 0, 0},
-        {22, 432, 451, 119, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 376, 481, 167, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        {1, 339, 484, 200, 0, 0, 0, 0, 0, 0, 0, 0},
+        {2, 345, 473, 204, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 342, 485, 196, 0, 0, 0, 0, 0, 0, 0, 0},
+        {3, 354, 490, 177, 0, 0, 0, 0, 0, 0, 0, 0},
+        {11, 413, 471, 129, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     switch (index)
     {
-    case CENTER:
+    case 0:
 
         for (uint8_t i = 0; i < 6; i++)
         {
-           data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
+            data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
         }
 
         for (uint8_t i = 0; i < 12; i++)
         {
-           data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
+            data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-       data->xtalkhisto.xtalk_shape.zero_distance_phase = 4678;
-        
-       data->per_vcsel_cal_data.short_a_offset_mm = 0;
-       data->per_vcsel_cal_data.short_b_offset_mm = 0;
-       data->per_vcsel_cal_data.medium_a_offset_mm = 0;
-       data->per_vcsel_cal_data.medium_b_offset_mm = 0;
-       data->per_vcsel_cal_data.long_a_offset_mm = 0;
-       data->per_vcsel_cal_data.long_b_offset_mm = 0;
-        
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4602;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10746;
+        data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
+        data->xtalkhisto.xtalk_shape.zone_id = 0;
+        data->xtalkhisto.xtalk_shape.vcsel_width = 40;
+        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48322;
+
+        // data->per_vcsel_cal_data.short_a_offset_mm = -16;
+        // data->per_vcsel_cal_data.short_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.medium_a_offset_mm = -11;
+        // data->per_vcsel_cal_data.medium_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.long_a_offset_mm = -10;
+        // data->per_vcsel_cal_data.long_b_offset_mm = -11;
+
+        data->customer.global_config__spad_enables_ref_0 = 123;
+        data->customer.global_config__spad_enables_ref_1 = 255;
+        data->customer.global_config__spad_enables_ref_2 = 255;
+        data->customer.global_config__spad_enables_ref_3 = 255;
+        data->customer.global_config__spad_enables_ref_4 = 255;
+        data->customer.global_config__spad_enables_ref_5 = 13;
+        data->customer.ref_spad_man__num_requested_ref_spads = 11;
+        data->customer.ref_spad_man__ref_location = 2;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 2634;
+        data->customer.ref_spad_char__total_rate_target_mcps = 2560;
+        data->customer.mm_config__inner_offset_mm = 17;
+        data->customer.mm_config__outer_offset_mm = 17;
+
         break;
-    case LEFT: //
+    case 1:
 
         for (uint8_t i = 0; i < 6; i++)
         {
-           data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
+            data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
         }
 
         for (uint8_t i = 0; i < 12; i++)
         {
-           data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
+            data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-       data->xtalkhisto.xtalk_shape.zero_distance_phase = 4177;
-       data->per_vcsel_cal_data.short_a_offset_mm = -31;
-       data->per_vcsel_cal_data.short_b_offset_mm = -27;
-       data->per_vcsel_cal_data.medium_a_offset_mm = -21;
-       data->per_vcsel_cal_data.medium_b_offset_mm = -26;
-       data->per_vcsel_cal_data.long_a_offset_mm = -23;
-       data->per_vcsel_cal_data.long_b_offset_mm = -24;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4628;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10772;
+        data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 6;
+        data->xtalkhisto.xtalk_shape.zone_id = 0;
+        data->xtalkhisto.xtalk_shape.vcsel_width = 40;
+        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48332;
+
+        // data->per_vcsel_cal_data.short_a_offset_mm = -16;
+        // data->per_vcsel_cal_data.short_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.medium_a_offset_mm = -11;
+        // data->per_vcsel_cal_data.medium_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.long_a_offset_mm = -10;
+        // data->per_vcsel_cal_data.long_b_offset_mm = -11;
+
+        data->customer.global_config__spad_enables_ref_0 = 255;
+        data->customer.global_config__spad_enables_ref_1 = 127;
+        data->customer.global_config__spad_enables_ref_2 = 247;
+        data->customer.global_config__spad_enables_ref_3 = 251;
+        data->customer.global_config__spad_enables_ref_4 = 247;
+        data->customer.global_config__spad_enables_ref_5 = 15;
+        data->customer.ref_spad_man__num_requested_ref_spads = 10;
+        data->customer.ref_spad_man__ref_location = 2;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 4053;
+        data->customer.ref_spad_char__total_rate_target_mcps = 2560;
+        data->customer.mm_config__inner_offset_mm = 23;
+        data->customer.mm_config__outer_offset_mm = 23;
         break;
-    case RIGHT: // RIGHT
+    case 2:
         for (uint8_t i = 0; i < 6; i++)
         {
-           data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
+            data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
         }
 
         for (uint8_t i = 0; i < 12; i++)
         {
-           data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
+            data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-       data->xtalkhisto.xtalk_shape.zero_distance_phase = 4446;
-       data->per_vcsel_cal_data.short_a_offset_mm = -27;
-       data->per_vcsel_cal_data.short_b_offset_mm = -27;
-       data->per_vcsel_cal_data.medium_a_offset_mm = -24;
-       data->per_vcsel_cal_data.medium_b_offset_mm = -25;
-       data->per_vcsel_cal_data.long_a_offset_mm = -19;
-       data->per_vcsel_cal_data.long_b_offset_mm = -20;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4575;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10719;
+        data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 6;
+        data->xtalkhisto.xtalk_shape.zone_id = 0;
+        data->xtalkhisto.xtalk_shape.vcsel_width = 40;
+        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48373;
+
+        // data->per_vcsel_cal_data.short_a_offset_mm = -16;
+        // data->per_vcsel_cal_data.short_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.medium_a_offset_mm = -11;
+        // data->per_vcsel_cal_data.medium_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.long_a_offset_mm = -10;
+        // data->per_vcsel_cal_data.long_b_offset_mm = -11;
+
+        data->customer.global_config__spad_enables_ref_0 = 191;
+        data->customer.global_config__spad_enables_ref_1 = 247;
+        data->customer.global_config__spad_enables_ref_2 = 255;
+        data->customer.global_config__spad_enables_ref_3 = 223;
+        data->customer.global_config__spad_enables_ref_4 = 251;
+        data->customer.global_config__spad_enables_ref_5 = 15;
+        data->customer.ref_spad_man__num_requested_ref_spads = 12;
+        data->customer.ref_spad_man__ref_location = 2;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 9870;
+        data->customer.ref_spad_char__total_rate_target_mcps = 2560;
+        data->customer.mm_config__inner_offset_mm = 25;
+        data->customer.mm_config__outer_offset_mm = 25;
         break;
 
-    case TOP: // TOP
+    case 3:
         for (uint8_t i = 0; i < 6; i++)
         {
-           data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
+            data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
         }
 
         for (uint8_t i = 0; i < 12; i++)
         {
-           data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
+            data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-       data->xtalkhisto.xtalk_shape.zero_distance_phase = 0;
-       data->per_vcsel_cal_data.short_a_offset_mm = -37;
-       data->per_vcsel_cal_data.short_b_offset_mm = -40;
-       data->per_vcsel_cal_data.medium_a_offset_mm = -48;
-       data->per_vcsel_cal_data.medium_b_offset_mm = -48;
-       data->per_vcsel_cal_data.long_a_offset_mm = -33;
-       data->per_vcsel_cal_data.long_b_offset_mm = -35;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4441;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10585;
+        data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
+        data->xtalkhisto.xtalk_shape.zone_id = 0;
+        data->xtalkhisto.xtalk_shape.vcsel_width = 40;
+        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48414;
+
+        // data->per_vcsel_cal_data.short_a_offset_mm = -16;
+        // data->per_vcsel_cal_data.short_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.medium_a_offset_mm = -11;
+        // data->per_vcsel_cal_data.medium_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.long_a_offset_mm = -10;
+        // data->per_vcsel_cal_data.long_b_offset_mm = -11;
+
+        data->customer.global_config__spad_enables_ref_0 = 255;
+        data->customer.global_config__spad_enables_ref_1 = 255;
+        data->customer.global_config__spad_enables_ref_2 = 255;
+        data->customer.global_config__spad_enables_ref_3 = 255;
+        data->customer.global_config__spad_enables_ref_4 = 253;
+        data->customer.global_config__spad_enables_ref_5 = 5;
+        data->customer.ref_spad_man__num_requested_ref_spads = 11;
+        data->customer.ref_spad_man__ref_location = 2;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 5957;
+        data->customer.ref_spad_char__total_rate_target_mcps = 2560;
+        data->customer.mm_config__inner_offset_mm = 17;
+        data->customer.mm_config__outer_offset_mm = 17;
         break;
 
-    case BOTTOM: // BOTTOM
+    case 4:
         for (uint8_t i = 0; i < 6; i++)
         {
-           data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
+            data->algo__xtalk_cpo_HistoMerge_kcps[i] = xtalk_kcps[index][i];
         }
 
         for (uint8_t i = 0; i < 12; i++)
         {
-           data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
+            data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-       data->xtalkhisto.xtalk_shape.zero_distance_phase = 0;
-       data->per_vcsel_cal_data.short_a_offset_mm = -68;
-       data->per_vcsel_cal_data.short_b_offset_mm = -70;
-       data->per_vcsel_cal_data.medium_a_offset_mm = -56;
-       data->per_vcsel_cal_data.medium_b_offset_mm = -58;
-       data->per_vcsel_cal_data.long_a_offset_mm = -58;
-       data->per_vcsel_cal_data.long_b_offset_mm = -61;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4219;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10363;
+        data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
+        data->xtalkhisto.xtalk_shape.zone_id = 0;
+        data->xtalkhisto.xtalk_shape.vcsel_width = 40;
+        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48250;
+
+        // data->per_vcsel_cal_data.short_a_offset_mm = -16;
+        // data->per_vcsel_cal_data.short_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.medium_a_offset_mm = -11;
+        // data->per_vcsel_cal_data.medium_b_offset_mm = -15;
+        // data->per_vcsel_cal_data.long_a_offset_mm = -10;
+        // data->per_vcsel_cal_data.long_b_offset_mm = -11;
+
+        data->customer.global_config__spad_enables_ref_0 = 255;
+        data->customer.global_config__spad_enables_ref_1 = 239;
+        data->customer.global_config__spad_enables_ref_2 = 251;
+        data->customer.global_config__spad_enables_ref_3 = 247;
+        data->customer.global_config__spad_enables_ref_4 = 175;
+        data->customer.global_config__spad_enables_ref_5 = 14;
+        data->customer.ref_spad_man__num_requested_ref_spads = 10;
+        data->customer.ref_spad_man__ref_location = 2;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 6185;
+        data->customer.ref_spad_char__total_rate_target_mcps = 2560;
+        data->customer.mm_config__inner_offset_mm = 25;
+        data->customer.mm_config__outer_offset_mm = 25;
         break;
 
     default:
@@ -156,11 +250,11 @@ void setCalibrationData(VL53L3CX_Object_t* dev,sensorDev index, VL53LX_Calibrati
     VL53LX_SetCalibrationData(dev, data);
 }
 
-void setXTalkCompensation(VL53L3CX_Object_t* dev, bool state)
+void setXTalkCompensation(VL53L3CX_Object_t *dev, bool state)
 {
     VL53LX_SetXTalkCompensationEnable(dev, state);
 }
-void setOffsetCorrectionMode(VL53L3CX_Object_t* dev, VL53LX_OffsetCorrectionModes state)
+void setOffsetCorrectionMode(VL53L3CX_Object_t *dev, VL53LX_OffsetCorrectionModes state)
 {
     VL53LX_SetOffsetCorrectionMode(dev, state);
 }

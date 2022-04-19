@@ -32,6 +32,11 @@
 #include "stdbool.h"
 #include "vl53lx_api.h"
 #include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
+#include "GestureDetectObject.h"
+#include "GestureDetectRL.h"
+#include "GestureDetectLR.h"
+#include "GestureDetectUD.h"
+#include "GestureDetectDU.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +62,25 @@ long status[5] = {0, 0, 0, 0, 0};
 volatile bool isReady[5] = {false, false, false, false, false};
 volatile bool hasRead[5] = {false, false, false, false, false};
 VL53L3CX_Result_t results[5];
+
+bool objectPresent = false;
+bool prevObjectPresent = false;
+bool gestureRL = false;
+bool gestureLR = false;
+bool gestureDU = false;
+bool gestureUD = false;
+
+prevGestureRL = false; // fix debouncing van gestureRL
+prevGestureLR = false; // fix debouncing van gestureLR
+prevGestureDU = false; // fix debouncing van gestureDU
+prevGestureUD = false; // fix debouncing van gestureUD
+
+commands commando = NONE;
+
+// Timer command
+static float timerCommand = 0;
+static bool timerCommandSet = false;
+static int timerCommandTimeout = 2000; // 2 seconden
 
 // typedef enum SensorDef
 // {
@@ -141,135 +165,75 @@ int main(void)
   // if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
   if (true)
   {
-    bool done = false;
-    while (!done)
+    VL53LX_CalibrationData_t callData[amountSensor];
+
+    printf("Calibrating in 10 seconds... \r\n\r\n");
+    for (uint8_t i = 0; i < 2; i++)
     {
-      VL53LX_CalibrationData_t callData[amountSensor];
-
-      printf("Calibrating in 10 seconds... \r\n\r\n");
-      for (uint8_t i = 0; i < 2; i++)
-      {
-        HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
-        HAL_Delay(1000);
-      }
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
-
-      printf("Sensor CENTER\r\n");
-      RefSpadCal(&sensor[CENTER]);
-      VL53LX_CalibrationData_t center;
-      HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
-      xTalkCal(&sensor[CENTER]);
-
-      while (true)
-      {
-        VL53LX_MultiRangingData_t result;
-        Start_Sensor(&sensor[CENTER], CENTER);
-
-        VL53LX_WaitMeasurementDataReady(&sensor[CENTER]);
-        VL53LX_GetMultiRangingData(&sensor[CENTER], &result);
-
-        VL53LX_ClearInterruptAndStartMeasurement(&sensor[CENTER]);
-      }
-
-
-      HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
-      // offsetPerVcselCal(&sensor[CENTER], 600);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
-      callData[CENTER] = getCalibrationData(&sensor[CENTER]);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
-      // setXTalkCompensation(&sensor[CENTER], 1);
-      VL53LX_SetCalibrationData(&sensor[CENTER], &callData[CENTER]);
-      // setCalibrationData(&sensor[CENTER],CENTER, &callData[CENTER]);
-
-      int16_t xtalk_bin_data[amountSensor][12];
-      int16_t xtalk_kcps[amountSensor][6];
-      int16_t xtalk_zero_distance[amountSensor];
-      int16_t offset[amountSensor][6];
-
-      for (uint8_t i = 0; i < amountSensor; i++)
-      {
-        for (uint8_t j = 0; j < 6; j++)
-        {
-          xtalk_kcps[i][j] = callData[i].algo__xtalk_cpo_HistoMerge_kcps[j];
-        }
-      }
-
-      for (uint8_t i = 0; i < amountSensor; i++)
-      {
-        for (uint8_t j = 0; j < 12; j++)
-        {
-          xtalk_bin_data[i][j] = callData[i].xtalkhisto.xtalk_shape.bin_data[j];
-        }
-      }
-
-      for (uint8_t i = 0; i < amountSensor; i++)
-      {
-        offset[i][0] = callData[i].per_vcsel_cal_data.short_a_offset_mm;
-        offset[i][1] = callData[i].per_vcsel_cal_data.short_b_offset_mm;
-        offset[i][2] = callData[i].per_vcsel_cal_data.medium_a_offset_mm;
-        offset[i][3] = callData[i].per_vcsel_cal_data.medium_b_offset_mm;
-        offset[i][4] = callData[i].per_vcsel_cal_data.long_a_offset_mm;
-        offset[i][5] = callData[i].per_vcsel_cal_data.long_b_offset_mm;
-      }
-
-      for (uint8_t i = 0; i < amountSensor; i++)
-      {
-        xtalk_zero_distance[i] = callData[i].xtalkhisto.xtalk_shape.zero_distance_phase;
-      }
-
-      // plotten naar serial monitor
-
-      for (uint8_t i = 0; i < amountSensor - 4; i++)
-      {
-        printf("instance %1d \r\n", i);
-
-        // xtalk_bin_data
-        printf("\r\n\txtalk_bin_data \r\n");
-        for (size_t j = 0; j < 12; j++)
-        {
-          printf("%2d: %5d\r\n", j, xtalk_bin_data[i][j]);
-        }
-
-        // xtalk_kcps
-        printf("\r\n\t xtalk_kcps \r\n");
-        for (size_t j = 0; j < 6; j++)
-        {
-          printf("%2d: %5d\r\n", j, xtalk_kcps[i][j]);
-        }
-
-        // offset
-        printf("\r\n\t offset \r\n");
-        for (size_t j = 0; j < 6; j++)
-        {
-          printf("%2d: %5d\r\n", j, offset[i][j]);
-        }
-
-        // xtalk_zero_distance
-        printf("\r\n\t xtalk_zero_distance \r\n");
-        printf("%5d\r\n", xtalk_zero_distance[i]);
-
-        printf("---------------------------------------------\r\n");
-        HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 1);
-      }
-
-      printf(" \r\n");
-
-      // while (1)
-      //   ;
-      done = true;
+      HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
+      HAL_Delay(1000);
     }
+    HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
+
+    // printf("Sensor %2d\r\n", CENTER);
+    RefSpadCal(&sensor[CENTER]);
+    RefSpadCal(&sensor[LEFT]);
+    RefSpadCal(&sensor[RIGHT]);
+    RefSpadCal(&sensor[TOP]);
+    RefSpadCal(&sensor[BOTTOM]);
+    // HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
+    // printf("refspad\r\n");
+    // xTalkCal(&sensor[CENTER]);
+    // xTalkCal(&sensor[LEFT]);
+    // xTalkCal(&sensor[RIGHT]);
+    // xTalkCal(&sensor[TOP]);
+    // xTalkCal(&sensor[BOTTOM]);
+    // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
+    printf("xtalk\r\n");
+    // offsetPerVcselCal(&sensor[CENTER], 600);
+    // HAL_Delay(2);
+    // offsetPerVcselCal(&sensor[LEFT], 600);
+    // HAL_Delay(2);
+    // offsetPerVcselCal(&sensor[RIGHT], 600);
+    // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
+    callData[CENTER] = getCalibrationData(&sensor[CENTER]);
+    callData[LEFT] = getCalibrationData(&sensor[LEFT]);
+    callData[RIGHT] = getCalibrationData(&sensor[RIGHT]);
+    callData[TOP] = getCalibrationData(&sensor[TOP]);
+    callData[BOTTOM] = getCalibrationData(&sensor[BOTTOM]);
+    // HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
+    // VL53LX_SetCalibrationData(&sensor[i], &callData[i]);
+    setCalibrationData(&sensor[CENTER], CENTER, &callData[CENTER]);
+    setCalibrationData(&sensor[LEFT], LEFT, &callData[LEFT]);
+    setCalibrationData(&sensor[RIGHT], RIGHT, &callData[RIGHT]);
+    setCalibrationData(&sensor[TOP], TOP, &callData[TOP]);
+    setCalibrationData(&sensor[BOTTOM], BOTTOM, &callData[BOTTOM]);
+
+    setOffsetCorrectionMode(&sensor[CENTER], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[CENTER], 1);
+    setOffsetCorrectionMode(&sensor[LEFT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[LEFT], 1);
+    setOffsetCorrectionMode(&sensor[RIGHT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[RIGHT], 1);
+    setOffsetCorrectionMode(&sensor[TOP], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[TOP], 1);
+    setOffsetCorrectionMode(&sensor[BOTTOM], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[BOTTOM], 1);
   }
 
   Start_Sensor(&sensor[CENTER], CENTER);
-  Start_Sensor(&sensor[LEFT], LEFT);
-  Start_Sensor(&sensor[RIGHT], RIGHT);
-  Start_Sensor(&sensor[TOP], TOP);
-  Start_Sensor(&sensor[BOTTOM], BOTTOM);
+  // Start_Sensor(&sensor[LEFT], LEFT);
+  // Start_Sensor(&sensor[RIGHT], RIGHT);
+  // Start_Sensor(&sensor[TOP], TOP);
+  // Start_Sensor(&sensor[BOTTOM], BOTTOM);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  initObjectPresent(-1, -1, -1);
+
   while (1)
   {
     if (Sensor_Ready(&sensor[CENTER], CENTER, (uint8_t *)isReady))
@@ -322,47 +286,140 @@ int main(void)
       HAL_Delay(2);
     }
 
-    if (distance[BOTTOM] >= 20 && distance[BOTTOM] <= 300)
-    {
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 1);
-      HAL_Delay(20);
-    }
+    objectPresent = ckeckObjectPresent(results, &objectPresent, &distance[CENTER]);
 
-    if (distance[TOP] >= 20 && distance[TOP] <= 300)
-    {
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
-      HAL_Delay(20);
-    }
+    // Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
+    gestureRL = CheckGestureRL(&gestureRL, &objectPresent, results);
+    gestureLR = CheckGestureLR(&gestureLR, &objectPresent, results);
+    gestureDU = CheckGestureDU(&gestureDU, &objectPresent, results);
+    gestureUD = CheckGestureUD(&gestureUD, &objectPresent, results);
 
-    if (distance[LEFT] >= 20 && distance[LEFT] <= 300)
-    {
-      HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
-      HAL_Delay(20);
-    }
+    // printf("Object: %1d \t", gestureRL);
 
-    if (distance[RIGHT] >= 20 && distance[RIGHT] <= 300)
-    {
-      HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
-      HAL_Delay(20);
-    }
-
-    if (distance[CENTER] >= 20 && distance[CENTER] <= 300)
-    {
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
-      HAL_Delay(20);
-    }
+    HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
 
     HAL_Delay(2);
-    HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
-    HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 0);
-    HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 0);
-    HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 0);
-    HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 0);
-    printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\t distance TOP: %4d %3d\t distance BOTTOM: %4d %3d\r\n",
-           (int)distance[CENTER], status[CENTER], (int)distance[LEFT], status[LEFT], (int)distance[RIGHT], status[RIGHT], (int)distance[TOP], status[TOP], (int)distance[BOTTOM], status[BOTTOM]);
+    // printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\t distance TOP: %4d %3d\t distance BOTTOM: %4d %3d\r\n",
+    //(int)distance[CENTER], status[CENTER], (int)distance[LEFT], status[LEFT], (int)distance[RIGHT], status[RIGHT], (int)distance[TOP], status[TOP], (int)distance[BOTTOM], status[BOTTOM]);
+    // printf("L: %5d, C: %5d, R: %5d\r\n", distance[LEFT], distance[CENTER], distance[RIGHT]);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+    if (objectPresent && !prevObjectPresent)
+    {
+      // Opstarten van sensoren
+      Start_Sensor(&sensor[LEFT], LEFT);
+      Start_Sensor(&sensor[RIGHT], RIGHT);
+      Start_Sensor(&sensor[TOP], TOP);
+      Start_Sensor(&sensor[BOTTOM], BOTTOM);
+      printf("Start\r\n");
+    }
+    else if (!objectPresent && prevObjectPresent)
+    {
+      Stop_Sensor(&sensor[LEFT]);
+      Stop_Sensor(&sensor[RIGHT]);
+      Stop_Sensor(&sensor[TOP]);
+      Stop_Sensor(&sensor[BOTTOM]);
+      printf("Stop\r\n");
+    }
+
+    // Commando's instellen
+    //  Het commando RL activeren
+    if (gestureRL && !prevGestureRL && commando == NONE)
+    {
+      prevGestureRL = gestureRL;
+      printf("gestureCommand RL: %d \r\n", gestureRL);
+      commando = RL;
+    }
+
+    // Het commando LR activeren
+    if (gestureLR && !prevGestureLR && commando == NONE)
+    {
+      prevGestureLR = gestureLR;
+      printf("gestureCommand LR: %d \r\n", gestureLR);
+      commando = LR;
+    }
+
+    // Het commando DU activeren
+    if (gestureDU && !prevGestureDU && commando == NONE)
+    {
+      prevGestureDU = gestureDU;
+      printf("gestureCommand DU: %d \r\n", gestureDU);
+      commando = DU;
+    }
+
+    // Het commando UD activeren
+    if (gestureUD && !prevGestureUD && commando == NONE)
+    {
+      prevGestureUD = gestureUD;
+      printf("gestureCommand UD: %d \r\n", gestureUD);
+      commando = UD;
+    }
+
+    prevObjectPresent = objectPresent;
+    prevGestureRL = gestureRL; // fix debouncing van gestureRL
+    prevGestureLR = gestureLR; // fix debouncing van gestureLR
+    prevGestureDU = gestureDU; // fix debouncing van gestureDU
+    prevGestureUD = gestureUD; // fix debouncing van gestureUD
+
+    /* 	Timer om leds even aan te laten
+        Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
+        Dan zetten we een timer
+        Wanneer de timer afloopt wordt het commando gereset
+      */
+    if (!timerCommandSet && commando != NONE)
+    {
+      timerCommandSet = true;
+      timerCommand = HAL_GetTick();
+    }
+    if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
+    {
+      timerCommandSet = false;
+      commando = NONE;
+    }
+    // Commando's uitsturen
+    switch (commando)
+    {
+    case NONE:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case RL:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case LR:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case UD:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case DU:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
+      break;
+    case DIM:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
+      break;
+
+    default:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    }
+
+    HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
   }
   /* USER CODE END 3 */
 }
@@ -399,7 +456,7 @@ void SystemClock_Config(void)
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
     Error_Handler();
-  }   
+  }
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_I2C1 | RCC_PERIPHCLK_I2C3;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_SYSCLK;
@@ -557,7 +614,7 @@ uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isRead
 
 void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index)
 {
-    VL53L3CX_Result_t results;
+  VL53L3CX_Result_t results;
 
   switch (index)
   {
