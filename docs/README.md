@@ -18,13 +18,13 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 - [Gebruikte Hardware](#gebruikte-hardware)
 - [Opbouw Project](#opbouw-project)
   - [PinOut](#pinout)
-  - [Importeren API VL53LXC](#importeren-api-vl53lxc)
+  - [Importeer API VL53LXC](#importeer-api-vl53lxc)
   - [Importeer Andere Bestanden](#importeer-andere-bestanden)
   - [Installeer Platform & Board](#installeer-platform--board)
   - [configureer platformio.ini file](#configureer-platformioini-file)
   - [importeren include & src bestanden](#importeren-include--src-bestanden)
   - [Build & Upload](#build--upload)
-- [Hardware specificaties](#hardware-specificaties)
+- [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
 - [Onderzoek](#onderzoek)
 
@@ -95,11 +95,13 @@ Nadien zag ik de mogelijkheid om met PlatformIO IDE (plugin van Visual Code) ver
 
 Omdat de gegenereerde code in STM32CubeIDE wel heel handig is, heb ik het project eerst in STM32CubeIDE opgezet (configuratie I²C, GPIO, ...) en nadien de bestanden overgeplaatst naar het PlatformIO project. uiteraard heeft PLatformIO ook de nodige HAL(Hardware Abstraction Layer) bibliotheken nodig om de gegenereerde code te compileren. Later bespreken we hoe we deze installeren.
 
+Om met de ToF-sensoren aan de slag te gaan, heb ik gebruik gemaakt van het development kit [P-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/p-nucleo-53l3a2.html) die een voor-gecompileerde bibliotheek meegeleverd kreeg. Hier heb ik eerst met leren werken. Nadien ben ik overgestapt naar de *"Bare API"* en hier al de nodige extra bestanden die we moeten toevoegen om het compatibel te maken met het gebruikte platform.
+
 ----
 
 ## PinOut
 
-In onderstaande Miro sheets worden de pinouts weergegeven van zowel de MCU als de arduino header pinout
+In onderstaande Miro sheets worden de pinouts weergegeven van zowel de MCU als de ST Morpho Extention pin header.
 
 
 PCB Pinout F401
@@ -108,42 +110,45 @@ PCB Pinout F401
 PCB Pinout F151
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOC73SG8=/?moveToViewport=-794,-502,1535,853" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
-Arduino Header pinout
+PCB Pinout F302
+<iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVO7LxdQU=/?moveToViewport=-355,-347,595,605" frameBorder="0" scrolling="no" allowFullScreen></iframe>
+
+!> Merk op dat we **EXTERN1** & **EXTERN2** hebben moeten vervangen door **I2C2_SDA** & **I2C2_SCL**. 
+
+ST Morpho Extention pin header
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_cksw=/?moveToViewport=-1651,-1262,3867,2149" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
 ----
 
-## Importeren API VL53LXC
+## Importeer API VL53LXC
 
 Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **inc** en **src** folder waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we de **inc** en **src** bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
 
+!> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PlatformIo's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
 
+Wanneer we het example project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden in die van belang zijn:
 
-!> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PLatformIo's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
-
-Wanneer we het example project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden in die van belang zijn. Dit zijn:
-
-* 53l3a2.c
-* 53l3a2.h
-* 53l3a2_ranging_sensor.c
-* 53l3a2_ranging_sensor.h
-* 53l3a2_conf_template.h
-* ranging_sensor.h
+* vl53lx_platform_init.h
+* vl53lx_platform_ipp_imports.h
+* vl53lx_platform_ipp.c
+* vl53lx_platform_ipp.h
+* vl53lx_platform_log.c
+* vl53lx_platform_log.h
+* vl53lx_platform_user_config.h
+* vl53lx_platform_user_data.h
+* vl53lx_platform_user_defines.h
+* vl53lx_platform.c
+* vl53lx_platform.h
+* vl53lx_types.h
 * vl53l3cx.h
 * vl53l3cx.c
-* stm32f4xx_hal_conf.h
-* stm32f4xx_hal_msp.c
-* stm32f4xx_it.h
-* stm32f4xx_it.c
-* stm32f4xx_nucleo_bus.h
-* stm32f4xx_nucleo_bus.c
-* stm32f4xx_nucleo_conf.h
-* stm32f4xx_nucleo.h
-* stm32f4xx_nucleo.c
+* custom_tof_conf.h
+
+?> deze bestanden zijn gegenereerd door STM32CubeIDE
 
 Deze bestanden moeten eveneens in de folder **BSP_vl53l3cx** geplaatst worden.
 
-Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
+<!-- Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
 
 ?> De development kit maakt gebruik van een [STMP1600](https://html.alldatasheet.com/html-pdf/942880/STMICROELECTRONICS/STMPE1600/1946/1/STMPE1600.html) GPIO Expander die d.m.v. I²C communiceert. Ze gaan namelijk de XSHUT pinnen van de ToF-sensoren hiermee aansturen (Zie [hier](https://www.st.com/resource/en/user_manual/um2757-getting-started-with-xnucleo53l3a2-multi-target-ranging-tof-sensor-expansion-board-based-on-vl53l3cx-for-stm32-nucleo-stmicroelectronics.pdf) op pagina 5). Ook gebruikt deze development kit maar 3 ToF-sensoren (LEFT, CENTER, RIGHT) waar we in dit project er 5 gaan gebruiken (LEFT, CENTER, RIGHT, TOP, BOTTOM).
 
@@ -193,7 +198,7 @@ enum VL53L3A2_dev_e
 };
 ```
 
-----
+---- -->
 
 ## Importeer Andere Bestanden
 
@@ -217,6 +222,7 @@ Naast de gekregen API van ST, hebben we ook zelf een aantal bestanden gecreëerd
 Al deze bestanden gaan eveneens onder de **lib** folder plaatsen in de folder **Gesture_Detect/src**.
 
 ----
+
 
 ## Installeer Platform & Board
 
@@ -243,15 +249,68 @@ Het platform.ini bestand is een belangrijk bestand. Hierin wordt de configuratie
 
 Hieronder is het genen dat je in dit bestand moet plaatsen.
 
-```platformio.ini
-[env:nucleo_f401re]
+``` platformio.ini
+[env:custom_f303ret6]
 platform = ststm32
-board = nucleo_f401re
+board = custom_f302ret6
 framework = stm32cube
+test_transport = custom
 monitor_speed = 115200
+build_flags = -D HSE_VALUE=8000000U
 ```
 
-Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* moet gebruiken. Zo worden de HAL-bibliotheken aangesproken. Ook wordt er gedefinieerde welk board dat we gebruiken. Voor debug redenen zal de baudrate ingesteld worden op 115200. Het voorafgaande platform dat geïnstalleerd is, plaatsen we hier ook in.
+Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* moet gebruiken. Zo worden de HAL-bibliotheken aangesproken. Ook wordt er gedefinieerde welk board dat we gebruiken. Voor debug redenen zal de baudrate ingesteld worden op 115200. Het voorafgaande platform dat geïnstalleerd is, plaatsen we hier ook in. De build_flags parameter geeft mee wat de frequentie is van de externe klok (in dit geval 8MHz).
+
+De test_transponder parameter is toegevoegd zodat we optimaal gebruik kunnen maken van Unit testing. De nodige bestanden hiervoor zijn **unittest_transport.c** & **unittest_transport.h** die onder de folder **test** gezet moet worden. [Hier](https://docs.platformio.org/en/stable/plus/unit-testing.html) is wat extra uitleg over wat dit nu juist doet en hoe het gebruikt moet worden.
+
+Omdat we werken met de STM32F302RET6, die (nog) niet ondersteund is door PlatformIO, moeten we hier onze eigen spin aan geven. Er wordt een bestand genaamd **custom_f302ret6.json** aangemaakt en het wordt in de folder **boards** geplaatst met volgende content:
+
+``` json custom_f302ret6
+{
+    "build": {
+      "core": "stm32",
+      "cpu": "cortex-m4",
+      "extra_flags": "-DSTM32F302xE",
+      "f_cpu": "32000000L",
+      "mcu": "stm32f302ret6",
+      "product_line": "STM32F302xE",
+      "variant": "STM32F3xx/F302R(B-C-D-E)T"
+    },
+    "debug": {
+      "default_tools": [
+        "stlink"
+      ],
+      "jlink_device": "STM32F302RE",
+      "openocd_target": "stm32f3x",
+      "svd_path": "STM32F302x.svd"
+    },
+    "frameworks": [
+      "arduino",
+      "cmsis",
+      "mbed",
+      "stm32cube",
+      "libopencm3",
+      "zephyr"
+    ],
+    "name": "ST Nucleo F302RE (64k RAM. 512k Flash)",
+    "upload": {
+      "maximum_ram_size": 65536,
+      "maximum_size": 524288,
+      "protocol": "stlink",
+      "protocols": [
+        "jlink",
+        "cmsis-dap",
+        "stlink",
+        "blackmagic",
+        "mbed"
+      ]
+    },
+    "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f302.html",
+    "vendor": "ST"
+  }
+```
+
+Voor meer informatie zie de [documentatie](https://docs.platformio.org/en/stable/platforms/creating_board.html).
 
 ----
 
@@ -260,11 +319,25 @@ Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* m
 Als laatste gaan we de bestanden importeren die het eigelijke project tot leven brengen. Dit zijn de bestanden:
 
 * main.h
+* custom_bus.h
+* custom_conf.h
+* custom_errno.h
+* gpio.h
+* i2c.h
+* stm32f3xx_hal_conf.h
+* stm32f3xx_it.h
+* uart.h
+* uart.c
+* stm32f3xx_hal_msp.c
+* stm32f3xx.c
 * main.c
-* app_tof.h
-* app_tof.c
 * syscalls.c
 * sysmem.c
+* custom_bus.c
+* gpio.c
+* i2c.c
+* stm32f3xx_it.c
+
 
 Hier plaatsen we de .h bestanden in de *include* folder en de .c bestanden in de *src* folder.
 
@@ -281,9 +354,14 @@ Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 
 ----
 
-# Hardware specificaties
+# Hardware Opbouw
+
+De gemaakte PCB V0.3 wordt op een plexi plaat gemonteerd zodat dit kan fungeren als een coverglas. Er worden extra gaten voorzien om de aparte sensor-bodjes te verplaatsen van plaats door enkele bouten te verplaatsen.
+
+![foto opstelling](foto's/OpstellingV2.jpg)
 
 
+</div>
 
 # LED Controller
 

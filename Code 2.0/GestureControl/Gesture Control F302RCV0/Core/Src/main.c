@@ -144,9 +144,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  VL53L3CX_GetDistance(&sensor, &results);
-	  printf("distance: %4d\r\n", results.ZoneResult[0].Distance[0]);
-	  HAL_Delay(1000);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
