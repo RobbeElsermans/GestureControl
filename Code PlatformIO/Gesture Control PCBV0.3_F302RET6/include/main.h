@@ -30,6 +30,13 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
 
+  /* Private includes ----------------------------------------------------------*/
+  /* USER CODE BEGIN Includes */
+
+  /* USER CODE END Includes */
+
+  /* Exported types ------------------------------------------------------------*/
+  /* USER CODE BEGIN ET */
   typedef enum SensorDef
   {
     CENTER = 0,
@@ -49,21 +56,17 @@ extern "C"
     NONE = 0x10
   } commands;
 
-#define amountSensor 5
-
-  /* Private includes ----------------------------------------------------------*/
-  /* USER CODE BEGIN Includes */
-
-  /* USER CODE END Includes */
-
-  /* Exported types ------------------------------------------------------------*/
-  /* USER CODE BEGIN ET */
-
+  typedef struct resultaat
+  {
+    long distance;
+    int8_t status;
+    long timestamp;
+  } Resultaat_t;
   /* USER CODE END ET */
 
   /* Exported constants --------------------------------------------------------*/
   /* USER CODE BEGIN EC */
-
+#define amountSensor 5
   /* USER CODE END EC */
 
   /* Exported macro ------------------------------------------------------------*/

@@ -85,5 +85,5 @@ bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistance
   * @note   De tijd wanneer er een object gedetecteerd wordt is gedefinieerd in timerMeasurmentTimeout.
   * @retval bool ObjectPresent
   */
-bool ckeckObjectPresent(VL53L3CX_Result_t Result[], bool *WasObjectPresent, int* dist);
+bool ckeckObjectPresent(Resultaat_t *Result, bool *WasObjectPresent, long *dist);
 #endif

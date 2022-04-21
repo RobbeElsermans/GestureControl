@@ -57,10 +57,10 @@ bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistance
     return true;
 }
 
-bool ckeckObjectPresent(VL53L3CX_Result_t *Result, bool *WasObjectPresent, int *dist)
+bool ckeckObjectPresent(Resultaat_t *Result, bool *WasObjectPresent, long *dist)
 {
-    // De afstand en zone results ophalen uite Result
-    zone = (uint8_t)Result[CENTER].ZoneResult[0].Status[0];
+    // De afstand en zone results ophalen uit Result
+    zone = Result->distance;
 
     // if (counter_prevDistances == max_prevDistances)
     //     counter_prevDistances = 0;
