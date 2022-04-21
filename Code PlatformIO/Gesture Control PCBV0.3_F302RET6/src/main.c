@@ -61,9 +61,9 @@ long distance[amountSensor] = {0, 0, 0, 0, 0};
 long status[amountSensor] = {0, 0, 0, 0, 0};
 volatile bool isReady[amountSensor] = {false, false, false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false, false, false};
-//VL53L3CX_Result_t results[amountSensor]; // Vervangen door Resultaat_t
+// VL53L3CX_Result_t results[amountSensor]; // Vervangen door Resultaat_t
 
-//Resultaat van de meetingen
+// Resultaat van de meetingen
 Resultaat_t resultaat[amountSensor];
 
 bool objectPresent = false;
@@ -253,70 +253,79 @@ int main(void)
     timerGlobal = HAL_GetTick();
 
     VL53L3CX_Result_t tempResult;
+
     if (Sensor_Ready(&sensor[CENTER], CENTER, (uint8_t *)isReady))
     {
       isReady[CENTER] = false;
       VL53L3CX_GetDistance(&sensor[CENTER], &tempResult);
-      //HAL_Delay(2);
+      // HAL_Delay(2);
       resultaat[CENTER].distance = (long)tempResult.ZoneResult[0].Distance[0];
       resultaat[CENTER].status = tempResult.ZoneResult[0].Status[0];
-      //HAL_Delay(2);
+      // HAL_Delay(2);
     }
 
-if(objectPresent){
-if(toggler){
-    if (Sensor_Ready(&sensor[LEFT], LEFT, (uint8_t *)isReady))
+    if (objectPresent)
     {
-      isReady[LEFT] = false;
-      VL53L3CX_GetDistance(&sensor[LEFT], &tempResult);
-      //HAL_Delay(2);
-      resultaat[LEFT].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      resultaat[LEFT].status = tempResult.ZoneResult[0].Status[0];
-      //HAL_Delay(2);
-    }
+      if (toggler)
+      {
+        if (Sensor_Ready(&sensor[LEFT], LEFT, (uint8_t *)isReady))
+        {
+          isReady[LEFT] = false;
+          VL53L3CX_GetDistance(&sensor[LEFT], &tempResult);
+          // HAL_Delay(2);
+          resultaat[LEFT].distance = (long)tempResult.ZoneResult[0].Distance[0];
+          resultaat[LEFT].status = tempResult.ZoneResult[0].Status[0];
+          // HAL_Delay(2);
+        }
 
-    if (Sensor_Ready(&sensor[RIGHT], RIGHT, (uint8_t *)isReady))
-    {
-      isReady[RIGHT] = false;
-      VL53L3CX_GetDistance(&sensor[RIGHT], &tempResult);
-      //HAL_Delay(2);
-      resultaat[RIGHT].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      resultaat[RIGHT].status = tempResult.ZoneResult[0].Status[0];
-      //HAL_Delay(2);
-    }
-  }
-  else
-  {
-    if (Sensor_Ready(&sensor[TOP], TOP, (uint8_t *)isReady))
-    {
-      isReady[TOP] = false;
-      VL53L3CX_GetDistance(&sensor[TOP], &tempResult);
-      //HAL_Delay(2);
-      resultaat[TOP].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      resultaat[TOP].status = tempResult.ZoneResult[0].Status[0];
-      //HAL_Delay(2);
-    }
+        if (Sensor_Ready(&sensor[RIGHT], RIGHT, (uint8_t *)isReady))
+        {
+          isReady[RIGHT] = false;
+          VL53L3CX_GetDistance(&sensor[RIGHT], &tempResult);
+          // HAL_Delay(2);
+          resultaat[RIGHT].distance = (long)tempResult.ZoneResult[0].Distance[0];
+          resultaat[RIGHT].status = tempResult.ZoneResult[0].Status[0];
+          // HAL_Delay(2);
+        }
+      }
+      else
+      {
+        if (Sensor_Ready(&sensor[TOP], TOP, (uint8_t *)isReady))
+        {
+          isReady[TOP] = false;
+          VL53L3CX_GetDistance(&sensor[TOP], &tempResult);
+          // HAL_Delay(2);
+          resultaat[TOP].distance = (long)tempResult.ZoneResult[0].Distance[0];
+          resultaat[TOP].status = tempResult.ZoneResult[0].Status[0];
+          // HAL_Delay(2);
+        }
 
-    if (Sensor_Ready(&sensor[BOTTOM], BOTTOM, (uint8_t *)isReady))
-    {
-      isReady[BOTTOM] = false;
-      VL53L3CX_GetDistance(&sensor[BOTTOM], &tempResult);
-      //HAL_Delay(2);
-      resultaat[BOTTOM].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      resultaat[BOTTOM].status = tempResult.ZoneResult[0].Status[0];
-      //HAL_Delay(2);
+        if (Sensor_Ready(&sensor[BOTTOM], BOTTOM, (uint8_t *)isReady))
+        {
+          isReady[BOTTOM] = false;
+          VL53L3CX_GetDistance(&sensor[BOTTOM], &tempResult);
+          // HAL_Delay(2);
+          resultaat[BOTTOM].distance = (long)tempResult.ZoneResult[0].Distance[0];
+          resultaat[BOTTOM].status = tempResult.ZoneResult[0].Status[0];
+          // HAL_Delay(2);
+        }
+      }
+      toggler = !toggler;
     }
-  }
-  toggler = !toggler;
-}
+    else
+    {
+      long tempTimer = HAL_GetTick();
+      while (HAL_GetTick() - tempTimer < 500)
+        ;
+    }
 
     objectPresent = ckeckObjectPresent(&resultaat[CENTER], &objectPresent, &resultaat[CENTER].distance);
 
     // Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
     gestureRL = CheckGestureRL(&gestureRL, &objectPresent, resultaat);
-    //gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
-    //gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
-    //gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
+    gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
+    // gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
+    // gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
 
     // printf("Object: %1d \t", gestureRL);
 
@@ -453,7 +462,7 @@ if(toggler){
     //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].status, resultaat[CENTER].status, resultaat[RIGHT].status);
     //   timerPrintf = HAL_GetTick();
     // }
-    printf("R: %5d %2d\r\n", resultaat[RIGHT].distance, resultaat[RIGHT].status);
+    printf("C: %5d %2d\r\n", resultaat[CENTER].distance, resultaat[CENTER].status);
   }
   /* USER CODE END 3 */
 }
@@ -609,10 +618,10 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   VL53L3CX_ProfileConfig_t Profile;
 
   Profile.RangingProfile = VL53LX_DISTANCEMODE_MEDIUM;
-  Profile.TimingBudget = 8*5;  /* 8 ms < TimingBudget < 500 ms */
-  Profile.Frequency = 0;     /* not necessary in simple ranging */
-  Profile.EnableAmbient = 1; /* Enable: 1, Disable: 0 */
-  Profile.EnableSignal = 1;  /* Enable: 1, Disable: 0 */
+  Profile.TimingBudget = 8 * 5; /* 8 ms < TimingBudget < 500 ms */
+  Profile.Frequency = 0;        /* not necessary in simple ranging */
+  Profile.EnableAmbient = 1;    /* Enable: 1, Disable: 0 */
+  Profile.EnableSignal = 1;     /* Enable: 1, Disable: 0 */
 
   VL53L3CX_ConfigProfile(sensor, &Profile);
 }

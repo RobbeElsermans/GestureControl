@@ -20,7 +20,7 @@ static int maxDistanceObject = 1000;           // Maximale afstand dat een objec
 // Timer om een object te herkennen
 static float timerMeasurment = 0;           // opsalg van timer waarde
 static bool timerMeasurementSet = false;    // de flag wanneer de timer gezet is
-static int timerMeasurmentTimeout = 2000;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
+static int timerMeasurmentTimeout = 2100;      // x seconden moet het object voor het toestel staan om gedetecteerd te worden
 
 // Bug wanneer de sensor niets detecteerd maar de afstand blijft hetzelfde en er zij geen foutcodes aanwezig (zone == 0)
 static uint8_t max_prevDistances = 9;           // x metingen opslaan
@@ -106,9 +106,7 @@ bool ckeckObjectPresent(Resultaat_t *Result, bool *WasObjectPresent, long *dist)
             timerMeasurment = HAL_GetTick();
         }
 
-        int diff = HAL_GetTick() - timerMeasurment;
-
-        if (diff >= timerMeasurmentTimeout)
+        if (HAL_GetTick() - timerMeasurment >= timerMeasurmentTimeout)
         {
             printf("Object! \r\n");
             timerMeasurementSet = false;
