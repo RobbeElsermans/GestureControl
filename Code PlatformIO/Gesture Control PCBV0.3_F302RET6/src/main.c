@@ -315,7 +315,7 @@ int main(void)
     else
     {
       long tempTimer = HAL_GetTick();
-      while (HAL_GetTick() - tempTimer < 500)
+      while (HAL_GetTick() - tempTimer < 250)
         ;
     }
 
@@ -324,8 +324,8 @@ int main(void)
     // Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
     gestureRL = CheckGestureRL(&gestureRL, &objectPresent, resultaat);
     gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
-    // gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
-    // gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
+    gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
+    gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
 
     // printf("Object: %1d \t", gestureRL);
 
@@ -462,7 +462,7 @@ int main(void)
     //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].status, resultaat[CENTER].status, resultaat[RIGHT].status);
     //   timerPrintf = HAL_GetTick();
     // }
-    printf("C: %5d %2d\r\n", resultaat[CENTER].distance, resultaat[CENTER].status);
+    printf("T: %5d %2d\r\n", resultaat[TOP].distance, resultaat[TOP].status);
   }
   /* USER CODE END 3 */
 }

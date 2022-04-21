@@ -38,23 +38,23 @@ bool CheckGestureUD(bool *_gestureUD, bool *_object, Resultaat_t *Result)
         int dis1 = (int)Result[CENTER].distance;
         int dis4 = (int)Result[BOTTOM].distance;
 
-        if ((dis3 < maxDistanceObject) && (dis4 > maxDistanceObject) && (sta3 == 0) && !hasBottom && !hasCenter &&  !hasTop && dis3 != 0) // Sensor top
+        if ((dis3 < maxDistanceObject) && (dis4 > maxDistanceObject) && (sta3 == 0 || sta3 == 7) && !hasBottom && !hasCenter && !hasTop && dis3 != 0) // Sensor top
         {
             hasTop = true;
-            //printf("Bottom \r\n");
+            printf("TOP \r\n");
         }
-        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && !hasBottom && !hasCenter && hasTop && dis1 != 0) // Sensor center
+        else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && !hasBottom && !hasCenter && hasTop && dis1 != 0) // Sensor center
         {
             hasCenter = true;
-            //printf("center \r\n");
+            printf("CENTER \r\n");
         }
-        else if ((dis4 < maxDistanceObject) && (sta4 == 0) && !hasBottom && hasCenter && hasTop && dis4 != 0) // Sensor top
+        else if ((dis4 < maxDistanceObject) && (sta4 == 0 || sta4 == 7) && !hasBottom && hasCenter && hasTop && dis4 != 0) // Sensor top
         {
             hasBottom = true;
-            //printf("Top \r\n");
+            printf("BOTTOM \r\n");
         }
 
-        //printf("TOP %2d, center %2d, BOTTOM %2d \r\n", hasTop, hasCenter, hasBottom);
+        // printf("TOP %2d, center %2d, BOTTOM %2d \r\n", hasTop, hasCenter, hasBottom);
     }
 
     // Een timeout timer plaatsen
@@ -75,8 +75,15 @@ bool CheckGestureUD(bool *_gestureUD, bool *_object, Resultaat_t *Result)
             hasCenter = false;
         }
 
-    if(hasBottom && hasCenter && hasTop)
-    return true;
+    if (hasBottom && hasCenter && hasTop)
+    {
+        timerMeasurementSet = false;
+        hasBottom = false;
+        hasTop = false;
+        hasCenter = false;
+        return true;
+    }
+
     else
-    return false;
+        return false;
 }

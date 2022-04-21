@@ -38,17 +38,17 @@ bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
         int dis1 = (int)Result[CENTER].distance;
         int dis4 = (int)Result[BOTTOM].distance;
 
-        if ((dis4 < maxDistanceObject) && (dis3 > maxDistanceObject) && (sta4 == 0) && !hasBottom && !hasCenter &&  !hasTop && dis4 != 0) // Sensor bottom
+        if ((dis4 < maxDistanceObject) && (dis3 > maxDistanceObject) && (sta4 == 0 || sta4 == 7) && !hasBottom && !hasCenter &&  !hasTop && dis4 != 0) // Sensor bottom
         {
             hasBottom = true;
             //printf("Bottom \r\n");
         }
-        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasBottom && !hasCenter && !hasTop && dis1 != 0) // Sensor center
+        else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && hasBottom && !hasCenter && !hasTop && dis1 != 0) // Sensor center
         {
             hasCenter = true;
             //printf("center \r\n");
         }
-        else if ((dis3 < maxDistanceObject) && (sta3 == 0) && hasBottom && hasCenter && !hasTop && dis3 != 0) // Sensor top
+        else if ((dis3 < maxDistanceObject) && (sta3 == 0 || sta3 == 7) && hasBottom && hasCenter && !hasTop && dis3 != 0) // Sensor top
         {
             hasTop = true;
             //printf("Top \r\n");
@@ -75,8 +75,14 @@ bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
             hasCenter = false;
         }
 
-    if(hasBottom && hasCenter && hasTop)
-    return true;
+    if (hasBottom && hasCenter && hasTop)
+    {
+        timerMeasurementSet = false;
+        hasBottom = false;
+        hasTop = false;
+        hasCenter = false;
+        return true;
+    }
     else
     return false;
 }
