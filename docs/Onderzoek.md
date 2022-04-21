@@ -10,20 +10,22 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
 
 - [Onderzoek](#onderzoek)
 - [Inhoudsopgaven](#inhoudsopgaven)
-- [plaats sensoren](#plaats-sensoren)
-- [Snelheid Metingen](#snelheid-metingen)
+- [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit)
+- [Snelheid Metingen Development Kit](#snelheid-metingen-development-kit)
   - [Eén sensor](#eén-sensor)
     - [BLOCKING_CONTINUOUS](#blocking_continuous)
     - [ASYNC_CONTINUOUS](#async_continuous)
   - [Vijf sensoren](#vijf-sensoren)
     - [BLOCKING_CONTINUOUS](#blocking_continuous-1)
     - [ASYNC_CONTINUOUS](#async_continuous-1)
+- [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03)
+- [Snelheid Metingen PCBV0.3](#snelheid-metingen-pcbv03)
 - [Coverglas](#coverglas)
 
 
 ----
 
-# plaats sensoren
+# Plaats Sensoren Development Kit
 
 Dit project is ontworpen om te reageren op bewegingen gegeven door een gebruiker. Omdat dit meestal een hand zal zijn, moet er gekeken worden hoe de sensoren juist t.o.v. elkaar moeten staan (kruis, ster, cirkel, ...).
 
@@ -60,7 +62,7 @@ Dat uiteindelijk uitkomt op dit:
 De printplaat waarop de Nucleo-F401RE bevestigd is, wordt op een houten plaat bevestigd zodat deze verticaal staat. Op deze printplaat staan ook nog extra led's en drukknoppen om de analyse wat zichtbaar te maken.
 
 
-# Snelheid Metingen 
+# Snelheid Metingen Development Kit
 ## Eén sensor
 
 ### BLOCKING_CONTINUOUS
@@ -301,6 +303,19 @@ while (1)
 We kunnen concluderen dat snelheid niet het beste is wanneer we met meerdere sensoren werken. We gaan een balans moeten zoeken tussen de snelheid van het meten en de snelheid van verwerken.
 
 We nemen hier 100 als waarde voor *TimingBudget* wat ons een software delay geeft van +-60ms.
+
+# Plaats Sensoren PCBV0.3
+
+Zoals besproken in [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit) zijn er enkele mogelijkheden om de sensoren op te stellen. We hebben daarom een plexi glas plaat ontworpen die genoeg mogelijkheden voorziet om de sensoren op verschillende plaatsen te bevestigen.
+
+**Importeer het DXF bestand van de plexi plaat**
+
+Als eerste opstelling gaan we opteren om de sensoren kruislings te plaatsen. Dit omdat we met de development kit goede resultaten hebben bekomen. Later in dit hoofdstuk gaan we nog enkele opstellingen uitvoeren op werking.
+
+![foto opstelling 1](foto's/PCBV0.3_opstelling_1.jpg)
+
+# Snelheid Metingen PCBV0.3
+
 
 # Coverglas
 

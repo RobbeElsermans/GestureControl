@@ -23,7 +23,7 @@ static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
 static int timerMeasurmentTimeout = 1200; // 1 seconden
 
-bool CheckGestureDU(bool *_gestureDU, bool *_object, VL53L3CX_Result_t *Result)
+bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
 {
     // Detecteren commando van Onder naar boven
     // Eerst moet sensor onder (4) minder binnen krijgen
@@ -31,12 +31,12 @@ bool CheckGestureDU(bool *_gestureDU, bool *_object, VL53L3CX_Result_t *Result)
     // Als laatste sensor boven (3)
     if (*_object)
     {
-        uint8_t sta3 = (uint8_t)Result[TOP].ZoneResult[0].Status[0];
-        uint8_t sta1 = (uint8_t)Result[CENTER].ZoneResult[0].Status[0];
-        uint8_t sta4 = (uint8_t)Result[BOTTOM].ZoneResult[0].Status[0];
-        int dis3 = (int)Result[TOP].ZoneResult[0].Distance[0];
-        int dis1 = (int)Result[CENTER].ZoneResult[0].Distance[0];
-        int dis4 = (int)Result[BOTTOM].ZoneResult[0].Distance[0];
+        int8_t sta3 = Result[TOP].status;
+        int8_t sta1 = Result[CENTER].status;
+        int8_t sta4 = Result[BOTTOM].status;
+        int dis3 = (int)Result[TOP].distance;
+        int dis1 = (int)Result[CENTER].distance;
+        int dis4 = (int)Result[BOTTOM].distance;
 
         if ((dis4 < maxDistanceObject) && (dis3 > maxDistanceObject) && (sta4 == 0) && !hasBottom && !hasCenter &&  !hasTop && dis4 != 0) // Sensor bottom
         {

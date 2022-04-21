@@ -31,6 +31,6 @@
   * @note   De tijd wanneer er een object gedetecteerd wordt is gedefinieerd in timerMeasurmentTimeout.
   * @retval bool GestureLR
   */
-bool CheckGestureLR(bool *_gestureLR, bool* _object,VL53L3CX_Result_t *Result);
+bool CheckGestureLR(bool *_gestureLR, bool* _object,Resultaat_t *Result);
 
 #endif

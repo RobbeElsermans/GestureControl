@@ -62,7 +62,9 @@ long status[amountSensor] = {0, 0, 0, 0, 0};
 volatile bool isReady[amountSensor] = {false, false, false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false, false, false};
 //VL53L3CX_Result_t results[amountSensor]; // Vervangen door Resultaat_t
-volatile Resultaat_t resultaat[amountSensor];
+
+//Resultaat van de meetingen
+Resultaat_t resultaat[amountSensor];
 
 bool objectPresent = false;
 bool prevObjectPresent = false;
@@ -306,13 +308,13 @@ int main(void)
   }
   toggler = !toggler;
 
-    // objectPresent = ckeckObjectPresent(&resultaat[CENTER], &objectPresent, &resultaat[CENTER].distance);
+    objectPresent = ckeckObjectPresent(&resultaat[CENTER], &objectPresent, &resultaat[CENTER].distance);
 
     // Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
-    // gestureRL = CheckGestureRL(&gestureRL, &objectPresent, results);
-    // gestureLR = CheckGestureLR(&gestureLR, &objectPresent, results);
-    // gestureDU = CheckGestureDU(&gestureDU, &objectPresent, results);
-    // gestureUD = CheckGestureUD(&gestureUD, &objectPresent, results);
+    gestureRL = CheckGestureRL(&gestureRL, &objectPresent, resultaat);
+    gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
+    gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
+    gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
 
     // printf("Object: %1d \t", gestureRL);
 
@@ -326,118 +328,118 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    // if (objectPresent && !prevObjectPresent)
-    // {
-    //   // Opstarten van sensoren
-    //   Start_Sensor(&sensor[LEFT], LEFT);
-    //   Start_Sensor(&sensor[RIGHT], RIGHT);
-    //   Start_Sensor(&sensor[TOP], TOP);
-    //   Start_Sensor(&sensor[BOTTOM], BOTTOM);
-    //   printf("Start\r\n");
-    // }
-    // else if (!objectPresent && prevObjectPresent)
-    // {
-    //   Stop_Sensor(&sensor[LEFT]);
-    //   Stop_Sensor(&sensor[RIGHT]);
-    //   Stop_Sensor(&sensor[TOP]);
-    //   Stop_Sensor(&sensor[BOTTOM]);
-    //   printf("Stop\r\n");
-    // }
+    if (objectPresent && !prevObjectPresent)
+    {
+      // Opstarten van sensoren
+      Start_Sensor(&sensor[LEFT], LEFT);
+      Start_Sensor(&sensor[RIGHT], RIGHT);
+      Start_Sensor(&sensor[TOP], TOP);
+      Start_Sensor(&sensor[BOTTOM], BOTTOM);
+      printf("Start\r\n");
+    }
+    else if (!objectPresent && prevObjectPresent)
+    {
+      Stop_Sensor(&sensor[LEFT]);
+      Stop_Sensor(&sensor[RIGHT]);
+      Stop_Sensor(&sensor[TOP]);
+      Stop_Sensor(&sensor[BOTTOM]);
+      printf("Stop\r\n");
+    }
 
-    // // Commando's instellen
-    // //  Het commando RL activeren
-    // if (gestureRL && !prevGestureRL && commando == NONE)
-    // {
-    //   prevGestureRL = gestureRL;
-    //   printf("gestureCommand RL: %d \r\n", gestureRL);
-    //   commando = RL;
-    // }
+    // Commando's instellen
+    //  Het commando RL activeren
+    if (gestureRL && !prevGestureRL && commando == NONE)
+    {
+      prevGestureRL = gestureRL;
+      printf("gestureCommand RL: %d \r\n", gestureRL);
+      commando = RL;
+    }
 
-    // // Het commando LR activeren
-    // if (gestureLR && !prevGestureLR && commando == NONE)
-    // {
-    //   prevGestureLR = gestureLR;
-    //   printf("gestureCommand LR: %d \r\n", gestureLR);
-    //   commando = LR;
-    // }
+    // Het commando LR activeren
+    if (gestureLR && !prevGestureLR && commando == NONE)
+    {
+      prevGestureLR = gestureLR;
+      printf("gestureCommand LR: %d \r\n", gestureLR);
+      commando = LR;
+    }
 
-    // // Het commando DU activeren
-    // if (gestureDU && !prevGestureDU && commando == NONE)
-    // {
-    //   prevGestureDU = gestureDU;
-    //   printf("gestureCommand DU: %d \r\n", gestureDU);
-    //   commando = DU;
-    // }
+    // Het commando DU activeren
+    if (gestureDU && !prevGestureDU && commando == NONE)
+    {
+      prevGestureDU = gestureDU;
+      printf("gestureCommand DU: %d \r\n", gestureDU);
+      commando = DU;
+    }
 
-    // // Het commando UD activeren
-    // if (gestureUD && !prevGestureUD && commando == NONE)
-    // {
-    //   prevGestureUD = gestureUD;
-    //   printf("gestureCommand UD: %d \r\n", gestureUD);
-    //   commando = UD;
-    // }
+    // Het commando UD activeren
+    if (gestureUD && !prevGestureUD && commando == NONE)
+    {
+      prevGestureUD = gestureUD;
+      printf("gestureCommand UD: %d \r\n", gestureUD);
+      commando = UD;
+    }
 
-    // prevObjectPresent = objectPresent;
-    // prevGestureRL = gestureRL; // fix debouncing van gestureRL
-    // prevGestureLR = gestureLR; // fix debouncing van gestureLR
-    // prevGestureDU = gestureDU; // fix debouncing van gestureDU
-    // prevGestureUD = gestureUD; // fix debouncing van gestureUD
+    prevObjectPresent = objectPresent;
+    prevGestureRL = gestureRL; // fix debouncing van gestureRL
+    prevGestureLR = gestureLR; // fix debouncing van gestureLR
+    prevGestureDU = gestureDU; // fix debouncing van gestureDU
+    prevGestureUD = gestureUD; // fix debouncing van gestureUD
 
-    // /* 	Timer om leds even aan te laten
-    //     Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
-    //     Dan zetten we een timer
-    //     Wanneer de timer afloopt wordt het commando gereset
-    //   */
-    // if (!timerCommandSet && commando != NONE)
-    // {
-    //   timerCommandSet = true;
-    //   timerCommand = HAL_GetTick();
-    // }
-    // if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
-    // {
-    //   timerCommandSet = false;
-    //   commando = NONE;
-    // }
-    // // Commando's uitsturen
-    // switch (commando)
-    // {
-    // case NONE:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-    //   break;
-    // case RL:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-    //   break;
-    // case LR:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-    //   break;
-    // case UD:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-    //   break;
-    // case DU:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-    //   break;
-    // case DIM:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-    //   break;
+    /* 	Timer om leds even aan te laten
+        Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
+        Dan zetten we een timer
+        Wanneer de timer afloopt wordt het commando gereset
+      */
+    if (!timerCommandSet && commando != NONE)
+    {
+      timerCommandSet = true;
+      timerCommand = HAL_GetTick();
+    }
+    if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
+    {
+      timerCommandSet = false;
+      commando = NONE;
+    }
+    // Commando's uitsturen
+    switch (commando)
+    {
+    case NONE:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case RL:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case LR:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case UD:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    case DU:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
+      break;
+    case DIM:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
+      break;
 
-    // default:
-    //   HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-    //   HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-    //   break;
-    // }
+    default:
+      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+      break;
+    }
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 
