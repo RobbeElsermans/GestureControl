@@ -60,7 +60,7 @@ bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistance
 bool ckeckObjectPresent(Resultaat_t *Result, bool *WasObjectPresent, long *dist)
 {
     // De afstand en zone results ophalen uit Result
-    zone = Result->distance;
+    zone = Result->status;
 
     // if (counter_prevDistances == max_prevDistances)
     //     counter_prevDistances = 0;

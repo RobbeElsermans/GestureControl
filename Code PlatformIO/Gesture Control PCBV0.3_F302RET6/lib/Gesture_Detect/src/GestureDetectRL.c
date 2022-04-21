@@ -18,7 +18,7 @@ static bool hasLeft = false;
 static bool hasCenter = false;
 static bool hasRight = false;
 
-static int maxDistanceObject = 300;
+static int maxDistanceObject = 400;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
 static int timerMeasurmentTimeout = 1200; // 1 seconden
@@ -38,23 +38,23 @@ bool CheckGestureRL(bool *_gestureRL, bool *_object, Resultaat_t *Result)
         int dis1 = (int)Result[CENTER].distance;
         int dis2 = (int)Result[RIGHT].distance;
 
-        if ((dis2 < maxDistanceObject) && (dis0 > maxDistanceObject) && (sta2 == 0) && !hasRight && !hasCenter &&  !hasLeft && dis2 != 0) // Sensor right
+        if ((dis2 < maxDistanceObject) && (dis0 > maxDistanceObject) && (sta2 == 0 || sta2 == 7) && !hasRight && !hasCenter && !hasLeft && dis2 != 0) // Sensor right
         {
             hasRight = true;
-            //printf("right  %4d \r\n", dis2);
+            printf(" RL right  %4d \r\n", dis2);
         }
-        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasRight && !hasCenter && !hasLeft && dis1 != 0) // Sensor center
+        else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && hasRight && !hasCenter && !hasLeft && dis1 != 0) // Sensor center
         {
             hasCenter = true;
-            //printf("center %4d \r\n", dis1);
+            printf(" RL center %4d \r\n", dis1);
         }
-        else if ((dis0 < maxDistanceObject) && (sta0 == 0) && hasRight && hasCenter && !hasLeft && dis0 != 0) // Sensor left
+        else if ((dis0 < maxDistanceObject) && (sta0 == 0 || sta0 == 7) && hasRight && hasCenter && !hasLeft && dis0 != 0) // Sensor left
         {
             hasLeft = true;
-            //printf("left %4d \r\n", dis0);
+            printf(" RL left %4d \r\n", dis0);
         }
 
-        //printf("left %2d, center %2d, right %2d \r\n", hasLeft, hasCenter, hasRight);
+        // printf("left %2d, center %2d, right %2d \r\n", hasLeft, hasCenter, hasRight);
     }
 
     // Een timeout timer plaatsen
@@ -75,8 +75,13 @@ bool CheckGestureRL(bool *_gestureRL, bool *_object, Resultaat_t *Result)
             hasCenter = false;
         }
 
-    if(hasRight && hasCenter && hasLeft)
-    return true;
-    else
-    return false;
+    if (hasRight && hasCenter && hasLeft)
+    {
+        timerMeasurementSet = false;
+        hasRight = false;
+        hasLeft = false;
+        hasCenter = false;
+        return true;
+    }
+    else return false;
 }

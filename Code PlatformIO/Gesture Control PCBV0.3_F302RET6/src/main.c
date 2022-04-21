@@ -235,10 +235,10 @@ int main(void)
   }
 
   Start_Sensor(&sensor[CENTER], CENTER);
-  Start_Sensor(&sensor[LEFT], LEFT);
-  Start_Sensor(&sensor[RIGHT], RIGHT);
-  Start_Sensor(&sensor[TOP], TOP);
-  Start_Sensor(&sensor[BOTTOM], BOTTOM);
+  // Start_Sensor(&sensor[LEFT], LEFT);
+  // Start_Sensor(&sensor[RIGHT], RIGHT);
+  // Start_Sensor(&sensor[TOP], TOP);
+  // Start_Sensor(&sensor[BOTTOM], BOTTOM);
 
   /* USER CODE END 2 */
 
@@ -263,7 +263,8 @@ int main(void)
       //HAL_Delay(2);
     }
 
-  if(toggler){
+if(objectPresent){
+if(toggler){
     if (Sensor_Ready(&sensor[LEFT], LEFT, (uint8_t *)isReady))
     {
       isReady[LEFT] = false;
@@ -307,14 +308,15 @@ int main(void)
     }
   }
   toggler = !toggler;
+}
 
     objectPresent = ckeckObjectPresent(&resultaat[CENTER], &objectPresent, &resultaat[CENTER].distance);
 
     // Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
     gestureRL = CheckGestureRL(&gestureRL, &objectPresent, resultaat);
-    gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
-    gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
-    gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
+    //gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
+    //gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
+    //gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
 
     // printf("Object: %1d \t", gestureRL);
 
@@ -443,12 +445,15 @@ int main(void)
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 
-    if (((HAL_GetTick() - timerPrintf) > timerPrintfTimeout))
-    {
-      int timeTotal = HAL_GetTick() - timerGlobal;
-      printf("totale tijd: %5d, distance: %5d, status: %5d\r\n", timeTotal, resultaat[RIGHT].distance, resultaat[RIGHT].status);
-      timerPrintf = HAL_GetTick();
-    }
+    // if (((HAL_GetTick() - timerPrintf) > timerPrintfTimeout))
+    // {
+    //   int timeTotal = HAL_GetTick() - timerGlobal;
+    //   printf("totale tijd: %5d, distance: %5d, status: %5d\r\n", timeTotal, resultaat[CENTER].distance, resultaat[CENTER].status);
+    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].distance, resultaat[CENTER].distance, resultaat[RIGHT].distance);
+    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].status, resultaat[CENTER].status, resultaat[RIGHT].status);
+    //   timerPrintf = HAL_GetTick();
+    // }
+    printf("R: %5d %2d\r\n", resultaat[RIGHT].distance, resultaat[RIGHT].status);
   }
   /* USER CODE END 3 */
 }
