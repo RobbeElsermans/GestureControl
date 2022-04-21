@@ -42,6 +42,12 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+typedef struct resultaat{
+  long distance;
+  int8_t status;
+  long timestamp;
+} Resultaat_t;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -61,7 +67,7 @@ long distance[5] = {0, 0, 0, 0, 0};
 long status[5] = {0, 0, 0, 0, 0};
 volatile bool isReady[5] = {false, false, false, false, false};
 volatile bool hasRead[5] = {false, false, false, false, false};
-VL53L3CX_Result_t results[5];
+VL53L3CX_Result_t results[5]; //Vervangen door Resultaat_t
 
 bool objectPresent = false;
 bool prevObjectPresent = false;
@@ -81,6 +87,14 @@ commands commando = NONE;
 static float timerCommand = 0;
 static bool timerCommandSet = false;
 static int timerCommandTimeout = 2000; // 2 seconden
+
+//Global Timer Counter
+static long timerGlobal = 0;
+
+// Timer printf
+static float timerPrintf = 0;
+static bool timerPrintfSet = false;
+static int timerPrintfTimeout = 2000; // 2 seconden
 
 // typedef enum SensorDef
 // {
@@ -236,54 +250,58 @@ int main(void)
 
   while (1)
   {
+    //Calculate time over main loop
+    timerGlobal = HAL_GetTick();
+
+
     if (Sensor_Ready(&sensor[CENTER], CENTER, (uint8_t *)isReady))
     {
       isReady[CENTER] = false;
       VL53L3CX_GetDistance(&sensor[CENTER], &results[CENTER]);
-      HAL_Delay(2);
+      //HAL_Delay(2);
       distance[CENTER] = (long)results[CENTER].ZoneResult[0].Distance[0];
       status[CENTER] = results[CENTER].ZoneResult[0].Status[0];
-      HAL_Delay(2);
+      //HAL_Delay(2);
     }
 
     if (Sensor_Ready(&sensor[LEFT], LEFT, (uint8_t *)isReady))
     {
       isReady[LEFT] = false;
       VL53L3CX_GetDistance(&sensor[LEFT], &results[LEFT]);
-      HAL_Delay(2);
+      //HAL_Delay(2);
       distance[LEFT] = (long)results[LEFT].ZoneResult[0].Distance[0];
       status[LEFT] = results[LEFT].ZoneResult[0].Status[0];
-      HAL_Delay(2);
+      //HAL_Delay(2);
     }
 
     if (Sensor_Ready(&sensor[RIGHT], RIGHT, (uint8_t *)isReady))
     {
       isReady[RIGHT] = false;
       VL53L3CX_GetDistance(&sensor[RIGHT], &results[RIGHT]);
-      HAL_Delay(2);
+      //HAL_Delay(2);
       distance[RIGHT] = (long)results[RIGHT].ZoneResult[0].Distance[0];
       status[RIGHT] = results[RIGHT].ZoneResult[0].Status[0];
-      HAL_Delay(2);
+      //HAL_Delay(2);
     }
 
     if (Sensor_Ready(&sensor[TOP], TOP, (uint8_t *)isReady))
     {
       isReady[TOP] = false;
       VL53L3CX_GetDistance(&sensor[TOP], &results[TOP]);
-      HAL_Delay(2);
+      //HAL_Delay(2);
       distance[TOP] = (long)results[TOP].ZoneResult[0].Distance[0];
       status[TOP] = results[TOP].ZoneResult[0].Status[0];
-      HAL_Delay(2);
+      //HAL_Delay(2);
     }
 
     if (Sensor_Ready(&sensor[BOTTOM], BOTTOM, (uint8_t *)isReady))
     {
       isReady[BOTTOM] = false;
       VL53L3CX_GetDistance(&sensor[BOTTOM], &results[BOTTOM]);
-      HAL_Delay(2);
+      //HAL_Delay(2);
       distance[BOTTOM] = (long)results[BOTTOM].ZoneResult[0].Distance[0];
       status[BOTTOM] = results[BOTTOM].ZoneResult[0].Status[0];
-      HAL_Delay(2);
+      //HAL_Delay(2);
     }
 
     objectPresent = ckeckObjectPresent(results, &objectPresent, &distance[CENTER]);
@@ -298,7 +316,7 @@ int main(void)
 
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
 
-    HAL_Delay(2);
+    //HAL_Delay(2);
     // printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\t distance TOP: %4d %3d\t distance BOTTOM: %4d %3d\r\n",
     //(int)distance[CENTER], status[CENTER], (int)distance[LEFT], status[LEFT], (int)distance[RIGHT], status[RIGHT], (int)distance[TOP], status[TOP], (int)distance[BOTTOM], status[BOTTOM]);
     // printf("L: %5d, C: %5d, R: %5d\r\n", distance[LEFT], distance[CENTER], distance[RIGHT]);
@@ -420,6 +438,13 @@ int main(void)
     }
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
+
+    if(((HAL_GetTick()-timerPrintf) > timerPrintfTimeout))
+    {
+      int timeTotal = HAL_GetTick() - timerGlobal;
+      printf("totale tijd: %5d, distance: %5d, status: %5d\r\n", timeTotal, distance[0], status[0]);
+      timerPrintf = HAL_GetTick();
+    }
   }
   /* USER CODE END 3 */
 }
@@ -567,13 +592,14 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   }
   HAL_Delay(2);
   VL53L3CX_Init(sensor);
+  //VL53LX_SetMeasurementTimingBudgetMicroSeconds(sensor, 8000);
   VL53L3CX_SetAddress(sensor, (uint32_t)address);
 
   // Config profile
   VL53L3CX_ProfileConfig_t Profile;
 
   Profile.RangingProfile = VL53LX_DISTANCEMODE_MEDIUM;
-  Profile.TimingBudget = 33; /* 16 ms < TimingBudget < 500 ms */
+  Profile.TimingBudget = 8; /* 8 ms < TimingBudget < 500 ms */
   Profile.Frequency = 0;      /* not necessary in simple ranging */
   Profile.EnableAmbient = 1;  /* Enable: 1, Disable: 0 */
   Profile.EnableSignal = 1;   /* Enable: 1, Disable: 0 */
