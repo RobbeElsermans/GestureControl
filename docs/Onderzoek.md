@@ -314,6 +314,9 @@ Als eerste opstelling gaan we opteren om de sensoren kruislings te plaatsen. Dit
 
 ![foto opstelling 1](foto's/PCBV0.3_opstelling_1.jpg)
 
+We verplaatsen telkens de sensoren dichter en dichter totdat de metingen elkaar overlappen (Het gaat vooral over de Up-Down & Down-Up gestures die door de handgrootte de links en rechtse sensor kunnen triggeren).
+
+
 # Snelheid Metingen PCBV0.3
 
 

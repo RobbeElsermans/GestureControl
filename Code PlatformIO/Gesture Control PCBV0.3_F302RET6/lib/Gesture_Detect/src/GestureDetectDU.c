@@ -21,7 +21,7 @@ static bool hasBottom = false;
 static int maxDistanceObject = 300;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
-static int timerMeasurmentTimeout = 1200; // 1 seconden
+static int timerMeasurmentTimeout = 750; // 1 seconden
 
 bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
 {

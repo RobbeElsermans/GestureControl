@@ -21,7 +21,7 @@ static bool hasBottom = false;
 static int maxDistanceObject = 300;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
-static int timerMeasurmentTimeout = 1200; // 1 seconden
+static int timerMeasurmentTimeout = 750; // 1 seconden
 
 bool CheckGestureUD(bool *_gestureUD, bool *_object, Resultaat_t *Result)
 {
@@ -41,17 +41,17 @@ bool CheckGestureUD(bool *_gestureUD, bool *_object, Resultaat_t *Result)
         if ((dis3 < maxDistanceObject) && (dis4 > maxDistanceObject) && (sta3 == 0 || sta3 == 7) && !hasBottom && !hasCenter && !hasTop && dis3 != 0) // Sensor top
         {
             hasTop = true;
-            printf("TOP \r\n");
+            //printf("TOP \r\n");
         }
         else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && !hasBottom && !hasCenter && hasTop && dis1 != 0) // Sensor center
         {
             hasCenter = true;
-            printf("CENTER \r\n");
+            //printf("CENTER \r\n");
         }
         else if ((dis4 < maxDistanceObject) && (sta4 == 0 || sta4 == 7) && !hasBottom && hasCenter && hasTop && dis4 != 0) // Sensor top
         {
             hasBottom = true;
-            printf("BOTTOM \r\n");
+            //printf("BOTTOM \r\n");
         }
 
         // printf("TOP %2d, center %2d, BOTTOM %2d \r\n", hasTop, hasCenter, hasBottom);

@@ -18,10 +18,13 @@ static bool hasLeft = false;
 static bool hasCenter = false;
 static bool hasRight = false;
 
-static int maxDistanceObject = 300;
+static int maxDistanceObject = 400;
+static int minDistanceObject = 100;
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
-static int timerMeasurmentTimeout = 1200; // 1 seconden
+static int timerMeasurmentTimeout = 750; // 750 mseconden
+
+static int prevState0 = 0;
 
 bool CheckGestureLR(bool *_gestureLR, bool *_object, Resultaat_t *Result)
 {
@@ -38,21 +41,23 @@ bool CheckGestureLR(bool *_gestureLR, bool *_object, Resultaat_t *Result)
         int dis1 = (int)Result[CENTER].distance;
         int dis2 = (int)Result[RIGHT].distance;
 
-        if ((dis0 < maxDistanceObject) && (dis2 > maxDistanceObject) && (sta0 == 0 || sta0 == 7) && !hasLeft && !hasCenter && !hasRight && dis0 != 0) // Sensor right
+        if ((dis0 < maxDistanceObject) && (dis0 > minDistanceObject) && (dis2 > maxDistanceObject) && (sta0 == 0 || (sta0 == 7 && prevState0 == 0)) && !hasLeft && !hasCenter && !hasRight && dis0 != 0) // Sensor right
         {
             hasLeft = true;
-            //printf("left \r\n");
+            printf(" LR left  %4d \r\n", dis0);
         }
         else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && hasLeft && !hasCenter && !hasRight && dis1 != 0) // Sensor center
         {
             hasCenter = true;
-            //printf("center \r\n");
+            printf(" LR center  %4d \r\n", dis1);
         }
         else if ((dis2 < maxDistanceObject) && (sta2 == 0 || sta2 == 7) && hasLeft && hasCenter && !hasRight && dis2 != 0) // Sensor left
         {
             hasRight = true;
-            //printf("right \r\n");
+            printf(" LR right  %4d \r\n", dis2);
         }
+
+        prevState0 = sta0;
     }
 
     // Een timeout timer plaatsen

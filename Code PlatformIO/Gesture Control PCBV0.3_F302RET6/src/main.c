@@ -321,19 +321,22 @@ int main(void)
 
     objectPresent = ckeckObjectPresent(&resultaat[CENTER], &objectPresent, &resultaat[CENTER].distance);
 
-    // Wanneer er geen dimming commando aanwezig is dan kijken we of dat er een Right Left beweging aanwezig is
+    // Wanneer er geen commando aanwezig is, kijken
+    if(commando == NONE)
+    {
     gestureRL = CheckGestureRL(&gestureRL, &objectPresent, resultaat);
     gestureLR = CheckGestureLR(&gestureLR, &objectPresent, resultaat);
     gestureDU = CheckGestureDU(&gestureDU, &objectPresent, resultaat);
     gestureUD = CheckGestureUD(&gestureUD, &objectPresent, resultaat);
+    }
 
     // printf("Object: %1d \t", gestureRL);
 
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
 
     // HAL_Delay(2);
-    //  printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\t distance TOP: %4d %3d\t distance BOTTOM: %4d %3d\r\n",
-    //(int)distance[CENTER], status[CENTER], (int)distance[LEFT], status[LEFT], (int)distance[RIGHT], status[RIGHT], (int)distance[TOP], status[TOP], (int)distance[BOTTOM], status[BOTTOM]);
+     printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\t distance TOP: %4d %3d\t distance BOTTOM: %4d %3d\r\n",
+    (int)resultaat[CENTER].distance, resultaat[CENTER].status, (int)resultaat[LEFT].distance, resultaat[LEFT].status, (int)resultaat[RIGHT].distance, resultaat[RIGHT].status, (int)resultaat[TOP].distance, resultaat[TOP].status, (int)resultaat[BOTTOM].distance, resultaat[BOTTOM].status);
     //  printf("L: %5d, C: %5d, R: %5d\r\n", distance[LEFT], distance[CENTER], distance[RIGHT]);
     /* USER CODE END WHILE */
 
@@ -462,7 +465,7 @@ int main(void)
     //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].status, resultaat[CENTER].status, resultaat[RIGHT].status);
     //   timerPrintf = HAL_GetTick();
     // }
-    printf("T: %5d %2d\r\n", resultaat[TOP].distance, resultaat[TOP].status);
+    //printf("L: %5d %2d\r\n", resultaat[LEFT].distance, resultaat[LEFT].status);
   }
   /* USER CODE END 3 */
 }
