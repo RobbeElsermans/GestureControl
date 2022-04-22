@@ -230,8 +230,14 @@ int main(void)
 
   initObjectPresent(-1, -1, -1);
 
-  bool links = false;
-  bool rechts = false;
+  bool LR_links = false;
+  bool LR_rechts = false;
+  bool LR_center = false;
+
+  bool RL_links = false;
+  bool RL_rechts = false;
+  bool RL_center = false;
+
   bool DU_beiden = false;
   bool DU_center = false;
 
@@ -337,6 +343,7 @@ int main(void)
 
       int16_t maxDis = 300;
 
+      //DU gesture
       if(dis0 < maxDis && dis2 < maxDis && !DU_center && resultaat[LEFT].status == 0 && resultaat[RIGHT].status == 0 && dis1 > maxDis){
         //Set flag
         DU_beiden = true;
@@ -346,6 +353,7 @@ int main(void)
         DU_center = true;
       }
 
+      //UD gesture
       if(dis1 < maxDis && !UD_beiden && resultaat[CENTER].status == 0 && dis0 > maxDis && dis2 > maxDis){
         //Set flag
         UD_center = true;
@@ -356,6 +364,34 @@ int main(void)
         UD_beiden = true;
       }
 
+      //LR gesture
+      if(dis0 < maxDis && resultaat[LEFT].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis){
+        LR_links = true;
+      }
+
+      if(dis1 < maxDis && resultaat[CENTER].status == 0 && !LR_rechts && LR_links && dis2 > maxDis){
+        LR_center = true;
+      }
+
+      if(dis2 < maxDis && resultaat[RIGHT].status == 0 && LR_center && LR_links)
+      {
+        LR_rechts = true;
+      }
+
+      //RL gesture
+      if(dis2 < maxDis && resultaat[RIGHT].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis){
+        RL_rechts = true;
+      }
+
+      if(dis1 < maxDis && resultaat[CENTER].status == 0 && !RL_links && RL_rechts && dis0 > maxDis){
+        RL_center = true;
+      }
+
+      if(dis0 < maxDis && resultaat[LEFT].status == 0 && RL_center && RL_rechts)
+      {
+        RL_links = true;
+      }
+
       if(DU_beiden && DU_center){
         commando = DU;
       }
@@ -363,7 +399,16 @@ int main(void)
       if(UD_beiden && UD_center){
         commando = UD;
       }
-      printf("DU_beiden %1d, DU_center %1d\t UD_beiden %1d, UD_center %1d\r\n", DU_beiden, DU_center,UD_beiden, UD_center);
+
+      if(LR_links && LR_center && LR_rechts){
+        commando = LR;
+      }
+
+      if(RL_links && RL_center && RL_rechts){
+        commando = RL;
+      }
+
+      //printf("LR_links %1d, LR_center %1d\t LR_rechts %1d\r\n", LR_links, LR_center,LR_rechts);
     }
 
     //reset gesture flags
@@ -380,8 +425,12 @@ int main(void)
       DU_center = false;
       UD_beiden = false;
       UD_center = false;
-      links = false;
-      rechts = false;
+      LR_links = false;
+      LR_rechts = false;
+      LR_center = false;
+      RL_links = false;
+      RL_rechts = false;
+      RL_center = false;
     }
 
     // printf("Object: %1d \t", gestureRL);
@@ -411,44 +460,8 @@ int main(void)
       printf("Stop\r\n");
     }
 
-    // Commando's instellen
-    //  Het commando RL activeren
-    if (gestureRL && !prevGestureRL && commando == NONE)
-    {
-      prevGestureRL = gestureRL;
-      printf("gestureCommand RL: %d \r\n", gestureRL);
-      commando = RL;
-    }
-
-    // Het commando LR activeren
-    if (gestureLR && !prevGestureLR && commando == NONE)
-    {
-      prevGestureLR = gestureLR;
-      printf("gestureCommand LR: %d \r\n", gestureLR);
-      commando = LR;
-    }
-
-    // Het commando DU activeren
-    if (gestureDU && !prevGestureDU && commando == NONE)
-    {
-      prevGestureDU = gestureDU;
-      printf("gestureCommand DU: %d \r\n", gestureDU);
-      commando = DU;
-    }
-
-    // Het commando UD activeren
-    if (gestureUD && !prevGestureUD && commando == NONE)
-    {
-      prevGestureUD = gestureUD;
-      printf("gestureCommand UD: %d \r\n", gestureUD);
-      commando = UD;
-    }
-
+    
     prevObjectPresent = objectPresent;
-    prevGestureRL = gestureRL; // fix debouncing van gestureRL
-    prevGestureLR = gestureLR; // fix debouncing van gestureLR
-    prevGestureDU = gestureDU; // fix debouncing van gestureDU
-    prevGestureUD = gestureUD; // fix debouncing van gestureUD
 
     /* 	Timer om leds even aan te laten
         Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
@@ -459,6 +472,7 @@ int main(void)
     {
       timerCommandSet = true;
       timerCommand = HAL_GetTick();
+      printf("command: %2d\r\n", commando);
     }
     if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
     {

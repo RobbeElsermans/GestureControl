@@ -21,6 +21,7 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
 - [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03)
   - [Kruislings](#kruislings)
   - [Piramide](#piramide)
+  - [Trap](#trap)
 - [Snelheid Metingen PCBV0.3](#snelheid-metingen-pcbv03)
 - [Coverglas](#coverglas)
 
@@ -322,12 +323,11 @@ Zoals besproken in [Plaats Sensoren Development Kit](#plaats-sensoren-developmen
 
 Als eerste opstelling gaan we opteren om de sensoren kruislings te plaatsen. Dit omdat we met de development kit goede resultaten hebben bekomen. Later in dit hoofdstuk gaan we nog enkele opstellingen uitvoeren op werking.
 
-![foto opstelling 1](foto's/PCBV0.3_opstelling_1.jpg)
+<img src="./foto's/PCBV0.3_opstelling_1.jpg" alt="foto opstelling 1" width="50%">
 
 We verplaatsen telkens de sensoren dichter en dichter totdat de metingen elkaar overlappen (het gaat vooral over de Up-Down & Down-Up gestures die door de handgrootte de links en rechtse sensor kunnen triggeren en omgekeerd).
 
-
-![foto opstelling 2](foto's/PCBV0.3_opstelling_2.jpg)
+<img src="./foto's/PCBV0.3_opstelling_2.jpg" alt="foto opstelling 2" width="50%">
 
 De foto hierboven is de maximale afstand die de sensoren kunnen verdragen om geen foutieve metingen te triggeren. Dit is uiteraard enkel met mijn hand getest. mensen met een groter hand, kunnen hier nog wel last van hebben. Vandaar dat we de sensoren finaal met 1 plaats opschuiven naar de buitenkant zodat we hopelijk deze hand grootte kunnen inperken. De flat cables zijn nu wat aan de lange kant en gaan we in de toekomst wat kleiner maken.
 
@@ -342,7 +342,7 @@ Nu we weten dat de opstelling kruislings werkt, kunnen we eens verder zien naar 
 
 ## Piramide
 
-![stand_5_sensoren_1](foto's/stand_3_sensoren_4.jpg)
+<img src="./foto's/stand_3_sensoren_4.jpg" alt="stand_3_sensoren_4" width="50%">
 
 Met bovenstaande opstelling is het theoretisch mogelijk om links, rechts, boven en onder te detecteren.
 
@@ -358,7 +358,42 @@ We lijsten even op hoe we zullen detecteren:
 Het is belangrijk dat we bij de gestures boven-onder & onder-boven kijken of dat de 2 sensoren tezamen getriggerd zijn. Als we dit niet doen kan een iets schuinere onder boven een rechts-links (of links-rechts) gesture triggeren.
 
 In de praktijk ziet de opstelling er zo uit:
-![foto opstelling B1]()
+
+<img src="./foto's/PCBV0.3_opstelling_piramide_1.jpg" alt="foto opstelling piramide 1" width="50%">
+
+Na het aanpassen van de code was het mogelijk om met de sensoren al de 4 gestures te verkrijgen. 
+
+![piramide command terminal](foto's/terminal_piramide_commando.jpg)
+
+?> zie de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) voor meer informatie over de commando waardes.
+
+De snelheid is ook aanzienlijk verbeterd en het RAM geheugen zit minder vol. Met deze opstelling kunnen we gebruik maken van de STM32F302RCT6 i.p.v. de STM32F302RET6. In de repo is hiervoor een aparte branch opgezet genaamd *piramide*.
+
+Een nadeel met deze opstelling is dat wanneer we ons hand te schuin van boven naar onder (of onder naar boven) verplaatsen, we de links-rechts en rechts-links triggeren. Dit is een beetje gefilterd in de code door een gemiddelde te nemen over 5 metingen en nog wat extra flags om ervoor te zorgen dat wanneer de gesture controller denkt een bepaalde gesture binnen te krijgen, de andere gestures wat te negeren. uiteraard mag deze hold van andere gestures niet te lang duren. Vandaar dat er ook een reset timer is geplaatst die al de flags op 0 zet om de 0.5 seconden.
+
+De afstanden zijn nu:
+
+* S1 = 5cm
+* S2 = 5cm
+* S3 = 6cm
+* S4 = 6cm
+
+## Trap
+
+Omdat ik nu toch bezig was met allerlei opstellingen dacht ik er ook aan om deze eens te proberen:
+
+<img src="./foto's/stand_3_sensoren_5.jpg" alt="stand_3_sensoren_5" width="50%">
+
+We lijsten even op hoe we zullen detecteren:
+
+?> **LEGENDE** SR = sensor rechts, SC = sensor center, SL = sensor links
+
+* **RECHTS-LINKS** --> SR -> SC -> SL
+* **LINKS-RECHTS** --> SL -> SC -> SR
+* **BOVEN-ONDER**  --> SC -> SR -> SL
+* **ONDER-BOVEN**  --> SL -> SR -> SC
+
+Als we opstelling [Piramide](#piramide) vergelijken met de trap opstelling, is te zien dat we in deze opstelling SR en SL apart kunnen monitoren voor de 4 toestanden. Dit is niet het geval bij de piramide (hier gebruiken we SR & SL bij 2 gestures tezamen).
 
 # Snelheid Metingen PCBV0.3
 
