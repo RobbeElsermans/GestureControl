@@ -230,14 +230,17 @@ int main(void)
 
   initObjectPresent(-1, -1, -1);
 
-  bool beiden = false;
   bool links = false;
   bool rechts = false;
-  bool center = false;
+  bool DU_beiden = false;
+  bool DU_center = false;
+
+  bool UD_beiden = false;
+  bool UD_center = false;
 
   float timerMeasurment = 0;
   bool timerMeasurementSet = false;
-  int timerMeasurmentTimeout = 100; // 0.5 seconden
+  int timerMeasurmentTimeout = 500; // 0.5 seconden
 
   while (1)
   {
@@ -311,6 +314,7 @@ int main(void)
       int dis1 = 0;
       int dis2 = 0;
 
+      //Gemiddelde berekenen
       for(i = 0; i < counterHeight; i++)
       {
         dis0 += counter[LEFT][i];
@@ -333,19 +337,33 @@ int main(void)
 
       int16_t maxDis = 300;
 
-      if(dis0 < maxDis && dis2 < maxDis && !center && resultaat[LEFT].status == 0 && resultaat[RIGHT].status == 0 && dis1 > maxDis){
+      if(dis0 < maxDis && dis2 < maxDis && !DU_center && resultaat[LEFT].status == 0 && resultaat[RIGHT].status == 0 && dis1 > maxDis){
         //Set flag
-        beiden = true;
+        DU_beiden = true;
       }
 
-      if(dis1 < maxDis && resultaat[CENTER].status == 0 && beiden == true){
-        center = true;
+      if(dis1 < maxDis && resultaat[CENTER].status == 0 && DU_beiden == true){
+        DU_center = true;
       }
 
-      if(beiden && center){
+      if(dis1 < maxDis && !UD_beiden && resultaat[CENTER].status == 0 && dis0 > maxDis && dis2 > maxDis){
+        //Set flag
+        UD_center = true;
+      }
+
+      if(dis0 < maxDis && dis2 < maxDis && resultaat[LEFT].status == 0 && resultaat[RIGHT].status == 0 && UD_center){
+        //Set flag
+        UD_beiden = true;
+      }
+
+      if(DU_beiden && DU_center){
         commando = DU;
       }
-      printf("beiden %1d, center %1d\r\n", beiden, center);
+
+      if(UD_beiden && UD_center){
+        commando = UD;
+      }
+      printf("DU_beiden %1d, DU_center %1d\t UD_beiden %1d, UD_center %1d\r\n", DU_beiden, DU_center,UD_beiden, UD_center);
     }
 
     //reset gesture flags
@@ -358,8 +376,10 @@ int main(void)
     if(timerMeasurementSet && (temp - timerMeasurment) > timerMeasurmentTimeout)
     {
       timerMeasurementSet = false;
-      beiden = false;
-      center = false;
+      DU_beiden = false;
+      DU_center = false;
+      UD_beiden = false;
+      UD_center = false;
       links = false;
       rechts = false;
     }
