@@ -19,6 +19,8 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
     - [BLOCKING_CONTINUOUS](#blocking_continuous-1)
     - [ASYNC_CONTINUOUS](#async_continuous-1)
 - [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03)
+  - [Kruislings](#kruislings)
+  - [Piramide](#piramide)
 - [Snelheid Metingen PCBV0.3](#snelheid-metingen-pcbv03)
 - [Coverglas](#coverglas)
 
@@ -63,13 +65,17 @@ De printplaat waarop de Nucleo-F401RE bevestigd is, wordt op een houten plaat be
 
 
 # Snelheid Metingen Development Kit
+
+!> De I2C klok frequentie is bij deze metingen ingesteld op 100kHz. Later wanneer PCBV0.3 onder handen wordt genomen, gaan we de klok frequentie proberen te verhogen naar 1MHz.
+
 ## Eén sensor
 
 ### BLOCKING_CONTINUOUS
 
 !> De metingen die te zien zijn in de terminal screenshots zijn gebeurd zonder kalibratie van de sensor. Daarom dat deze afwijkend zijn van elkaar. De nauwkeurigheid van de sensor(en) heeft geen invloed op dit onderzoek.
 
-Bij de gekregen Dev-kit werden de sensoren met mode *BLOCKING_CONTINUOUS* aangestuurd Dit houd in dat de software zelf zal wachten totdat de sensor terug stuurt dat de data beschikbaar is. Dit proces herhalen we telkens.
+
+Bij de gekregen Dev-kit werden de sensoren met mode *BLOCKING_CONTINUOUS* aangestuurd. Dit houd in dat de software zelf zal wachten totdat de sensor terug stuurt dat de data beschikbaar is. Dit proces herhalen we telkens.
 
 |                       |min|typ|max|eenheid|
 |-----------------------|---|---|---|-------|
@@ -306,6 +312,10 @@ We nemen hier 100 als waarde voor *TimingBudget* wat ons een software delay geef
 
 # Plaats Sensoren PCBV0.3
 
+## Kruislings
+
+<img src="./foto's/stand_5_sensoren_1.jpg" width="33%">
+
 Zoals besproken in [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit) zijn er enkele mogelijkheden om de sensoren op te stellen. We hebben daarom een plexi glas plaat ontworpen die genoeg mogelijkheden voorziet om de sensoren op verschillende plaatsen te bevestigen.
 
 <iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c5393429cd8315483a19?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
@@ -314,11 +324,43 @@ Als eerste opstelling gaan we opteren om de sensoren kruislings te plaatsen. Dit
 
 ![foto opstelling 1](foto's/PCBV0.3_opstelling_1.jpg)
 
-We verplaatsen telkens de sensoren dichter en dichter totdat de metingen elkaar overlappen (Het gaat vooral over de Up-Down & Down-Up gestures die door de handgrootte de links en rechtse sensor kunnen triggeren).
+We verplaatsen telkens de sensoren dichter en dichter totdat de metingen elkaar overlappen (het gaat vooral over de Up-Down & Down-Up gestures die door de handgrootte de links en rechtse sensor kunnen triggeren en omgekeerd).
 
+
+![foto opstelling 2](foto's/PCBV0.3_opstelling_2.jpg)
+
+De foto hierboven is de maximale afstand die de sensoren kunnen verdragen om geen foutieve metingen te triggeren. Dit is uiteraard enkel met mijn hand getest. mensen met een groter hand, kunnen hier nog wel last van hebben. Vandaar dat we de sensoren finaal met 1 plaats opschuiven naar de buitenkant zodat we hopelijk deze hand grootte kunnen inperken. De flat cables zijn nu wat aan de lange kant en gaan we in de toekomst wat kleiner maken.
+
+De afstanden zijn nu:
+
+* S1 = 6cm
+* S2 = 6cm
+* S3 = 10.5cm
+* S4 = 6.5cm
+
+Nu we weten dat de opstelling kruislings werkt, kunnen we eens verder zien naar mogelijke opstellingen die eventueel kunnen werken met minder sensoren in gebruik. Dit zal wel voor complexere code zorgen maar de snelheid, kost en grootte van de opstelling wordt wel optimaler.
+
+## Piramide
+
+![stand_5_sensoren_1](foto's/stand_3_sensoren_4.jpg)
+
+Met bovenstaande opstelling is het theoretisch mogelijk om links, rechts, boven en onder te detecteren.
+
+We lijsten even op hoe we zullen detecteren:
+
+?> **LEGENDE** SR = sensor rechts, SC = sensor center, SL = sensor links
+
+* **RECHTS-LINKS** --> SR -> SC -> SL
+* **LINKS-RECHTS** --> SL -> SC -> SR
+* **BOVEN-ONDER**  --> SC -> SR & SL
+* **ONDER-BOVEN**  --> SR & SL -> SC
+
+Het is belangrijk dat we bij de gestures boven-onder & onder-boven kijken of dat de 2 sensoren tezamen getriggerd zijn. Als we dit niet doen kan een iets schuinere onder boven een rechts-links (of links-rechts) gesture triggeren.
+
+In de praktijk ziet de opstelling er zo uit:
+![foto opstelling B1]()
 
 # Snelheid Metingen PCBV0.3
-
 
 # Coverglas
 
