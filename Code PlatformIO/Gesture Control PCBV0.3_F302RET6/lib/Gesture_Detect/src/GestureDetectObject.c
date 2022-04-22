@@ -62,42 +62,6 @@ bool ckeckObjectPresent(Resultaat_t *Result, bool *WasObjectPresent, long *dist)
     // De afstand en zone results ophalen uit Result
     zone = Result->status;
 
-    // if (counter_prevDistances == max_prevDistances)
-    //     counter_prevDistances = 0;
-    // else
-    //     counter_prevDistances++;
-
-    // // opslaan van data
-    // prevDistances[counter_prevDistances] = *dist;
-    // for (uint8_t i = 0; i <= max_prevDistances; i++)
-    // {
-    //     if (i > 0)
-    //     {
-    //         int a = prevDistances[i] ;
-    //         int b = prevDistances[i - 1];
-    //         if (a != b)
-    //         {
-    //             prevDistancesEqual = false;
-    //             break;
-    //         }
-    //     }
-
-    //     // einde van de loop en nog steeds allemaal hetzelfde
-    //     if (i == max_prevDistances)
-    //         prevDistancesEqual = true;
-    // }
-
-    // if (x == 0)
-    // {
-    //     printf("Zone result %1d: %2d \t", VL53L3A2_DEV_CENTER, zone);
-    //     printf("Dist result %1d: %2d \r\n", VL53L3A2_DEV_CENTER, *dist);
-    // }
-    // x++;
-
-    /*	als dist1 onder de 1000 mm komt voor x seconden, dan is er een object.
-     * 	+ er mag geen foutcode zijn
-     */
-    //if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent && !prevDistancesEqual))
     if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent))
     {
         if (!timerMeasurementSet)

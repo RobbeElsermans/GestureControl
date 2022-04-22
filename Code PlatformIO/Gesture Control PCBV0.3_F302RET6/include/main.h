@@ -40,10 +40,8 @@ extern "C"
   typedef enum SensorDef
   {
     CENTER = 0,
-    LEFT = 4,
+    LEFT = 2,
     RIGHT = 1,
-    TOP = 2,
-    BOTTOM = 3,
   } sensorDev;
 
   typedef enum commands
@@ -66,7 +64,7 @@ extern "C"
 
   /* Exported constants --------------------------------------------------------*/
   /* USER CODE BEGIN EC */
-#define amountSensor 5
+#define amountSensor 3
   /* USER CODE END EC */
 
   /* Exported macro ------------------------------------------------------------*/
