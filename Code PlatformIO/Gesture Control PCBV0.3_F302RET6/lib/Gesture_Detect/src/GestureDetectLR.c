@@ -41,17 +41,17 @@ bool CheckGestureLR(bool *_gestureLR, bool *_object, Resultaat_t *Result)
         int dis1 = (int)Result[CENTER].distance;
         int dis2 = (int)Result[RIGHT].distance;
 
-        if ((dis0 < maxDistanceObject) && (dis0 > minDistanceObject) && (dis2 > maxDistanceObject) && (sta0 == 0 || (sta0 == 7 && prevState0 == 0)) && !hasLeft && !hasCenter && !hasRight && dis0 != 0) // Sensor right
+        if ((dis0 < maxDistanceObject) && (dis0 > minDistanceObject) && (dis2 > maxDistanceObject) && (sta0 == 0 || (prevState0 == 0)) && !hasLeft && !hasCenter && !hasRight && dis0 != 0) // Sensor right
         {
             hasLeft = true;
             printf(" LR left  %4d \r\n", dis0);
         }
-        else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && hasLeft && !hasCenter && !hasRight && dis1 != 0) // Sensor center
+        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasLeft && !hasCenter && !hasRight && dis1 != 0) // Sensor center
         {
             hasCenter = true;
             printf(" LR center  %4d \r\n", dis1);
         }
-        else if ((dis2 < maxDistanceObject) && (sta2 == 0 || sta2 == 7) && hasLeft && hasCenter && !hasRight && dis2 != 0) // Sensor left
+        else if ((dis2 < maxDistanceObject) && (sta2 == 0) && hasLeft && hasCenter && !hasRight && dis2 != 0) // Sensor left
         {
             hasRight = true;
             printf(" LR right  %4d \r\n", dis2);

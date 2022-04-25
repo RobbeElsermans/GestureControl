@@ -14,7 +14,6 @@
 #include "GestureDetectDU.h"
 
 // Gesture Right Left
-static bool hasTop = false;
 static bool hasCenter = false;
 static bool hasBottom = false;
 
@@ -31,34 +30,29 @@ bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
     // Als laatste sensor boven (3)
     if (*_object)
     {
-        int8_t sta3 = Result[TOP].status;
+        int8_t sta0 = Result[LEFT].status;
         int8_t sta1 = Result[CENTER].status;
-        int8_t sta4 = Result[BOTTOM].status;
-        int dis3 = (int)Result[TOP].distance;
+        int8_t sta2 = Result[RIGHT].status;
+        int dis0 = (int)Result[LEFT].distance;
         int dis1 = (int)Result[CENTER].distance;
-        int dis4 = (int)Result[BOTTOM].distance;
+        int dis2 = (int)Result[RIGHT].distance;
 
-        if ((dis4 < maxDistanceObject) && (dis3 > maxDistanceObject) && (sta4 == 0 || sta4 == 7) && !hasBottom && !hasCenter &&  !hasTop && dis4 != 0) // Sensor bottom
+        if ((dis0 < maxDistanceObject) && (dis2 < maxDistanceObject) && (dis1 > maxDistanceObject) && (sta0 == 0) && (sta2 == 0) && (!hasBottom && !hasCenter) && (dis0 != 0 && dis2 != 0)) // Sensor bottom
         {
             hasBottom = true;
-            //printf("Bottom \r\n");
+            printf("DU Bottom: %4d\t%4d \r\n",dis0, dis2);
         }
-        else if ((dis1 < maxDistanceObject) && (sta1 == 0 || sta1 == 7) && hasBottom && !hasCenter && !hasTop && dis1 != 0) // Sensor center
+        else if ((dis1 < maxDistanceObject) && (sta1 == 0) && hasBottom && !hasCenter && dis1 != 0) // Sensor center
         {
             hasCenter = true;
-            //printf("center \r\n");
-        }
-        else if ((dis3 < maxDistanceObject) && (sta3 == 0 || sta3 == 7) && hasBottom && hasCenter && !hasTop && dis3 != 0) // Sensor top
-        {
-            hasTop = true;
-            //printf("Top \r\n");
+            printf("DU center: %4d \r\n", dis1);
         }
 
-        //printf("TOP %2d, center %2d, BOTTOM %2d \r\n", hasTop, hasCenter, hasBottom);
+        // printf("TOP %2d, center %2d, BOTTOM %2d \r\n", hasTop, hasCenter, hasBottom);
     }
 
     // Een timeout timer plaatsen
-    if (timerMeasurementSet == false && (hasBottom || hasCenter || hasTop))
+    if (timerMeasurementSet == false && (hasBottom || hasCenter))
     {
         timerMeasurementSet = true;
         timerMeasurment = HAL_GetTick();
@@ -71,18 +65,16 @@ bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
         {
             timerMeasurementSet = false;
             hasBottom = false;
-            hasTop = false;
             hasCenter = false;
         }
 
-    if (hasBottom && hasCenter && hasTop)
+    if (hasBottom && hasCenter)
     {
         timerMeasurementSet = false;
         hasBottom = false;
-        hasTop = false;
         hasCenter = false;
         return true;
     }
     else
-    return false;
+        return false;
 }

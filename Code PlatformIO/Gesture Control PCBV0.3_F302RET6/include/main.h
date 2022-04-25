@@ -37,14 +37,30 @@ extern "C"
 
   /* Exported types ------------------------------------------------------------*/
   /* USER CODE BEGIN ET */
+  #ifdef env1
+  
   typedef enum SensorDef
   {
     CENTER = 0,
-    LEFT = 4,
+    LEFT = 2,
     RIGHT = 1,
     TOP = 2,
-    BOTTOM = 3,
+    BOTTOM = 3 
   } sensorDev;
+
+  #endif
+  #ifdef env2
+  #ifdef drie1
+
+  typedef enum SensorDef
+  {
+    CENTER = 0,
+    LEFT = 2,
+    RIGHT = 1,
+  } sensorDev;
+
+  #endif
+  #endif
 
   typedef enum commands
   {
@@ -66,7 +82,7 @@ extern "C"
 
   /* Exported constants --------------------------------------------------------*/
   /* USER CODE BEGIN EC */
-#define amountSensor 5
+#define amountSensor 3
   /* USER CODE END EC */
 
   /* Exported macro ------------------------------------------------------------*/
