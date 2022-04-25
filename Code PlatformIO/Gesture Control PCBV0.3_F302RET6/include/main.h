@@ -30,27 +30,27 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
 
-  /* Private includes ----------------------------------------------------------*/
-  /* USER CODE BEGIN Includes */
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 
-  /* USER CODE END Includes */
+/* USER CODE END Includes */
 
-  /* Exported types ------------------------------------------------------------*/
-  /* USER CODE BEGIN ET */
-  #ifdef env1
-  
+/* Exported types ------------------------------------------------------------*/
+/* USER CODE BEGIN ET */
+#ifdef env1
+
   typedef enum SensorDef
   {
     CENTER = 0,
     LEFT = 2,
     RIGHT = 1,
     TOP = 2,
-    BOTTOM = 3 
+    BOTTOM = 3
   } sensorDev;
 
-  #endif
-  #ifdef env2
-  #ifdef drie1
+#endif
+#ifdef env2
+#ifdef drie1
 
   typedef enum SensorDef
   {
@@ -59,8 +59,18 @@ extern "C"
     RIGHT = 1,
   } sensorDev;
 
-  #endif
-  #endif
+#endif
+#ifdef drie2
+
+  typedef enum SensorDef
+  {
+    CENTER = 0,
+    LEFT = 2,
+    RIGHT = 1,
+  } sensorDev;
+
+#endif
+#endif
 
   typedef enum commands
   {

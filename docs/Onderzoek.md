@@ -384,6 +384,10 @@ Omdat ik nu toch bezig was met allerlei opstellingen dacht ik er ook aan om deze
 
 <img src="./foto's/stand_3_sensoren_5.jpg" alt="stand_3_sensoren_5" width="50%">
 
+en in praktijk ziet dit er zo uit:
+
+<img src="./foto's/PCBV0.3_opstelling_trap_1.jpg" alt="PCBV0.3_opstelling_trap_1" width="50%">
+
 We lijsten even op hoe we zullen detecteren:
 
 ?> **LEGENDE** SR = sensor rechts, SC = sensor center, SL = sensor links
@@ -394,6 +398,11 @@ We lijsten even op hoe we zullen detecteren:
 * **ONDER-BOVEN**  --> SL -> SR -> SC
 
 Als we opstelling [Piramide](#piramide) vergelijken met de trap opstelling, is te zien dat we in deze opstelling SR en SL apart kunnen monitoren voor de 4 toestanden. Dit is niet het geval bij de piramide (hier gebruiken we SR & SL bij 2 gestures tezamen).
+
+Tijdens het testen van deze opstelling met gebruik makend van de sensor die op het main bordje zit, merkte ik op dat wanneer ik de boven-onder gesture uitoefende, dit niet altijd even vlot ging dan bij de andere 3 gestures. Ik heb daarom een sensor bordje in de plaats gezet i.p.v. het main bordje. We zullen nu dus ook de XSHUT op "0" moeten zetten zodat de sensor niet gebruikt wordt.
+
+<img src="./foto's/PCBV0.3_opstelling_trap_2.jpg" alt="PCBV0.3_opstelling_trap_1" width="50%">
+
 
 # Snelheid Metingen PCBV0.3
 
