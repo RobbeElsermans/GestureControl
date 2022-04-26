@@ -56,12 +56,17 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-VL53L3CX_Object_t sensor[amountSensor];
+VL53L3CX_Object_t sensor[amountSensorUsed];
 volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
 
+//Aanmaken sensor definities
+struct Sensor_Definition center = {CENTER, 0};
+struct Sensor_Definition left = {LEFT, 1};
+struct Sensor_Definition right = {RIGHT, 2};
+
 // Resultaat van de meetingen
-Resultaat_t resultaat[amountSensor];
+Resultaat_t resultaat[amountSensorUsed];
 
 bool objectPresent = false;
 bool prevObjectPresent = false;
@@ -89,7 +94,7 @@ static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
 #define counterHeight 5
-int counter[amountSensor][counterHeight];
+int counter[amountSensorUsed][counterHeight];
 uint8_t counterStep = 0;
 
 /* USER CODE END PV */
@@ -162,14 +167,14 @@ int main(void)
 
   CUSTOM_VL53L3CX_I2C_Init();
 
-  Init_Sensor(&sensor[CENTER], CENTER);
-  Init_Sensor(&sensor[LEFT], LEFT);
-  Init_Sensor(&sensor[RIGHT], RIGHT);
+  Init_Sensor(&sensor[center.id], center.gpioPin);
+  Init_Sensor(&sensor[left.id], left.gpioPin);
+  Init_Sensor(&sensor[right.id], right.gpioPin);
 
   if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
   // if (true)
   {
-    VL53LX_CalibrationData_t callData[amountSensor];
+    VL53LX_CalibrationData_t callData[amountSensorUsed];
 
     printf("Calibrating in 10 seconds... \r\n\r\n");
     for (uint8_t i = 0; i < 2; i++)
@@ -179,42 +184,42 @@ int main(void)
     }
     HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
 
-    // printf("Sensor %2d\r\n", CENTER);
-    RefSpadCal(&sensor[CENTER]);
-    RefSpadCal(&sensor[LEFT]);
-    RefSpadCal(&sensor[RIGHT]);
+    // printf("Sensor %2d\r\n", center.gpioPin);
+    RefSpadCal(&sensor[center.id]);
+    RefSpadCal(&sensor[left.id]);
+    RefSpadCal(&sensor[right.id]);
     // HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
     // printf("refspad\r\n");
-    // xTalkCal(&sensor[CENTER]);
-    // xTalkCal(&sensor[LEFT]);
+    // xTalkCal(&sensor[center.id]);
+    // xTalkCal(&sensor[left.id]);
     // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
     printf("xtalk\r\n");
-    // offsetPerVcselCal(&sensor[CENTER], 600);
+    // offsetPerVcselCal(&sensor[center.id], 600);
     // HAL_Delay(2);
-    // offsetPerVcselCal(&sensor[LEFT], 600);
+    // offsetPerVcselCal(&sensor[left.id], 600);
     // HAL_Delay(2);
-    // offsetPerVcselCal(&sensor[RIGHT], 600);
+    // offsetPerVcselCal(&sensor[right.id], 600);
     // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
-    callData[CENTER] = getCalibrationData(&sensor[CENTER]);
-    callData[LEFT] = getCalibrationData(&sensor[LEFT]);
-    callData[RIGHT] = getCalibrationData(&sensor[RIGHT]);
+    callData[center.id] = getCalibrationData(&sensor[center.id]);
+    callData[left.id] = getCalibrationData(&sensor[left.id]);
+    callData[right.id] = getCalibrationData(&sensor[right.id]);
     // HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
     // VL53LX_SetCalibrationData(&sensor[i], &callData[i]);
-    setCalibrationData(&sensor[CENTER], CENTER, &callData[CENTER]);
-    setCalibrationData(&sensor[LEFT], LEFT, &callData[LEFT]);
-    setCalibrationData(&sensor[RIGHT], RIGHT, &callData[RIGHT]);
+    setCalibrationData(&sensor[center.id], center.gpioPin, &callData[center.id]);
+    setCalibrationData(&sensor[left.id], left.gpioPin, &callData[left.id]);
+    setCalibrationData(&sensor[right.id], right.gpioPin, &callData[right.id]);
 
-    setOffsetCorrectionMode(&sensor[CENTER], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
-    setXTalkCompensation(&sensor[CENTER], 1);
-    setOffsetCorrectionMode(&sensor[LEFT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
-    setXTalkCompensation(&sensor[LEFT], 1);
-    setOffsetCorrectionMode(&sensor[RIGHT], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
-    setXTalkCompensation(&sensor[RIGHT], 1);
+    setOffsetCorrectionMode(&sensor[center.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[center.id], 1);
+    setOffsetCorrectionMode(&sensor[left.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[left.id], 1);
+    setOffsetCorrectionMode(&sensor[right.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[right.id], 1);
   }
 
-  Start_Sensor(&sensor[CENTER], CENTER);
-  // Start_Sensor(&sensor[LEFT], LEFT);
-  // Start_Sensor(&sensor[RIGHT], RIGHT);
+  Start_Sensor(&sensor[center.id], center.gpioPin);
+  // Start_Sensor(&sensor[left.id], left.gpioPin);
+  // Start_Sensor(&sensor[right.id], right.gpioPin);
   //  Start_Sensor(&sensor[TOP], TOP);
   //  Start_Sensor(&sensor[BOTTOM], BOTTOM);
 
@@ -262,13 +267,13 @@ int main(void)
 
     VL53L3CX_Result_t tempResult;
 
-    if (Sensor_Ready(&sensor[CENTER], CENTER, (uint8_t *)isReady))
+    if (Sensor_Ready(&sensor[center.id], center.gpioPin, (uint8_t *)isReady))
     {
-      isReady[CENTER] = false;
-      VL53L3CX_GetDistance(&sensor[CENTER], &tempResult);
+      isReady[center.id] = false;
+      VL53L3CX_GetDistance(&sensor[center.id], &tempResult);
       // HAL_Delay(2);
-      resultaat[CENTER].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      resultaat[CENTER].status = tempResult.ZoneResult[0].Status[0];
+      resultaat[center.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+      resultaat[center.id].status = tempResult.ZoneResult[0].Status[0];
       // HAL_Delay(2);
     }
 
@@ -276,31 +281,31 @@ int main(void)
     {
       if (toggler)
       {
-        if (Sensor_Ready(&sensor[LEFT], LEFT, (uint8_t *)isReady))
+        if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
         {
-          isReady[LEFT] = false;
-          VL53L3CX_GetDistance(&sensor[LEFT], &tempResult);
+          isReady[left.id] = false;
+          VL53L3CX_GetDistance(&sensor[left.id], &tempResult);
           // HAL_Delay(2);
-          resultaat[LEFT].distance = (long)tempResult.ZoneResult[0].Distance[0];
-          resultaat[LEFT].status = tempResult.ZoneResult[0].Status[0];
+          resultaat[left.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+          resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
           // HAL_Delay(2);
         }
       }
       else
       {
-        if (Sensor_Ready(&sensor[RIGHT], RIGHT, (uint8_t *)isReady))
+        if (Sensor_Ready(&sensor[right.id], right.gpioPin, (uint8_t *)isReady))
         {
-          isReady[RIGHT] = false;
-          VL53L3CX_GetDistance(&sensor[RIGHT], &tempResult);
+          isReady[right.id] = false;
+          VL53L3CX_GetDistance(&sensor[right.id], &tempResult);
           // HAL_Delay(2);
-          resultaat[RIGHT].distance = (long)tempResult.ZoneResult[0].Distance[0];
-          resultaat[RIGHT].status = tempResult.ZoneResult[0].Status[0];
+          resultaat[right.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+          resultaat[right.id].status = tempResult.ZoneResult[0].Status[0];
           // HAL_Delay(2);
         }
       }
 
-      counter[LEFT][counterStep] = resultaat[LEFT].distance;
-      counter[RIGHT][counterStep] = resultaat[RIGHT].distance;
+      counter[left.id][counterStep] = resultaat[left.id].distance;
+      counter[right.id][counterStep] = resultaat[right.id].distance;
 
       toggler = !toggler;
     }
@@ -311,13 +316,13 @@ int main(void)
         ;
     }
 
-    counter[CENTER][counterStep] = resultaat[CENTER].distance;
+    counter[center.id][counterStep] = resultaat[center.id].distance;
 
     counterStep++;
     if (counterStep >= counterHeight)
       counterStep = 0;
 
-    objectPresent = ckeckObjectPresent(&resultaat[CENTER], &objectPresent, &resultaat[CENTER].distance);
+    objectPresent = ckeckObjectPresent(&resultaat[center.id], &objectPresent, &resultaat[center.id].distance);
 
     // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
     if (commando == NONE)
@@ -330,19 +335,19 @@ int main(void)
       // Gemiddelde berekenen
       for (i = 0; i < counterHeight; i++)
       {
-        dis0 += counter[LEFT][i];
+        dis0 += counter[left.id][i];
       };
       dis0 /= 5;
 
       for (i = 0; i < counterHeight; i++)
       {
-        dis1 += counter[CENTER][i];
+        dis1 += counter[center.id][i];
       };
       dis1 /= 5;
 
       for (i = 0; i < counterHeight; i++)
       {
-        dis2 += counter[RIGHT][i];
+        dis2 += counter[right.id][i];
       };
       dis2 /= 5;
 
@@ -351,58 +356,58 @@ int main(void)
       int16_t maxDis = 300;
 
       // DU gesture
-      if (dis0 < maxDis && dis2 < maxDis && !DU_center && resultaat[LEFT].status == 0 && resultaat[RIGHT].status == 0 && dis1 > maxDis)
+      if (dis0 < maxDis && dis2 < maxDis && !DU_center && resultaat[left.id].status == 0 && resultaat[right.id].status == 0 && dis1 > maxDis)
       {
         // Set flag
         DU_beiden = true;
       }
 
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && DU_beiden == true)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && DU_beiden == true)
       {
         DU_center = true;
       }
 
       // UD gesture
-      if (dis1 < maxDis && !UD_beiden && resultaat[CENTER].status == 0 && dis0 > maxDis && dis2 > maxDis)
+      if (dis1 < maxDis && !UD_beiden && resultaat[center.id].status == 0 && dis0 > maxDis && dis2 > maxDis)
       {
         // Set flag
         UD_center = true;
       }
 
-      if (dis0 < maxDis && dis2 < maxDis && resultaat[LEFT].status == 0 && resultaat[RIGHT].status == 0 && UD_center)
+      if (dis0 < maxDis && dis2 < maxDis && resultaat[left.id].status == 0 && resultaat[right.id].status == 0 && UD_center)
       {
         // Set flag
         UD_beiden = true;
       }
 
       // LR gesture
-      if (dis0 < maxDis && resultaat[LEFT].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
+      if (dis0 < maxDis && resultaat[left.id].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
       {
         LR_links = true;
       }
 
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
       {
         LR_center = true;
       }
 
-      if (dis2 < maxDis && resultaat[RIGHT].status == 0 && LR_center && LR_links)
+      if (dis2 < maxDis && resultaat[right.id].status == 0 && LR_center && LR_links)
       {
         LR_rechts = true;
       }
 
       // RL gesture
-      if (dis2 < maxDis && resultaat[RIGHT].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
+      if (dis2 < maxDis && resultaat[right.id].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
       {
         RL_rechts = true;
       }
 
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
       {
         RL_center = true;
       }
 
-      if (dis0 < maxDis && resultaat[LEFT].status == 0 && RL_center && RL_rechts)
+      if (dis0 < maxDis && resultaat[left.id].status == 0 && RL_center && RL_rechts)
       {
         RL_links = true;
       }
@@ -431,65 +436,65 @@ int main(void)
       int16_t maxDis = 300;
 
       // DU gesture
-      if (dis0 < maxDis && resultaat[LEFT].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
+      if (dis0 < maxDis && resultaat[left.id].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
       {
         DU_onder = true;
       }
 
-      if (dis2 < maxDis && resultaat[RIGHT].status == 0 && !DU_center && DU_onder && dis1 > maxDis)
+      if (dis2 < maxDis && resultaat[right.id].status == 0 && !DU_center && DU_onder && dis1 > maxDis)
       {
         DU_center = true;
       }
 
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && DU_center && DU_onder)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && DU_center && DU_onder)
       {
         DU_boven = true;
       }
 
       // UD gesture
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && !UD_center && !UD_onder && dis0 > maxDis && dis2 > maxDis)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && !UD_center && !UD_onder && dis0 > maxDis && dis2 > maxDis)
       {
         UD_boven = true;
       }
 
-      if (dis2 < maxDis && resultaat[RIGHT].status == 0 && !UD_onder && UD_boven && dis0 > maxDis)
+      if (dis2 < maxDis && resultaat[right.id].status == 0 && !UD_onder && UD_boven && dis0 > maxDis)
       {
         UD_center = true;
       }
 
-      if (dis0 < maxDis && resultaat[LEFT].status == 0 && UD_center && UD_boven)
+      if (dis0 < maxDis && resultaat[left.id].status == 0 && UD_center && UD_boven)
       {
         UD_onder = true;
       }
 
       // LR gesture
-      if (dis0 < maxDis && resultaat[LEFT].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
+      if (dis0 < maxDis && resultaat[left.id].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
       {
         LR_links = true;
       }
 
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
       {
         LR_center = true;
       }
 
-      if (dis2 < maxDis && resultaat[RIGHT].status == 0 && LR_center && LR_links)
+      if (dis2 < maxDis && resultaat[right.id].status == 0 && LR_center && LR_links)
       {
         LR_rechts = true;
       }
 
       // RL gesture
-      if (dis2 < maxDis && resultaat[RIGHT].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
+      if (dis2 < maxDis && resultaat[right.id].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
       {
         RL_rechts = true;
       }
 
-      if (dis1 < maxDis && resultaat[CENTER].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
+      if (dis1 < maxDis && resultaat[center.id].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
       {
         RL_center = true;
       }
 
-      if (dis0 < maxDis && resultaat[LEFT].status == 0 && RL_center && RL_rechts)
+      if (dis0 < maxDis && resultaat[left.id].status == 0 && RL_center && RL_rechts)
       {
         RL_links = true;
       }
@@ -546,9 +551,9 @@ int main(void)
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
 
     // HAL_Delay(2);
-    // printf("distance CENTER: %4d %3d\t distance LEFT: %4d %3d\t distance RIGHT: %4d %3d\r\n",
-    //       (int)resultaat[CENTER].distance, resultaat[CENTER].status, (int)resultaat[LEFT].distance, resultaat[LEFT].status, (int)resultaat[RIGHT].distance, resultaat[RIGHT].status);
-    //  printf("L: %5d, C: %5d, R: %5d\r\n", distance[LEFT], distance[CENTER], distance[RIGHT]);
+    // printf("distance center.gpioPin: %4d %3d\t distance left.gpioPin: %4d %3d\t distance right.gpioPin: %4d %3d\r\n",
+    //       (int)resultaat[center.id].distance, resultaat[center.id].status, (int)resultaat[left.id].distance, resultaat[left.id].status, (int)resultaat[right.id].distance, resultaat[right.id].status);
+    printf("L%d, C%d, R%d\r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -556,15 +561,15 @@ int main(void)
     if (objectPresent && !prevObjectPresent)
     {
       // Opstarten van sensoren
-      Start_Sensor(&sensor[LEFT], LEFT);
-      Start_Sensor(&sensor[RIGHT], RIGHT);
+      Start_Sensor(&sensor[left.id], left.gpioPin);
+      Start_Sensor(&sensor[right.id], right.gpioPin);
       printf("Start\r\n");
     }
 
     if (!objectPresent && prevObjectPresent)
     {
-      Stop_Sensor(&sensor[LEFT]);
-      Stop_Sensor(&sensor[RIGHT]);
+      Stop_Sensor(&sensor[left.id]);
+      Stop_Sensor(&sensor[right.id]);
       printf("Stop\r\n");
     }
 
@@ -632,12 +637,12 @@ int main(void)
     // if (((HAL_GetTick() - timerPrintf) > timerPrintfTimeout))
     // {
     //   int timeTotal = HAL_GetTick() - timerGlobal;
-    //   printf("totale tijd: %5d, distance: %5d, status: %5d\r\n", timeTotal, resultaat[CENTER].distance, resultaat[CENTER].status);
-    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].distance, resultaat[CENTER].distance, resultaat[RIGHT].distance);
-    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[LEFT].status, resultaat[CENTER].status, resultaat[RIGHT].status);
+    //   printf("totale tijd: %5d, distance: %5d, status: %5d\r\n", timeTotal, resultaat[center.id].distance, resultaat[center.id].status);
+    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
+    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[left.id].status, resultaat[center.id].status, resultaat[right.id].status);
     //   timerPrintf = HAL_GetTick();
     // }
-    // printf("L: %5d %2d\r\n", resultaat[LEFT].distance, resultaat[LEFT].status);
+    // printf("L: %5d %2d\r\n", resultaat[left.id].distance, resultaat[left.id].status);
   }
   /* USER CODE END 3 */
 }
@@ -815,7 +820,6 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   sensor->IO.GetTick = CUSTOM_VL53L3CX_I2C_GetTick;
   sensor->IO.Address = 0x52;
 
-  #ifdef drie1
   switch (index)
   {
   case 0: 
@@ -836,23 +840,7 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   default:
     break;
   }
-  #endif
-  #ifdef drie2
- switch (index)
-  {
-  case 1: 
-    HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, 1);
-    break;
-  case 2: 
-    HAL_GPIO_WritePin(XSHUT_2_GPIO_Port, XSHUT_2_Pin, 1);
-    break;
-  case 0:
-    HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, 1);
-    break;
-  default:
-    break;
-  }
-  #endif
+
 
   HAL_Delay(2);
   VL53L3CX_Init(sensor);
@@ -873,7 +861,6 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
 
 uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isReady)
 {
-  #ifdef drie1
   switch (index)
   {
   case 0:
@@ -900,34 +887,13 @@ uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isRead
     return 0;
     break;
   }
-  #endif
-  #ifdef drie2
-  switch (index)
-  {
-  case 1:
-    if (isReady[index] || (!isReady[index] && !HAL_GPIO_ReadPin(GPIOI_1_GPIO_Port, GPIOI_1_Pin)))
-      return 1;
-    break;
-  case 2:
-    if (isReady[index] || (!isReady[index] && !HAL_GPIO_ReadPin(GPIOI_2_GPIO_Port, GPIOI_2_Pin)))
-      return 1;
-    break;
-  case 0:
-    if (isReady[index] || (!isReady[index] && !HAL_GPIO_ReadPin(GPIOI_3_GPIO_Port, GPIOI_3_Pin)))
-      return 1;
-    break;
-  default:
-    return 0;
-    break;
-  }
-  #endif
   return 0;
 }
 
 void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index)
 {
   VL53L3CX_Result_t results;
-  #ifdef drie1
+
   switch (index)
   {
   case 0:
@@ -959,36 +925,14 @@ void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index)
   default:
     break;
   }
-  #endif
-  #ifdef drie2
-  switch (index)
-  {
-  case 1:
-    while (HAL_GPIO_ReadPin(GPIOI_1_GPIO_Port, GPIOI_1_Pin))
-      ; // Zolang wachten totdat de GPIOI is af gegaan
-    /* code */
-    break;
-  case 2:
-    while (HAL_GPIO_ReadPin(GPIOI_2_GPIO_Port, GPIOI_2_Pin))
-      ; // Zolang wachten totdat de GPIOI is af gegaan
-    /* code */
-    break;
-  case 0:
-    while (HAL_GPIO_ReadPin(GPIOI_3_GPIO_Port, GPIOI_3_Pin))
-      ; // Zolang wachten totdat de GPIOI is af gegaan
-    /* code */
-    break;
-  default:
-    break;
-  }
-  #endif
+
   VL53L3CX_GetDistance(sensor, &results); // 1ste meeting weg gooien
 }
 void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 {
   uint32_t id;
   int ret;
-#ifdef drie1
+
   switch (index)
   {
   case 0:
@@ -1010,23 +954,6 @@ void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
   default:
     break;
   }
-  #endif
-  #ifdef drie2
-  switch (index)
-  {
-  case 1:
-    Config_Sensor(sensor, index, (uint8_t *)4);
-    break;
-  case 2:
-    Config_Sensor(sensor, index, (uint8_t *)6);
-    break;
-  case 0:
-    Config_Sensor(sensor, index, (uint8_t *)8);
-    break;
-  default:
-    break;
-  }
-  #endif
 
   ret = VL53L3CX_ReadID(sensor, &id);
   printf("%d\r\n", ret);

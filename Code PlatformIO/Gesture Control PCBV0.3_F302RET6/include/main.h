@@ -62,15 +62,21 @@ extern "C"
 #endif
 #ifdef drie2
 
-  typedef enum SensorDef
+  typedef enum SensorDev
   {
-    CENTER = 0,
+    CENTER = 3,
     LEFT = 2,
     RIGHT = 1,
   } sensorDev;
 
 #endif
 #endif
+
+struct Sensor_Definition
+{
+  sensorDev gpioPin;
+  uint8_t id;
+};
 
   typedef enum commands
   {
@@ -92,7 +98,8 @@ extern "C"
 
   /* Exported constants --------------------------------------------------------*/
   /* USER CODE BEGIN EC */
-#define amountSensor 3
+#define amountSensor 5
+#define amountSensorUsed 3
   /* USER CODE END EC */
 
   /* Exported macro ------------------------------------------------------------*/
