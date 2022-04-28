@@ -93,7 +93,7 @@ static bool timerPrintfSet = false;
 static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
-#define counterHeight 6
+#define counterHeight 4
 int counter[amountSensorUsed][counterHeight];
 uint8_t counterStep = 0;
 
@@ -435,24 +435,27 @@ int main(void)
     {
       uint8_t i = 0;
 
-      // Gemiddelde berekenen
-      for (i = 0; i < counterHeight; i++)
-      {
-        dis0 += counter[left.id][i];
-      };
-      dis0 /= 5;
+      // // Gemiddelde berekenen
+      // for (i = 0; i < counterHeight; i++)
+      // {
+      //   dis0 += counter[left.id][i];
+      // };
+      // dis0 /= 5;
 
-      for (i = 0; i < counterHeight; i++)
-      {
-        dis1 += counter[center.id][i];
-      };
-      dis1 /= 5;
+      // for (i = 0; i < counterHeight; i++)
+      // {
+      //   dis1 += counter[center.id][i];
+      // };
+      // dis1 /= 5;
 
-      for (i = 0; i < counterHeight; i++)
-      {
-        dis2 += counter[right.id][i];
-      };
-      dis2 /= 5;
+      // for (i = 0; i < counterHeight; i++)
+      // {
+      //   dis2 += counter[right.id][i];
+      // };
+      // dis2 /= 5;
+      dis0 = resultaat[left.id].distance;
+      dis1 = resultaat[center.id].distance;
+      dis2 = resultaat[right.id].distance;
 
 // printf("dis0: %5d, dis1: %5d, dis2: %5d\r\n", dis0, dis1, dis2);
 #ifdef drie1
