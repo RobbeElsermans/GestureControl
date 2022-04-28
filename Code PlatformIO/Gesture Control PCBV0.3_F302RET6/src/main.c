@@ -56,7 +56,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-VL53L3CX_Object_t sensor[amountSensorUsed];
 volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
 
@@ -129,6 +128,11 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+  //Define de sensor objecten.
+  VL53L3CX_Object_t sensor[amountSensorUsed];
+  sensor[left.id].IsInitialized = 0;
+  sensor[center.id].IsInitialized = 0;
+  sensor[right.id].IsInitialized = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -269,7 +273,6 @@ int main(void)
     Start_Sensor(&sensor[right.id], right.gpioPin);
     while (1)
     {
-
       if (Sensor_Ready(&sensor[center.id], center.gpioPin, (uint8_t *)isReady))
       {
         isReady[center.id] = false;
@@ -303,7 +306,6 @@ int main(void)
   }
   else
   {
-
     VL53LX_CalibrationData_t callData[amountSensorUsed];
     callData[center.id] = getCalibrationData(&sensor[center.id]);
     callData[left.id] = getCalibrationData(&sensor[left.id]);
@@ -324,8 +326,6 @@ int main(void)
   Start_Sensor(&sensor[center.id], center.gpioPin);
   // Start_Sensor(&sensor[left.id], left.gpioPin);
   // Start_Sensor(&sensor[right.id], right.gpioPin);
-  //  Start_Sensor(&sensor[TOP], TOP);
-  //  Start_Sensor(&sensor[BOTTOM], BOTTOM);
 
   /* USER CODE END 2 */
 
@@ -1034,6 +1034,7 @@ void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index)
 
   VL53L3CX_GetDistance(sensor, &results); // 1ste meeting weg gooien
 }
+
 void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 {
   uint32_t id;
