@@ -93,7 +93,7 @@ static bool timerPrintfSet = false;
 static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
-#define counterHeight 5
+#define counterHeight 6
 int counter[amountSensorUsed][counterHeight];
 uint8_t counterStep = 0;
 
@@ -176,7 +176,7 @@ int main(void)
   {
     VL53LX_CalibrationData_t callData[amountSensorUsed];
 
-    printf("Calibrating in 10 seconds... \r\n\r\n");
+  // printf("Calibrating in 10 seconds... \r\n\r\n");
     for (uint8_t i = 0; i < 2; i++)
     {
       HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
@@ -193,7 +193,7 @@ int main(void)
     // xTalkCal(&sensor[center.id]);
     // xTalkCal(&sensor[left.id]);
     // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
-    printf("xtalk\r\n");
+  // printf("xtalk\r\n");
     // offsetPerVcselCal(&sensor[center.id], 600);
     // HAL_Delay(2);
     // offsetPerVcselCal(&sensor[left.id], 600);
@@ -258,7 +258,7 @@ int main(void)
 
   float timerMeasurment = 0;
   bool timerMeasurementSet = false;
-  int timerMeasurmentTimeout = 500; // 0.5 seconden
+  int timerMeasurmentTimeout = 1200; // 0.5 seconden
 
   while (1)
   {
@@ -323,14 +323,13 @@ int main(void)
       counterStep = 0;
 
     objectPresent = ckeckObjectPresent(&resultaat[center.id], &objectPresent, &resultaat[center.id].distance);
-
+    int dis0 = 0;
+    int dis1 = 0;
+    int dis2 = 0;
     // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
     if (commando == NONE)
     {
       uint8_t i = 0;
-      int dis0 = 0;
-      int dis1 = 0;
-      int dis2 = 0;
 
       // Gemiddelde berekenen
       for (i = 0; i < counterHeight; i++)
@@ -433,7 +432,7 @@ int main(void)
       }
 #endif
 #ifdef drie2
-      int16_t maxDis = 300;
+      int16_t maxDis = 450;
 
       // DU gesture
       if (dis0 < maxDis && resultaat[left.id].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
@@ -520,6 +519,7 @@ int main(void)
       }
 #endif
       // printf("LR_links %1d, LR_center %1d\t LR_rechts %1d\r\n", LR_links, LR_center,LR_rechts);
+      printf("L%d, C%d, R%d\r\n", dis0, dis1, dis2);
     }
 
     // reset gesture flags
@@ -553,7 +553,7 @@ int main(void)
     // HAL_Delay(2);
     // printf("distance center.gpioPin: %4d %3d\t distance left.gpioPin: %4d %3d\t distance right.gpioPin: %4d %3d\r\n",
     //       (int)resultaat[center.id].distance, resultaat[center.id].status, (int)resultaat[left.id].distance, resultaat[left.id].status, (int)resultaat[right.id].distance, resultaat[right.id].status);
-    printf("L%d, C%d, R%d\r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
+    // printf("L%d, C%d, R%d\r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -563,14 +563,14 @@ int main(void)
       // Opstarten van sensoren
       Start_Sensor(&sensor[left.id], left.gpioPin);
       Start_Sensor(&sensor[right.id], right.gpioPin);
-      printf("Start\r\n");
+    // printf("Start\r\n");
     }
 
     if (!objectPresent && prevObjectPresent)
     {
       Stop_Sensor(&sensor[left.id]);
       Stop_Sensor(&sensor[right.id]);
-      printf("Stop\r\n");
+    // printf("Stop\r\n");
     }
 
     prevObjectPresent = objectPresent;
@@ -584,7 +584,7 @@ int main(void)
     {
       timerCommandSet = true;
       timerCommand = HAL_GetTick();
-      printf("command: %2d\r\n", commando);
+    // printf("command: %2d\r\n", commando);
     }
     if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
     {
@@ -956,7 +956,7 @@ void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
   }
 
   ret = VL53L3CX_ReadID(sensor, &id);
-  printf("%d\r\n", ret);
+// printf("%d\r\n", ret);
 }
 
 void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
