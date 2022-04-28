@@ -435,27 +435,27 @@ int main(void)
     {
       uint8_t i = 0;
 
-      // // Gemiddelde berekenen
-      // for (i = 0; i < counterHeight; i++)
-      // {
-      //   dis0 += counter[left.id][i];
-      // };
-      // dis0 /= 5;
+      // Gemiddelde berekenen
+      for (i = 0; i < counterHeight; i++)
+      {
+        dis0 += counter[left.id][i];
+      };
+      dis0 /= counterHeight;
 
-      // for (i = 0; i < counterHeight; i++)
-      // {
-      //   dis1 += counter[center.id][i];
-      // };
-      // dis1 /= 5;
+      for (i = 0; i < counterHeight; i++)
+      {
+        dis1 += counter[center.id][i];
+      };
+      dis1 /= counterHeight;
 
-      // for (i = 0; i < counterHeight; i++)
-      // {
-      //   dis2 += counter[right.id][i];
-      // };
-      // dis2 /= 5;
-      dis0 = resultaat[left.id].distance;
-      dis1 = resultaat[center.id].distance;
-      dis2 = resultaat[right.id].distance;
+      for (i = 0; i < counterHeight; i++)
+      {
+        dis2 += counter[right.id][i];
+      };
+      dis2 /= counterHeight;
+      // dis0 = resultaat[left.id].distance;
+      // dis1 = resultaat[center.id].distance;
+      // dis2 = resultaat[right.id].distance;
 
 // printf("dis0: %5d, dis1: %5d, dis2: %5d\r\n", dis0, dis1, dis2);
 #ifdef drie1
