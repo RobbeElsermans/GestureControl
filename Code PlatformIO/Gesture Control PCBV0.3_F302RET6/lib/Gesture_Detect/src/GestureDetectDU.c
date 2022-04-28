@@ -30,12 +30,12 @@ bool CheckGestureDU(bool *_gestureDU, bool *_object, Resultaat_t *Result)
     // Als laatste sensor boven (3)
     if (*_object)
     {
-        int8_t sta0 = Result[LEFT].status;
-        int8_t sta1 = Result[CENTER].status;
-        int8_t sta2 = Result[RIGHT].status;
-        int dis0 = (int)Result[LEFT].distance;
-        int dis1 = (int)Result[CENTER].distance;
-        int dis2 = (int)Result[RIGHT].distance;
+        int8_t sta0 = Result[XSHUT_2].status;
+        int8_t sta1 = Result[XSHUT_3].status;
+        int8_t sta2 = Result[XSHUT_1].status;
+        int dis0 = (int)Result[XSHUT_2].distance;
+        int dis1 = (int)Result[XSHUT_3].distance;
+        int dis2 = (int)Result[XSHUT_1].distance;
 
         if ((dis0 < maxDistanceObject) && (dis2 < maxDistanceObject) && (dis1 > maxDistanceObject) && (sta0 == 0) && (sta2 == 0) && (!hasBottom && !hasCenter) && (dis0 != 0 && dis2 != 0)) // Sensor bottom
         {

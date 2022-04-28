@@ -32,10 +32,10 @@ bool CheckGestureUD(bool *_gestureUD, bool *_object, Resultaat_t *Result)
     if (*_object)
     {
         int8_t sta3 = Result[0].status;
-        int8_t sta1 = Result[CENTER].status;
+        int8_t sta1 = Result[XSHUT_3].status;
         int8_t sta4 = Result[0].status;
         int dis3 = (int)Result[0].distance;
-        int dis1 = (int)Result[CENTER].distance;
+        int dis1 = (int)Result[XSHUT_3].distance;
         int dis4 = (int)Result[0].distance;
 
         if ((dis3 < maxDistanceObject) && (dis4 > maxDistanceObject) && (sta3 == 0 || sta3 == 7) && !hasBottom && !hasCenter && !hasTop && dis3 != 0) // Sensor top

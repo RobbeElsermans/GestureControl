@@ -60,10 +60,10 @@ VL53L3CX_Object_t sensor[amountSensorUsed];
 volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
 
-//Aanmaken sensor definities
-struct Sensor_Definition center = {CENTER, 0};
-struct Sensor_Definition left = {LEFT, 1};
-struct Sensor_Definition right = {RIGHT, 2};
+// Aanmaken sensor definities
+struct Sensor_Definition center = {XSHUT_2, 0};
+struct Sensor_Definition left = {XSHUT_3, 1};
+struct Sensor_Definition right = {XSHUT_1, 2};
 
 // Resultaat van de meetingen
 Resultaat_t resultaat[amountSensorUsed];
@@ -172,11 +172,11 @@ int main(void)
   Init_Sensor(&sensor[right.id], right.gpioPin);
 
   if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
-  // if (true)
+  //if (true)
   {
     VL53LX_CalibrationData_t callData[amountSensorUsed];
 
-  // printf("Calibrating in 10 seconds... \r\n\r\n");
+    printf("Calibrating in 10 seconds... \r\n\r\n");
     for (uint8_t i = 0; i < 2; i++)
     {
       HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
@@ -184,30 +184,134 @@ int main(void)
     }
     HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
 
-    // printf("Sensor %2d\r\n", center.gpioPin);
+    printf("Sensor %2d\r\n", center.gpioPin);
     RefSpadCal(&sensor[center.id]);
     RefSpadCal(&sensor[left.id]);
     RefSpadCal(&sensor[right.id]);
     // HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
-    // printf("refspad\r\n");
-    // xTalkCal(&sensor[center.id]);
-    // xTalkCal(&sensor[left.id]);
+    printf("refspad\r\n");
+    xTalkCal(&sensor[center.id]);
+    xTalkCal(&sensor[left.id]);
+    xTalkCal(&sensor[right.id]);
     // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
-  // printf("xtalk\r\n");
-    // offsetPerVcselCal(&sensor[center.id], 600);
-    // HAL_Delay(2);
-    // offsetPerVcselCal(&sensor[left.id], 600);
-    // HAL_Delay(2);
-    // offsetPerVcselCal(&sensor[right.id], 600);
+    printf("xtalk\r\n");
+    offsetPerVcselCal(&sensor[center.id], 600);
+    HAL_Delay(2);
+    offsetPerVcselCal(&sensor[left.id], 600);
+    HAL_Delay(2);
+    offsetPerVcselCal(&sensor[right.id], 600);
     // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
     callData[center.id] = getCalibrationData(&sensor[center.id]);
     callData[left.id] = getCalibrationData(&sensor[left.id]);
     callData[right.id] = getCalibrationData(&sensor[right.id]);
+
+    // for (uint8_t i = 0; i < 3; i++)
+    // {
+    //   /* code */
+    //   printf("sensor: %2d\r\n", i);
+    //   printf("XTalk_kps\r\n");
+    //   for (uint8_t j = 0; j < 6; j++)
+    //   {
+    //     printf(j);
+    //     printf("%2d: %5d \r\n", j, callData[i].algo__xtalk_cpo_HistoMerge_kcps[j]);
+    //   }
+    //   printf("\r\n");
+    //   printf("xtalk_bin_data\r\n");
+    //   for (uint8_t j = 0; j < 12; j++)
+    //   {
+    //     printf(j);
+    //     printf("%2d: %5d \r\n", j, callData[i].xtalkhisto.xtalk_shape.bin_data[j]);
+    //   }
+    //   printf("\r\n");
+    //   printf("zero_distance_phase: %5d\r\n", callData[i].xtalkhisto.xtalk_shape.zero_distance_phase);
+    //   printf("phasecal_result__reference_phase: %5d\r\n", callData[i].xtalkhisto.xtalk_shape.phasecal_result__reference_phase);
+    //   printf("cal_config__vcsel_start: %5d\r\n", callData[i].xtalkhisto.xtalk_shape.cal_config__vcsel_start);
+    //   printf("zone_id: %5d\r\n", callData[i].xtalkhisto.xtalk_shape.zone_id);
+    //   printf("vcsel_width: %5d\r\n", callData[i].xtalkhisto.xtalk_shape.vcsel_width);
+    //   printf("VL53LX_p_015: %5d\r\n", callData[i].xtalkhisto.xtalk_shape.VL53LX_p_015);
+    //   printf("\r\n");
+    //   printf("short_a_offset_mm: %5d\r\n", callData[i].per_vcsel_cal_data.short_a_offset_mm);
+    //   printf("short_b_offset_mm: %5d\r\n", callData[i].per_vcsel_cal_data.short_b_offset_mm);
+    //   printf("medium_a_offset_mm: %5d\r\n", callData[i].per_vcsel_cal_data.medium_a_offset_mm);
+    //   printf("medium_b_offset_mm: %5d\r\n", callData[i].per_vcsel_cal_data.medium_b_offset_mm);
+    //   printf("long_a_offset_mm: %5d\r\n", callData[i].per_vcsel_cal_data.long_a_offset_mm);
+    //   printf("long_b_offset_mm: %5d\r\n", callData[i].per_vcsel_cal_data.long_b_offset_mm);
+    //   printf("\r\n");
+    //   printf("global_config__spad_enables_ref_0: %5d\r\n", callData[i].customer.global_config__spad_enables_ref_0);
+    //   printf("global_config__spad_enables_ref_1: %5d\r\n", callData[i].customer.global_config__spad_enables_ref_1);
+    //   printf("global_config__spad_enables_ref_2: %5d\r\n", callData[i].customer.global_config__spad_enables_ref_2);
+    //   printf("global_config__spad_enables_ref_3: %5d\r\n", callData[i].customer.global_config__spad_enables_ref_3);
+    //   printf("global_config__spad_enables_ref_4: %5d\r\n", callData[i].customer.global_config__spad_enables_ref_4);
+    //   printf("global_config__spad_enables_ref_5: %5d\r\n", callData[i].customer.global_config__spad_enables_ref_5);
+    //   printf("ref_spad_man__num_requested_ref_spads: %5d\r\n", callData[i].customer.ref_spad_man__num_requested_ref_spads);
+    //   printf("ref_spad_man__ref_location: %5d\r\n", callData[i].customer.ref_spad_man__ref_location);
+    //   printf("algo__crosstalk_compensation_plane_offset_kcps: %5d\r\n", callData[i].customer.algo__crosstalk_compensation_plane_offset_kcps);
+    //   printf("ref_spad_char__total_rate_target_mcps: %5d\r\n", callData[i].customer.ref_spad_char__total_rate_target_mcps);
+    //   printf("mm_config__inner_offset_mm: %5d\r\n", callData[i].customer.mm_config__inner_offset_mm);
+    //   printf("mm_config__outer_offset_mm: %5d\r\n", callData[i].customer.mm_config__outer_offset_mm);
+    // }
     // HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
     // VL53LX_SetCalibrationData(&sensor[i], &callData[i]);
-    setCalibrationData(&sensor[center.id], center.gpioPin, &callData[center.id]);
-    setCalibrationData(&sensor[left.id], left.gpioPin, &callData[left.id]);
-    setCalibrationData(&sensor[right.id], right.gpioPin, &callData[right.id]);
+    // setCalibrationData(&sensor[center.id], center.id, &callData[center.id]);
+    // setCalibrationData(&sensor[left.id], center.id, &callData[left.id]);
+    // setCalibrationData(&sensor[right.id], center.id, &callData[right.id]);
+
+    setOffsetCorrectionMode(&sensor[center.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[center.id], 1);
+    setOffsetCorrectionMode(&sensor[left.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[left.id], 1);
+    setOffsetCorrectionMode(&sensor[right.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(&sensor[right.id], 1);
+
+    VL53L3CX_Result_t tempResult;
+    Start_Sensor(&sensor[center.id], center.gpioPin);
+    Start_Sensor(&sensor[left.id], left.gpioPin);
+    Start_Sensor(&sensor[right.id], right.gpioPin);
+    while (1)
+    {
+
+      if (Sensor_Ready(&sensor[center.id], center.gpioPin, (uint8_t *)isReady))
+      {
+        isReady[center.id] = false;
+        VL53L3CX_GetDistance(&sensor[center.id], &tempResult);
+        // HAL_Delay(2);
+        resultaat[center.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+        resultaat[center.id].status = tempResult.ZoneResult[0].Status[0];
+        // HAL_Delay(2);
+      }
+      if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
+      {
+        isReady[left.id] = false;
+        VL53L3CX_GetDistance(&sensor[left.id], &tempResult);
+        // HAL_Delay(2);
+        resultaat[left.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+        resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
+        // HAL_Delay(2);
+      }
+      if (Sensor_Ready(&sensor[right.id], right.gpioPin, (uint8_t *)isReady))
+      {
+        isReady[right.id] = false;
+        VL53L3CX_GetDistance(&sensor[right.id], &tempResult);
+        HAL_Delay(2);
+        resultaat[right.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+        resultaat[right.id].status = tempResult.ZoneResult[0].Status[0];
+        HAL_Delay(2);
+      }
+      HAL_Delay(200);
+      printf("left %5d,center %5d,right %5d \r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
+    }
+  }
+  else
+  {
+
+    VL53LX_CalibrationData_t callData[amountSensorUsed];
+    callData[center.id] = getCalibrationData(&sensor[center.id]);
+    callData[left.id] = getCalibrationData(&sensor[left.id]);
+    callData[right.id] = getCalibrationData(&sensor[right.id]);
+
+    setCalibrationData(&sensor[center.id], center.id, &callData[center.id]);
+    setCalibrationData(&sensor[left.id], center.id, &callData[left.id]);
+    setCalibrationData(&sensor[right.id], center.id, &callData[right.id]);
 
     setOffsetCorrectionMode(&sensor[center.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
     setXTalkCompensation(&sensor[center.id], 1);
@@ -563,14 +667,14 @@ int main(void)
       // Opstarten van sensoren
       Start_Sensor(&sensor[left.id], left.gpioPin);
       Start_Sensor(&sensor[right.id], right.gpioPin);
-    // printf("Start\r\n");
+      // printf("Start\r\n");
     }
 
     if (!objectPresent && prevObjectPresent)
     {
       Stop_Sensor(&sensor[left.id]);
       Stop_Sensor(&sensor[right.id]);
-    // printf("Stop\r\n");
+      // printf("Stop\r\n");
     }
 
     prevObjectPresent = objectPresent;
@@ -584,7 +688,7 @@ int main(void)
     {
       timerCommandSet = true;
       timerCommand = HAL_GetTick();
-    // printf("command: %2d\r\n", commando);
+      // printf("command: %2d\r\n", commando);
     }
     if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
     {
@@ -822,25 +926,24 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
 
   switch (index)
   {
-  case 0: 
+  case 0:
     HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, 1);
     break;
-  case 1: 
+  case 1:
     HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, 1);
     break;
-  case 2: 
+  case 2:
     HAL_GPIO_WritePin(XSHUT_2_GPIO_Port, XSHUT_2_Pin, 1);
     break;
   case 3:
     HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, 1);
     break;
-  case 4: 
+  case 4:
     HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, 1);
     break;
   default:
     break;
   }
-
 
   HAL_Delay(2);
   VL53L3CX_Init(sensor);
@@ -956,7 +1059,7 @@ void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
   }
 
   ret = VL53L3CX_ReadID(sensor, &id);
-// printf("%d\r\n", ret);
+  // printf("%d\r\n", ret);
 }
 
 void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)

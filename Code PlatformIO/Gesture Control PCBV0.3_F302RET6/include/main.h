@@ -62,11 +62,13 @@ extern "C"
 #endif
 #ifdef drie2
 
-  typedef enum SensorDev
+    typedef enum SensorDev
   {
-    CENTER = 3,
-    LEFT = 2,
-    RIGHT = 1,
+    XSHUT_4 = 4,
+    XSHUT_3 = 3,
+    XSHUT_2 = 2,
+    XSHUT_1 = 1,
+    XSHUT_0 = 1
   } sensorDev;
 
 #endif

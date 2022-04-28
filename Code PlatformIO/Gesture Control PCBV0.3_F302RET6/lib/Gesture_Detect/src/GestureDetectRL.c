@@ -34,12 +34,12 @@ bool CheckGestureRL(bool *_gestureRL, bool *_object, Resultaat_t *Result)
     // Als laatste sensor left
     if (*_object)
     {
-        int8_t sta0 = Result[LEFT].status;
-        int8_t sta1 = Result[CENTER].status;
-        int8_t sta2 = Result[RIGHT].status;
-        int dis0 = (int)Result[LEFT].distance;
-        int dis1 = (int)Result[CENTER].distance;
-        int dis2 = (int)Result[RIGHT].distance;
+        int8_t sta0 = Result[XSHUT_2].status;
+        int8_t sta1 = Result[XSHUT_3].status;
+        int8_t sta2 = Result[XSHUT_1].status;
+        int dis0 = (int)Result[XSHUT_2].distance;
+        int dis1 = (int)Result[XSHUT_3].distance;
+        int dis2 = (int)Result[XSHUT_1].distance;
 
         if ((dis2 < maxDistanceObject) && (dis2 > minDistanceObject) && (dis0 > maxDistanceObject) && (sta2 == 0 || (prevState2 == 0)) && !hasRight && !hasCenter && !hasLeft && dis2 != 0) // Sensor right
         {
