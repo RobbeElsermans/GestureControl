@@ -18,14 +18,17 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 - [Gebruikte Hardware](#gebruikte-hardware)
 - [Opbouw Project](#opbouw-project)
   - [PinOut](#pinout)
+    - [Pin description](#pin-description)
+  - [genereer code](#genereer-code)
   - [Importeer API VL53LXC](#importeer-api-vl53lxc)
+  - [importeren include & src bestanden](#importeren-include--src-bestanden)
   - [Importeer Andere Bestanden](#importeer-andere-bestanden)
   - [Installeer Platform & Board](#installeer-platform--board)
   - [configureer platformio.ini file](#configureer-platformioini-file)
-  - [importeren include & src bestanden](#importeren-include--src-bestanden)
   - [Build & Upload](#build--upload)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
+- [Bevindingen & Upgrades](#bevindingen--upgrades)
 - [Onderzoek](#onderzoek)
 
 ----
@@ -36,6 +39,7 @@ Dit markdown document zal de geschreven code wat verduidelijken in beste maten m
 Ook wordt er ook een sectie voorzien over de hardware specificaties opgelijst van de gemaakte PCB.
 Als laatste wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
 
+Helemaal onderaan is een link naar de onderzoekspagina waar ik sommige zaken dieper heb bekeken en onderzocht.
 
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
 STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide items duidelijk geworden.
@@ -101,16 +105,16 @@ Om met de ToF-sensoren aan de slag te gaan, heb ik gebruik gemaakt van het devel
 
 ## PinOut
 
-In onderstaande Miro sheets worden de pinouts weergegeven van zowel de MCU als de ST Morpho Extention pin header.
+In onderstaande Miro sheets worden de pinouts weergegeven van zowel de (mogelijke) MCU(s) als de ST Morpho Extention pin header.
 
 
-PCB Pinout F401
+PCB Pinout F401RxT
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_Iavc=/?moveToViewport=-1493,-812,2822,1560" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
-PCB Pinout F151
+PCB Pinout F151Lx
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOC73SG8=/?moveToViewport=-794,-502,1535,853" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
-PCB Pinout F302
+PCB Pinout F302Rx
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVO7LxdQU=/?moveToViewport=-355,-347,595,605" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
 !> Merk op dat we **EXTERN1** & **EXTERN2** hebben moeten vervangen door **I2C2_SDA** & **I2C2_SCL**. 
@@ -118,15 +122,244 @@ PCB Pinout F302
 ST Morpho Extention pin header
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_cksw=/?moveToViewport=-1651,-1262,3867,2149" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
+
+### Pin description 
+
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
+  <tr>
+    <th>naam</th>
+    <th>type</th>
+    <th>default state</th>
+  </tr>
+  <tr>
+    <td>XSHUT_0</td>
+    <td>GPIO_Output</td>
+    <td>HIGH</td>
+  </tr>
+  <tr>
+    <td>XSHUT_1</td>
+    <td>GPIO_Output</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>XSHUT_2</td>
+    <td>GPIO_Output</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>XSHUT_3</td>
+    <td>GPIO_Output</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>XSHUT_4</td>
+    <td>GPIO_Output</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>GPIOI_0</td>
+    <td>GPIO_EXTIx</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>GPIOI_1</td>
+    <td>GPIO_EXTIx</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>GPIOI_2</td>
+    <td>GPIO_EXTIx</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>GPIOI_3</td>
+    <td>GPIO_EXTIx</td>
+    <td>HIGH</td>
+  </tr>
+    <tr>
+    <td>GPIOI_4</td>
+    <td>GPIO_EXTIx</td>
+    <td>HIGH</td>
+  </tr>  
+  <tr>
+    <td>LED_0</td>
+    <td>GPIO_Output</td>
+    <td>LOW</td>
+  </tr>
+  <tr>
+    <td>LED_1</td>
+    <td>GPIO_Output</td>
+    <td>LOW</td>
+  </tr>  
+  <tr>
+    <td>LED_2</td>
+    <td>GPIO_Output</td>
+    <td>LOW</td>
+  </tr>  
+  <tr>
+    <td>LED_3</td>
+    <td>GPIO_Output</td>
+    <td>LOW</td>
+  </tr>
+  <tr>
+    <td>LED_4</td>
+    <td>GPIO_Output</td>
+    <td>LOW</td>
+  </tr>
+  <tr>
+    <td>SW_1</td>
+    <td>GPIO_Input</td>
+    <td>LOW</td>
+  </tr>
+  <tr>
+    <td>SW_2</td>
+    <td>GPIO_Input</td>
+    <td>LOW</td>
+  </tr>
+  <tr>
+    <td>EN_5V</td>
+    <td>GPIO_Output</td>
+    <td>HIGH</td>
+  </tr>
+</table>
+</div>
+
 ----
+
+## genereer code
+
+Om het onszelf makkelijk maken gaan we gebruik maken van de STM32CubeIDE tools die voor ons de code genereren.
+
+1. Installeer [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) en open dit in een directory naar keuzen.
+
+![foto opstart popup 0](foto's/tutorial_Importeer_bestanden_0.jpg)
+
+2. Start een nieuw project op. Dit kan even duren vooraleer een nieuwe window verschijnt.
+
+![foto opstart project 1](foto's/tutorial_Importeer_bestanden_1.jpg)
+
+3. Type in **Part Number** het volgende: *stm32f302rc*. Nadien selecteer je in de tabel de 1ste rij om nadien dan op **Next** te drukken
+
+![foto opstart project 2](foto's/tutorial_Importeer_bestanden_2.jpg)
+
+4. Een nieuw venster verschijnt waarin we de naam, de locatie en de programmeer taal dat we willen gebruiken instellen. De naam is vrij te kiezen net zoals de locatie van het project. Ik neem hier *GestureController* als naam en de locatie laat ik op default staan. Als programmeer taal gaan we C nemen. Nu drukken we op **Finish** zodat ons project wordt aangemaakt. Men zal vragen of dat men het **Device Configuration Tool perspective** mag openen. Druk hierbij op **Yes**.
+
+![foto opstart project 3](foto's/tutorial_Importeer_bestanden_3.jpg)
+![foto opstart project 4](foto's/tutorial_Importeer_bestanden_4.jpg)
+
+?> Nu bevinden we ons in ST's hun (mijn mening) handigste tool ooit. Hier kunnen we op grafischer wijze heel ons project opbouwen zonder 1 lijn code te schrijven.
+
+5. Nu gaan we de ToF-sensor extensie installeren zodat we de nodige code kunnen laten genereren. Hiervoor gaan we naar de dropdown **Software Packs** vervolgens **Manage Software Packs** (of ALT+U)
+
+![foto opstart project 5](foto's/tutorial_Importeer_bestanden_5.jpg)
+
+1. In het popup-venster **Embedded Software packages Manager** gaan we bovenaan naar de 2de tab **STMicroelektronics** en zoeken we in de lijst naar **X-CUBE-TOF1** waar we vervolgens in de dropdown versie 1.0.0 aanvinken & versie 3.0.0 aanvinken. We installeren deze.
+
+![foto opstart project 6](foto's/tutorial_Importeer_bestanden_6.jpg)
+
+!> men vraagt voor akkoord (of niet akkoord) te gaan met de licentie van de software. Als we niet akkoord gaan kunnen we uiteraard de software niet gebruiken. Ik ga dus akkoord.
+
+Wanneer de installatie voltooid is, zou het vinkje volledig groen moeten zijn. We sluiten het **Embedded Software packages Manager** venster.
+
+![foto opstart project 7](foto's/tutorial_Importeer_bestanden_7.jpg)
+
+7. Vervolgens plaatsen we de pin gegevens (die te vinden zijn in hoofdstuk [PinOut](#pinout) meer bepaald in foto **PCB Pinout F302Rx** en in hoofdstuk [Pin description](#pin-description)) in de grafische editor. Zoals de opmerking zegt, is I2C2 op een andere pin dan de MCU's die we in gedachten hadden om te gebruiken. Dit wordt in hoofdstuk [Hardware Opbouw](#hardware-opbouw) beschreven hoe we dit aanpassen met PCBV0.3.
+
+Om een pin de definiëren gaan we met de cursor van de muis op de desbetreffende pin staan. Met de linker muisknop komt er een dropdown waarin alle opties staan die de geselecteerde pin kan hebben. Hieronder een voorbeeld hoe we XSHUT_0 - dat een GPIO_Output is en zich op PC0 bevindt - definiëren. We geven de pin ook een naam zodat dit later in de code leesbaar is.
+
+![foto declareren pinnen 8](foto's/tutorial_Importeer_bestanden_8.jpg)
+
+Om een naam te geven klikken we met de rechter muisknop op de aangemaakte GPIO pin en selecteren we **Enter User label** om dan een naam in te kunnen geven.
+
+![foto declareren pinnen 9](foto's/tutorial_Importeer_bestanden_9.jpg)
+
+Dit herhalen we totdat we al de XSHUT, GPIOI, LED en SW pinnen hebben gedeclareerd. Dit resulteert in onderstaande foto:
+
+![foto declareren pinnen 10](foto's/tutorial_Importeer_bestanden_10.jpg)
+
+Nu rest ons nog om voor de interrupts (GPIOI_0->4) code te laten genereren. Dit vinden we in de zijbalk onder **System Core** -> **NVIC** die ons een ander zijbalk 
+toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts** aanvinken. Dit zal later voor ons de code activeren.
+
+![foto declareren peripheral pinnen 11](foto's/tutorial_Importeer_bestanden_11.jpg)
+
+8. Na het plaatsen van de input, output en interrupt pinnen, moeten de peripheral pinnen nog gedeclareerd worden (zoals I2C1, I2C2, Externe clock, UART, ...). Dit vergt iets meer werk dan voorgaande stap.
+   1. Als eerste gaan we de programming peripheral activeren genaamd **Async Serial Wire**. Dit doen we door in de zijbalk onder **System Core** -> **SYS** bij de dropdown **Debug** de laatste optie **Trace Asynchronous Sw** te selecteren. Na de selectie zullen er enkele pinnen groen worden en een naam krijgen.
+   
+   ![foto declareren peripheral pinnen 12](foto's/tutorial_Importeer_bestanden_12.jpg)
+   ![foto declareren peripheral pinnen 13](foto's/tutorial_Importeer_bestanden_13.jpg)
+   
+   2. Het volgende dat we gaan instellen zijn de externe klok kristallen. Hiervoor gaan we ook onder **System Core** naar **RCC** waar we dan de HSE (High Speed Clock) en de LSE (Low Speed Clock) kunnen instellen. Beiden worden geplaatst op **Crystal/Ceramic Resonator**. Wederom worden er enkele pinnen groen met een naam.
+    
+    ![foto declareren peripheral pinnen 14](foto's/tutorial_Importeer_bestanden_14.jpg)
+    ![foto declareren peripheral pinnen 15](foto's/tutorial_Importeer_bestanden_15.jpg)
+    
+    Nu dat de pinnen gedefinieërd zijn, kunnen we de klok zelf definiëren. Dit doen we in een andere tab (die bovenaan te vinden is) genaamd **Clock Configuration**. Hierin gaan we 2 bolletjes van plaats veranderen. Bij **PLL Source Mux** veranderen we het bolletje van **HSI** naar **HSE**. Bij **System Clock Mux** veranderen we het bolletje van **HSI** naar **PLLCLK**. Later komen we hier nog enkele zaken aanpassen.
+
+    ![foto declareren peripheral pinnen 16](foto's/tutorial_Importeer_bestanden_16.jpg)
+
+   3. We keren terug naar de **Pinout & Configuration** tab bovenaan. Nu gaan we de FTDI peripheral aanmaken op **USART1**. Hiervoor gana we onder **Connectivity** -> **USART1** de volgende zaken wijzigen:
+      - Mode: Asynchronous
+      - Hardware Flow Control (RS232): CTS/RTS
+      - Baud Rate: 115200
+      - TX and RX Pins Swapping: Enable
+    
+    ![foto declareren peripheral pinnen 17](foto's/tutorial_Importeer_bestanden_17.jpg)
+    ![foto declareren peripheral pinnen 18](foto's/tutorial_Importeer_bestanden_18.jpg)
+
+    Zoals te zien op de foto zijn er weer enkele pinnen groen geworden met hun bijhorende naam. Merk op dat USART1_RX en USART1_TX niet op de juiste plaatst staat. Om de pin op de juiste plaats te zetten, gaan we met de muis over de pin staan en we drukken Ctrl+linker muisknop. nu zal je pinnen zien pinken. Deze pinnen kunnen de functie (USART1_RX) eveneens aansturen.
+
+    ![foto declareren peripheral pinnen 19](foto's/tutorial_Importeer_bestanden_19.jpg)
+
+    We slepen dus de vastgenomen pin naar PB7. Dit doen we ook voor USART1_TX maar dan naar PB6. Nu staat de pin juist.
+      
+    ![foto declareren peripheral pinnen 20](foto's/tutorial_Importeer_bestanden_20.jpg)
+
+   4. Een van de belangrijkste peripheral is toch I2C1 die in communcatie gaat met de ToF-sensoren. Deze stellen we in via **Connectivity** -> **I2C1** waar we de dropdown op **I2C** plaatsen. De snelheid van de klok stellen we in op **Fast Mode Plus** (1MHz frequentie).
+   
+   ![foto declareren peripheral pinnen 21](foto's/tutorial_Importeer_bestanden_21.jpg)
+
+   Net zoals bij de USART1 peripheral staan de pinnen niet zoals we het willen. Hier wordt hetzelfde gedaan als met USART1_RX & USART1_TX maar dit dan met I2C1_SCL. We verplaatsen I2C1_SCL van PA15 naar PB8.
+
+   ![foto declareren peripheral pinnen 22](foto's/tutorial_Importeer_bestanden_22.jpg)
+
+   1. De 2de belangrijkste peripheral is I2C2 die in slave mode zal staan zodat andere toestellen hiermee verbinding kunnen aangaan. Net zoals hierboven gaan we in de zijbalk bij **Connectivity** naar **I2C2** waar we in de dropdown **I2C** selecteren en we stellen zijn adres in op **32** (HEX: 0x20).
+
+    ![foto declareren peripheral pinnen 23](foto's/tutorial_Importeer_bestanden_23.jpg)
+
+    Omdat we met de gesture controller niet willen wachten totdat wanneer er een master iets stuurt, zal dit over een interrupt verlopen. Hiervoor gaan we naar de tab **NVIC Settings** waar we **I2C2 event global interrupt / I2C2 wake-up interrupt trhough EXTI line 24**.
+
+    ![foto declareren peripheral pinnen 24](foto's/tutorial_Importeer_bestanden_24.jpg)
+
+    De pinnen worden nu wel juist geplaatst. We moeten wel later de pinnen doorverbinden op de PCBV0.3
+
+    ![foto declareren peripheral pinnen 25](foto's/tutorial_Importeer_bestanden_25.jpg)
+
+9. De MCU heeft al de aansluitingen gekregen die deze nodig heeft voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. De rij **STMicroelektronics.X-CUBE-TOF1** vouwen we open om dan door te gaan naar **Board Part Ranging** waar we **VL53L3CX** selecteren. We vouwen ook **Device ToF1_Applications** open om daar in de dropdown **VL53L3CX_SimpleRanging** te selecteren. Dit zal een oranje driehoek tevoorschijn laten komen. Wanneer we op deze driehoek klikken met de linker muisknop, zal er onderaan in de kader **Component dependencies** informatie tevoorschijn komen. Hier klikken we met de linker muisknop op **Resolve** wat automatisch voor ons de dependencies zal oplossen.
+
+![foto declareren peripheral pinnen 26](foto's/tutorial_Importeer_bestanden_26.jpg)
+![foto declareren peripheral pinnen 27](foto's/tutorial_Importeer_bestanden_27.jpg)
+
+De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STMicroelectronics.X-CUBE-TOF1.3.0.0**. Hier Gaan we het eerste vinkjes selecteren in de kader **Mode**. In de kader **Configuration** stellen we in welke pin voor wat in staat. Omdat we onze pinnen al gedefinieerd hebben is het enkel maar de dropdown open doen en een correcte pin te selecteren. We nemen in dit geval voor XSHUT pin PC0 en voor I2C nemen we I2C1 met adres 82 (HEX: 0x52) dat het default adres is van de ToF-sensoren. Later in de code wordt er bijna geen gebruik gemaakt van deze instellingen. Dit moet gewoon ingevuld zijn zodat ST de code voor ons kan genereren.
+
+![foto declareren peripheral pinnen 28](foto's/tutorial_Importeer_bestanden_28.jpg)
+
+10. Een laatste wijziging voeren we door zodat al de peripherals in apare c en h bestanden geplaatst worden. Dit is overzichtelijker maar niet noodzakelijk. Hiervoor ga je naar **Project manager**->**Code Generation** waar we de regel **Generate peripheral initialization as a pair of '.c/.h' files per peripheral** aanvinken.
+
+![foto declareren peripheral files 29](foto's/tutorial_Importeer_bestanden_29.jpg)
+
+Nu is het tijd om de code te genereren. Als we op ctrl+S (opslaan) drukken, dan zal er een popup verschijnen om de code te genereren. Nadien volgt een andere popup om het perspecitief om te zetten naar C/C++ perspecief. bijde druk je op **Yes**. De code wordt gegenereerd. 
+
+Omdat ik mijn project in PlatformIO heb gemaakt, zal ik hier nog verder beschrijven hoe we dit daarin importeren. Men kan vanaf hieruit ook alles in STM32CubeIDE uitvoeren net zoals in PlatformIO.
+
+----
+
 
 ## Importeer API VL53LXC
 
-Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **inc** en **src** folder waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we de **inc** en **src** bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
+Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **modules** folder onder **BSP/Components/vl53l3cx** waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we al de bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
 
-!> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PlatformIo's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
-
-Wanneer we het example project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden in die van belang zijn:
+Wanneer we het gegenereerde project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden onder **BSP/Components/vl53l3cx/porting**, **BSP/Components/vl53l3cx** en **TOF/Target** in die van belang zijn:
 
 * vl53lx_platform_init.h
 * vl53lx_platform_ipp_imports.h
@@ -144,9 +377,11 @@ Wanneer we het example project opendoen met de VL53L3CX sensoren, staan er nog e
 * vl53l3cx.c
 * custom_tof_conf.h
 
-?> deze bestanden zijn gegenereerd door STM32CubeIDE
-
 Deze bestanden moeten eveneens in de folder **BSP_vl53l3cx** geplaatst worden.
+
+!> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PlatformIO's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
+
+?> deze bestanden zijn gegenereerd door STM32CubeIDE
 
 <!-- Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
 
@@ -200,29 +435,42 @@ enum VL53L3A2_dev_e
 
 ---- -->
 
-## Importeer Andere Bestanden
+----
 
-Naast de gekregen API van ST, hebben we ook zelf een aantal bestanden gecreëerd om de code wat ordelijker en gestructureerder te maken. Zo hebben we voor elke gesture, calibratie, en extra rand methodes een aparte .c & .h bestand aangemaakt die ook van belang zijn in het project. Dit zijn de bestanden:
+## importeren include & src bestanden
 
-* CalibrationData.h
-* CalibrationData.c
-* GestureDetectDimming.h
-* GestureDetectDimming.c
-* GestureDetectLR.h
-* GestureDetectLR.c
-* GestureDetectRL.h
-* GestureDetectRL.c
-* GestureDetectUD.h
-* GestureDetectUD.c
-* GestureDetectDU.h
-* GestureDetectDU.c
-* GestureDetectObject.h
-* GestureDetectObject.c
+Als laatste gaan we de bestanden importeren die het eigenlijke project tot leven brengen. Dit zijn al de bestanden die te vinden zijn onder de folder **Core/Inc** en **Core/Src**. We plaatsen al de bestanden van **Core/Inc** in de **include** folder en de **Core/Src** in de **src** folder. Dit zijn de bestanden:
 
-Al deze bestanden gaan eveneens onder de **lib** folder plaatsen in de folder **Gesture_Detect/src**.
+* main.h
+* custom_bus.h
+* custom_conf.h
+* custom_errno.h
+* gpio.h
+* i2c.h
+* stm32f3xx_hal_conf.h
+* stm32f3xx_it.h
+* uart.h
+* uart.c
+* stm32f3xx_hal_msp.c
+* system_stm32f3xx.c
+* main.c
+* syscalls.c
+* sysmem.c
+* custom_bus.c
+* gpio.c
+* i2c.c
+* stm32f3xx_it.c
+
+?> deze bestanden zijn gegenereerd door STM32CubeIDE. Later wijzigen we nog enkelen.
 
 ----
 
+## Importeer Andere Bestanden
+
+Naast de gekregen API van ST, zijn er nog andere bestanden gegenereerd onder **CMSIS** en **STM32F3xx_HAL_Driver**.
+Deze 2 bibliotheken zetten we elks apart in een bestand met een src map waarin we alle .h en .c bestanden plaatsen van die bibliotheek. We maken dus een folder **CMSIS** en een folder **STM32F3xx_HAL_Driver** met beiden een map **src**. Nu plaatsen we elk .c of .h bestand in de src folder van die bibliotheek.
+
+----
 
 ## Installeer Platform & Board
 
@@ -237,7 +485,7 @@ style=" display: block;
         margin-left: auto;
         margin-right: auto;"> -->
 
-In de figuur (die linksboven afgebeeld is) is de 1<sup>ste</sup> kader de kader om de dropdown te openen waarin we de 2<sup>de</sup> kader vinden. We selecteren hier *platforms*.
+In de figuur (die linksboven afgebeeld is) is de 1<sup>ste</sup> kader, de kader om de dropdown te openen waarin we de 2<sup>de</sup> kader vinden. We selecteren hier *platforms*.
 
 Nadien komen we op de figuur rechtsboven uit. We selecteren *Embedded* bovenaan en we zoeken naar *ST*. We zien dan in de lijst *ST STM32* verschijnen. Wanneer we hier op drukken, kunnen we het platform installeren met de juiste versie gebruikt in dit project (V15.2.0).
 
@@ -247,12 +495,12 @@ Nadien komen we op de figuur rechtsboven uit. We selecteren *Embedded* bovenaan 
 
 Het platform.ini bestand is een belangrijk bestand. Hierin wordt de configuratie van het project geplaatst.
 
-Hieronder is het genen dat je in dit bestand moet plaatsen.
+Hieronder is de content dat je in dit bestand moet plaatsen.
 
 ``` platformio.ini
-[env:custom_f303ret6]
+[env:custom_f302rct6]
 platform = ststm32
-board = custom_f302ret6
+board = custom_f302rct6
 framework = stm32cube
 test_transport = custom
 monitor_speed = 115200
@@ -263,83 +511,54 @@ Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* m
 
 De test_transponder parameter is toegevoegd zodat we optimaal gebruik kunnen maken van Unit testing. De nodige bestanden hiervoor zijn **unittest_transport.c** & **unittest_transport.h** die onder de folder **test** gezet moet worden. [Hier](https://docs.platformio.org/en/stable/plus/unit-testing.html) is wat extra uitleg over wat dit nu juist doet en hoe het gebruikt moet worden.
 
-Omdat we werken met de STM32F302RET6, die (nog) niet ondersteund is door PlatformIO, moeten we hier onze eigen spin aan geven. Er wordt een bestand genaamd **custom_f302ret6.json** aangemaakt en het wordt in de folder **boards** geplaatst met volgende content:
+Omdat we werken met de STM32F302RCT6, die (nog) niet ondersteund is door PlatformIO, moeten we hier onze eigen spin aan geven. Er wordt een bestand genaamd **custom_f302rct6.json** aangemaakt en het wordt in de folder **boards** geplaatst met volgende content:
 
-``` json custom_f302ret6
+``` json custom_f302rct6
 {
-    "build": {
-      "core": "stm32",
-      "cpu": "cortex-m4",
-      "extra_flags": "-DSTM32F302xE",
-      "f_cpu": "32000000L",
-      "mcu": "stm32f302ret6",
-      "product_line": "STM32F302xE",
-      "variant": "STM32F3xx/F302R(B-C-D-E)T"
-    },
-    "debug": {
-      "default_tools": [
-        "stlink"
-      ],
-      "jlink_device": "STM32F302RE",
-      "openocd_target": "stm32f3x",
-      "svd_path": "STM32F302x.svd"
-    },
-    "frameworks": [
-      "arduino",
-      "cmsis",
-      "mbed",
-      "stm32cube",
-      "libopencm3",
-      "zephyr"
+  "build": {
+    "core": "stm32",
+    "cpu": "cortex-m4",
+    "extra_flags": "-DSTM32F302xC",
+    "f_cpu": "32000000L",
+    "mcu": "stm32f302rc",
+    "product_line": "STM32F302xC",
+    "variant": "STM32F3xx/F302R(B-C-D-E)T"
+  },
+  "debug": {
+    "default_tools": [
+      "stlink"
     ],
-    "name": "ST Nucleo F302RE (64k RAM. 512k Flash)",
-    "upload": {
-      "maximum_ram_size": 65536,
-      "maximum_size": 524288,
-      "protocol": "stlink",
-      "protocols": [
-        "jlink",
-        "cmsis-dap",
-        "stlink",
-        "blackmagic",
-        "mbed"
-      ]
-    },
-    "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f302.html",
-    "vendor": "ST"
+    "jlink_device": "STM32F302RE",
+    "openocd_target": "stm32f3x",
+    "svd_path": "STM32F302x.svd"
+  },
+  "frameworks": [
+    "arduino",
+    "cmsis",
+    "mbed",
+    "stm32cube",
+    "libopencm3",
+    "zephyr"
+  ],
+  "name": "ST Nucleo F302RE (40k RAM. 256k Flash)",
+  "upload": {
+    "maximum_ram_size": 32768,
+    "maximum_size": 262144,
+    "protocol": "stlink",
+    "protocols": [
+      "jlink",
+      "cmsis-dap",
+      "stlink",
+      "blackmagic",
+      "mbed"
+    ]
+  },
+  "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32f302.html",
+  "vendor": "ST"
   }
 ```
 
 Voor meer informatie zie de [documentatie](https://docs.platformio.org/en/stable/platforms/creating_board.html).
-
-----
-
-## importeren include & src bestanden
-
-Als laatste gaan we de bestanden importeren die het eigelijke project tot leven brengen. Dit zijn de bestanden:
-
-* main.h
-* custom_bus.h
-* custom_conf.h
-* custom_errno.h
-* gpio.h
-* i2c.h
-* stm32f3xx_hal_conf.h
-* stm32f3xx_it.h
-* uart.h
-* uart.c
-* stm32f3xx_hal_msp.c
-* stm32f3xx.c
-* main.c
-* syscalls.c
-* sysmem.c
-* custom_bus.c
-* gpio.c
-* i2c.c
-* stm32f3xx_it.c
-
-
-Hier plaatsen we de .h bestanden in de *include* folder en de .c bestanden in de *src* folder.
 
 ----
 
@@ -387,6 +606,7 @@ Hieronder zal ik de werking van de code uitleggen die [hier](https://github.com/
 We starten in de code bij de ```int main()``` functie waar alles wordt opgestart van de MCU. Ook resetten we alle rijen en kolommen van onze led matrix gedefiniëerd bovenaan.
 
 //De rest volgt nog
+# Bevindingen & Upgrades 
 
 # Onderzoek
 [link](Onderzoek.md)
