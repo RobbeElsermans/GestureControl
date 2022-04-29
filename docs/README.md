@@ -574,10 +574,14 @@ Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 
 # Hardware Opbouw
 
-De gemaakte PCB V0.3 wordt op een plexi plaat gemonteerd zodat dit kan fungeren als een coverglas. Er worden extra gaten voorzien om de aparte sensor-bodjes te verplaatsen van plaats door enkele bouten te verplaatsen.
+De gemaakte PCB V0.3 wordt op een plexi plaat gemonteerd zodat dit kan fungeren als een coverglas. In het document [link](Onderzoek.md) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn.
 
-![foto opstelling](foto's/OpstellingV2.jpg)
+![foto opstelling](foto's/PCBV0.3_opstelling_trap_3.jpg)
 
+Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opgeschoven. Dit is makkelijk verholpen door de pads door te lussen die we voorzien hebben tijdens het PCB ontwerpen. We gaan daarom J19 met TP1 verbinden en J18 met TP2 verbinden. Ook halen we R38 en R37 van de PCB af.
+
+![I2C verhelping kicad](foto's/I2C_verhelping_Kicad.jpg)
+<img src="foto's/I2C2%20verhelping.png" width="50%">
 
 </div>
 
