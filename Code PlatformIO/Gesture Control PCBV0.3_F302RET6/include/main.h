@@ -74,11 +74,11 @@ extern "C"
 #endif
 #endif
 
-struct Sensor_Definition
+typedef struct Sensor_Definition
 {
   sensorDev gpioPin;
   uint8_t id;
-};
+} Sensor_Definition_t;
 
   typedef enum commands
   {

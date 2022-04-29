@@ -33,10 +33,6 @@
 #include "vl53lx_api.h"
 #include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 #include "GestureDetectObject.h"
-#include "GestureDetectRL.h"
-#include "GestureDetectLR.h"
-#include "GestureDetectUD.h"
-#include "GestureDetectDU.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,11 +56,12 @@ volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
 
 // Aanmaken sensor definities
-struct Sensor_Definition center = {XSHUT_2, 0};
-struct Sensor_Definition left = {XSHUT_3, 1};
-struct Sensor_Definition right = {XSHUT_1, 2};
+//
+Sensor_Definition_t center = {XSHUT_2, 0};
+Sensor_Definition_t left = {XSHUT_3, 1};
+Sensor_Definition_t right = {XSHUT_1, 2};
 
-// Resultaat van de meetingen
+// Resultaat van de meetingen die de afstand, status en timestamp bevat voor amountSensorUsed aantal keer aangemaakt
 Resultaat_t resultaat[amountSensorUsed];
 
 bool objectPresent = false;
@@ -74,22 +71,21 @@ bool gestureLR = false;
 bool gestureDU = false;
 bool gestureUD = false;
 
-bool toggler = false;
-
+//Commando enum waarmee we de commando's opslaan
 commands commando = NONE;
 
-// Timer command
+// Timer die het commando voor timerCommandTimeout seconden aanhoud
 static float timerCommand = 0;
-static bool timerCommandSet = false;
-static int timerCommandTimeout = 2000; // 2 seconden
+static bool timerCommandSet = false;    //Start in false state
+static int timerCommandTimeout = 2000;  // 2 seconden
 
 // Global Timer Counter
-static long timerGlobal = 0;
+// static long timerGlobal = 0;
 
 // Timer printf
-static float timerPrintf = 0;
-static bool timerPrintfSet = false;
-static int timerPrintfTimeout = 2000; // 2 seconden
+// static float timerPrintf = 0;
+// static bool timerPrintfSet = false;
+// static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
 #define counterHeight 4
@@ -127,12 +123,6 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
-  //Define de sensor objecten.
-  VL53L3CX_Object_t sensor[amountSensorUsed];
-  sensor[left.id].IsInitialized = 0;
-  sensor[center.id].IsInitialized = 0;
-  sensor[right.id].IsInitialized = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -169,13 +159,24 @@ int main(void)
 
   HAL_Delay(20);
 
-  while(1)
-  {
-    HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
-    HAL_Delay(1000);
-  }
-  
+  // while(1)
+  // {
+  //   HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
+  //   HAL_Delay(1000);
+  // }
 
+  //Zal switchen tussen links en rechts sensor telkens bij een nieuwe loop
+  bool toggler = false;
+
+  //Define de sensor objecten amountSensorUsed keer.
+  VL53L3CX_Object_t sensor[amountSensorUsed];
+
+  //Omdat we in RAM de objecten aanmaken (en niet initializeren) gaat er random waardes insteken.
+  //Isinitialized moet 0 zijn om verder te kunnen.
+  sensor[left.id].IsInitialized = 0;
+  sensor[center.id].IsInitialized = 0;
+  sensor[right.id].IsInitialized = 0;
+  
   CUSTOM_VL53L3CX_I2C_Init();
 
   Init_Sensor(&sensor[center.id], center.gpioPin);
@@ -308,7 +309,7 @@ int main(void)
         HAL_Delay(2);
       }
       HAL_Delay(200);
-      printf("left %5d,center %5d,right %5d \r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
+      printf("left %5d,center %5d,right %5d \r\n", (int)resultaat[left.id].distance, (int)resultaat[center.id].distance, (int)resultaat[right.id].distance);
     }
   }
   else
@@ -374,7 +375,7 @@ int main(void)
   while (1)
   {
     // Calculate time over main loop
-    timerGlobal = HAL_GetTick();
+    // timerGlobal = HAL_GetTick();
 
     VL53L3CX_Result_t tempResult;
 
