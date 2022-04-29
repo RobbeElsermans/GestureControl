@@ -25,6 +25,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Importeer Andere Bestanden](#importeer-andere-bestanden)
   - [Installeer Platform & Board](#installeer-platform--board)
   - [configureer platformio.ini file](#configureer-platformioini-file)
+  - [main.h & .c](#mainh--c)
   - [Build & Upload](#build--upload)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
@@ -560,6 +561,13 @@ Omdat we werken met de STM32F302RCT6, die (nog) niet ondersteund is door Platfor
 Voor meer informatie zie de [documentatie](https://docs.platformio.org/en/stable/platforms/creating_board.html).
 
 ----
+
+## main.h & .c
+
+Het main bestand bevad de code die we gebruiken voor de gesture controller. hieronder is een link die leid naar de bestandne op GitHub.
+
+[main.h]()
+[main.c]()
 
 ## Build & Upload
 
