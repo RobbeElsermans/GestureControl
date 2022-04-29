@@ -169,6 +169,13 @@ int main(void)
 
   HAL_Delay(20);
 
+  while(1)
+  {
+    HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
+    HAL_Delay(1000);
+  }
+  
+
   CUSTOM_VL53L3CX_I2C_Init();
 
   Init_Sensor(&sensor[center.id], center.gpioPin);

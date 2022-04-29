@@ -504,10 +504,9 @@ board = custom_f302rct6
 framework = stm32cube
 test_transport = custom
 monitor_speed = 115200
-build_flags = -D HSE_VALUE=8000000U
 ```
 
-Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* moet gebruiken. Zo worden de HAL-bibliotheken aangesproken. Ook wordt er gedefinieerde welk board dat we gebruiken. Voor debug redenen zal de baudrate ingesteld worden op 115200. Het voorafgaande platform dat geïnstalleerd is, plaatsen we hier ook in. De build_flags parameter geeft mee wat de frequentie is van de externe klok (in dit geval 8MHz).
+Met deze tekst stellen we in dat de compileerder het framework van *stm32cube* moet gebruiken. Zo worden de HAL-bibliotheken aangesproken. Ook wordt er gedefinieerde welk board dat we gebruiken. Voor debug redenen zal de baudrate ingesteld worden op 115200. Het voorafgaande platform dat geïnstalleerd is, plaatsen we hier ook in.
 
 De test_transponder parameter is toegevoegd zodat we optimaal gebruik kunnen maken van Unit testing. De nodige bestanden hiervoor zijn **unittest_transport.c** & **unittest_transport.h** die onder de folder **test** gezet moet worden. [Hier](https://docs.platformio.org/en/stable/plus/unit-testing.html) is wat extra uitleg over wat dit nu juist doet en hoe het gebruikt moet worden.
 
