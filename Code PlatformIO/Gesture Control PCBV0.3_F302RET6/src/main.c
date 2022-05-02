@@ -353,6 +353,23 @@ int main(void)
     VL53LX_SmudgeCorrectionEnable(&sensor[right.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke start de correctie toepassen
   }
 
+
+  //DEBUG mag weg later
+  // Start_Sensor(&sensor[left.id], left.gpioPin);
+  // VL53L3CX_Result_t tempResult;
+  // while(1){
+  //   if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
+  //     {
+  //       isReady[left.id] = false;
+  //       VL53L3CX_GetDistance(&sensor[left.id], &tempResult);
+  //       // HAL_Delay(2);
+  //       resultaat[left.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+  //       resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
+  //       // HAL_Delay(2);
+  //     }
+  // }
+  //DEBUG mag weg later
+
   Start_Sensor(&sensor[center.id], center.gpioPin);
   // Start_Sensor(&sensor[left.id], left.gpioPin);
   // Start_Sensor(&sensor[right.id], right.gpioPin);
