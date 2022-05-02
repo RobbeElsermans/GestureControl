@@ -346,6 +346,11 @@ int main(void)
     setXTalkCompensation(&sensor[left.id], 1);
     setOffsetCorrectionMode(&sensor[right.id], (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
     setXTalkCompensation(&sensor[right.id], 1);
+
+    //Smudge detectie
+    VL53LX_SmudgeCorrectionEnable(&sensor[center.id], VL53LX_SMUDGE_CORRECTION_CONTINUOUS); //Deze sensor zal bij elke meeting de smudge toepassen
+    VL53LX_SmudgeCorrectionEnable(&sensor[left.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke start de correctie toepassen
+    VL53LX_SmudgeCorrectionEnable(&sensor[right.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke start de correctie toepassen
   }
 
   Start_Sensor(&sensor[center.id], center.gpioPin);
@@ -758,7 +763,7 @@ int main(void)
       timerDataCollection = HAL_GetTick();
     }
     #endif
-    printf("L: %5d %2d\r\n", resultaat[left.id].distance, resultaat[left.id].status);
+    printf("C: %5d %2d\r\n", resultaat[center.id].distance, resultaat[center.id].status);
   }
   /* USER CODE END 3 */
 }
