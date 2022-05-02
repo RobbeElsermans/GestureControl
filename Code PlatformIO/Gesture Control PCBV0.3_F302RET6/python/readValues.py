@@ -3,7 +3,6 @@ from typing import Counter
 import serial
 import matplotlib.pyplot as plt
 
-
 ser = serial.Serial("COM6",115200)
 
 #tekst = "L156,C152,R875\\r\\nL158,C152,R875\\r\\nL162,C152,R875\\r\\nL164,C152,R875\\r\\nL166,C152,R875\\r\\nL168,C152,R875\\r\\nL587"

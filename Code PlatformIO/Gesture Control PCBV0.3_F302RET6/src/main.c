@@ -42,6 +42,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+//Toggle for data collection
+//#define DATACOLLECTION
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -54,6 +58,19 @@
 /* USER CODE BEGIN PV */
 volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
+
+//Reset timer voor sensor detectie
+float timerMeasurment = 0;
+bool timerMeasurementSet = false;
+int timerMeasurmentTimeout = 1200; // in milliseconden
+
+//detectie distance
+int16_t maxDis = 300;
+
+#ifdef DATACOLLECTION
+long timerDataCollection = 0;
+int timerDataCollectionTimeout = 20; //aantal milliseconden per meeting
+#endif
 
 // Aanmaken sensor definities
 //
@@ -88,7 +105,7 @@ static int timerCommandTimeout = 2000;  // 2 seconden
 // static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
-#define counterHeight 4
+#define counterHeight 2
 int counter[amountSensorUsed][counterHeight];
 uint8_t counterStep = 0;
 
@@ -368,10 +385,6 @@ int main(void)
 #endif
   bool UD_center = false;
 
-  float timerMeasurment = 0;
-  bool timerMeasurementSet = false;
-  int timerMeasurmentTimeout = 1200; // 0.5 seconden
-
   while (1)
   {
     // Calculate time over main loop
@@ -391,8 +404,6 @@ int main(void)
 
     if (objectPresent)
     {
-      if (toggler)
-      {
         if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
         {
           isReady[left.id] = false;
@@ -402,9 +413,6 @@ int main(void)
           resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
           // HAL_Delay(2);
         }
-      }
-      else
-      {
         if (Sensor_Ready(&sensor[right.id], right.gpioPin, (uint8_t *)isReady))
         {
           isReady[right.id] = false;
@@ -414,12 +422,8 @@ int main(void)
           resultaat[right.id].status = tempResult.ZoneResult[0].Status[0];
           // HAL_Delay(2);
         }
-      }
-
       counter[left.id][counterStep] = resultaat[left.id].distance;
       counter[right.id][counterStep] = resultaat[right.id].distance;
-
-      toggler = !toggler;
     }
     else
     {
@@ -547,8 +551,6 @@ int main(void)
       }
 #endif
 #ifdef drie2
-      int16_t maxDis = 450;
-
       // DU gesture
       if (dis0 < maxDis && resultaat[left.id].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
       {
@@ -634,7 +636,6 @@ int main(void)
       }
 #endif
       // printf("LR_links %1d, LR_center %1d\t LR_rechts %1d\r\n", LR_links, LR_center,LR_rechts);
-      printf("L%d, C%d, R%d\r\n", dis0, dis1, dis2);
     }
 
     // reset gesture flags
@@ -749,15 +750,15 @@ int main(void)
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 
-    // if (((HAL_GetTick() - timerPrintf) > timerPrintfTimeout))
-    // {
-    //   int timeTotal = HAL_GetTick() - timerGlobal;
-    //   printf("totale tijd: %5d, distance: %5d, status: %5d\r\n", timeTotal, resultaat[center.id].distance, resultaat[center.id].status);
-    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
-    //   printf("L: %5d, C: %5d, R: %5d\r\n", resultaat[left.id].status, resultaat[center.id].status, resultaat[right.id].status);
-    //   timerPrintf = HAL_GetTick();
-    // }
-    // printf("L: %5d %2d\r\n", resultaat[left.id].distance, resultaat[left.id].status);
+    #ifdef DATACOLLECTION
+    //DataCollection
+    if (((HAL_GetTick() - timerDataCollection) > timerDataCollectionTimeout))
+    {
+      printf("L%d, C%d, R%d\r\n", dis0, dis1, dis2);
+      timerDataCollection = HAL_GetTick();
+    }
+    #endif
+    printf("L: %5d %2d\r\n", resultaat[left.id].distance, resultaat[left.id].status);
   }
   /* USER CODE END 3 */
 }
