@@ -24,6 +24,10 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
   - [Trap](#trap)
 - [Snelheid Metingen PCBV0.3](#snelheid-metingen-pcbv03)
 - [Coverglas](#coverglas)
+- [Smudge Detection](#smudge-detection)
+  - [Normale werking](#normale-werking)
+  - [VL53LX_SMUDGE_CORRECTION_SINGLE](#vl53lx_smudge_correction_single)
+  - [VL53LX_SMUDGE_CORRECTION_CONTINUOUS](#vl53lx_smudge_correction_continuous)
 
 
 ----
@@ -413,4 +417,70 @@ Wanneer deze opstelling uitvoerig werd getest, merkte ik op dat het niet altijd 
 
 # Coverglas
 
-Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder calibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder calibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijve
+
+
+# Smudge Detection
+
+Wanneer de sensor in gebruik zou zijn bij een eindgebruiker. Kan het altijd voorkomen dat het coverglas, dat zich over de sensor bevindt, vuil kan worden met vingerafdrukken en stof. ST heeft hier zelf een oplossing voor bedacht die geïntegreerd is in de API die men uitbracht. We moeten hier dus zelf niet ons hoofd over breken hoe we vuil kunnen weg filteren.
+
+Wat we wel kunnen doen is de gebruiker waarschuwen wanneer er te veel vuil aanwezig zou zijn. Ook kunnen we testen wat nu de verschillende effecten zijn van vuil en de twee soorten standen die ST voorziet:
+
+* **VL53LX_SMUDGE_CORRECTION_SINGLE**     --> Bij elk start commando de correctie toepassen
+* **VL53LX_SMUDGE_CORRECTION_CONTINUOUS** --> Bij elke range de correctie toepassen
+
+Om de data visueel te representeren heb ik een python script gemaakt dat te vinden is onder **python** genaamd **storeDataCSV_1Measurement.py** en **showDataCSV_1Measurement.py**. We sturen hiervoor een string van de afstand met de status van 1 sensor uit die we in het python script binnenhalen en opslaan als integers in een CSV bestand. Het andere python script zal de data (afkomstig van het CSV bestand) visualiseren met matplotlib.
+
+**foutcodes** 
+* 4: Raised when range result is out of bounds, 
+* 6: No wraparound check has been done (this is the very first range), 
+* 12: Indicate that there is a target, but signal is too low to report ranging,
+* 14: Ranging data is negative and has to be ignored.
+
+## Normale werking
+
+hieronder is een screenshot te zien van een normale werking met een proper coverglas over x aantal meetingen. De sensor werd op een blauwe muur gefixeerd op een afstand van +- 1200mm. De meetingen zijn een gemiddelde van 4 meetingen achtereenvolgens.
+
+![normal graph 1](foto's/normal_graph.png)
+
+Zoals te zien zijn de metingen nog te fluxuerend. Dit komt omdat we hier werken met ene cover glas. De afstand wordt beduidend minder wanneer we met een cover glas werken. We verplaatsen het object eens naar +- 700mm. Deze keer is de muur wit van kleur.
+
+![normal graph 2](foto's/normal_graph_2.png)
+
+De meetingen zijn nog steeds zeer instabiel. We gaan een afstand van 500mm nemen.
+
+![normal graph 3](foto's/normal_graph_3.png)
+
+Dit lijkt al een betere afstand oms ons onderzoek op uit te voeren.
+
+## VL53LX_SMUDGE_CORRECTION_SINGLE
+
+Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één malig bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
+
+We voegen, voordat we de sensor aanzetten, wat vingerafdrukken toe op het coverglas. Daarna zetten we de voeding aan en zullen we de resultaten zien in de grafiek. 
+
+![single mode graph](foto's/single_graph.png)
+
+Op de grafiek zien we geen grote verschillen met voorgaande grafieken. In volgende grafiek hebben we met een keukenrol papier wat stof op het coverglas gebracht.
+
+![single mode graph 2](foto's/single_graph_2.png)
+
+Er is duidelijk een verschil te zien met de voorige grafiek. Met het stof op het coverglas, zijn er meer foutmeldingen. De afstand is over het algemeen wel constant.
+
+## VL53LX_SMUDGE_CORRECTION_CONTINUOUS
+
+Deze modus zal bij elke binnenkomende meeting, de correctie erop uitvoeren. Het is dus veel maal dynamischer dan bij de VL53LX_SMUDGE_CORRECTION_SINGLE modus.
+
+We voegen, voordat we de sensor aanzetten, wat vingerafdrukken toe op het coverglas. Daarna zetten we de voeding aan en zullen we de resultaten zien in de grafiek. 
+
+![continuous mode graph](foto's/continuous_graph.png)
+
+Op de grafiek zien we geen grote verschillen met voorgaande grafieken. In volgende grafiek hebben we met een keukenrol papier wat stof op het coverglas gebracht.
+
+![continuous mode graph 2](foto's/continuous_graph_2.png)
+
+Zoals bij Single mode is hier ook goed op te merken dat het glas vuil is. We nemen eens een meeting nadat het toestel al even op staat.
+
+![continuous mode graph 3](foto's/continuous_graph_3.png)
+
+Dit geeft geen verschil.
