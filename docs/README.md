@@ -619,5 +619,8 @@ We starten in de code bij de ```int main()``` functie waar alles wordt opgestart
 //De rest volgt nog
 # Bevindingen & Upgrades 
 
+VL53L1x heeft de mogelijkheid om in een array te kijken van meetingen.
+ILPS22QS Een andere soort sensor (druksensor) waarmee gestures gedetecteerd kunnen worden.
+
 # Onderzoek
 [link](Onderzoek.md)
