@@ -110,7 +110,7 @@ void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x2000090E;
+  //hi2c2.Init.Timing = 0x2000090E;
   //hi2c2.Init.Timing = 0x0000020B;
   //hi2c2.Init.Timing = 0x00000001;
   hi2c2.Init.OwnAddress1 = 0;

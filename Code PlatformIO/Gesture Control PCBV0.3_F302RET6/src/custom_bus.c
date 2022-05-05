@@ -401,8 +401,8 @@ __weak HAL_StatusTypeDef MX_I2C1_Init(I2C_HandleTypeDef* hi2c)
 
   hi2c->Instance = I2C1;
   //hi2c->Init.Timing = 0x2000090E; //100kHz
-  hi2c->Init.Timing = 0x0000020B; //400kHz
-  //hi2c->Init.Timing = 0x00000001; //1MHz
+  //hi2c->Init.Timing = 0x0000020B; //400kHz
+  hi2c->Init.Timing = 0x00000001; //1MHz
   hi2c->Init.OwnAddress1 = 0;
   hi2c->Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c->Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
