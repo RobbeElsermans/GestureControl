@@ -639,11 +639,6 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 
 De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een 2de NUCLEO_F401RE die zich gedraagt als LED-Controller.
 
-Hieronder zal ik de werking van de code uitleggen die [hier](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/Led-Controller/src/main.c) te vinden is. 
-
-We starten in de code bij de ```int main()``` functie waar alles wordt opgestart van de MCU. Ook resetten we alle rijen en kolommen van onze led matrix gedefiniëerd bovenaan.
-
-//De rest volgt nog
 # Bevindingen & Upgrades 
 
 VL53L1x heeft de mogelijkheid om in een array te kijken van meetingen.
