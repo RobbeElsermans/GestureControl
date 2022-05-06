@@ -26,6 +26,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Installeer Platform & Board](#installeer-platform--board)
   - [configureer platformio.ini file](#configureer-platformioini-file)
   - [main.h & .c](#mainh--c)
+  - [Overzicht geïnporteerde bestanden](#overzicht-geïnporteerde-bestanden)
   - [Build & Upload](#build--upload)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
@@ -230,7 +231,7 @@ ST Morpho Extention pin header
 
 ## genereer code
 
-Om het onszelf makkelijk maken gaan we gebruik maken van de STM32CubeIDE tools die voor ons de code genereren.
+Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tools die voor ons de code genereren.
 
 1. Installeer [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) en open dit in een directory naar keuzen.
 
@@ -240,7 +241,7 @@ Om het onszelf makkelijk maken gaan we gebruik maken van de STM32CubeIDE tools d
 
 ![foto opstart project 1](foto's/tutorial_Importeer_bestanden_1.jpg)
 
-3. Type in **Part Number** het volgende: *stm32f302rc*. Nadien selecteer je in de tabel de 1ste rij om nadien dan op **Next** te drukken
+1. Type in **Part Number** het volgende: *stm32f302rc*. Nadien selecteer je in de tabel de 1ste rij om nadien op **Next** te drukken.
 
 ![foto opstart project 2](foto's/tutorial_Importeer_bestanden_2.jpg)
 
@@ -299,7 +300,7 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
 
     ![foto declareren peripheral pinnen 16](foto's/tutorial_Importeer_bestanden_16.jpg)
 
-   3. We keren terug naar de **Pinout & Configuration** tab bovenaan. Nu gaan we de FTDI peripheral aanmaken op **USART1**. Hiervoor gana we onder **Connectivity** -> **USART1** de volgende zaken wijzigen:
+   3. We keren terug naar de **Pinout & Configuration** tab bovenaan. Nu gaan we de FTDI peripheral aanmaken op **USART1**. Hiervoor gaan we onder **Connectivity** -> **USART1** de volgende zaken wijzigen:
       - Mode: Asynchronous
       - Hardware Flow Control (RS232): CTS/RTS
       - Baud Rate: 115200
@@ -328,20 +329,23 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
 
     ![foto declareren peripheral pinnen 23](foto's/tutorial_Importeer_bestanden_23.jpg)
 
-    Omdat we met de gesture controller niet willen wachten totdat wanneer er een master iets stuurt, zal dit over een interrupt verlopen. Hiervoor gaan we naar de tab **NVIC Settings** waar we **I2C2 event global interrupt / I2C2 wake-up interrupt trhough EXTI line 24**.
+    Omdat we met de gesture controller niet willen wachten totdat wanneer er een master iets stuurt, zal dit over een interrupt verlopen. Hiervoor gaan we naar de tab **NVIC Settings** waar we **I2C2 event global interrupt / I2C2 wake-up interrupt trhough EXTI line 24** aanvinken.
 
     ![foto declareren peripheral pinnen 24](foto's/tutorial_Importeer_bestanden_24.jpg)
 
-    De pinnen worden nu wel juist geplaatst. We moeten wel later de pinnen doorverbinden op de PCBV0.3
+    De pinnen worden nu wel juist geplaatst. We moeten wel later de pinnen doorverbinden op de PCBV0.3 (zie [Hardware Opbouw](#hardware-opbouw)).
 
     ![foto declareren peripheral pinnen 25](foto's/tutorial_Importeer_bestanden_25.jpg)
 
-9. De MCU heeft al de aansluitingen gekregen die deze nodig heeft voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. De rij **STMicroelektronics.X-CUBE-TOF1** vouwen we open om dan door te gaan naar **Board Part Ranging** waar we **VL53L3CX** selecteren. We vouwen ook **Device ToF1_Applications** open om daar in de dropdown **VL53L3CX_SimpleRanging** te selecteren. Dit zal een oranje driehoek tevoorschijn laten komen. Wanneer we op deze driehoek klikken met de linker muisknop, zal er onderaan in de kader **Component dependencies** informatie tevoorschijn komen. Hier klikken we met de linker muisknop op **Resolve** wat automatisch voor ons de dependencies zal oplossen.
+9. De MCU heeft al de aansluitingen gekregen die deze nodig heeft voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. 
 
 ![foto declareren peripheral pinnen 26](foto's/tutorial_Importeer_bestanden_26.jpg)
+
+De rij **STMicroelektronics.X-CUBE-TOF1** vouwen we open om dan door te gaan naar **Board Part Ranging** waar we **VL53L3CX** selecteren. We vouwen ook **Device ToF1_Applications** open om daar in de dropdown **VL53L3CX_SimpleRanging** te selecteren. Dit zal een oranje driehoek tevoorschijn laten komen. Wanneer we op deze driehoek klikken met de linker muisknop, zal er onderaan in de kader **Component dependencies** informatie tevoorschijn komen. Hier klikken we met de linker muisknop op **Resolve** wat automatisch voor ons de dependencies zal oplossen.
+
 ![foto declareren peripheral pinnen 27](foto's/tutorial_Importeer_bestanden_27.jpg)
 
-De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STMicroelectronics.X-CUBE-TOF1.3.0.0**. Hier Gaan we het eerste vinkjes selecteren in de kader **Mode**. In de kader **Configuration** stellen we in welke pin voor wat in staat. Omdat we onze pinnen al gedefinieerd hebben is het enkel maar de dropdown open doen en een correcte pin te selecteren. We nemen in dit geval voor XSHUT pin PC0 en voor I2C nemen we I2C1 met adres 82 (HEX: 0x52) dat het default adres is van de ToF-sensoren. Later in de code wordt er bijna geen gebruik gemaakt van deze instellingen. Dit moet gewoon ingevuld zijn zodat ST de code voor ons kan genereren.
+De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STMicroelectronics.X-CUBE-TOF1.3.0.0**. Hier Gaan we het eerste vinkjes selecteren in de kader **Mode**. In de kader **Configuration** stellen we in welke pin voor wat in staat. Omdat we onze pinnen al gedefinieerd hebben is het enkel maar de dropdown open doen en een correcte pin selecteren. We nemen in dit geval voor XSHUT pin PC0 en voor I2C nemen we I2C1 met adres 82 (HEX: 0x52) dat het default adres is van de ToF-sensoren. Later in de code wordt er bijna geen gebruik gemaakt van deze instellingen. Dit moet gewoon ingevuld zijn zodat ST de code voor ons kan genereren.
 
 ![foto declareren peripheral pinnen 28](foto's/tutorial_Importeer_bestanden_28.jpg)
 
@@ -358,22 +362,10 @@ Omdat ik mijn project in PlatformIO heb gemaakt, zal ik hier nog verder beschrij
 
 ## Importeer API VL53LXC
 
-Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **modules** folder onder **BSP/Components/vl53l3cx** waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we al de bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
+Zoals gezegt in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **modules** en **porting** folder onder **BSP/Components/vl53l3cx** waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we al de bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
 
-Wanneer we het gegenereerde project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden onder **BSP/Components/vl53l3cx/porting**, **BSP/Components/vl53l3cx** en **TOF/Target** in die van belang zijn:
+Wanneer we het gegenereerde project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden onder **BSP/Components/vl53l3cx.h & .c** en **TOF/Target** in die van belang zijn:
 
-* vl53lx_platform_init.h
-* vl53lx_platform_ipp_imports.h
-* vl53lx_platform_ipp.c
-* vl53lx_platform_ipp.h
-* vl53lx_platform_log.c
-* vl53lx_platform_log.h
-* vl53lx_platform_user_config.h
-* vl53lx_platform_user_data.h
-* vl53lx_platform_user_defines.h
-* vl53lx_platform.c
-* vl53lx_platform.h
-* vl53lx_types.h
 * vl53l3cx.h
 * vl53l3cx.c
 * custom_tof_conf.h
@@ -382,7 +374,7 @@ Deze bestanden moeten eveneens in de folder **BSP_vl53l3cx** geplaatst worden.
 
 !> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PlatformIO's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
 
-?> deze bestanden zijn gegenereerd door STM32CubeIDE
+?> Al de bestanden die we nu overzetten, zijn gegenereerd in STM32CubeIDE (zie [genereer code](#genereer-code)).
 
 <!-- Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
 
@@ -462,7 +454,7 @@ Als laatste gaan we de bestanden importeren die het eigenlijke project tot leven
 * i2c.c
 * stm32f3xx_it.c
 
-?> deze bestanden zijn gegenereerd door STM32CubeIDE. Later wijzigen we nog enkelen.
+?> deze bestanden zijn wederom gegenereerd door STM32CubeIDE. Later wijzigen we nog enkelen.
 
 ----
 
@@ -569,9 +561,44 @@ Het main bestand bevad de code die we gebruiken voor de gesture controller. hier
 [main.h]()
 [main.c]()
 
+## Overzicht geïnporteerde bestanden
+
+Hier is een schematische voorstelling hoe de bestanden structuur er uit ziet in PlatformIO
+
+``` file structure
+┏╸GestureControllerPlatformIO
+┣┓ boards
+┃┗╸ custom_f302rct6.json
+┣┓ include
+┃┗╸ (.h bestanden)
+┣┓ lib
+┃┣┓ BSP
+┃┃┗┓ src
+┃┃ ┗╸ (.h & .c bestanden)
+┃┣┓ CMSIS
+┃┃┗┓ src
+┃┃ ┗╸ (.h bestanden)
+┃┣┓ STM32F3xx_HAL_Driver
+┃┃┗┓ src
+┃┃ ┗╸ (.h & .c bestanden)
+┃┗┓ Gesture_Detect
+┃ ┗┓ src
+┃  ┗╸ (.h & .c bestanden)
+┣┓ python
+┃┗╸ (data scripts)
+┣┓ src
+┃┗╸ (.h & .c bestanden)
+┣┓ test
+┃┗╸ (.h & .c bestanden)
+┣╸ platformio.ini
+
+```
+
+----
+
 ## Build & Upload
 
-Het project is nu compleet om gebuild te worden en nadien geupload naar het bordje.
+Het project is nu compleet om gebuild en nadien geupload te worden naar het bordje.
 
 ![foto build & upload knop](foto's/platformio_platforms_3.jpg)
 
@@ -582,7 +609,7 @@ Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 
 # Hardware Opbouw
 
-De gemaakte PCB V0.3 wordt op een plexi plaat gemonteerd zodat dit kan fungeren als een coverglas. In het document [link](Onderzoek.md) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn.
+De gemaakte PCB V0.3 wordt op een plexi plaat gemonteerd zodat dit kan fungeren als een coverglas. In het [onderzoek document](Onderzoek.md) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn.
 
 ![foto opstelling](foto's/PCBV0.3_opstelling_trap_3.jpg)
 
