@@ -792,6 +792,8 @@ int main(void)
 #endif
     printf("%d,%d\r\n", dis0, resultaat[left.id].status);
     // printf("L%d, C%d, R%d\r\n", dis0, dis1, dis2);
+    int8_t buf;
+    HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
     HAL_Delay(20);
   }
   /* USER CODE END 3 */
@@ -1118,6 +1120,11 @@ void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 void Stop_Sensor(VL53L3CX_Object_t *sensor)
 {
   VL53L3CX_Stop(sensor); // Sensor staren met meten
+}
+
+void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	HAL_I2C_Slave_Transmit(&hi2c2, &commando, sizeof(commando), 50);
 }
 /* USER CODE END 4 */
 
