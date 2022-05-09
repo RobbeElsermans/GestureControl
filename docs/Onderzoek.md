@@ -417,7 +417,7 @@ Wanneer deze opstelling uitvoerig werd getest, merkte ik op dat het niet altijd 
 
 # Coverglas
 
-Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder calibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijve
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder calibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
 
 
 # Smudge Detection
@@ -439,15 +439,15 @@ Om de data visueel te representeren heb ik een python script gemaakt dat te vind
 
 ## Normale werking
 
-hieronder is een screenshot te zien van een normale werking met een proper coverglas over x aantal meetingen. De sensor werd op een blauwe muur gefixeerd op een afstand van +- 1200mm. De meetingen zijn een gemiddelde van 4 meetingen achtereenvolgens.
+hieronder is een screenshot te zien van een normale werking met een proper coverglas over x aantal metingen. De sensor werd op een blauwe muur gefixeerd op een afstand van +- 1200mm. De metingen zijn een gemiddelde van 4 metingen achtereenvolgens.
 
 ![normal graph 1](foto's/normal_graph.png)
 
-Zoals te zien zijn de metingen nog te fluxuerend. Dit komt omdat we hier werken met ene cover glas. De afstand wordt beduidend minder wanneer we met een cover glas werken. We verplaatsen het object eens naar +- 700mm. Deze keer is de muur wit van kleur.
+Zoals te zien zijn de metingen nog te fluctuerend. Dit komt omdat we hier werken met ene cover glas. De afstand wordt beduidend minder wanneer we met een cover glas werken. We verplaatsen het object eens naar +- 700mm. Deze keer is de muur wit van kleur.
 
 ![normal graph 2](foto's/normal_graph_2.png)
 
-De meetingen zijn nog steeds zeer instabiel. We gaan een afstand van 500mm nemen.
+De metingen zijn nog steeds zeer instabiel. We gaan een afstand van 500mm nemen.
 
 ![normal graph 3](foto's/normal_graph_3.png)
 
@@ -465,7 +465,7 @@ Op de grafiek zien we geen grote verschillen met voorgaande grafieken. In volgen
 
 ![single mode graph 2](foto's/single_graph_2.png)
 
-Er is duidelijk een verschil te zien met de voorige grafiek. Met het stof op het coverglas, zijn er meer foutmeldingen. De afstand is over het algemeen wel constant.
+Er is duidelijk een verschil te zien met de vorige grafiek. Met het stof op het coverglas, zijn er meer foutmeldingen. De afstand is over het algemeen wel constant.
 
 ## VL53LX_SMUDGE_CORRECTION_CONTINUOUS
 

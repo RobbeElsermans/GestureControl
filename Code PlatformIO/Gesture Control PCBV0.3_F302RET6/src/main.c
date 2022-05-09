@@ -134,6 +134,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+#ifdef env1
+  MX_I2C3_Init();
+#endif
 #ifdef env2
   MX_I2C2_Init();
 #endif
@@ -237,6 +240,9 @@ int main(void)
 
       isReady[right.id] = getData(&sensor[right.id], &right, &resultaat[right.id], (uint8_t *)isReady);
       setMeanVal(right.id, resultaat[right.id].distance);
+    }
+    else{
+      HAL_Delay(40);      
     }
 
     objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &resultaat[left.id].distance);

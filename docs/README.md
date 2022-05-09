@@ -26,7 +26,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Installeer Platform & Board](#installeer-platform--board)
   - [configureer platformio.ini file](#configureer-platformioini-file)
   - [main.h & .c](#mainh--c)
-  - [Overzicht geïnporteerde bestanden](#overzicht-geïnporteerde-bestanden)
+  - [Overzicht geïmporteerde bestanden](#overzicht-geïmporteerde-bestanden)
   - [Build & Upload](#build--upload)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
@@ -296,7 +296,7 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
     ![foto declareren peripheral pinnen 14](foto's/tutorial_Importeer_bestanden_14.jpg)
     ![foto declareren peripheral pinnen 15](foto's/tutorial_Importeer_bestanden_15.jpg)
     
-    Nu dat de pinnen gedefinieërd zijn, kunnen we de klok zelf definiëren. Dit doen we in een andere tab (die bovenaan te vinden is) genaamd **Clock Configuration**. Hierin gaan we 2 bolletjes van plaats veranderen. Bij **PLL Source Mux** veranderen we het bolletje van **HSI** naar **HSE**. Bij **System Clock Mux** veranderen we het bolletje van **HSI** naar **PLLCLK**. Later komen we hier nog enkele zaken aanpassen.
+    Nu dat de pinnen gedefinieerd zijn, kunnen we de klok zelf definiëren. Dit doen we in een andere tab (die bovenaan te vinden is) genaamd **Clock Configuration**. Hierin gaan we 2 bolletjes van plaats veranderen. Bij **PLL Source Mux** veranderen we het bolletje van **HSI** naar **HSE**. Bij **System Clock Mux** veranderen we het bolletje van **HSI** naar **PLLCLK**. Later komen we hier nog enkele zaken aanpassen.
 
     ![foto declareren peripheral pinnen 16](foto's/tutorial_Importeer_bestanden_16.jpg)
 
@@ -317,7 +317,7 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
       
     ![foto declareren peripheral pinnen 20](foto's/tutorial_Importeer_bestanden_20.jpg)
 
-   4. Een van de belangrijkste peripheral is toch I2C1 die in communcatie gaat met de ToF-sensoren. Deze stellen we in via **Connectivity** -> **I2C1** waar we de dropdown op **I2C** plaatsen. De snelheid van de klok stellen we in op **Fast Mode Plus** (1MHz frequentie).
+   4. Een van de belangrijkste peripheral is toch I2C1 die in communicatie gaat met de ToF-sensoren. Deze stellen we in via **Connectivity** -> **I2C1** waar we de dropdown op **I2C** plaatsen. De snelheid van de klok stellen we in op **Fast Mode Plus** (1MHz frequentie).
    
    ![foto declareren peripheral pinnen 21](foto's/tutorial_Importeer_bestanden_21.jpg)
 
@@ -375,6 +375,16 @@ Deze bestanden moeten eveneens in de folder **BSP_vl53l3cx** geplaatst worden.
 !> Het is belangrijk dat we de bestanden rechtstreeks hierin plaatsen. We verkrijgen dus een map waarin zowel .h als .c bestanden staan. PlatformIO's [Library Dependency Finder (LDF)](https://docs.platformio.org/en/stable/librarymanager/ldf.html) werkt namelijk niet met een een *inc* folder. Voor simpliciteit gaan we dus alle .c en .h bestanden samen voegen in dezelfde folder genaamd **src**.
 
 ?> Al de bestanden die we nu overzetten, zijn gegenereerd in STM32CubeIDE (zie [genereer code](#genereer-code)).
+
+In het bestand **custom_tof_conf.h** moeten we nog een lijn code toevoegen tussen **/\* USER CODE BEGIN 1 \*/** en **/\* USER CODE END 1 \*/** (lijn 34) om de gemaakte code te laten werken. 
+
+´´´ C custom_tof_conf.h
+
+/* USER CODE BEGIN 1 */
+#define CUSTOM_VL53L3CX_I2C_GetTick   BSP_GetTick
+/* USER CODE END 1 */
+
+´´´
 
 <!-- Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
 
@@ -462,6 +472,8 @@ Als laatste gaan we de bestanden importeren die het eigenlijke project tot leven
 
 Naast de gekregen API van ST, zijn er nog andere bestanden gegenereerd onder **CMSIS** en **STM32F3xx_HAL_Driver**.
 Deze 2 bibliotheken zetten we elks apart in een bestand met een src map waarin we alle .h en .c bestanden plaatsen van die bibliotheek. We maken dus een folder **CMSIS** en een folder **STM32F3xx_HAL_Driver** met beiden een map **src**. Nu plaatsen we elk .c of .h bestand in de src folder van die bibliotheek.
+
+De bestanden die het project tot leven brengen zijn nog niet geïmporteerd. We hebben een map [**Gesture_Detect**](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/gesture%20Control%20Final/lib/Gesture_Detect/src) die we in de folder **lib** moeten plaatsen.
 
 ----
 
@@ -556,12 +568,12 @@ Voor meer informatie zie de [documentatie](https://docs.platformio.org/en/stable
 
 ## main.h & .c
 
-Het main bestand bevad de code die we gebruiken voor de gesture controller. hieronder is een link die leid naar de bestandne op GitHub.
+Het main bestand bevat de code die we gebruiken voor de gesture controller. hieronder is een link die leid naar de bestanden op GitHub.
 
-[main.h]()
-[main.c]()
+[main.h](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/gesture%20Control%20Final/include/main.h)
+[main.c](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/gesture%20Control%20Final/src/main.c)
 
-## Overzicht geïnporteerde bestanden
+## Overzicht geïmporteerde bestanden
 
 Hier is een schematische voorstelling hoe de bestanden structuur er uit ziet in PlatformIO
 
@@ -615,7 +627,7 @@ De gemaakte PCB V0.3 wordt op een plexi plaat gemonteerd zodat dit kan fungeren 
 
 Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opgeschoven. Dit is makkelijk verholpen door de pads door te lussen die we voorzien hebben tijdens het PCB ontwerpen. We gaan daarom J19 met TP1 verbinden en J18 met TP2 verbinden. Ook halen we R38 en R37 van de PCB af.
 
-![I2C verhelping kicad](foto's/I2C_verhelping_Kicad.jpg)
+![I2C verhelpen kicad](foto's/I2C_verhelping_Kicad.jpg)
 <img src="foto's/I2C2%20verhelping.png" width="50%">
 
 </div>
@@ -641,8 +653,19 @@ De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende comm
 
 # Bevindingen & Upgrades 
 
-VL53L1x heeft de mogelijkheid om in een array te kijken van meetingen.
-ILPS22QS Een andere soort sensor (druksensor) waarmee gestures gedetecteerd kunnen worden.
+Het project is gestart met een idee waar een mogelijke toekomst in zit. Omdat dit project vanaf 0 is opgestart, is het op dit moment ook niet marktwaardig. De genomen beslissingen kunnen nog in twijfel genomen worden net zoals de geschreven software. Dit project is ontwikkeld om aan te tonen dat er toekomst in zit mits het verdere onderzoeken.
+
+Zo zijn er enkele zaken die ik tijdens het maken van het project heb ondervonden.
+
+De genomen sensor VL53L3CX is een mogelijke kandidaat om gesture te detecteren. Enkel bestaat er een ToF-sensor die misschien nog beter geschikt is namelijk de [VL53L1X](https://www.st.com/en/imaging-and-photonics-solutions/vl53l1x.html). 
+
+Deze sensor zijn kijkveld kunnen we opdelen in 2 aparte kijkvelden. Dit is ideaal om gesture detectie uit te voeren. De sensor heeft ook een ingebouwde MCU die al de data verwerkt (in tegenstelling tot de VL53L3CX die dit niet heeft) zodat de host hier minder rekenkracht moet uitvoeren. ST heeft voor deze sensor ook een ULD (Ultra-Low Driver) API gemaakt.
+
+Dit project ging enkel over ToF-sensoren. uiteraard zijn dit niet de enige sensoren waarmee we dit kunnen doen. Zo bestaat er een druksensor genaamd ILPS22QS die een waardige tegenhanger kan zijn om de gestures te detecteren. Omdat deze een nauwkeurigheid heeft van 0.5hPa, is het mogelijk om voorbijgaande zaken te detecteren. Dit zou, in combinatie met de ToF-sensor, de gestures kunnen herkennen.
+
+Op gebied van software kan er ook geëxperimenteerd worden met Machine Learning. We werken tenslotte met data. Op deze manier kunnen we met genoeg data, een model creëren die nog beter de verschillende gestures kan onderscheiden van elkaar. 
+
+De genomen eindpositie waarin de sensoren staan, zijn niet perfect. Het geef een weergaven van hoe we met 3 sensoren de x & y as kunnen monitororen. In een latere fase kan hier een aparte studie over gedaan worden om de ideale opstelling te bedenken.
 
 # Onderzoek
 [link](Onderzoek.md)
