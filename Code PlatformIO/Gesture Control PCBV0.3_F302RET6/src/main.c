@@ -86,10 +86,6 @@ Resultaat_t resultaat[amountSensorUsed];
 
 bool objectPresent = false;
 bool prevObjectPresent = false;
-bool gestureRL = false;
-bool gestureLR = false;
-bool gestureDU = false;
-bool gestureUD = false;
 
 // Commando enum waarmee we de commando's opslaan
 commands commando = NONE;
@@ -480,23 +476,24 @@ int main(void)
       uint8_t i = 0;
 
       // Gemiddelde berekenen
-      for (i = 0; i < counterHeight; i++)
-      {
-        dis0 += counter[left.id][i];
-      };
-      dis0 /= counterHeight;
+      // for (i = 0; i < counterHeight; i++)
+      // {
+      //   dis0 += counter[left.id][i];
+      // };
+      // dis0 /= counterHeight;
+      
 
-      for (i = 0; i < counterHeight; i++)
-      {
-        dis1 += counter[center.id][i];
-      };
-      dis1 /= counterHeight;
+      // for (i = 0; i < counterHeight; i++)
+      // {
+      //   dis1 += counter[center.id][i];
+      // };
+      // dis1 /= counterHeight;
 
-      for (i = 0; i < counterHeight; i++)
-      {
-        dis2 += counter[right.id][i];
-      };
-      dis2 /= counterHeight;
+      // for (i = 0; i < counterHeight; i++)
+      // {
+      //   dis2 += counter[right.id][i];
+      // };
+      // dis2 /= counterHeight;
       // dis0 = resultaat[left.id].distance;
       // dis1 = resultaat[center.id].distance;
       // dis2 = resultaat[right.id].distance;
