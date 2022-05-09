@@ -661,7 +661,9 @@ De genomen sensor VL53L3CX is een mogelijke kandidaat om gesture te detecteren. 
 
 Deze sensor zijn kijkveld kunnen we opdelen in 2 aparte kijkvelden. Dit is ideaal om gesture detectie uit te voeren. De sensor heeft ook een ingebouwde MCU die al de data verwerkt (in tegenstelling tot de VL53L3CX die dit niet heeft) zodat de host hier minder rekenkracht moet uitvoeren. ST heeft voor deze sensor ook een ULD (Ultra-Low Driver) API gemaakt.
 
-Dit project ging enkel over ToF-sensoren. uiteraard zijn dit niet de enige sensoren waarmee we dit kunnen doen. Zo bestaat er een druksensor genaamd ILPS22QS die een waardige tegenhanger kan zijn om de gestures te detecteren. Omdat deze een nauwkeurigheid heeft van 0.5hPa, is het mogelijk om voorbijgaande zaken te detecteren. Dit zou, in combinatie met de ToF-sensor, de gestures kunnen herkennen.
+De [VL53L5CX](https://www.st.com/en/imaging-and-photonics-solutions/vl53l5cx.html#overview) sensor is ook een optie. Deze sensor heeft een 8x8 array waarop hij een detectie kan uitvoeren. op deze moment zijn er ook tal van examples door ST beschikbaar gesteld waarmee hand gesture wordt mogelijk gemaakt.
+
+Dit project ging enkel over ToF-sensoren. uiteraard zijn dit niet de enige sensoren waarmee we dit kunnen doen. Zo bestaat er een druksensor genaamd [ILPS22QS](https://www.st.com/en/mems-and-sensors/ilps22qs.html) die een waardige tegenhanger kan zijn om de gestures te detecteren. Omdat deze een nauwkeurigheid heeft van 0.5hPa, is het mogelijk om voorbijgaande zaken te detecteren. Dit zou, in combinatie met de ToF-sensor, de gestures kunnen herkennen.
 
 Op gebied van software kan er ook geëxperimenteerd worden met Machine Learning. We werken tenslotte met data. Op deze manier kunnen we met genoeg data, een model creëren die nog beter de verschillende gestures kan onderscheiden van elkaar. 
 
