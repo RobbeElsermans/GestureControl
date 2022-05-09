@@ -39,10 +39,16 @@ static bool UD_boven = false;
 static bool UD_onder = false;
 static bool UD_center = false;
 
-commands detectgesture(int16_t left, int16_t center, int16_t right);
-int16_t getMean(uint8_t id, int16_t distance);
+static float timerMeasurment = 0;
+static bool timerMeasurementSet = false;
+static int timerMeasurmentTimeout = 1200; // in milliseconden
+
+commands detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus);
+checkResetTimer();
+int16_t getMean(uint8_t id);
 int getCountMeans(uint8_t id);
 int * getMeans(uint8_t id);
+setMeanVal(uint8_t id, int16_t distance);
 uint8_t getMaxMean();
 uint8_t getMaxDis();
 

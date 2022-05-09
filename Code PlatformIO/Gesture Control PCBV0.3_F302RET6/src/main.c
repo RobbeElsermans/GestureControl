@@ -33,6 +33,7 @@
 #include "vl53lx_api.h"
 #include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 #include "GestureDetectObject.h"
+#include "GestureDetect.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,9 +64,9 @@ volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
 
 // Reset timer voor sensor detectie
-float timerMeasurment = 0;
-bool timerMeasurementSet = false;
-int timerMeasurmentTimeout = 1200; // in milliseconden
+// float timerMeasurment = 0;
+// bool timerMeasurementSet = false;
+// int timerMeasurmentTimeout = 1200; // in milliseconden
 
 // detectie distance
 int16_t maxDis = 300;
@@ -104,9 +105,9 @@ static int timerCommandTimeout = 2000; // 2 seconden
 // static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
-#define counterHeight 10
-int counter[amountSensorUsed][counterHeight];
-uint8_t counterStep = 0;
+// #define counterHeight 10
+// int counter[amountSensorUsed][counterHeight];
+// uint8_t counterStep = 0;
 
 // Define de sensor objecten amountSensorUsed keer.
 VL53L3CX_Object_t sensor[amountSensorUsed];
@@ -350,9 +351,9 @@ int main(void)
     setXTalkCompensation(&sensor[right.id], 1);
 
     // Smudge detectie
-    // VL53LX_SmudgeCorrectionEnable(&sensor[center.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke meeting de smudge toepassen
+    VL53LX_SmudgeCorrectionEnable(&sensor[center.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke meeting de smudge toepassen
     VL53LX_SmudgeCorrectionEnable(&sensor[left.id], VL53LX_SMUDGE_CORRECTION_CONTINUOUS); // Deze sensor zal bij elke start de correctie toepassen
-    // VL53LX_SmudgeCorrectionEnable(&sensor[right.id], VL53LX_SMUDGE_CORRECTION_CONTINUOUS); //Deze sensor zal bij elke start de correctie toepassen
+    VL53LX_SmudgeCorrectionEnable(&sensor[right.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke start de correctie toepassen
   }
 
   // DEBUG mag weg later
@@ -381,32 +382,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   initObjectPresent(-1, -1, -1);
-
-  bool LR_links = false;
-  bool LR_rechts = false;
-  bool LR_center = false;
-
-  bool RL_links = false;
-  bool RL_rechts = false;
-  bool RL_center = false;
-
-#ifdef drie1
-  bool DU_beiden = false;
-#endif
-#ifdef drie2
-  bool DU_boven = false;
-  bool DU_onder = false;
-#endif
-  bool DU_center = false;
-
-#ifdef drie1
-  bool UD_beiden = false;
-#endif
-#ifdef drie2
-  bool UD_boven = false;
-  bool UD_onder = false;
-#endif
-  bool UD_center = false;
 
   while (1)
   {
@@ -449,8 +424,11 @@ int main(void)
         resultaat[right.id].status = tempResult.ZoneResult[0].Status[0];
         // HAL_Delay(2);
       }
-      counter[center.id][counterStep] = resultaat[center.id].distance;
-      counter[right.id][counterStep] = resultaat[right.id].distance;
+      
+      setMeanVal(center.id, resultaat[center.id].distance);
+      setMeanVal(right.id, resultaat[right.id].distance);
+      // counter[center.id][counterStep] = resultaat[center.id].distance;
+      // counter[right.id][counterStep] = resultaat[right.id].distance;
     }
     else
     {
@@ -459,7 +437,8 @@ int main(void)
         ;
     }
 
-    counter[left.id][counterStep] = resultaat[left.id].distance;
+    setMeanVal(left.id, resultaat[left.id].distance);
+    // counter[left.id][counterStep] = resultaat[left.id].distance;
 
     counterStep++;
     if (counterStep >= counterHeight)
@@ -482,21 +461,26 @@ int main(void)
       // };
       // dis0 /= counterHeight;
       
-
+      dis0 = getMean(left.id);
       // for (i = 0; i < counterHeight; i++)
       // {
       //   dis1 += counter[center.id][i];
       // };
       // dis1 /= counterHeight;
+      dis1 = getMean(center.id);
 
       // for (i = 0; i < counterHeight; i++)
       // {
       //   dis2 += counter[right.id][i];
       // };
       // dis2 /= counterHeight;
+      dis0 = getMean(right.id);
+
       // dis0 = resultaat[left.id].distance;
       // dis1 = resultaat[center.id].distance;
       // dis2 = resultaat[right.id].distance;
+
+      commando = detectgesture(dis0, resultaat[left.id].status, dis1, resultaat[center.id].status, dis2, resultaat[right.id].status);
 
 // printf("dis0: %5d, dis1: %5d, dis2: %5d\r\n", dis0, dis1, dis2);
 #ifdef drie1
@@ -580,117 +564,117 @@ int main(void)
       }
 #endif
 #ifdef drie2
-      // DU gesture
-      if (dis0 < maxDis && resultaat[left.id].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
-      {
-        DU_onder = true;
-      }
+      // // DU gesture
+      // if (dis0 < maxDis && resultaat[left.id].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
+      // {
+      //   DU_onder = true;
+      // }
 
-      if (dis2 < maxDis && resultaat[right.id].status == 0 && !DU_center && DU_onder && dis1 > maxDis)
-      {
-        DU_center = true;
-      }
+      // if (dis2 < maxDis && resultaat[right.id].status == 0 && !DU_center && DU_onder && dis1 > maxDis)
+      // {
+      //   DU_center = true;
+      // }
 
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && DU_center && DU_onder)
-      {
-        DU_boven = true;
-      }
+      // if (dis1 < maxDis && resultaat[center.id].status == 0 && DU_center && DU_onder)
+      // {
+      //   DU_boven = true;
+      // }
 
-      // UD gesture
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && !UD_center && !UD_onder && dis0 > maxDis && dis2 > maxDis)
-      {
-        UD_boven = true;
-      }
+      // // UD gesture
+      // if (dis1 < maxDis && resultaat[center.id].status == 0 && !UD_center && !UD_onder && dis0 > maxDis && dis2 > maxDis)
+      // {
+      //   UD_boven = true;
+      // }
 
-      if (dis2 < maxDis && resultaat[right.id].status == 0 && !UD_onder && UD_boven && dis0 > maxDis)
-      {
-        UD_center = true;
-      }
+      // if (dis2 < maxDis && resultaat[right.id].status == 0 && !UD_onder && UD_boven && dis0 > maxDis)
+      // {
+      //   UD_center = true;
+      // }
 
-      if (dis0 < maxDis && resultaat[left.id].status == 0 && UD_center && UD_boven)
-      {
-        UD_onder = true;
-      }
+      // if (dis0 < maxDis && resultaat[left.id].status == 0 && UD_center && UD_boven)
+      // {
+      //   UD_onder = true;
+      // }
 
-      // LR gesture
-      if (dis0 < maxDis && resultaat[left.id].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
-      {
-        LR_links = true;
-      }
+      // // LR gesture
+      // if (dis0 < maxDis && resultaat[left.id].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
+      // {
+      //   LR_links = true;
+      // }
 
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
-      {
-        LR_center = true;
-      }
+      // if (dis1 < maxDis && resultaat[center.id].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
+      // {
+      //   LR_center = true;
+      // }
 
-      if (dis2 < maxDis && resultaat[right.id].status == 0 && LR_center && LR_links)
-      {
-        LR_rechts = true;
-      }
+      // if (dis2 < maxDis && resultaat[right.id].status == 0 && LR_center && LR_links)
+      // {
+      //   LR_rechts = true;
+      // }
 
-      // RL gesture
-      if (dis2 < maxDis && resultaat[right.id].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
-      {
-        RL_rechts = true;
-      }
+      // // RL gesture
+      // if (dis2 < maxDis && resultaat[right.id].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
+      // {
+      //   RL_rechts = true;
+      // }
 
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
-      {
-        RL_center = true;
-      }
+      // if (dis1 < maxDis && resultaat[center.id].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
+      // {
+      //   RL_center = true;
+      // }
 
-      if (dis0 < maxDis && resultaat[left.id].status == 0 && RL_center && RL_rechts)
-      {
-        RL_links = true;
-      }
+      // if (dis0 < maxDis && resultaat[left.id].status == 0 && RL_center && RL_rechts)
+      // {
+      //   RL_links = true;
+      // }
 
-      if (DU_boven && DU_center && DU_onder)
-      {
-        commando = DU;
-      }
+      // if (DU_boven && DU_center && DU_onder)
+      // {
+      //   commando = DU;
+      // }
 
-      if (UD_boven && UD_center && UD_onder)
-      {
-        commando = UD;
-      }
+      // if (UD_boven && UD_center && UD_onder)
+      // {
+      //   commando = UD;
+      // }
 
-      if (LR_links && LR_center && LR_rechts)
-      {
-        commando = LR;
-      }
+      // if (LR_links && LR_center && LR_rechts)
+      // {
+      //   commando = LR;
+      // }
 
-      if (RL_links && RL_center && RL_rechts)
-      {
-        commando = RL;
-      }
+      // if (RL_links && RL_center && RL_rechts)
+      // {
+      //   commando = RL;
+      // }
 #endif
       // printf("LR_links %1d, LR_center %1d\t LR_rechts %1d\r\n", LR_links, LR_center,LR_rechts);
     }
 
     // reset gesture flags
-    if (!timerMeasurementSet)
-    {
-      timerMeasurementSet = true;
-      timerMeasurment = HAL_GetTick();
-    }
-    long temp = HAL_GetTick();
-    if (timerMeasurementSet && (temp - timerMeasurment) > timerMeasurmentTimeout)
-    {
-      timerMeasurementSet = false;
-      DU_boven = false;
-      DU_center = false;
-      DU_onder = false;
-      UD_boven = false;
-      UD_center = false;
-      UD_onder = false;
-      LR_links = false;
-      LR_rechts = false;
-      LR_center = false;
-      RL_links = false;
-      RL_rechts = false;
-      RL_center = false;
-    }
-
+    // if (!timerMeasurementSet)
+    // {
+    //   timerMeasurementSet = true;
+    //   timerMeasurment = HAL_GetTick();
+    // }
+    // long temp = HAL_GetTick();
+    // if (timerMeasurementSet && (temp - timerMeasurment) > timerMeasurmentTimeout)
+    // {
+    //   timerMeasurementSet = false;
+    //   DU_boven = false;
+    //   DU_center = false;
+    //   DU_onder = false;
+    //   UD_boven = false;
+    //   UD_center = false;
+    //   UD_onder = false;
+    //   LR_links = false;
+    //   LR_rechts = false;
+    //   LR_center = false;
+    //   RL_links = false;
+    //   RL_rechts = false;
+    //   RL_center = false;
+    // }
+    checkResetTimer();
     // printf("Object: %1d \t", gestureRL);
 
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
