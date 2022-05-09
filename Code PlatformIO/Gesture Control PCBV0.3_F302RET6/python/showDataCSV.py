@@ -2,7 +2,7 @@
 from csv import reader
 import matplotlib.pyplot as plt
 
-fileName = "data_2022-05-06_153635"
+fileName = "data_2022-05-09_112718"
 
 file = open("logs/" + fileName + ".csv", 'r', newline='')
 

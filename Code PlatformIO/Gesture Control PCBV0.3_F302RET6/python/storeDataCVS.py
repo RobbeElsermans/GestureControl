@@ -5,7 +5,7 @@ import serial
 
 try:
     _1Measurement = 18
-    amountReadings = 500
+    amountReadings = 1000
     
     #instelling seriële communicatie met poort: COM6 en baudrate: 115200
     ser = serial.Serial("COM6",115200)
