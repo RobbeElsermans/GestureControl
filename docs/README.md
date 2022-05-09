@@ -632,6 +632,8 @@ Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opge
 
 </div>
 
+----s
+
 # LED Controller
 
 <img src="foto's/Smart%20Object.jpg" width="70%">
@@ -651,6 +653,8 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 
 De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een NUCLEO_F401RE die zich gedraagt als LED-Controller.
 
+----
+
 # Bevindingen & Upgrades 
 
 Het project is gestart met een idee waar een mogelijke toekomst in zit. Omdat dit project vanaf 0 is opgestart, is het op dit moment ook niet marktwaardig. De genomen beslissingen kunnen nog in twijfel genomen worden net zoals de geschreven software. Dit project is ontwikkeld om aan te tonen dat er toekomst in zit mits het verdere onderzoeken.
@@ -668,6 +672,8 @@ Dit project ging enkel over ToF-sensoren. uiteraard zijn dit niet de enige senso
 Op gebied van software kan er ook geëxperimenteerd worden met Machine Learning. We werken tenslotte met data. Op deze manier kunnen we met genoeg data, een model creëren die nog beter de verschillende gestures kan onderscheiden van elkaar. 
 
 De genomen eindpositie waarin de sensoren staan, zijn niet perfect. Het geef een weergaven van hoe we met 3 sensoren de x & y as kunnen monitororen. In een latere fase kan hier een aparte studie over gedaan worden om de ideale opstelling te bedenken.
+
+----
 
 # Onderzoek
 [link](Onderzoek.md)
