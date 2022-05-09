@@ -11,6 +11,107 @@
  *
  */
 
+void RefSpadCal(VL53L3CX_Object_t *dev);
+void xTalkCal(VL53L3CX_Object_t *dev);
+void offsetPerVcselCal(VL53L3CX_Object_t *dev, uint16_t distance);
+VL53LX_CalibrationData_t getCalibrationData(VL53L3CX_Object_t *dev);
+void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_CalibrationData_t *data);
+void setXTalkCompensation(VL53L3CX_Object_t *dev, bool state);
+void setOffsetCorrectionMode(VL53L3CX_Object_t *dev, VL53LX_OffsetCorrectionModes state);
+void convertCalibrationData(VL53LX_CalibrationData_t *data, int16_t *xtalk_bin_data, int16_t *xtalk_kcps, int16_t *xtalk_zero_distance, int16_t *offset);
+
+void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
+{
+    VL53LX_CalibrationData_t callData;
+
+    printf("Calibrating in 20 seconds... \r\n\r\n");
+    for (uint8_t i = 0; i < 20; i++)
+    {
+        HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
+        HAL_Delay(1000);
+    }
+    HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
+
+    // printf("Sensor %2d\r\n", center.gpioPin);
+    RefSpadCal(dev);
+    // HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
+    printf("refspad\r\n");
+    xTalkCal(dev);
+    // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
+    printf("xtalk\r\n");
+    offsetPerVcselCal(dev, 600);
+    HAL_Delay(2);
+    // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
+    callData = getCalibrationData(dev);
+
+    /* code */
+    printf("sensor: %2d\r\n", id);
+    printf("XTalk_kps\r\n");
+    for (uint8_t j = 0; j < 6; j++)
+    {
+        printf(j);
+        printf("%2d: %5d \r\n", j, callData.algo__xtalk_cpo_HistoMerge_kcps[j]);
+    }
+    printf("\r\n");
+    printf("xtalk_bin_data\r\n");
+    for (uint8_t j = 0; j < 12; j++)
+    {
+        printf(j);
+        printf("%2d: %5d \r\n", j, callData.xtalkhisto.xtalk_shape.bin_data[j]);
+    }
+    printf("\r\n");
+    printf("zero_distance_phase: %5d\r\n", callData.xtalkhisto.xtalk_shape.zero_distance_phase);
+    printf("phasecal_result__reference_phase: %5d\r\n", callData.xtalkhisto.xtalk_shape.phasecal_result__reference_phase);
+    printf("cal_config__vcsel_start: %5d\r\n", callData.xtalkhisto.xtalk_shape.cal_config__vcsel_start);
+    printf("zone_id: %5d\r\n", callData.xtalkhisto.xtalk_shape.zone_id);
+    printf("vcsel_width: %5d\r\n", callData.xtalkhisto.xtalk_shape.vcsel_width);
+    printf("VL53LX_p_015: %5d\r\n", callData.xtalkhisto.xtalk_shape.VL53LX_p_015);
+    printf("\r\n");
+    printf("short_a_offset_mm: %5d\r\n", callData.per_vcsel_cal_data.short_a_offset_mm);
+    printf("short_b_offset_mm: %5d\r\n", callData.per_vcsel_cal_data.short_b_offset_mm);
+    printf("medium_a_offset_mm: %5d\r\n", callData.per_vcsel_cal_data.medium_a_offset_mm);
+    printf("medium_b_offset_mm: %5d\r\n", callData.per_vcsel_cal_data.medium_b_offset_mm);
+    printf("long_a_offset_mm: %5d\r\n", callData.per_vcsel_cal_data.long_a_offset_mm);
+    printf("long_b_offset_mm: %5d\r\n", callData.per_vcsel_cal_data.long_b_offset_mm);
+    printf("\r\n");
+    printf("global_config__spad_enables_ref_0: %5d\r\n", callData.customer.global_config__spad_enables_ref_0);
+    printf("global_config__spad_enables_ref_1: %5d\r\n", callData.customer.global_config__spad_enables_ref_1);
+    printf("global_config__spad_enables_ref_2: %5d\r\n", callData.customer.global_config__spad_enables_ref_2);
+    printf("global_config__spad_enables_ref_3: %5d\r\n", callData.customer.global_config__spad_enables_ref_3);
+    printf("global_config__spad_enables_ref_4: %5d\r\n", callData.customer.global_config__spad_enables_ref_4);
+    printf("global_config__spad_enables_ref_5: %5d\r\n", callData.customer.global_config__spad_enables_ref_5);
+    printf("ref_spad_man__num_requested_ref_spads: %5d\r\n", callData.customer.ref_spad_man__num_requested_ref_spads);
+    printf("ref_spad_man__ref_location: %5d\r\n", callData.customer.ref_spad_man__ref_location);
+    printf("algo__crosstalk_compensation_plane_offset_kcps: %5d\r\n", callData.customer.algo__crosstalk_compensation_plane_offset_kcps);
+    printf("ref_spad_char__total_rate_target_mcps: %5d\r\n", callData.customer.ref_spad_char__total_rate_target_mcps);
+    printf("mm_config__inner_offset_mm: %5d\r\n", callData.customer.mm_config__inner_offset_mm);
+    printf("mm_config__outer_offset_mm: %5d\r\n", callData.customer.mm_config__outer_offset_mm);
+
+    HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
+
+    setCalibrationData(dev, id, &callData);
+
+    setOffsetCorrectionMode(dev, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(dev, 1);
+}
+
+void setCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
+{
+    VL53LX_CalibrationData_t callData;
+    callData = getCalibrationData(dev);
+
+    setCalibrationData(dev, id, &callData);
+
+    setOffsetCorrectionMode(dev, (VL53LX_OffsetCorrectionModes)VL53LX_OFFSETCORRECTIONMODE_PERVCSEL);
+    setXTalkCompensation(dev, 1);
+
+    // Smudge detectie
+    if (id == 1)
+        VL53LX_SmudgeCorrectionEnable(dev, VL53LX_SMUDGE_CORRECTION_CONTINUOUS); // Deze sensor zal bij elke meeting de smudge toepassen
+    else
+        VL53LX_SmudgeCorrectionEnable(dev, VL53LX_SMUDGE_CORRECTION_SINGLE); // Deze sensor zal bij elke start de correctie toepassen
+}
+
 void RefSpadCal(VL53L3CX_Object_t *dev)
 {
     VL53LX_PerformRefSpadManagement(dev);

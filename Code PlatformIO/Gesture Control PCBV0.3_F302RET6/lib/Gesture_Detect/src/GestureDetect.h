@@ -19,7 +19,7 @@
 
 #define maxMean 6
 #define maxDistance 300U
-#define timerMeasurmentTimeout 1200U
+#define timerMeasurmentTimeout 1500U
 
 
 /**
