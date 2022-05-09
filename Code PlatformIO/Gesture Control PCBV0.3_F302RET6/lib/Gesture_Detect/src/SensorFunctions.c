@@ -43,10 +43,10 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   VL53L3CX_ProfileConfig_t Profile;
 
   Profile.RangingProfile = VL53LX_DISTANCEMODE_MEDIUM;
-  Profile.TimingBudget = 8*3; /* 8 ms < TimingBudget < 500 ms */
-  Profile.Frequency = 0;         /* not necessary in simple ranging */
-  Profile.EnableAmbient = 1;     /* Enable: 1, Disable: 0 */
-  Profile.EnableSignal = 1;      /* Enable: 1, Disable: 0 */
+  Profile.TimingBudget = 8 * 3; /* 8 ms < TimingBudget < 500 ms */
+  Profile.Frequency = 0;        /* not necessary in simple ranging */
+  Profile.EnableAmbient = 1;    /* Enable: 1, Disable: 0 */
+  Profile.EnableSignal = 1;     /* Enable: 1, Disable: 0 */
 
   VL53L3CX_ConfigProfile(sensor, &Profile);
 }
@@ -161,4 +161,27 @@ void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index)
 void Stop_Sensor(VL53L3CX_Object_t *sensor)
 {
   VL53L3CX_Stop(sensor); // Sensor staren met meten
+}
+
+bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t *resultaat, uint8_t *isReadySens)
+{
+  VL53L3CX_Result_t tempResult;
+  bool trigger = false;
+  if (Sensor_Ready(sensor, device->gpioPin, isReadySens))
+  {
+    trigger = true;
+    VL53L3CX_GetDistance(sensor, &tempResult);
+    // HAL_Delay(2);
+    if (tempResult.ZoneResult->Distance[0] <= 8000)
+    {
+      resultaat->distance = (long)tempResult.ZoneResult[0].Distance[0];
+      resultaat->status = tempResult.ZoneResult[0].Status[0];
+      resultaat->timestamp = HAL_GetTick();
+    }
+    // HAL_Delay(2);
+  }
+
+  if (trigger)
+    return false;
+  return true;
 }

@@ -11,7 +11,7 @@
   * @param  sensor Een pointer naar het sensor object dat wordt geïnitialiseerd 
   * @param  index De XSHUT & GPIO pin waarop de sensor staat aangesloten
   * @param  isReady Een pointer value dat de waardes van de interrupt flags bevat
-  * @retval Zal 1 retourneren bij een set en 0 bij een reset van de interrupt flag
+  * @retval uint8_t isReady: Zal 1 retourneren bij een set en 0 bij een reset van de interrupt flag
   */
 uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isReady);
 
@@ -41,5 +41,7 @@ void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index);
   * @retval void
   */
 void Stop_Sensor(VL53L3CX_Object_t *sensor);
+
+bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t* device, Resultaat_t* resultaat, uint8_t* isReadySens);
 
 #endif

@@ -24,8 +24,8 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
 {
     VL53LX_CalibrationData_t callData;
 
-    printf("Calibrating sensor %2d in 20 seconds... \r\n\r\n", id);
-    for (uint8_t i = 0; i < 20; i++)
+    printf("Calibrating sensor %2d in 10 seconds... \r\n\r\n", id);
+    for (uint8_t i = 0; i < 10; i++)
     {
         HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
         HAL_Delay(1000);
