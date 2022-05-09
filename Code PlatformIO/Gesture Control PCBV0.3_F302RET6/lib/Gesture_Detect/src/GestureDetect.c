@@ -22,7 +22,7 @@ static bool UD_center = false;
 
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
-static int timerMeasurmentTimeout = 1200; // in milliseconden
+// static int timerMeasurmentTimeout = 1200; // in milliseconden
 
 int16_t tempMean = 0;
 
@@ -153,7 +153,7 @@ int16_t getMean(uint8_t id)
     tempMean /= maxMean;
     return tempMean;
 }
-int getCountMeans(uint8_t id)
+int getCountMean(uint8_t id)
 {
     return disMeanindex[id];
 }

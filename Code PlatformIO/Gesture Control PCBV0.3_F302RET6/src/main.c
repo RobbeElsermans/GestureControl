@@ -91,17 +91,6 @@ static float timerCommand = 0;
 static bool timerCommandSet = false;   // Start in false state
 static int timerCommandTimeout = 2000; // 2 seconden
 
-// Global Timer Counter
-// static long timerGlobal = 0;
-
-// Timer printf
-// static float timerPrintf = 0;
-// static bool timerPrintfSet = false;
-// static int timerPrintfTimeout = 2000; // 2 seconden
-
-// Define de sensor objecten amountSensorUsed keer.
-VL53L3CX_Object_t sensor[amountSensorUsed];
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -148,7 +137,8 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  // Define de sensor objecten amountSensorUsed keer.
+  VL53L3CX_Object_t sensor[amountSensorUsed];
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -346,22 +336,6 @@ int main(void)
     VL53LX_SmudgeCorrectionEnable(&sensor[right.id], VL53LX_SMUDGE_CORRECTION_SINGLE); //Deze sensor zal bij elke start de correctie toepassen
   }
 
-  // DEBUG mag weg later
-  //  Start_Sensor(&sensor[left.id], left.gpioPin);
-  //  VL53L3CX_Result_t tempResult;
-  //  while(1){
-  //    if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
-  //      {
-  //        isReady[left.id] = false;
-  //        VL53L3CX_GetDistance(&sensor[left.id], &tempResult);
-  //        // HAL_Delay(2);
-  //        resultaat[left.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-  //        resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
-  //        // HAL_Delay(2);
-  //      }
-  //  }
-  // DEBUG mag weg later
-
   Start_Sensor(&sensor[left.id], left.gpioPin);
   // Start_Sensor(&sensor[left.id], left.gpioPin);
   // Start_Sensor(&sensor[right.id], right.gpioPin);
@@ -375,9 +349,6 @@ int main(void)
 
   while (1)
   {
-    // Calculate time over main loop
-    // timerGlobal = HAL_GetTick();
-
     VL53L3CX_Result_t tempResult;
 
     if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
