@@ -637,7 +637,7 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 * **0x25** -> Er is een hand op en neer aan het bewegen. Dit wordt gevolgd door een waarde van 10-bits groot. (0->1024)
 * **0x26** -> ... 
 
-De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een 2de NUCLEO_F401RE die zich gedraagt als LED-Controller.
+De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een NUCLEO_F401RE die zich gedraagt als LED-Controller.
 
 # Bevindingen & Upgrades 
 

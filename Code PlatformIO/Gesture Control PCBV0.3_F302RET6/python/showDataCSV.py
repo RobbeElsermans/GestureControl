@@ -2,9 +2,9 @@
 from csv import reader
 import matplotlib.pyplot as plt
 
-fileName = "data_2022-05-02_95943"
+fileName = "data_2022-05-06_153635"
 
-file = open("logs/" + fileName, 'r', newline='')
+file = open("logs/" + fileName + ".csv", 'r', newline='')
 
 data = reader(file, delimiter=',')
 

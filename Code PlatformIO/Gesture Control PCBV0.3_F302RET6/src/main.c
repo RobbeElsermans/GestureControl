@@ -44,7 +44,7 @@
 /* USER CODE BEGIN PD */
 
 // Toggle for data collection
-//#define DATACOLLECTION
+#define DATACOLLECTION
 
 // Toggle voor calibrate
 //#define CALIBRATE
@@ -108,7 +108,7 @@ static int timerCommandTimeout = 2000; // 2 seconden
 // static int timerPrintfTimeout = 2000; // 2 seconden
 
 // Opteller van waardes
-#define counterHeight 4
+#define counterHeight 10
 int counter[amountSensorUsed][counterHeight];
 uint8_t counterStep = 0;
 
@@ -790,7 +790,7 @@ int main(void)
       timerDataCollection = HAL_GetTick();
     }
 #endif
-    printf("%d,%d\r\n", dis0, resultaat[left.id].status);
+    //printf("%d,%d\r\n", dis0, resultaat[left.id].status);
     // printf("L%d, C%d, R%d\r\n", dis0, dis1, dis2);
     int8_t buf;
     HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
@@ -1002,7 +1002,7 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   VL53L3CX_ProfileConfig_t Profile;
 
   Profile.RangingProfile = VL53LX_DISTANCEMODE_MEDIUM;
-  Profile.TimingBudget = 32 * 3; /* 8 ms < TimingBudget < 500 ms */
+  Profile.TimingBudget = 8*3; /* 8 ms < TimingBudget < 500 ms */
   Profile.Frequency = 0;         /* not necessary in simple ranging */
   Profile.EnableAmbient = 1;     /* Enable: 1, Disable: 0 */
   Profile.EnableSignal = 1;      /* Enable: 1, Disable: 0 */

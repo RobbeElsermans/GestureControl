@@ -68,7 +68,7 @@ try:
     ##print(timestamp)
 
     #open (maak) het bestand 
-    file = open(("logs/data_"+timestamp), 'w', newline='')
+    file = open(("logs/data_"+timestamp+ ".csv"), 'w', newline='')
 
     #kopel het bestand aan de cvs schrijver
     schrijf = writer(file)
