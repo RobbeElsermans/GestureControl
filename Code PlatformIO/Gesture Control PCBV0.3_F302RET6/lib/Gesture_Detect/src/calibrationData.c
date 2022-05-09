@@ -24,7 +24,7 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
 {
     VL53LX_CalibrationData_t callData;
 
-    printf("Calibrating in 20 seconds... \r\n\r\n");
+    printf("Calibrating sensor %2d in 20 seconds... \r\n\r\n", id);
     for (uint8_t i = 0; i < 20; i++)
     {
         HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
@@ -33,12 +33,13 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
     HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
 
     // printf("Sensor %2d\r\n", center.gpioPin);
+    printf("refspad\r\n");
     RefSpadCal(dev);
     // HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, 1);
-    printf("refspad\r\n");
+    printf("xtalk\r\n");
     xTalkCal(dev);
     // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
-    printf("xtalk\r\n");
+    printf("offset\r\n");
     offsetPerVcselCal(dev, 600);
     HAL_Delay(2);
     // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
@@ -86,8 +87,6 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
     printf("ref_spad_char__total_rate_target_mcps: %5d\r\n", callData.customer.ref_spad_char__total_rate_target_mcps);
     printf("mm_config__inner_offset_mm: %5d\r\n", callData.customer.mm_config__inner_offset_mm);
     printf("mm_config__outer_offset_mm: %5d\r\n", callData.customer.mm_config__outer_offset_mm);
-
-    HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
 
     setCalibrationData(dev, id, &callData);
 
