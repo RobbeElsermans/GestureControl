@@ -45,7 +45,7 @@
 /* USER CODE BEGIN PD */
 
 // Toggle for data collection
-#define DATACOLLECTION
+//#define DATACOLLECTION
 
 // Toggle voor calibrate
 //#define CALIBRATE
@@ -62,11 +62,6 @@
 /* USER CODE BEGIN PV */
 volatile bool isReady[amountSensor] = {false, false, false};
 volatile bool hasRead[amountSensor] = {false, false, false};
-
-// Reset timer voor sensor detectie
-// float timerMeasurment = 0;
-// bool timerMeasurementSet = false;
-// int timerMeasurmentTimeout = 1200; // in milliseconden
 
 // detectie distance
 int16_t maxDis = 300;
@@ -103,11 +98,6 @@ static int timerCommandTimeout = 2000; // 2 seconden
 // static float timerPrintf = 0;
 // static bool timerPrintfSet = false;
 // static int timerPrintfTimeout = 2000; // 2 seconden
-
-// Opteller van waardes
-// #define counterHeight 10
-// int counter[amountSensorUsed][counterHeight];
-// uint8_t counterStep = 0;
 
 // Define de sensor objecten amountSensorUsed keer.
 VL53L3CX_Object_t sensor[amountSensorUsed];
@@ -427,8 +417,6 @@ int main(void)
       
       setMeanVal(center.id, resultaat[center.id].distance);
       setMeanVal(right.id, resultaat[right.id].distance);
-      // counter[center.id][counterStep] = resultaat[center.id].distance;
-      // counter[right.id][counterStep] = resultaat[right.id].distance;
     }
     else
     {
@@ -438,251 +426,27 @@ int main(void)
     }
 
     setMeanVal(left.id, resultaat[left.id].distance);
-    // counter[left.id][counterStep] = resultaat[left.id].distance;
-
-    counterStep++;
-    if (counterStep >= counterHeight)
-      counterStep = 0;
 
     objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &resultaat[left.id].distance);
-    // objectPresent = true;
     int dis0 = 0;
     int dis1 = 0;
     int dis2 = 0;
     // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
     if (commando == NONE)
-    {
-      uint8_t i = 0;
-
-      // Gemiddelde berekenen
-      // for (i = 0; i < counterHeight; i++)
-      // {
-      //   dis0 += counter[left.id][i];
-      // };
-      // dis0 /= counterHeight;
-      
+    {      
       dis0 = getMean(left.id);
-      // for (i = 0; i < counterHeight; i++)
-      // {
-      //   dis1 += counter[center.id][i];
-      // };
-      // dis1 /= counterHeight;
       dis1 = getMean(center.id);
+      dis2 = getMean(right.id);
+      int8_t val = detectgesture(dis0, resultaat[left.id].status, dis1, resultaat[center.id].status, dis2, resultaat[right.id].status);
+      if(val != -1)
+        commando = val;
 
-      // for (i = 0; i < counterHeight; i++)
-      // {
-      //   dis2 += counter[right.id][i];
-      // };
-      // dis2 /= counterHeight;
-      dis0 = getMean(right.id);
-
-      // dis0 = resultaat[left.id].distance;
-      // dis1 = resultaat[center.id].distance;
-      // dis2 = resultaat[right.id].distance;
-
-      commando = detectgesture(dis0, resultaat[left.id].status, dis1, resultaat[center.id].status, dis2, resultaat[right.id].status);
-
-// printf("dis0: %5d, dis1: %5d, dis2: %5d\r\n", dis0, dis1, dis2);
-#ifdef drie1
-      int16_t maxDis = 300;
-
-      // DU gesture
-      if (dis0 < maxDis && dis2 < maxDis && !DU_center && resultaat[left.id].status == 0 && resultaat[right.id].status == 0 && dis1 > maxDis)
-      {
-        // Set flag
-        DU_beiden = true;
-      }
-
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && DU_beiden == true)
-      {
-        DU_center = true;
-      }
-
-      // UD gesture
-      if (dis1 < maxDis && !UD_beiden && resultaat[center.id].status == 0 && dis0 > maxDis && dis2 > maxDis)
-      {
-        // Set flag
-        UD_center = true;
-      }
-
-      if (dis0 < maxDis && dis2 < maxDis && resultaat[left.id].status == 0 && resultaat[right.id].status == 0 && UD_center)
-      {
-        // Set flag
-        UD_beiden = true;
-      }
-
-      // LR gesture
-      if (dis0 < maxDis && resultaat[left.id].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
-      {
-        LR_links = true;
-      }
-
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
-      {
-        LR_center = true;
-      }
-
-      if (dis2 < maxDis && resultaat[right.id].status == 0 && LR_center && LR_links)
-      {
-        LR_rechts = true;
-      }
-
-      // RL gesture
-      if (dis2 < maxDis && resultaat[right.id].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
-      {
-        RL_rechts = true;
-      }
-
-      if (dis1 < maxDis && resultaat[center.id].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
-      {
-        RL_center = true;
-      }
-
-      if (dis0 < maxDis && resultaat[left.id].status == 0 && RL_center && RL_rechts)
-      {
-        RL_links = true;
-      }
-
-      if (DU_beiden && DU_center)
-      {
-        commando = DU;
-      }
-
-      if (UD_beiden && UD_center)
-      {
-        commando = UD;
-      }
-
-      if (LR_links && LR_center && LR_rechts)
-      {
-        commando = LR;
-      }
-
-      if (RL_links && RL_center && RL_rechts)
-      {
-        commando = RL;
-      }
-#endif
-#ifdef drie2
-      // // DU gesture
-      // if (dis0 < maxDis && resultaat[left.id].status == 0 && !DU_center && !DU_boven && dis1 > maxDis && dis2 > maxDis)
-      // {
-      //   DU_onder = true;
-      // }
-
-      // if (dis2 < maxDis && resultaat[right.id].status == 0 && !DU_center && DU_onder && dis1 > maxDis)
-      // {
-      //   DU_center = true;
-      // }
-
-      // if (dis1 < maxDis && resultaat[center.id].status == 0 && DU_center && DU_onder)
-      // {
-      //   DU_boven = true;
-      // }
-
-      // // UD gesture
-      // if (dis1 < maxDis && resultaat[center.id].status == 0 && !UD_center && !UD_onder && dis0 > maxDis && dis2 > maxDis)
-      // {
-      //   UD_boven = true;
-      // }
-
-      // if (dis2 < maxDis && resultaat[right.id].status == 0 && !UD_onder && UD_boven && dis0 > maxDis)
-      // {
-      //   UD_center = true;
-      // }
-
-      // if (dis0 < maxDis && resultaat[left.id].status == 0 && UD_center && UD_boven)
-      // {
-      //   UD_onder = true;
-      // }
-
-      // // LR gesture
-      // if (dis0 < maxDis && resultaat[left.id].status == 0 && !LR_center && !LR_rechts && dis1 > maxDis && dis2 > maxDis)
-      // {
-      //   LR_links = true;
-      // }
-
-      // if (dis1 < maxDis && resultaat[center.id].status == 0 && !LR_rechts && LR_links && dis2 > maxDis)
-      // {
-      //   LR_center = true;
-      // }
-
-      // if (dis2 < maxDis && resultaat[right.id].status == 0 && LR_center && LR_links)
-      // {
-      //   LR_rechts = true;
-      // }
-
-      // // RL gesture
-      // if (dis2 < maxDis && resultaat[right.id].status == 0 && !RL_center && !RL_links && dis1 > maxDis && dis0 > maxDis)
-      // {
-      //   RL_rechts = true;
-      // }
-
-      // if (dis1 < maxDis && resultaat[center.id].status == 0 && !RL_links && RL_rechts && dis0 > maxDis)
-      // {
-      //   RL_center = true;
-      // }
-
-      // if (dis0 < maxDis && resultaat[left.id].status == 0 && RL_center && RL_rechts)
-      // {
-      //   RL_links = true;
-      // }
-
-      // if (DU_boven && DU_center && DU_onder)
-      // {
-      //   commando = DU;
-      // }
-
-      // if (UD_boven && UD_center && UD_onder)
-      // {
-      //   commando = UD;
-      // }
-
-      // if (LR_links && LR_center && LR_rechts)
-      // {
-      //   commando = LR;
-      // }
-
-      // if (RL_links && RL_center && RL_rechts)
-      // {
-      //   commando = RL;
-      // }
-#endif
-      // printf("LR_links %1d, LR_center %1d\t LR_rechts %1d\r\n", LR_links, LR_center,LR_rechts);
+      printf("dis0: %5d,dis1: %5d,dis2: %5d \r\n", dis0, dis1, dis2);
     }
 
-    // reset gesture flags
-    // if (!timerMeasurementSet)
-    // {
-    //   timerMeasurementSet = true;
-    //   timerMeasurment = HAL_GetTick();
-    // }
-    // long temp = HAL_GetTick();
-    // if (timerMeasurementSet && (temp - timerMeasurment) > timerMeasurmentTimeout)
-    // {
-    //   timerMeasurementSet = false;
-    //   DU_boven = false;
-    //   DU_center = false;
-    //   DU_onder = false;
-    //   UD_boven = false;
-    //   UD_center = false;
-    //   UD_onder = false;
-    //   LR_links = false;
-    //   LR_rechts = false;
-    //   LR_center = false;
-    //   RL_links = false;
-    //   RL_rechts = false;
-    //   RL_center = false;
-    // }
     checkResetTimer();
-    // printf("Object: %1d \t", gestureRL);
 
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
-
-    // HAL_Delay(2);
-    // printf("distance center.gpioPin: %4d %3d\t distance left.gpioPin: %4d %3d\t distance right.gpioPin: %4d %3d\r\n",
-    //       (int)resultaat[center.id].distance, resultaat[center.id].status, (int)resultaat[left.id].distance, resultaat[left.id].status, (int)resultaat[right.id].distance, resultaat[right.id].status);
-    // printf("L%d, C%d, R%d\r\n", resultaat[left.id].distance, resultaat[center.id].distance, resultaat[right.id].distance);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

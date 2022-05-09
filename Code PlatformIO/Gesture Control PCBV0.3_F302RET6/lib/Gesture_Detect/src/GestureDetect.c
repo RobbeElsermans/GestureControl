@@ -1,5 +1,29 @@
 #include "GestureDetect.h"
 
+//variabelen die niet mogen veranderen na weg gaan van methodes
+static int disMean[amountSensorUsed][maxMean];
+static uint8_t disMeanindex[amountSensorUsed];
+
+static bool LR_links = false;
+static bool LR_rechts = false;
+static bool LR_center = false;
+
+static bool RL_links = false;
+static bool RL_rechts = false;
+static bool RL_center = false;
+
+static bool DU_boven = false;
+static bool DU_onder = false;
+static bool DU_center = false;
+
+static bool UD_boven = false;
+static bool UD_onder = false;
+static bool UD_center = false;
+
+static float timerMeasurment = 0;
+static bool timerMeasurementSet = false;
+static int timerMeasurmentTimeout = 1200; // in milliseconden
+
 int16_t tempMean = 0;
 
 bool checkIndex(uint8_t id);
@@ -89,9 +113,11 @@ commands detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t c
       {
         return RL;
       }
+      return -1;
 }
 
-checkResetTimer(){
+void checkResetTimer()
+{
       // reset gesture flags
     if (!timerMeasurementSet)
     {
@@ -135,7 +161,7 @@ int *getMeans(uint8_t id)
 {
     return disMean[id];
 }
-setMeanVal(uint8_t id, int16_t distance)
+void setMeanVal(uint8_t id, int16_t distance)
 {
     disMean[id][disMeanindex[id]] = distance;
     checkIndex(id);
