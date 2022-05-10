@@ -24,10 +24,14 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
   - [Trap](#trap)
 - [Snelheid Metingen PCBV0.3](#snelheid-metingen-pcbv03)
 - [Coverglas](#coverglas)
-- [Smudge Detection](#smudge-detection)
+  - [plexiplaat](#plexiplaat)
+  - [glasplaat](#glasplaat)
+- [Smudge Detection plexiplaat](#smudge-detection-plexiplaat)
   - [Normale werking](#normale-werking)
   - [VL53LX_SMUDGE_CORRECTION_SINGLE](#vl53lx_smudge_correction_single)
   - [VL53LX_SMUDGE_CORRECTION_CONTINUOUS](#vl53lx_smudge_correction_continuous)
+- [Smudge Detection glasplaat](#smudge-detection-glasplaat)
+- [Bevindingen](#bevindingen)
 
 
 ----
@@ -82,10 +86,31 @@ De printplaat waarop de Nucleo-F401RE bevestigd is, wordt op een houten plaat be
 
 Bij de gekregen Dev-kit werden de sensoren met mode *BLOCKING_CONTINUOUS* aangestuurd. Dit houd in dat de software zelf zal wachten totdat de sensor terug stuurt dat de data beschikbaar is. Dit proces herhalen we telkens.
 
-|                       |min|typ|max|eenheid|
-|-----------------------|---|---|---|-------|
-|TimingBudget           |500|35 |16 |ms     |
-|gemeten waarde software|507|43 |24 |ms     |
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
+  <tr>
+    <th></th>
+    <th>min</th>
+    <th>typ</th>
+    <th>max</th>
+    <th>eenheid</th>
+  </tr>
+  <tr>
+    <td>TimingBudget</td>
+    <td>500</td>
+    <td>35</td>
+    <td>16</td>
+    <td>ms</td>
+  </tr>
+    <tr>
+    <td>gemeten waarde software</td>
+    <td>507</td>
+    <td>43</td>
+    <td>24</td>
+    <td>ms</td>
+  </tr>
+</table>
+</div>
 
 terminal beelden
 
@@ -134,11 +159,38 @@ gebruikte code
 Onderstaande metingen zijn uitgevoerd met LEFT sensor (1 sensor) die *ASYNC_CONTINUOUS* werkt. Dit gebeurd d.m.v. een interrupt waar we nadien de gegevens uitlezen en de flag resetten. 
 Hier hebben we een maximale snelheid bereiken van 16ms.
 
-|                       |min|typ|max|eenheid|
-|-----------------------|---|---|---|-------|
-|TimingBudget           |500|35 |16 |ms     |
-|gemeten waarde software|16 |16 |24 |ms     |
-|gemeten waarde scoop   |494|35 |16 |ms     |
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
+  <tr>
+    <th></th>
+    <th>min</th>
+    <th>typ</th>
+    <th>max</th>
+    <th>eenheid</th>
+  </tr>
+  <tr>
+    <td>TimingBudget</td>
+    <td>500</td>
+    <td>35</td>
+    <td>16</td>
+    <td>ms</td>
+  </tr>
+  <tr>
+    <td>gemeten waarde software</td>
+    <td>16</td>
+    <td>16</td>
+    <td>24</td>
+    <td>ms</td>
+  </tr>
+  <tr>
+    <td>gemeten waarde scoop </td>
+    <td>494</td>
+    <td>35</td>
+    <td>16</td>
+    <td>ms</td>
+  </tr>
+</table>
+</div>
 
 Scope beelden
 
@@ -155,7 +207,7 @@ Scope beelden
 ![scoop beeld maximaal](foto's/scoop_beeld_maximaal_snelheid_interrupt.png)
 
 
-De scoop beelden zeggen dat de tijd die de sensor op interrupt mode staat even lang blijft namelijk +-16ms ongeachte *TimingBudget*. De hoge periodes worden wel beïnvloed door *TimingBudget*. In de software daarentegen wijn de tijden wel korter dan bij *BLOCKING_CONTINUOUS*.
+De scoop beelden zeggen dat de tijd die de sensor op interrupt mode staat even lang blijft namelijk +-16ms ongeachte *TimingBudget*. De hoge periodes worden wel beïnvloed door *TimingBudget*. In de software daarentegen zijn de tijden wel korter dan bij *BLOCKING_CONTINUOUS*.
 
 **minimaal**
 
@@ -200,7 +252,7 @@ while (1)
       }
 ```
 
-Voor onze applicatie is snelheid van metingen belangrijk zodat de user hierdoor geen hinder door ondervind.
+Voor onze applicatie is snelheid van metingen belangrijk zodat de user hier geen hinder door vind.
 
 ## Vijf sensoren
 
@@ -208,10 +260,31 @@ Omdat ons systeem met 5 sensoren werkt zullen we dit ook even onderzoeken of dat
 
 ### BLOCKING_CONTINUOUS
 
-|                       |min|typ|max|eenheid|
-|-----------------------|---|---|---|-------|
-|TimingBudget           |500|35 |16 |ms     |
-|gemeten waarde software|508|86 |86 |ms     |
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
+  <tr>
+    <th></th>
+    <th>min</th>
+    <th>typ</th>
+    <th>max</th>
+    <th>eenheid</th>
+  </tr>
+  <tr>
+    <td>TimingBudget</td>
+    <td>500</td>
+    <td>35</td>
+    <td>16</td>
+    <td>ms</td>
+  </tr>
+  <tr>
+    <td>gemeten waarde software</td>
+    <td>508</td>
+    <td>86</td>
+    <td>86</td>
+    <td>ms</td>
+  </tr>
+</table>
+</div>
 
 **minimaal**
 
@@ -260,10 +333,31 @@ while (1)
 
 ### ASYNC_CONTINUOUS
 
-|                       |min|typ|max|eenheid|
-|-----------------------|---|---|---|-------|
-|TimingBudget           |500|35 |16 |ms     |
-|gemeten waarde software|33 |86 |86 |ms     |
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
+  <tr>
+    <th></th>
+    <th>min</th>
+    <th>typ</th>
+    <th>max</th>
+    <th>eenheid</th>
+  </tr>
+  <tr>
+    <td>TimingBudget</td>
+    <td>500</td>
+    <td>35</td>
+    <td>16</td>
+    <td>ms</td>
+  </tr>
+  <tr>
+    <td>gemeten waarde software</td>
+    <td>33</td>
+    <td>86</td>
+    <td>86</td>
+    <td>ms</td>
+  </tr>
+</table>
+</div>
 
 **minimaal**
 
@@ -371,7 +465,7 @@ Na het aanpassen van de code was het mogelijk om met de sensoren al de 4 gesture
 
 ?> zie de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) voor meer informatie over de commando waardes.
 
-De snelheid is ook aanzienlijk verbeterd en het RAM geheugen zit minder vol. Met deze opstelling kunnen we gebruik maken van de STM32F302RCT6 i.p.v. de STM32F302RET6. In de repo is hiervoor een aparte branch opgezet genaamd *piramide*.
+De snelheid is ook aanzienlijk verbeterd en het RAM geheugen zit minder vol. Met deze opstelling kunnen we gebruik maken van de STM32F302RCT6 i.p.v. de STM32F302RET6.
 
 Een nadeel met deze opstelling is dat wanneer we ons hand te schuin van boven naar onder (of onder naar boven) verplaatsen, we de links-rechts en rechts-links triggeren. Dit is een beetje gefilterd in de code door een gemiddelde te nemen over 5 metingen en nog wat extra flags om ervoor te zorgen dat wanneer de gesture controller denkt een bepaalde gesture binnen te krijgen, de andere gestures wat te negeren. uiteraard mag deze hold van andere gestures niet te lang duren. Vandaar dat er ook een reset timer is geplaatst die al de flags op 0 zet om de 0.5 seconden.
 
@@ -417,10 +511,58 @@ Wanneer deze opstelling uitvoerig werd getest, merkte ik op dat het niet altijd 
 
 # Coverglas
 
-Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder calibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder kalibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
 
+## plexiplaat
 
-# Smudge Detection
+Eerst hebben we met een plexiplaat gewerkt. Dit was gemakkelijker in omgang en we konden hier ook enkelen gaten in boren om alles op te monteren. Bij de plexiplaat hebben we een plaatdikte van 4 millimeter genomen. De afstand tussen de sensor en de plexiplaat bedraagt ~4mm. Wanneer we de sensor kalibreerde, waren dit enkel waardes tussen de 20mm en 40mm. De sensor kon niet verder kijken dan het coverglas en beschouwde het coverglas als object.
+
+We hebben daarom de afstand gereduceerd naar ~1mm. Dit geeft een relatief goed resultaat. Wanneer het plexiglas vuil is (vingerafdrukken, stof) beïnvloed dit drastisch de metingen met incorrecte metingen tot gevolg. Zie [Smudge Detection plexiplaat](#smudge-detection-plexiplaat) voor meer informatie omtrent vuil op het coverglas.
+
+Eerst is er gemeten op een afstand van ~850mm.
+![plexiglas 1mm](foto's/plexiglas_1mm.png)
+
+De metingen lopen van 840mm <-> 875mm wat een verschil is van 35mm (3.5cm). De foutcode is over heel de grafiek 0 wat resulteert in geen fouten.
+
+Nu meten we op een afstand van ~1250mm.
+![plexiglas 1mm 2](foto's/plexiglas_1mm_2.png)
+
+De metingen lopen van 1245mm <-> 1290mm wat een verschil is van 45mm (4.5cm). De foutcode is over heel de grafiek 0 wat resulteert in geen fouten.
+
+## glasplaat
+
+Omdat de metingen nog niet 100% correct waren (en omdat het wel interessant kon zijn), hebben we de plexiplaat vervangen door een glasplaat van 4mm dikte. De mogelijkheid was er niet om gaten te boren voor de sensoren te bevestigen. Om dit op te lossen hebben we creatief moeten omgaan met het probleem. We hebben een *glasklever* ontworpen waarin we de sensor inbrengen en dan nadien op de glasplaat kleven. Deze zijn beiden geprint met de 3D printer.
+
+<iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c53938de85e2cdec6f60?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+
+Hier hebben we 2 glasklevers ontworpen waarbij de 1ne een afstand heeft van  ~0.4mm (1.4mm in totaal) en de andere een afstand heeft van ~0mm (1mm in totaal). Omdat de glasklevers met een 3D printer gefabriceerd zijn, zal dit niet nauwkeurig zijn op een tiende van een millimeter.
+
+<img src="./foto's/PCBV0.3_opstelling_glas_1.jpg" alt="PCBV0.3_opstelling_glas_1" width="50%">
+
+Allereerst testen we de 1.4mm glasklever met het pythonscript storeDataCVS_1Measurement.py.
+
+![test glasklever 1.4mm](foto's/glasklever_1.4mm.png)
+
+Deze grafiek lijkt heel fluctuerend maar dit is maar bedrog. Als we kijken naar de y-as, dan is er te zien dat de metingen tussen de 805mm <-> 830mm. Wat maakt dat er een fluctuatie is van 25mm (2.5cm) op een afstand van  ~830mm (83cm). De rode lijn geven de foutcodes weer in de tijd. Deze is stabiel over heel de meeting en geeft geen errors weer.
+
+Nu voeren we de test uit met de 1.0mm glasklever.
+
+![test glasklever 1mm](foto's/glasklever_1mm.png)
+
+Zoals te zien op de grafiek is hier een bereik van 820mm <-> 860mm wat 40mm (4cm) verschil is. Een beetje tegen de verwachtingen in geeft de kleinere afstand tussen coverglas en sensor, een slechter resultaat.
+
+De plexiplaat kon bij een afstand van ~1200mm nog steeds redelijke resultaten weergeven. Om te kijken of dat de glas plaat beter presteert, gaan we dit ook testen met de glasplaat. Eerst wordt de 1.4mm glasklever getest en daarna de 1mm glasklever.
+
+<img src="./foto's/glasklever_1.4mm_2.png" alt="grafiek_glasklever_1.4mm_2" width="49%">
+<img src="./foto's/glasklever_1mm_2.png" alt="grafiek_glasklever_1mm_2" width="49%">
+
+Er is geen groot verschil t.o.v. het plexiglas. We zien wel dat de 1.4mm glascover het beter doet dan de 1mm glascover. Daarom gaan we in het verdere onderzoek gebruik maken van het 1.4mm glascover.
+
+Omdat er bij beide metingen telkens pieken zijn, is het best dat we van x-aantal metingen een gemiddelde nemen en hiermee verder werken.
+
+# Smudge Detection plexiplaat
+
+!> Deze meeting is uitgevoerd op een zonnige dag. Het coverglas is plexiglas en deze is gereinigd met water en een doekje.
 
 Wanneer de sensor in gebruik zou zijn bij een eindgebruiker. Kan het altijd voorkomen dat het coverglas, dat zich over de sensor bevindt, vuil kan worden met vingerafdrukken en stof. ST heeft hier zelf een oplossing voor bedacht die geïntegreerd is in de API die men uitbracht. We moeten hier dus zelf niet ons hoofd over breken hoe we vuil kunnen weg filteren.
 
@@ -443,7 +585,7 @@ hieronder is een screenshot te zien van een normale werking met een proper cover
 
 ![normal graph 1](foto's/normal_graph.png)
 
-Zoals te zien zijn de metingen nog te fluctuerend. Dit komt omdat we hier werken met ene cover glas. De afstand wordt beduidend minder wanneer we met een cover glas werken. We verplaatsen het object eens naar +- 700mm. Deze keer is de muur wit van kleur.
+Zoals te zien zijn de metingen nog te fluctuerend. Dit komt omdat we hier werken met een cover glas. De afstand wordt beduidend minder wanneer we met een cover glas werken. We verplaatsen het object eens naar +- 700mm. Deze keer is de muur wit van kleur.
 
 ![normal graph 2](foto's/normal_graph_2.png)
 
@@ -484,3 +626,56 @@ Zoals bij Single mode is hier ook goed op te merken dat het glas vuil is. We nem
 ![continuous mode graph 3](foto's/continuous_graph_3.png)
 
 Dit geeft geen verschil.
+
+# Smudge Detection glasplaat
+
+Tijdens het onderzoek in paragraaf [Coverglas](#coverglas) is het duidelijk geworden dat de plexiplaat en de glasplaat weinig verschil geven qua nauwkeurigheid. Daarom gaan we eens onderzoeken of dat er een verschil is tussen beiden wanneer we de oppervlakte vuil maken.
+
+Allereerst starten we met een proper oppervlakte waar we onze eerste metingen laten tonen. Idem als bij de plexiplaat, gaan we 4 metingen opnemen en hiervan het gemiddelde bepalen. We werken op FiFo (First in First out) principe wanneer we de data opslaan.
+
+![normal graph glas 1](foto's/normal_graph_glas.png)
+
+De curve is zeer stabiel zoals het hoort.
+
+Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één malig bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
+
+We voegen, voordat we de sensor aanzetten, wat vingerafdrukken toe op het coverglas. Daarna zetten we de voeding aan en zullen we de resultaten zien in de grafiek. 
+
+![single mode graph glas](foto's/single_graph_glas.png)
+
+Op de grafiek zien we geen grote verschillen met voorgaande grafieken. In volgende grafiek hebben we met een keukenrol papier wat stof op het coverglas gebracht.
+
+![single mode graph glas 2](foto's/single_graph_glas_2.png)
+
+Wederom is er geen verschil met vorige grafiek. We gaan het glas nu zo vuil mogelijk proberen te maken. We gaan er een druppeltje flux op leggen en dit uitsmeren. Dit zal het glas zeer vuil maken.
+
+<img src="./foto's/PCBV0.3_opstelling_glas_2.jpg" alt="PCBV0.3_opstelling_glas_2_vuil" width="50%">
+
+![single mode graph glas 3](foto's/single_graph_glas_3.png)
+
+Het is te zien dat de sensor niet voorbij het coverglas kan kijken. We proberen dezelfde opstelling eens (met dezelfde hoeveelheid vuil) maar dan in **VL53LX_SMUDGE_CORRECTION_CONTINUOUS** mode.
+
+![continuous mode graph glas](foto's/continuous_graph_glas.png)
+
+Er is te zien dat de sensor in het begin wat last heeft van het vuil. Dit wordt verderop de metingen weg gefilterd.
+
+Een laatste test is wanneer we, tijdens het meten, het vuil aanbrengen en zien hoe de sensor reageert. We gaan hiervoor wel wat meer metingen uitvoeren zodat we een mooi verloop van tijd zien. Er wordt gestart van een proper oppervlakte waar we nadien dan flux aanbrengen met een doekje en hier wat op deppen om ook stof erop te plaatsen.
+
+Na het plaatsen ga ik ook mijn hand er even voor houden en na enkele metingen wat dichter houden om eens te zien of dat het iets doet.
+
+![continuous mode graph glas 2](foto's/continuous_graph_glas_2.png)
+
+Er is duidelijk te zien op de grafiek dat er van een proper coverglas gestart is. Rond meeting 90 heb ik de flux aangebracht en dit wat rond verspreid. Rond meeting 330 staat mijn hand ervoor en vanaf meeting 380 verplaats ik deze dichter. Nadien haal ik mijn hand weg. 
+
+Het is een duidelijk verschil met de plexiplaat. We gaan daarom ook een opstelling voorzien met een glazen plaat.
+
+Er is ook te zien dat wanneer we de glazen plaat gebruiken, er minder uitschieters aanwezig zijn in de metingen dan als bij de plexiplaat.
+
+# Bevindingen
+
+De plaatsing van de sensoren onderling is een moeilijk maar zeer belangrijk aspect in dit project. Er zijn oneindig mogelijke manieren hoe dat we de sensoren onderling van elkaar kunnen plaatsen. Omdat dit project niet zozeer gefocust is op het plaatsen van de sensoren, is de genomen keuzen niet perfect. De genomen keuzen werkt wel en kan de basis zijn van het verdere onderzoek. 
+
+Zoals te zien in paragraaf [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit) en [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03) zijn er wel drastische wijzigingen gebeurd. We zijn van 5 sensoren naar 3 sensoren overgestapt. Voor de simpele gestures zal de code gelijklopend zijn. Wanneer we complexere gestures (tabs, hovers) moeten herkennen, kan het zijn dat hiervoor nog wat wijzigingen moeten gebeuren op gebied van layout en aantal sensoren.
+
+De snelheid (tijd die nodig is om de meeting te starten en te voltooien) is ook een belangrijk gegeven in deze applicatie. Vandaar dat interrupts gebruikt worden in het project. Op deze manier zal de main loop niet vast hangen wanneer deze een meeting opvraagt maar gebeurd dit on the fly.
+

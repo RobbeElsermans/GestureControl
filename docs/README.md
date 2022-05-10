@@ -37,8 +37,8 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 
 # Inleiding
 
-Dit markdown document zal de geschreven code wat verduidelijken in beste maten mogelijk. Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de software omgeving op te zetten en te kunnen gebruiken.
-Ook wordt er ook een sectie voorzien over de hardware specificaties opgelijst van de gemaakte PCB.
+Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de software omgeving op te zetten en te kunnen gebruiken.
+Ook wordt er ook een sectie voorzien over de hardware aanpassingen die gebeurd zijn doorlopen het project.
 Als laatste wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
 
 Helemaal onderaan is een link naar de onderzoekspagina waar ik sommige zaken dieper heb bekeken en onderzocht.
@@ -46,7 +46,7 @@ Helemaal onderaan is een link naar de onderzoekspagina waar ik sommige zaken die
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
 STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide items duidelijk geworden.
 
-Tijdens het middelbaar en hoger onderwijs heb ik de basis mee gekregen om een ordelijke PCB op te stellen. in dit project is de zelfzekerheid en het kritisch denken over hoe en wat we waar leggen/ tekenen, verhoogt.
+Tijdens het middelbaar en hoger onderwijs heb ik de basis mee gekregen om een ordelijke PCB op te stellen. in dit project is de zelfzekerheid en het kritisch denken over hoe je het best een PCB opbouwt verhoogt.
 
 De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in dit document aangehaald. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
 
@@ -71,7 +71,7 @@ Deze sectie zal de gebruikte software bevatten en waarom we deze gebruikt hebben
 
 | Software | Versie | Argumentatie | Link |
 | -------- |: ------    | ------------  | ----      |
-| STM32CubeIDE   |  V1.4.0    |De software geschreven door ST. Hiermee is het makkelijk om de MCU te pre-configureren zonder 1 lijn code te schrijven. Zo worden alle pheripherals en GPIO gebruik automatisch gegenereerd op basis van een userinterface. Op deze manier kunnen we een clean start maken van het project zonder te veel code te schrijven voor het initialiseren van de MCU.|[link](https://www.st.com/en/development-tools/stm32cubeide.html)|
+| STM32CubeIDE   |  V1.4.0    |De software geschreven door ST. Hiermee is het makkelijk om de MCU te pre-configureren zonder 1 lijn code te schrijven. Zo worden alle pheripherals en GPIO gebruik, automatisch gegenereerd op basis van een userinterface. Op deze manier kunnen we een clean start maken van het project zonder te veel code te schrijven voor het initialiseren van de MCU.|[link](https://www.st.com/en/development-tools/stm32cubeide.html)|
 |   Visual Code   |V1.65.2   | Een "open source" editor die een groot ecosysteem heeft van plugins. Deze editor is vooral gekozen omdat ik hier ervaring mee heb. Ook omdat dit draait op Linux.|[link](https://code.visualstudio.com/)|
 | PlatformIO  IDE | Home: V3.4.1  Core: V5.2.5 | Een plugin van Visual Code om de STM32Nucleo te programmeren en hardware debugging uit te voeren.  | [link](https://platformio.org/install/ide?install=vscode)
 |Docsify|V4.4.4|Om deze documentatie te schrijven is er gebruik gemaakt van Docsify die de markdown bestanden omzet in een interactieve website. |[link](https://docsify.js.org/)|
@@ -99,9 +99,9 @@ Initieel ben ik gestart met STM32CubeIDE omdat hierbij examples geleverd waren o
 
 Nadien zag ik de mogelijkheid om met PlatformIO IDE (plugin van Visual Code) verder te werken. Het is een vertrouwde omgeving en de basis functionaliteiten zijn hetzelfde als bij STM32CubeIDE.
 
-Omdat de gegenereerde code in STM32CubeIDE wel heel handig is, heb ik het project eerst in STM32CubeIDE opgezet (configuratie I²C, GPIO, ...) en nadien de bestanden overgeplaatst naar het PlatformIO project. uiteraard heeft PLatformIO ook de nodige HAL(Hardware Abstraction Layer) bibliotheken nodig om de gegenereerde code te compileren. Later bespreken we hoe we deze installeren.
+Omdat de gegenereerde code in STM32CubeIDE wel heel handig is, heb ik het project eerst in STM32CubeIDE opgezet (configuratie I²C, GPIO, ...) en nadien de bestanden overgeplaatst naar het PlatformIO project. uiteraard heeft PlatformIO ook de nodige HAL(Hardware Abstraction Layer) bibliotheken nodig om de gegenereerde code te compileren. Later bespreken we hoe we deze installeren.
 
-Om met de ToF-sensoren aan de slag te gaan, heb ik gebruik gemaakt van het development kit [P-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/p-nucleo-53l3a2.html) die een voor-gecompileerde bibliotheek meegeleverd kreeg. Hier heb ik eerst met leren werken. Nadien ben ik overgestapt naar de *"Bare API"* en hier al de nodige extra bestanden die we moeten toevoegen om het compatibel te maken met het gebruikte platform.
+Om met de ToF-sensoren aan de slag te gaan, heb ik gebruik gemaakt van het development kit [P-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/p-nucleo-53l3a2.html) die een voor-gecompileerde bibliotheek meegeleverd kreeg. Hier heb ik eerst met leren werken. Nadien ben ik overgestapt naar de *"Bare API"* en hier al de nodige extra bestanden, die we moeten toevoegen om het compatibel te maken met het gebruikte platform, aan toe gevoegd.
 
 ----
 
@@ -256,13 +256,13 @@ Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tool
 
 ![foto opstart project 5](foto's/tutorial_Importeer_bestanden_5.jpg)
 
-1. In het popup-venster **Embedded Software packages Manager** gaan we bovenaan naar de 2de tab **STMicroelektronics** en zoeken we in de lijst naar **X-CUBE-TOF1** waar we vervolgens in de dropdown versie 1.0.0 aanvinken & versie 3.0.0 aanvinken. We installeren deze.
+1. In het popup-venster **Embedded Software packages Manager** gaan we bovenaan naar de 2de tab **STMicroelektronics** en zoeken we in de lijst naar **X-CUBE-TOF1** waar we vervolgens in de dropdown versie 1.0.0 aanvinken & versie 3.0.0 aanvinken. Installeer deze.
 
 ![foto opstart project 6](foto's/tutorial_Importeer_bestanden_6.jpg)
 
 !> men vraagt voor akkoord (of niet akkoord) te gaan met de licentie van de software. Als we niet akkoord gaan kunnen we uiteraard de software niet gebruiken. Ik ga dus akkoord.
 
-Wanneer de installatie voltooid is, zou het vinkje volledig groen moeten zijn. We sluiten het **Embedded Software packages Manager** venster.
+Wanneer de installatie voltooid is, zou het vinkje volledig groen moeten zijn. Sluiten het **Embedded Software packages Manager** venster.
 
 ![foto opstart project 7](foto's/tutorial_Importeer_bestanden_7.jpg)
 
@@ -329,15 +329,15 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
 
     ![foto declareren peripheral pinnen 23](foto's/tutorial_Importeer_bestanden_23.jpg)
 
-    Omdat we met de gesture controller niet willen wachten totdat wanneer er een master iets stuurt, zal dit over een interrupt verlopen. Hiervoor gaan we naar de tab **NVIC Settings** waar we **I2C2 event global interrupt / I2C2 wake-up interrupt trhough EXTI line 24** aanvinken.
+    Omdat we met de gesture controller niet willen wachten totdat de master iets stuurt, zal dit over een interrupt verlopen. Hiervoor gaan we naar de tab **NVIC Settings** waar we **I2C2 event global interrupt / I2C2 wake-up interrupt trhough EXTI line 24** aanvinken.
 
     ![foto declareren peripheral pinnen 24](foto's/tutorial_Importeer_bestanden_24.jpg)
 
-    De pinnen worden nu wel juist geplaatst. We moeten wel later de pinnen doorverbinden op de PCBV0.3 (zie [Hardware Opbouw](#hardware-opbouw)).
+    De pinnen worden nu wel juist geplaatst. Later worden de pinnen doorverbonden op de PCBV0.3 (zie [Hardware Opbouw](#hardware-opbouw)).
 
     ![foto declareren peripheral pinnen 25](foto's/tutorial_Importeer_bestanden_25.jpg)
 
-9. De MCU heeft al de aansluitingen gekregen die deze nodig heeft voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. 
+9. De MCU heeft al de aansluitingen gekregen die nodig zijn voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. 
 
 ![foto declareren peripheral pinnen 26](foto's/tutorial_Importeer_bestanden_26.jpg)
 
@@ -378,13 +378,13 @@ Deze bestanden moeten eveneens in de folder **BSP_vl53l3cx** geplaatst worden.
 
 In het bestand **custom_tof_conf.h** moeten we nog een lijn code toevoegen tussen **/\* USER CODE BEGIN 1 \*/** en **/\* USER CODE END 1 \*/** (lijn 34) om de gemaakte code te laten werken. 
 
-´´´ C custom_tof_conf.h
-
+``` C custom_tof_conf.h
 /* USER CODE BEGIN 1 */
 #define CUSTOM_VL53L3CX_I2C_GetTick   BSP_GetTick
 /* USER CODE END 1 */
 
-´´´
+``` 
+
 
 <!-- Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
 
@@ -632,7 +632,7 @@ Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opge
 
 </div>
 
-----s
+----
 
 # LED Controller
 

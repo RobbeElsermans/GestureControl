@@ -163,7 +163,7 @@ void Stop_Sensor(VL53L3CX_Object_t *sensor)
   VL53L3CX_Stop(sensor); // Sensor staren met meten
 }
 
-bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t *resultaat, uint8_t *isReadySens)
+bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, struct resultaat *resultaat, uint8_t *isReadySens)
 {
   VL53L3CX_Result_t tempResult;
   bool trigger = false;

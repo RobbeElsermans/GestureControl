@@ -2,7 +2,7 @@
 from csv import reader
 import matplotlib.pyplot as plt
 
-fileName = "data_2022-05-03_122826"
+fileName = "data_2022-05-10_132425"
 
 file = open("test/" + fileName + ".csv", 'r', newline='')
 
@@ -22,7 +22,6 @@ for items in data:
 
 #aanmaken x as
 x = range(len(distance))
-
 fig, ax1 = plt.subplots()
 l1, = ax1.plot(distance,label="distance",color="blue")
 ax1.set_ylabel("distance (mm)")
@@ -30,6 +29,6 @@ ax1.set_xlabel("measurement number")
 ax2 = ax1.twinx()
 l2, = ax2.plot(status,label="status",color="red")
 ax2.set_ylabel("status code")
-
+plt.title("glasplaat vuil continuous")
 plt.legend(handles=[l1, l2])
 plt.show()

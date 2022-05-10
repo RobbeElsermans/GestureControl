@@ -59,8 +59,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile bool isReady[amountSensor] = {false, false, false};
-volatile bool hasRead[amountSensor] = {false, false, false};
+volatile bool isReady[amountSensor];
+volatile bool hasRead[amountSensor];
 
 #ifdef DATACOLLECTION
 long timerDataCollection = 0;
@@ -70,7 +70,7 @@ int timerDataCollectionTimeout = 20; // aantal milliseconden per meeting
 // Aanmaken sensor definities
 //
 Sensor_Definition_t center = {XSHUT_2, 0};
-Sensor_Definition_t right = {XSHUT_1, 2};
+Sensor_Definition_t right = {XSHUT_1, 1};
 
 // Resultaat van de meetingen die de afstand, status en timestamp bevat voor amountSensorUsed aantal keer aangemaakt
 struct resultaat resultaat[amountSensorUsed];
@@ -159,64 +159,33 @@ int main(void)
 
   //De sensoren initialiseren
   Init_Sensor(&sensor[center.id], center.gpioPin);
-
   Init_Sensor(&sensor[right.id], right.gpioPin);
 
   //Als de drukknop SW_1 actief is, wordt er gekalibreerd
   if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
+  //if(true)
   {
     getCalibrate(&sensor[center.id], center.id);
-
     getCalibrate(&sensor[right.id], right.id);
 
     VL53L3CX_Result_t tempResult;
     Start_Sensor(&sensor[center.id], center.gpioPin);
-
     Start_Sensor(&sensor[right.id], right.gpioPin);
     while (1)
     {
-      // if (Sensor_Ready(&sensor[center.id], center.gpioPin, (uint8_t *)isReady))
-      // {
-      //   isReady[center.id] = false;
-      //   VL53L3CX_GetDistance(&sensor[center.id], &tempResult);
-      //   // HAL_Delay(2);
-      //   resultaat[center.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      //   resultaat[center.id].status = tempResult.ZoneResult[0].Status[0];
-      //   // HAL_Delay(2);
-      // }
-      // if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
-      // {
-      //   isReady[left.id] = false;
-      //   VL53L3CX_GetDistance(&sensor[left.id], &tempResult);
-      //   // HAL_Delay(2);
-      //   resultaat[left.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      //   resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
-      //   // HAL_Delay(2);
-      // }
-      // if (Sensor_Ready(&sensor[right.id], right.gpioPin, (uint8_t *)isReady))
-      // {
-      //   isReady[right.id] = false;
-      //   VL53L3CX_GetDistance(&sensor[right.id], &tempResult);
-      //   HAL_Delay(2);
-      //   resultaat[right.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      //   resultaat[right.id].status = tempResult.ZoneResult[0].Status[0];
-      //   HAL_Delay(2);
-      // }
-
-      getData(&sensor[center.id], &center, resultaat, (uint8_t *)isReady);
-      getData(&sensor[right.id], &right, resultaat, (uint8_t *)isReady);
+      getData(&sensor[center.id], &center, &resultaat[center.id], (uint8_t *)isReady);
+      getData(&sensor[right.id], &right, &resultaat[right.id], (uint8_t *)isReady);
       HAL_Delay(200);
       printf("center %5d, %2d,right %5d, %2d \r\n", (int)resultaat[center.id].distance, resultaat[center.id].status, (int)resultaat[right.id].distance, resultaat[right.id].status);
     }
   }
   else
   {
-    //setCalibrate(&sensor[center.id], center.id);;
-
-    //setCalibrate(&sensor[right.id], right.id);
+    setCalibrate(&sensor[center.id], center.id);;
+    setCalibrate(&sensor[right.id], right.id);
   }
 
-   Start_Sensor(&sensor[center.id], center.gpioPin);
+  Start_Sensor(&sensor[center.id], center.gpioPin);
   Start_Sensor(&sensor[right.id], right.gpioPin);
 
   /* USER CODE END 2 */
@@ -224,7 +193,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  initObjectPresent(-1, -1, -1);
+
 
   while (1)
   {
@@ -250,72 +219,18 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    prevObjectPresent = objectPresent;
-
-    /* 	Timer om leds even aan te laten
-        Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
-        Dan zetten we een timer
-        Wanneer de timer afloopt wordt het commando gereset
-      */
-    if (!timerCommandSet && commando != NONE)
-    {
-      timerCommandSet = true;
-      timerCommand = HAL_GetTick();
-      // printf("command: %2d\r\n", commando);
-    }
-    if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
-    {
-      timerCommandSet = false;
-      commando = NONE;
-    }
-    // Commando's uitsturen
-    switch (commando)
-    {
-    case NONE:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case RL:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case LR:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case UD:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case DU:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-      break;
-    case DIM:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-      break;
-
-    default:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    }
-
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 
 #ifdef DATACOLLECTION
     // DataCollection
     if (((HAL_GetTick() - timerDataCollection) > timerDataCollectionTimeout))
     {
-      printf("C%d, R%d\r\n", centerDistance, rightDistance);
+      /**
+       * center -> 1
+       * right -> 1.4
+       */
+      //printf("C%d, R%d\r\n", centerDistance, rightDistance);
+      printf("%d,%d\r\n", rightDistance, resultaat[right.id].status);
       timerDataCollection = HAL_GetTick();
     }
 #endif
