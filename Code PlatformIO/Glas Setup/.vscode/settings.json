@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "calibrationdata.h": "c",
+        "gesturedetect.h": "c"
+    }
+}
