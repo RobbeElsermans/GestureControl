@@ -31,6 +31,9 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
   - [VL53LX_SMUDGE_CORRECTION_SINGLE](#vl53lx_smudge_correction_single)
   - [VL53LX_SMUDGE_CORRECTION_CONTINUOUS](#vl53lx_smudge_correction_continuous)
 - [Smudge Detection glasplaat](#smudge-detection-glasplaat)
+- [Trap in software verwerkt](#trap-in-software-verwerkt)
+  - [Op papier](#op-papier)
+  - [Met data](#met-data)
 - [Bevindingen](#bevindingen)
 
 
@@ -670,6 +673,162 @@ Er is duidelijk te zien op de grafiek dat er van een proper coverglas gestart is
 Het is een duidelijk verschil met de plexiplaat. We gaan daarom ook een opstelling voorzien met een glazen plaat.
 
 Er is ook te zien dat wanneer we de glazen plaat gebruiken, er minder uitschieters aanwezig zijn in de metingen dan als bij de plexiplaat.
+
+# Trap in software verwerkt
+
+De genomen sensor positie (zie [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03)) is in de perfecte omstandigheden een goede keuzen om te gebruiken. hier hebben we 4 onafhankelijke statussen voor de 4 gestures die we willen detecteren.
+
+<img src="./foto's/stand_3_sensoren_5.jpg" alt="stand_3_sensoren_5" width="50%" >
+
+?> **LEGENDE** SR = sensor rechts, SC = sensor center, SL = sensor links
+
+* **RECHTS-LINKS** --> SR -> SC -> SL
+* **LINKS-RECHTS** --> SL -> SC -> SR
+* **BOVEN-ONDER**  --> SC -> SR -> SL
+* **ONDER-BOVEN**  --> SL -> SR -> SC
+
+Uiteraard zal de gesture controller zelden (of nooit) in de ideale omstandigheden komen. Daarom moet er gekeken worden naar al de mogelijke statussen die elke gesture kan hebben. Wanneer we al de mogelijke (of toch een aantal veel voorkomende) statussen hebben gevonden, moeten we kijken of dat er nergens gelijklopende statussen zijn bij verschillende gestures. Deze moeten we dan ook proberen in te perken. Na dat al de statussen identiek zijn, zal dit in code worden omgezet. 
+
+?> Wat we hier doen is eigenlijk een model creëren op de oude manier. Dit project zou ideaal zijn om met machine Learning uit te voeren.
+
+## Op papier
+
+Allereerst wordt er op papier, voor elke gesture, de states opgeschreven. Daarna bekijken we dit in data dat hieronder zal uitgebeeld worden. 
+
+Het hand dat voorbij beweegt zal op 4 manieren gebeuren. 
+
+<img src="./foto's/hand_duim.jpg" alt="hand duim links rechts" width="49%">
+<img src="./foto's/hand.jpg" alt="hand links rechts" width="49%">
+
+Hier hebben we:
+* Duim hand links
+* Duim hand rechts
+* Hand links
+* Hand rechts
+
+
+
+Bij de *duim hand* zal de duim uitgestoken worden en bij de *hand* zal de duim gelijk met de handpalm gebracht worden. De duim kan beïnvloeden welke sensor eerst iets ziet. *Links* en *Rechts* slaagt op de linker of de rechter hand.
+
+!> Wanneer we DU of UD gesture uitvoeren, kan dit zowel links als rechts van de sensor gebeuren met 1 zelfde hand.
+
+<img src="./foto's/hand_links_states.jpg" alt="hand links states" width="49%">
+<img src="./foto's/hand_rechts_states.jpg" alt="hand rechts states" width="49%">
+
+Op bovenstaande foto's zijn de states te zien wanneer we ons hand er correct (horizontaal of verticaal) ervoor bewegen met en zonder de duim. 
+
+**De mogelijke statussen**
+
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
+  <tr>
+    <th></th>
+    <th>gesture</th>
+    <th colspan="2">flow</th>
+  </tr>
+  <tr>
+    <td rowspan="4">linker hand</td>
+    <td>LR</td>
+    <td>312</td>
+    <td>321</td>
+  </tr>
+  <tr>
+    <td>RL</td>
+    <td>213</td>
+  </tr>
+  <tr>
+    <td>UD</td>
+    <td>123</td>
+    <td>132</td>
+  </tr>
+  <tr>
+    <td>DU</td>
+    <td>321</td>
+    <td>231</td>
+  </tr>
+    <tr>
+    <td rowspan="4">rechter hand</td>
+    <td>LR</td>
+    <td>312</td>
+  </tr>
+  <tr>
+    <td>RL</td>
+    <td>213</td>
+    <td>231</td>
+  </tr>
+  <tr>
+    <td>UD</td>
+    <td>123</td>
+    <td>132</td>
+  </tr>
+  <tr>
+    <td>DU</td>
+    <td>321</td>
+    <td>312</td>
+  </tr>
+
+</table>
+
+</div>
+
+Wanneer er gekeken wordt naar de states van de linker hand, zien we dat state **321** overlappend is. Dit is wanneer we de LR met duim uitvoeren en de DU zonder duim uitvoeren. 
+
+Wanneer er gekeken wordt naar de states van de rechter hand, zien we dat state **312** (Dit is wanneer we LR zonder duim uitvoeren en wanneer we DU met duim uitvoeren) & **213** (Dit is wanneer we RL zonder duim uitvoeren en wanneer we UD met duim uitvoeren) overlappend is.
+
+Dit kan misschien verholpen worden door de sensor-layout verticaal te spiegelen. 
+
+<img src="./foto's/hand_links_spiegel_states.jpg" alt="hand links spiegel states" width="49%">
+<img src="./foto's/hand_rechts_spiegel_states.jpg" alt="hand rechts spiegel states" width="49%">
+
+Wanneer we dit doen zal er bij de linkse hand weer een status overlappend zijn namelijk **213** (Dit is wanneer we LR zonder duim uitvoeren en wanneer we UD met duim uitvoeren) en **312** (Dit is wanneer we RL zonder duim uitvoeren en wanneer we DU met duim uitvoeren). Het is voor de linker hand slechter dan voorgaande opstelling.
+
+Bij de rechtse hand is dit weer overlapping namelijk **321** (Dit is wanneer we RL met duim uitvoeren en wanneer we DU zonder duim uitvoeren). Voor de rechter hand is dit dus beter dan voorgaande opstelling.
+
+Met deze gegevens kunnen we vaststellen dat we best voor de linker hand een aparte opstelling maken en voor de rechterhand idem.
+
+## Met data
+
+!> Deze metingen zijn uitgevoerd zonder coverglas en zonder enige kalibratie.
+
+<table>
+  <tr>
+    <th colspan="2"></th>
+    <th>LR</th>
+    <th>RL</th>
+    <th>UD</th>
+    <th>DU</th>
+  </tr>
+  <tr>
+    <td rowspan="2">linkse hand</td>
+    <td>zonder duim</td>
+    <td>321</td>
+    <td>312</td>
+    <td>312</td>
+    <td>312</td>
+  </tr>
+  <tr>
+    <td>met duim</td>
+    <td>321</td>
+    <td>312</td>
+    <td>312</td>
+    <td>312</td>
+  </tr>
+    <tr>
+    <td rowspan="2">rechtse hand</td>
+    <td>zonder duim</td>
+    <td>321</td>
+    <td>312</td>
+    <td>312</td>
+    <td>312</td>
+  </tr>
+  <tr>
+    <td>met duim</td>
+    <td>321</td>
+    <td>312</td>
+    <td>312</td>
+    <td>312</td>
+  </tr>
+</table>
 
 # Bevindingen
 
