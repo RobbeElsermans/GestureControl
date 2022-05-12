@@ -4,8 +4,8 @@ from csv import writer
 import serial
 
 try:
-    _1Measurement = 18
-    amountReadings = 1000
+    _1Measurement = 20
+    amountReadings = 500
     
     #instelling seriële communicatie met poort: COM6 en baudrate: 115200
     ser = serial.Serial("COM6",115200)
@@ -64,11 +64,11 @@ try:
 
     #print(testData)
     #maak de timestamp
-    timestamp = f"{date.today()}_{datetime.now().hour}{datetime.now().minute}{datetime.now().second}"
+    timestamp = f"{date.today()}{datetime.now().hour}{datetime.now().minute}{datetime.now().second}"
     ##print(timestamp)
 
     #open (maak) het bestand 
-    file = open(("logs/data_"+timestamp+ ".csv"), 'w', newline='')
+    file = open(("Software_Opstelling/"+timestamp+ ".csv"), 'w', newline='')
 
     #kopel het bestand aan de cvs schrijver
     schrijf = writer(file)

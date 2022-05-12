@@ -33,7 +33,7 @@ Het zal bepaalde onderdelen staven waarom ik de desbetreffende zaken in het proj
 - [Smudge Detection glasplaat](#smudge-detection-glasplaat)
 - [Trap in software verwerkt](#trap-in-software-verwerkt)
   - [Op papier](#op-papier)
-  - [Met data](#met-data)
+  - [Met Data](#met-data)
 - [Bevindingen](#bevindingen)
 
 
@@ -786,11 +786,12 @@ Bij de rechtse hand is dit weer overlapping namelijk **321** (Dit is wanneer we 
 
 Met deze gegevens kunnen we vaststellen dat we best voor de linker hand een aparte opstelling maken en voor de rechterhand idem.
 
-## Met data
+## Met Data
 
-!> Deze metingen zijn uitgevoerd zonder coverglas en zonder enige kalibratie.
+!> Deze metingen zijn uitgevoerd zonder coverglas en zonder enige kalibratie. De afstand is een gemiddelde over 4 metingen. De opstelling is degenen die we bij [Trap](#trap) hebben bekomen.
 
-<table>
+<div style="display:inline-block; background-color:white">
+<table style="background-color: white; color: black; display:inline;">
   <tr>
     <th colspan="2"></th>
     <th>LR</th>
@@ -801,34 +802,37 @@ Met deze gegevens kunnen we vaststellen dat we best voor de linker hand een apar
   <tr>
     <td rowspan="2">linkse hand</td>
     <td>zonder duim</td>
-    <td>321</td>
-    <td>312</td>
-    <td>312</td>
-    <td>312</td>
+    <td><img src="./foto's/LR_L_ND_N.png" alt="LEFT RIGHT LEFT NIETDUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/RL_L_ND_N.png" alt="RIGHT LEFT LEFT NIETDUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/UD_L_ND_N.png" alt="UP DOWN LEFT NIETDUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/DU_L_ND_N.png" alt="DOWN UP LEFT NIETDUIM NIETSPIEGEL" width="100%"></td>
   </tr>
   <tr>
     <td>met duim</td>
-    <td>321</td>
-    <td>312</td>
-    <td>312</td>
-    <td>312</td>
+    <td><img src="./foto's/LR_L_D_N.png" alt="LEFT RIGHT LEFT DUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/RL_L_D_N.png" alt="RIGHT LEFT LEFT DUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/UD_L_D_N.png" alt="UP DOWN LEFT DUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/DU_L_D_N.png" alt="DOWN UP LEFT DUIM NIETSPIEGEL" width="100%"></td>
   </tr>
     <tr>
     <td rowspan="2">rechtse hand</td>
     <td>zonder duim</td>
-    <td>321</td>
-    <td>312</td>
-    <td>312</td>
-    <td>312</td>
+    <td><img src="./foto's/LR_R_ND_N.png" alt="LEFT RIGHT RIGHT NIETDUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/RL_R_ND_N.png" alt="RIGHT LEFT RIGHT NIETDUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/UD_R_ND_N.png" alt="UP DOWN RIGHT NIETDUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/DU_R_ND_N.png" alt="DOWN UP RIGHT NIETDUIM NIETSPIEGEL" width="100%"></td>
   </tr>
   <tr>
     <td>met duim</td>
-    <td>321</td>
-    <td>312</td>
-    <td>312</td>
-    <td>312</td>
+    <td><img src="./foto's/LR_R_D_N.png" alt="LEFT RIGHT RIGHT DUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/RL_R_D_N.png" alt="RIGHT LEFT RIGHT DUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/UD_R_D_N.png" alt="UP DOWNRIGHT DUIM NIETSPIEGEL" width="100%"></td>
+    <td><img src="./foto's/DU_R_D_N.png" alt="DOWN UP RIGHT DUIM NIETSPIEGEL" width="100%"></td>
   </tr>
 </table>
+</div>
+
+Bij het vergelijken van de meetingen tussen een hand met duim en zonder duim, is er weinig verschil merkbaar. Enkel is het merkbaar aan de meetingen wanneer ik mijn linker of rechter hand gebruik (zie links-LR en rechts-LR naar de afvlakking naar boven).
 
 # Bevindingen
 

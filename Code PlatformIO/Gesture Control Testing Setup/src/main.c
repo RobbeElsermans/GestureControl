@@ -155,12 +155,12 @@ int main(void)
 
   CUSTOM_VL53L3CX_I2C_Init();
 
-  //De sensoren initialiseren
+  // De sensoren initialiseren
   Init_Sensor(&sensor[center.id], center.gpioPin);
   Init_Sensor(&sensor[left.id], left.gpioPin);
   Init_Sensor(&sensor[right.id], right.gpioPin);
 
-  //Als de drukknop SW_1 actief is, wordt er gekalibreerd
+  // Als de drukknop SW_1 actief is, wordt er gekalibreerd
   if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
   {
     getCalibrate(&sensor[center.id], center.id);
@@ -209,14 +209,14 @@ int main(void)
   }
   else
   {
-    setCalibrate(&sensor[center.id], center.id);;
-    setCalibrate(&sensor[left.id], left.id);
-    setCalibrate(&sensor[right.id], right.id);
+    // setCalibrate(&sensor[center.id], center.id);;
+    // setCalibrate(&sensor[left.id], left.id);
+    // setCalibrate(&sensor[right.id], right.id);
   }
 
+  Start_Sensor(&sensor[center.id], center.gpioPin);
   Start_Sensor(&sensor[left.id], left.gpioPin);
-  // Start_Sensor(&sensor[left.id], left.gpioPin);
-  // Start_Sensor(&sensor[right.id], right.gpioPin);
+  Start_Sensor(&sensor[right.id], right.gpioPin);
 
   /* USER CODE END 2 */
 
@@ -225,117 +225,30 @@ int main(void)
 
   initObjectPresent(-1, -1, -1);
 
+  int leftDistance = 0;
+  int centerDistance = 0;
+  int rightDistance = 0;
+
   while (1)
   {
     isReady[left.id] = getData(&sensor[left.id], &left, &resultaat[left.id], (uint8_t *)isReady);
     setMeanVal(left.id, resultaat[left.id].distance);
 
-    if (objectPresent)
-    {
-      isReady[center.id] = getData(&sensor[center.id], &center, &resultaat[center.id], (uint8_t *)isReady);
-      setMeanVal(center.id, resultaat[center.id].distance);
+    isReady[center.id] = getData(&sensor[center.id], &center, &resultaat[center.id], (uint8_t *)isReady);
+    setMeanVal(center.id, resultaat[center.id].distance);
 
-      isReady[right.id] = getData(&sensor[right.id], &right, &resultaat[right.id], (uint8_t *)isReady);
-      setMeanVal(right.id, resultaat[right.id].distance);
-    }
+    isReady[right.id] = getData(&sensor[right.id], &right, &resultaat[right.id], (uint8_t *)isReady);
+    setMeanVal(right.id, resultaat[right.id].distance);
 
-    objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &resultaat[left.id].distance);
-    int leftDistance = 0;
-    int centerDistance = 0;
-    int rightDistance = 0;
-    // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
-    if (commando == NONE)
-    {
-      leftDistance = getMean(left.id);
-      centerDistance = getMean(center.id);
-      rightDistance = getMean(right.id);
-      int8_t val = detectgesture(leftDistance, resultaat[left.id].status, centerDistance, resultaat[center.id].status, rightDistance, resultaat[right.id].status);
-      if (val != -1)
-        commando = val;
+    leftDistance = getMean(left.id);
+    centerDistance = getMean(center.id);
+    rightDistance = getMean(right.id);
 
-      //printf("leftDistance: %5d,centerDistance: %5d,rightDistance: %5d \r\n", leftDistance, centerDistance, rightDistance);
-    }
-
-    checkResetTimer();
 
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-    if (objectPresent && !prevObjectPresent)
-    {
-      // Opstarten van sensoren
-      Start_Sensor(&sensor[center.id], center.gpioPin);
-      Start_Sensor(&sensor[right.id], right.gpioPin);
-      // printf("Start\r\n");
-    }
-
-    if (!objectPresent && prevObjectPresent)
-    {
-      Stop_Sensor(&sensor[center.id]);
-      Stop_Sensor(&sensor[right.id]);
-      // printf("Stop\r\n");
-    }
-
-    prevObjectPresent = objectPresent;
-
-    /* 	Timer om leds even aan te laten
-        Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
-        Dan zetten we een timer
-        Wanneer de timer afloopt wordt het commando gereset
-      */
-    if (!timerCommandSet && commando != NONE)
-    {
-      timerCommandSet = true;
-      timerCommand = HAL_GetTick();
-      // printf("command: %2d\r\n", commando);
-    }
-    if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
-    {
-      timerCommandSet = false;
-      commando = NONE;
-    }
-    // Commando's uitsturen
-    switch (commando)
-    {
-    case NONE:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case RL:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case LR:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case UD:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    case DU:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-      break;
-    case DIM:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-      break;
-
-    default:
-      HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-      HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-      break;
-    }
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 
@@ -350,8 +263,8 @@ int main(void)
     // printf("%d,%d\r\n", leftDistance, resultaat[left.id].status);
     //  printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
     int8_t buf;
-    HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
-    HAL_Delay(20);
+    //HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
+    HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }

@@ -17,7 +17,7 @@
 #include "main.h"
 #include "stdbool.h"
 
-#define maxMean 8
+#define maxMean 4
 #define maxDistance 300U
 #define timerMeasurmentTimeout 1500U
 

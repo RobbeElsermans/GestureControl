@@ -30,55 +30,28 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+  /* Private includes ----------------------------------------------------------*/
+  /* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+  /* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
-#ifdef env1
+  /* Exported types ------------------------------------------------------------*/
+  /* USER CODE BEGIN ET */
 
-  typedef enum SensorDef
-  {
-    CENTER = 0,
-    LEFT = 2,
-    RIGHT = 1,
-    TOP = 2,
-    BOTTOM = 3
-  } sensorDev;
-
-#endif
-#ifdef env2
-#ifdef drie1
-
-  typedef enum SensorDef
-  {
-    CENTER = 0,
-    LEFT = 2,
-    RIGHT = 1,
-  } sensorDev;
-
-#endif
-#ifdef drie2
-
-    typedef enum SensorDev
+  typedef enum SensorDev
   {
     XSHUT_4 = 4,
     XSHUT_3 = 3,
     XSHUT_2 = 2,
     XSHUT_1 = 1,
-    XSHUT_0 = 1
+    XSHUT_0 = 0
   } sensorDev;
 
-#endif
-#endif
-
-typedef struct Sensor_Definition
-{
-  sensorDev gpioPin;
-  uint8_t id;
-} Sensor_Definition_t;
+  typedef struct Sensor_Definition
+  {
+    sensorDev gpioPin;
+    uint8_t id;
+  } Sensor_Definition_t;
 
   typedef enum commands
   {
