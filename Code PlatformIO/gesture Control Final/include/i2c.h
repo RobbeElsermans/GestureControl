@@ -28,14 +28,10 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#if defined(env1)
-extern I2C_HandleTypeDef hi2c3;
-void MX_I2C3_Init(void);
 
-#elif defined(env2)
 extern I2C_HandleTypeDef hi2c2;
 void MX_I2C2_Init(void);
-#endif
+
 
 #ifdef __cplusplus
 }

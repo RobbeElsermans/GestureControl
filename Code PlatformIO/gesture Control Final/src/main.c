@@ -59,8 +59,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile bool isReady[amountSensor] = {false, false, false};
-volatile bool hasRead[amountSensor] = {false, false, false};
+volatile bool isReady[amountSensor] = {false, false, false,false,false};
+volatile bool hasRead[amountSensor] = {false, false, false, false, false};
 
 #ifdef DATACOLLECTION
 long timerDataCollection = 0;
@@ -87,11 +87,10 @@ static float timerCommand = 0;
 static bool timerCommandSet = false;   // Start in false state
 static int timerCommandTimeout = 2000; // 2 seconden
 
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
+//Mean values
+int leftDistance = 0;
+int centerDistance = 0;
+int rightDistance = 0;
 
 /* USER CODE END PV */
 
@@ -113,6 +112,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  #pragma region initializing
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -160,6 +160,9 @@ int main(void)
   Init_Sensor(&sensor[left.id], left.gpioPin);
   Init_Sensor(&sensor[right.id], right.gpioPin);
 
+  #pragma endregion
+
+  #pragma region kalibratie
   //Als de drukknop SW_1 actief is, wordt er gekalibreerd
   if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
   {
@@ -167,7 +170,7 @@ int main(void)
     getCalibrate(&sensor[left.id], left.id);
     getCalibrate(&sensor[right.id], right.id);
 
-    VL53L3CX_Result_t tempResult;
+    //VL53L3CX_Result_t tempResult;
     Start_Sensor(&sensor[center.id], center.gpioPin);
     Start_Sensor(&sensor[left.id], left.gpioPin);
     Start_Sensor(&sensor[right.id], right.gpioPin);
@@ -214,6 +217,8 @@ int main(void)
     setCalibrate(&sensor[right.id], right.id);
   }
 
+  #pragma endregion
+
   Start_Sensor(&sensor[left.id], left.gpioPin);
   // Start_Sensor(&sensor[left.id], left.gpioPin);
   // Start_Sensor(&sensor[right.id], right.gpioPin);
@@ -225,8 +230,11 @@ int main(void)
 
   initObjectPresent(-1, -1, -1);
 
+
   while (1)
   {
+
+    #pragma region collectData
     isReady[left.id] = getData(&sensor[left.id], &left, &resultaat[left.id], (uint8_t *)isReady);
     setMeanVal(left.id, resultaat[left.id].distance);
 
@@ -239,10 +247,11 @@ int main(void)
       setMeanVal(right.id, resultaat[right.id].distance);
     }
 
+    #pragma endregion
+    
     objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &resultaat[left.id].distance);
-    int leftDistance = 0;
-    int centerDistance = 0;
-    int rightDistance = 0;
+    
+    #pragma region calcMean
     // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
     if (commando == NONE)
     {
@@ -252,9 +261,8 @@ int main(void)
       int8_t val = detectgesture(leftDistance, resultaat[left.id].status, centerDistance, resultaat[center.id].status, rightDistance, resultaat[right.id].status);
       if (val != -1)
         commando = val;
-
-      //printf("leftDistance: %5d,centerDistance: %5d,rightDistance: %5d \r\n", leftDistance, centerDistance, rightDistance);
     }
+    #pragma endregion
 
     checkResetTimer();
 
@@ -263,6 +271,8 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+
+    #pragma region start-stopSensor
     if (objectPresent && !prevObjectPresent)
     {
       // Opstarten van sensoren
@@ -280,6 +290,10 @@ int main(void)
 
     prevObjectPresent = objectPresent;
 
+    #pragma endregion
+
+
+#pragma region commando
     /* 	Timer om leds even aan te laten
         Er wordt gekeken wanneer commando veranderd wordt naar alles behalve NONE.
         Dan zetten we een timer
@@ -336,6 +350,7 @@ int main(void)
       HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
       break;
     }
+    #pragma endregion
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 
@@ -349,60 +364,17 @@ int main(void)
 #endif
     // printf("%d,%d\r\n", leftDistance, resultaat[left.id].status);
     //  printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
-    int8_t buf;
+    
+    //I2C aanzetten om iets te ontvangen in interrupt modus.
+    uint8_t buf;
     HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
-    HAL_Delay(20);
+    
+    
+    
+    HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }
-
-#ifdef env1
-
-/**
- * @brief System Clock Configuration
- * @retval None
- */
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-
-  /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_I2C1 | RCC_PERIPHCLK_I2C3;
-  PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
-  PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_SYSCLK;
-  PeriphClkInit.I2c3ClockSelection = RCC_I2C3CLKSOURCE_SYSCLK;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-
-#endif
-#ifdef env2
 
 /**
  * @brief System Clock Configuration
@@ -448,7 +420,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-#endif
 
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)

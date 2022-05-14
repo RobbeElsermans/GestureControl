@@ -50,15 +50,15 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
     printf("XTalk_kps\r\n");
     for (uint8_t j = 0; j < 6; j++)
     {
-        printf(j);
-        printf("%2d: %5d \r\n", j, callData.algo__xtalk_cpo_HistoMerge_kcps[j]);
+        printf("%2d",j);
+        printf("%2d: %5d \r\n", (int)j, (int)callData.algo__xtalk_cpo_HistoMerge_kcps[j]);
     }
     printf("\r\n");
     printf("xtalk_bin_data\r\n");
     for (uint8_t j = 0; j < 12; j++)
     {
-        printf(j);
-        printf("%2d: %5d \r\n", j, callData.xtalkhisto.xtalk_shape.bin_data[j]);
+        printf("%2d",j);
+        printf("%2d: %5d \r\n", j, (int)callData.xtalkhisto.xtalk_shape.bin_data[j]);
     }
     printf("\r\n");
     printf("zero_distance_phase: %5d\r\n", callData.xtalkhisto.xtalk_shape.zero_distance_phase);
@@ -83,7 +83,7 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
     printf("global_config__spad_enables_ref_5: %5d\r\n", callData.customer.global_config__spad_enables_ref_5);
     printf("ref_spad_man__num_requested_ref_spads: %5d\r\n", callData.customer.ref_spad_man__num_requested_ref_spads);
     printf("ref_spad_man__ref_location: %5d\r\n", callData.customer.ref_spad_man__ref_location);
-    printf("algo__crosstalk_compensation_plane_offset_kcps: %5d\r\n", callData.customer.algo__crosstalk_compensation_plane_offset_kcps);
+    printf("algo__crosstalk_compensation_plane_offset_kcps: %5d\r\n", (int)callData.customer.algo__crosstalk_compensation_plane_offset_kcps);
     printf("ref_spad_char__total_rate_target_mcps: %5d\r\n", callData.customer.ref_spad_char__total_rate_target_mcps);
     printf("mm_config__inner_offset_mm: %5d\r\n", callData.customer.mm_config__inner_offset_mm);
     printf("mm_config__outer_offset_mm: %5d\r\n", callData.customer.mm_config__outer_offset_mm);
