@@ -38,10 +38,10 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 # Inleiding
 
 Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de software omgeving op te zetten en te kunnen gebruiken.
-Ook wordt er ook een sectie voorzien over de hardware aanpassingen die gebeurd zijn doorlopen het project.
+Ook wordt er een sectie voorzien over de hardware aanpassingen die gebeurd zijn doorlopen het project.
 Als laatste wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
 
-Helemaal onderaan is een link naar de onderzoekspagina waar ik sommige zaken dieper heb bekeken en onderzocht.
+Helemaal onderaan is een link naar de onderzoekspagina waar ik sommige zaken dieper heb bekeken en onderzocht. DIt zijn zaken zoals het testen van de soorten modusen waarin de sensor kon gebruikt worden en het soort coverglas (glas of plexi).
 
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
 STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide items duidelijk geworden.
