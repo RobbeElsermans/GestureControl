@@ -362,11 +362,12 @@ int main(void)
                                     , resultaat[right.id].distance, resultaat[right.id].status);
     //  printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
     
-    //I2C aanzetten om iets te ontvangen in interrupt modus.
     uint8_t buf;
     HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
     
-    HAL_Delay(20);
+    //I2C aanzetten om iets te ontvangen in interrupt modus.
+    
+    HAL_Delay(1);
   }
   /* USER CODE END 3 */
 }
