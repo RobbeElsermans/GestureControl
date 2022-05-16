@@ -68,9 +68,11 @@ int timerDataCollectionTimeout = 20; // aantal milliseconden per meeting
 #endif
 
 // Aanmaken sensor definities
-//
-Sensor_Definition_t center = {XSHUT_2, 0};
-Sensor_Definition_t right = {XSHUT_1, 1};
+// 1 -> links
+// 2 -> center
+// 3 -> rechts
+Sensor_Definition_t center = {XSHUT_1, 0};
+Sensor_Definition_t right = {XSHUT_3, 1};
 
 // Resultaat van de meetingen die de afstand, status en timestamp bevat voor amountSensorUsed aantal keer aangemaakt
 struct resultaat resultaat[amountSensorUsed];
@@ -162,8 +164,8 @@ int main(void)
   Init_Sensor(&sensor[right.id], right.gpioPin);
 
   //Als de drukknop SW_1 actief is, wordt er gekalibreerd
-  if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
-  //if(true)
+  //if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
+  if(true)
   {
     getCalibrate(&sensor[center.id], center.id);
     getCalibrate(&sensor[right.id], right.id);

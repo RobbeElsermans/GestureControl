@@ -25,7 +25,7 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
     VL53LX_CalibrationData_t callData;
 
     printf("Calibrating sensor %2d in 10 seconds... \r\n\r\n", id);
-    for (uint8_t i = 0; i < 10; i++)
+    for (uint8_t i = 0; i < 2; i++)
     {
         HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
         HAL_Delay(1000);
@@ -40,7 +40,7 @@ void getCalibrate(VL53L3CX_Object_t *dev, uint8_t id)
     xTalkCal(dev);
     // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
     printf("offset\r\n");
-    offsetPerVcselCal(dev, 600);
+    //offsetPerVcselCal(dev, 600);
     HAL_Delay(2);
     // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
     callData = getCalibrationData(dev);
@@ -132,14 +132,14 @@ VL53LX_CalibrationData_t getCalibrationData(VL53L3CX_Object_t *dev)
 void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_CalibrationData_t *data)
 {
     int xtalk_kcps[amountSensorUsed][6] = {
-        {9964, 19847, 29730, 39613, 49496, 59382},
-        {8673, 17283, 25893, 34503, 43113, 51724},
-        {3045, 6060, 9075, 12090, 15105, 18122}};
+        {8543, 16939, 25335, 33731, 42127, 50523},
+        {7912, 15684, 23456, 31228, 39000, 46772},
+        {2742, 5456, 8170, 10884, 13598, 16314}};
 
     int xtalk_bin_data[amountSensorUsed][12] = {
-        {9, 428, 470, 117, 0, 0, 0, 0, 0, 0, 0, 0},
-        {15, 422, 471, 116, 0, 0, 0, 0, 0, 0, 0, 0},
-        {16, 418, 481, 109, 0, 0, 0, 0, 0, 0, 0, 0}};
+        {2, 423, 458, 141, 0, 0, 0, 0, 0, 0, 0, 0},
+        {20, 446, 447, 111, 0, 0, 0, 0, 0, 0, 0, 0},
+        {24, 416, 479, 105, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     switch (index)
     {
@@ -155,32 +155,32 @@ void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_Calibratio
             data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4169;
-        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10313;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4292;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10436;
         data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
         data->xtalkhisto.xtalk_shape.zone_id = 0;
         data->xtalkhisto.xtalk_shape.vcsel_width = 40;
-        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48250;
+        data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48373;
 
-        data->per_vcsel_cal_data.short_a_offset_mm = -41;
-        data->per_vcsel_cal_data.short_b_offset_mm = -36;
-        data->per_vcsel_cal_data.medium_a_offset_mm = -34;
-        data->per_vcsel_cal_data.medium_b_offset_mm = -41;
-        data->per_vcsel_cal_data.long_a_offset_mm = -32;
-        data->per_vcsel_cal_data.long_b_offset_mm = -34;
+        data->per_vcsel_cal_data.short_a_offset_mm = 0;
+        data->per_vcsel_cal_data.short_b_offset_mm = 0;
+        data->per_vcsel_cal_data.medium_a_offset_mm = 0;
+        data->per_vcsel_cal_data.medium_b_offset_mm = 0;
+        data->per_vcsel_cal_data.long_a_offset_mm = 0;
+        data->per_vcsel_cal_data.long_b_offset_mm = 0;
 
-        data->customer.global_config__spad_enables_ref_0 = 255;
-        data->customer.global_config__spad_enables_ref_1 = 239;
-        data->customer.global_config__spad_enables_ref_2 = 251;
-        data->customer.global_config__spad_enables_ref_3 = 247;
-        data->customer.global_config__spad_enables_ref_4 = 175;
-        data->customer.global_config__spad_enables_ref_5 = 14;
+        data->customer.global_config__spad_enables_ref_0 = 223;
+        data->customer.global_config__spad_enables_ref_1 = 231;
+        data->customer.global_config__spad_enables_ref_2 = 255;
+        data->customer.global_config__spad_enables_ref_3 = 255;
+        data->customer.global_config__spad_enables_ref_4 = 247;
+        data->customer.global_config__spad_enables_ref_5 = 15;
         data->customer.ref_spad_man__num_requested_ref_spads = 10;
         data->customer.ref_spad_man__ref_location = 2;
-        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 9964;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 8543;
         data->customer.ref_spad_char__total_rate_target_mcps = 2560;
-        data->customer.mm_config__inner_offset_mm = 0;
-        data->customer.mm_config__outer_offset_mm = 0;
+        data->customer.mm_config__inner_offset_mm = 24;
+        data->customer.mm_config__outer_offset_mm = 24;
 
         break;
     case 1:
@@ -195,19 +195,19 @@ void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_Calibratio
             data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4164;
-        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10308;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4135;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10279;
         data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
         data->xtalkhisto.xtalk_shape.zone_id = 0;
         data->xtalkhisto.xtalk_shape.vcsel_width = 40;
         data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48250;
 
-        data->per_vcsel_cal_data.short_a_offset_mm = -26;
-        data->per_vcsel_cal_data.short_b_offset_mm = -20;
-        data->per_vcsel_cal_data.medium_a_offset_mm = -16;
-        data->per_vcsel_cal_data.medium_b_offset_mm = -22;
-        data->per_vcsel_cal_data.long_a_offset_mm = -13;
-        data->per_vcsel_cal_data.long_b_offset_mm = -16;
+        data->per_vcsel_cal_data.short_a_offset_mm = 0;
+        data->per_vcsel_cal_data.short_b_offset_mm = 0;
+        data->per_vcsel_cal_data.medium_a_offset_mm = 0;
+        data->per_vcsel_cal_data.medium_b_offset_mm = 0;
+        data->per_vcsel_cal_data.long_a_offset_mm = 0;
+        data->per_vcsel_cal_data.long_b_offset_mm = 0;
 
         data->customer.global_config__spad_enables_ref_0 = 255;
         data->customer.global_config__spad_enables_ref_1 = 239;
@@ -217,10 +217,10 @@ void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_Calibratio
         data->customer.global_config__spad_enables_ref_5 = 14;
         data->customer.ref_spad_man__num_requested_ref_spads = 10;
         data->customer.ref_spad_man__ref_location = 2;
-        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 8673;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 7912;
         data->customer.ref_spad_char__total_rate_target_mcps = 2560;
-        data->customer.mm_config__inner_offset_mm = 0;
-        data->customer.mm_config__outer_offset_mm = 0;
+        data->customer.mm_config__inner_offset_mm = 25;
+        data->customer.mm_config__outer_offset_mm = 25;
         break;
     case 2:
         for (uint8_t i = 0; i < 6; i++)
@@ -233,32 +233,32 @@ void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_Calibratio
             data->xtalkhisto.xtalk_shape.bin_data[i] = xtalk_bin_data[index][i];
         }
 
-        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4131;
-        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10275;
+        data->xtalkhisto.xtalk_shape.zero_distance_phase = 4112;
+        data->xtalkhisto.xtalk_shape.phasecal_result__reference_phase = 10256;
         data->xtalkhisto.xtalk_shape.cal_config__vcsel_start = 9;
         data->xtalkhisto.xtalk_shape.zone_id = 0;
         data->xtalkhisto.xtalk_shape.vcsel_width = 40;
         data->xtalkhisto.xtalk_shape.VL53LX_p_015 = 48373;
 
-        data->per_vcsel_cal_data.short_a_offset_mm = -52;
-        data->per_vcsel_cal_data.short_b_offset_mm = -48;
-        data->per_vcsel_cal_data.medium_a_offset_mm = -47;
-        data->per_vcsel_cal_data.medium_b_offset_mm = -54;
-        data->per_vcsel_cal_data.long_a_offset_mm = -43;
-        data->per_vcsel_cal_data.long_b_offset_mm = -42;
+        data->per_vcsel_cal_data.short_a_offset_mm = 0;
+        data->per_vcsel_cal_data.short_b_offset_mm = 0;
+        data->per_vcsel_cal_data.medium_a_offset_mm = 0;
+        data->per_vcsel_cal_data.medium_b_offset_mm = 0;
+        data->per_vcsel_cal_data.long_a_offset_mm = 0;
+        data->per_vcsel_cal_data.long_b_offset_mm = 0;
 
         data->customer.global_config__spad_enables_ref_0 = 255;
         data->customer.global_config__spad_enables_ref_1 = 255;
         data->customer.global_config__spad_enables_ref_2 = 254;
-        data->customer.global_config__spad_enables_ref_3 = 192;
+        data->customer.global_config__spad_enables_ref_3 = 182;
         data->customer.global_config__spad_enables_ref_4 = 183;
         data->customer.global_config__spad_enables_ref_5 = 15;
         data->customer.ref_spad_man__num_requested_ref_spads = 12;
         data->customer.ref_spad_man__ref_location = 2;
-        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 3045;
+        data->customer.algo__crosstalk_compensation_plane_offset_kcps = 2742;
         data->customer.ref_spad_char__total_rate_target_mcps = 2560;
-        data->customer.mm_config__inner_offset_mm = 0;
-        data->customer.mm_config__outer_offset_mm = 0;
+        data->customer.mm_config__inner_offset_mm = 18;
+        data->customer.mm_config__outer_offset_mm = 18;
         break;
     default:
         break;

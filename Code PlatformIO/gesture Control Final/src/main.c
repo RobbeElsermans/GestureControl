@@ -59,8 +59,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile bool isReady[amountSensor] = {false, false, false,false,false};
-volatile bool hasRead[amountSensor] = {false, false, false, false, false};
+volatile uint8_t isReady[amountSensor] = {false, false, false,false,false};
+volatile uint8_t hasRead[amountSensor] = {false, false, false, false, false};
 
 #ifdef DATACOLLECTION
 long timerDataCollection = 0;
@@ -70,8 +70,8 @@ int timerDataCollectionTimeout = 20; // aantal milliseconden per meeting
 // Aanmaken sensor definities
 //
 Sensor_Definition_t center = {XSHUT_2, 0};
-Sensor_Definition_t left = {XSHUT_3, 1};
-Sensor_Definition_t right = {XSHUT_1, 2};
+Sensor_Definition_t left = {XSHUT_1, 1};
+Sensor_Definition_t right = {XSHUT_3, 2};
 
 // Resultaat van de meetingen die de afstand, status en timestamp bevat voor amountSensorUsed aantal keer aangemaakt
 struct resultaat resultaat[amountSensorUsed];
@@ -157,55 +157,34 @@ int main(void)
 
   //De sensoren initialiseren
   Init_Sensor(&sensor[center.id], center.gpioPin);
+  HAL_Delay(2);
   Init_Sensor(&sensor[left.id], left.gpioPin);
+  HAL_Delay(2);
   Init_Sensor(&sensor[right.id], right.gpioPin);
+  HAL_Delay(2);
 
   #pragma endregion
 
   #pragma region kalibratie
   //Als de drukknop SW_1 actief is, wordt er gekalibreerd
   if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
+  //if(true)
   {
     getCalibrate(&sensor[center.id], center.id);
     getCalibrate(&sensor[left.id], left.id);
     getCalibrate(&sensor[right.id], right.id);
 
-    //VL53L3CX_Result_t tempResult;
     Start_Sensor(&sensor[center.id], center.gpioPin);
     Start_Sensor(&sensor[left.id], left.gpioPin);
     Start_Sensor(&sensor[right.id], right.gpioPin);
     while (1)
     {
-      // if (Sensor_Ready(&sensor[center.id], center.gpioPin, (uint8_t *)isReady))
-      // {
-      //   isReady[center.id] = false;
-      //   VL53L3CX_GetDistance(&sensor[center.id], &tempResult);
-      //   // HAL_Delay(2);
-      //   resultaat[center.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      //   resultaat[center.id].status = tempResult.ZoneResult[0].Status[0];
-      //   // HAL_Delay(2);
-      // }
-      // if (Sensor_Ready(&sensor[left.id], left.gpioPin, (uint8_t *)isReady))
-      // {
-      //   isReady[left.id] = false;
-      //   VL53L3CX_GetDistance(&sensor[left.id], &tempResult);
-      //   // HAL_Delay(2);
-      //   resultaat[left.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      //   resultaat[left.id].status = tempResult.ZoneResult[0].Status[0];
-      //   // HAL_Delay(2);
-      // }
-      // if (Sensor_Ready(&sensor[right.id], right.gpioPin, (uint8_t *)isReady))
-      // {
-      //   isReady[right.id] = false;
-      //   VL53L3CX_GetDistance(&sensor[right.id], &tempResult);
-      //   HAL_Delay(2);
-      //   resultaat[right.id].distance = (long)tempResult.ZoneResult[0].Distance[0];
-      //   resultaat[right.id].status = tempResult.ZoneResult[0].Status[0];
-      //   HAL_Delay(2);
-      // }
       getData(&sensor[left.id], &left, resultaat, (uint8_t *)isReady);
+      HAL_Delay(1);
       getData(&sensor[center.id], &center, resultaat, (uint8_t *)isReady);
+      HAL_Delay(1);
       getData(&sensor[right.id], &right, resultaat, (uint8_t *)isReady);
+      HAL_Delay(1);
       HAL_Delay(200);
       printf("left %5d, %2d,center %5d, %2d,right %5d, %2d \r\n", (int)resultaat[left.id].distance, resultaat[left.id].status, (int)resultaat[center.id].distance, resultaat[center.id].status, (int)resultaat[right.id].distance, resultaat[right.id].status);
     }
@@ -215,6 +194,21 @@ int main(void)
     setCalibrate(&sensor[center.id], center.id);;
     setCalibrate(&sensor[left.id], left.id);
     setCalibrate(&sensor[right.id], right.id);
+
+    // Start_Sensor(&sensor[center.id], center.gpioPin);
+    // Start_Sensor(&sensor[left.id], left.gpioPin);
+    // Start_Sensor(&sensor[right.id], right.gpioPin);
+    // while (1)
+    // {
+    //   getData(&sensor[left.id], &left, resultaat, (uint8_t *)isReady);
+    //   HAL_Delay(1);
+    //   getData(&sensor[center.id], &center, resultaat, (uint8_t *)isReady);
+    //   HAL_Delay(1);
+    //   getData(&sensor[right.id], &right, resultaat, (uint8_t *)isReady);
+    //   HAL_Delay(1);
+    //   HAL_Delay(200);
+    //   printf("left %5d, %2d,center %5d, %2d,right %5d, %2d \r\n", (int)resultaat[left.id].distance, resultaat[left.id].status, (int)resultaat[center.id].distance, resultaat[center.id].status, (int)resultaat[right.id].distance, resultaat[right.id].status);
+    // }
   }
 
   #pragma endregion
@@ -235,21 +229,21 @@ int main(void)
   {
 
     #pragma region collectData
-    isReady[left.id] = getData(&sensor[left.id], &left, &resultaat[left.id], (uint8_t *)isReady);
+    isReady[left.id] = getData(&sensor[left.id], &left, resultaat, (uint8_t *)isReady);;
     setMeanVal(left.id, resultaat[left.id].distance);
 
     if (objectPresent)
     {
-      isReady[center.id] = getData(&sensor[center.id], &center, &resultaat[center.id], (uint8_t *)isReady);
+      isReady[center.id] = getData(&sensor[center.id], &center, resultaat, (uint8_t *)isReady);
       setMeanVal(center.id, resultaat[center.id].distance);
 
-      isReady[right.id] = getData(&sensor[right.id], &right, &resultaat[right.id], (uint8_t *)isReady);
+      isReady[right.id] = getData(&sensor[right.id], &right, resultaat, (uint8_t *)isReady);
       setMeanVal(right.id, resultaat[right.id].distance);
     }
 
     #pragma endregion
     
-    objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &resultaat[left.id].distance);
+    objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &leftDistance);
     
     #pragma region calcMean
     // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
@@ -369,9 +363,7 @@ int main(void)
     uint8_t buf;
     HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
     
-    
-    
-    HAL_Delay(1);
+    HAL_Delay(20);
   }
   /* USER CODE END 3 */
 }

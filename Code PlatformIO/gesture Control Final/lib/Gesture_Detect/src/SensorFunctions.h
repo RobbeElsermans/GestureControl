@@ -13,7 +13,7 @@
   * @param  isReady Een pointer value dat de waardes van de interrupt flags bevat
   * @retval uint8_t isReady: Zal 1 retourneren bij een set en 0 bij een reset van de interrupt flag
   */
-uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isReady);
+uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t* isReady);
 
 /**
   * @brief  Configureerd de sensor bij de opstart van het programma

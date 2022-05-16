@@ -43,7 +43,7 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   VL53L3CX_ProfileConfig_t Profile;
 
   Profile.RangingProfile = VL53LX_DISTANCEMODE_MEDIUM;
-  Profile.TimingBudget = 8 * 3; /* 8 ms < TimingBudget < 500 ms */
+  Profile.TimingBudget = 100; /* 8 ms < TimingBudget < 500 ms */
   Profile.Frequency = 0;        /* not necessary in simple ranging */
   Profile.EnableAmbient = 1;    /* Enable: 1, Disable: 0 */
   Profile.EnableSignal = 1;     /* Enable: 1, Disable: 0 */

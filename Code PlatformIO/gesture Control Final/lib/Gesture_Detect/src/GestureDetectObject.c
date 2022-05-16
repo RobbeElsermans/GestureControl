@@ -62,7 +62,7 @@ bool ckeckObjectPresent(Resultaat_t *Result, bool *WasObjectPresent, long *dist)
     // De afstand en zone results ophalen uit Result
     zone = Result->status;
 
-    if (((*dist <= maxDistanceObject) && zone == 0 && !*WasObjectPresent))
+    if (((*dist <= maxDistanceObject) && (zone <= 1 ||zone == 6) && !*WasObjectPresent))
     {
         if (!timerMeasurementSet)
         {

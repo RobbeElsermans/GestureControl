@@ -51,7 +51,7 @@ void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
   VL53L3CX_ConfigProfile(sensor, &Profile);
 }
 
-uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *isReady)
+uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t* isReady)
 {
   switch (index)
   {
@@ -163,7 +163,7 @@ void Stop_Sensor(VL53L3CX_Object_t *sensor)
   VL53L3CX_Stop(sensor); // Sensor staren met meten
 }
 
-bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t *resultaat, uint8_t *isReadySens)
+bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t *resultaat, uint8_t* isReadySens)
 {
   VL53L3CX_Result_t tempResult;
   bool trigger = false;
@@ -172,11 +172,13 @@ bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t
     trigger = true;
     VL53L3CX_GetDistance(sensor, &tempResult);
     // HAL_Delay(2);
-    if (tempResult.ZoneResult->Distance[0] <= 8000)
+    if (tempResult.ZoneResult->Distance[1] <= 8000)
     {
-      resultaat->distance = (long)tempResult.ZoneResult[0].Distance[0];
-      resultaat->status = tempResult.ZoneResult[0].Status[0];
-      resultaat->timestamp = HAL_GetTick();
+
+      resultaat[device->id].distance = (long)tempResult.ZoneResult[0].Distance[0];
+      resultaat[device->id].status = tempResult.ZoneResult[0].Status[0];
+      resultaat[device->id].timestamp = HAL_GetTick();
+      
     }
     // HAL_Delay(2);
   }

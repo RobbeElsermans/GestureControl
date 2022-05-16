@@ -106,7 +106,7 @@ int main()
     counter++;
 
     // I2C stuff
-    status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, 100);
+    status = HAL_I2C_Master_Transmit(&hi2c1, addrs, &counter, 1, 200);
 
     if (status == HAL_OK)
     {
