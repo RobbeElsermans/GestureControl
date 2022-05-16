@@ -172,14 +172,9 @@ bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t
     trigger = true;
     VL53L3CX_GetDistance(sensor, &tempResult);
     // HAL_Delay(2);
-    if (tempResult.ZoneResult->Distance[1] <= 8000)
-    {
-
       resultaat[device->id].distance = (long)tempResult.ZoneResult[0].Distance[0];
       resultaat[device->id].status = tempResult.ZoneResult[0].Status[0];
       resultaat[device->id].timestamp = HAL_GetTick();
-      
-    }
     // HAL_Delay(2);
   }
 

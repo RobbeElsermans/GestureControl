@@ -134,10 +134,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-#ifdef env2
+
   MX_I2C2_Init();
-#endif
+
   MX_USART1_UART_Init();
+
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, 0);
   HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, 0);
@@ -243,7 +244,7 @@ int main(void)
 
     #pragma endregion
     
-    objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &leftDistance);
+    objectPresent = ckeckObjectPresent(&resultaat[left.id], &objectPresent, &resultaat[left.id].distance);
     
     #pragma region calcMean
     // Wanneer er geen commando aanwezig is, kijken ofdat er een gesture is
@@ -352,11 +353,13 @@ int main(void)
     // DataCollection
     if (((HAL_GetTick() - timerDataCollection) > timerDataCollectionTimeout))
     {
-      printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
+      //printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
       timerDataCollection = HAL_GetTick();
     }
 #endif
-    // printf("%d,%d\r\n", leftDistance, resultaat[left.id].status);
+    printf("%d,%d\t%d,%d\t%d,%d\r\n", resultaat[left.id].distance, resultaat[left.id].status
+                                    , resultaat[center.id].distance, resultaat[center.id].status
+                                    , resultaat[right.id].distance, resultaat[right.id].status);
     //  printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
     
     //I2C aanzetten om iets te ontvangen in interrupt modus.

@@ -31,17 +31,17 @@ bool checkIndex(uint8_t id);
 commands detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus)
 {
     // DU gesture
-      if (left < maxDistance && leftStatus == 0 && !DU_center && !DU_boven && center > maxDistance && right > maxDistance)
+      if (left < maxDistance && (leftStatus == 0 || leftStatus == 7) && !DU_center && !DU_boven && center > maxDistance && right > maxDistance)
       {
         DU_onder = true;
       }
 
-      if (right < maxDistance && rightStatus == 0 && !DU_center && DU_onder && center > maxDistance)
+      if (right < maxDistance && (rightStatus == 0 || rightStatus == 7) && !DU_center && DU_onder && center > maxDistance)
       {
         DU_center = true;
       }
 
-      if (center < maxDistance && centerStatus == 0 && DU_center && DU_onder)
+      if (center < maxDistance && (centerStatus == 0 || centerStatus == 7) && DU_center && DU_onder)
       {
         DU_boven = true;
       }
