@@ -134,93 +134,14 @@ int main(void)
         switch (mainState)
         {
         case STATE_INIT:
-            // Sensoren initialiseren
-            //  center -> 0
-            sensoren[CENTER].sensorPorts.gpioi_pin = (uint16_t)GPIOI_2_Pin;
-            sensoren[CENTER].sensorPorts.gpioi_port = GPIOI_2_GPIO_Port;
-            sensoren[CENTER].sensorPorts.xshut_pin = XSHUT_2_Pin;
-            sensoren[CENTER].sensorPorts.xshut_port = XSHUT_2_GPIO_Port;
-            sensoren[CENTER].id = CENTER;
 
-            // left -> 1
-            sensoren[LEFT].sensorPorts.gpioi_pin = GPIOI_1_Pin;
-            sensoren[LEFT].sensorPorts.gpioi_port = GPIOI_1_GPIO_Port;
-            sensoren[LEFT].sensorPorts.xshut_pin = XSHUT_1_Pin;
-            sensoren[LEFT].sensorPorts.xshut_port = XSHUT_1_GPIO_Port;
-            sensoren[LEFT].id = LEFT;
-
-            // right -> 2
-            sensoren[RIGHT].sensorPorts.gpioi_pin = GPIOI_3_Pin;
-            sensoren[RIGHT].sensorPorts.gpioi_port = GPIOI_3_GPIO_Port;
-            sensoren[RIGHT].sensorPorts.xshut_pin = XSHUT_3_Pin;
-            sensoren[RIGHT].sensorPorts.xshut_port = XSHUT_3_GPIO_Port;
-            sensoren[RIGHT].id = RIGHT;
-
-            HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, 0);
-            HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, 0);
-            HAL_GPIO_WritePin(XSHUT_2_GPIO_Port, XSHUT_2_Pin, 0);
-            HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, 0);
-            HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, 0);
-
-            HAL_Delay(20);
-
-            CUSTOM_VL53L3CX_I2C_Init();
-
-            // De sensoren initialiseren
-            Init_Sensor(&sensoren[CENTER]);
-            HAL_Delay(2);
-            Init_Sensor(&sensoren[LEFT]);
-            HAL_Delay(2);
-            Init_Sensor(&sensoren[RIGHT]);
-            HAL_Delay(2);
+            performInit();
 
             mainState = STATE_CALIBRATE;
             break;
         case STATE_CALIBRATE:
-            // Als de drukknop SW_1 actief is, wordt er gekalibreerd
-            if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
-            // if(true)
-            {
-                getCalibrate(&sensoren[CENTER]);
-                getCalibrate(&sensoren[LEFT]);
-                getCalibrate(&sensoren[RIGHT]);
 
-                Start_Sensor(&sensoren[CENTER]);
-                Start_Sensor(&sensoren[LEFT]);
-                Start_Sensor(&sensoren[RIGHT]);
-                while (1)
-                {
-                    getData(&sensoren[CENTER]);
-                    HAL_Delay(1);
-                    getData(&sensoren[LEFT]);
-                    HAL_Delay(1);
-                    getData(&sensoren[RIGHT]);
-                    HAL_Delay(1);
-                    HAL_Delay(200);
-                    printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-                }
-            }
-            else
-            {
-                setCalibrate(&sensoren[CENTER]);
-                setCalibrate(&sensoren[LEFT]);
-                setCalibrate(&sensoren[RIGHT]);
-
-                // Start_Sensor(&sensoren[CENTER]);
-                // Start_Sensor(&sensoren[LEFT]);
-                // Start_Sensor(&sensoren[RIGHT]);
-                // while (1)
-                // {
-                //   getData(&sensoren[CENTER]);
-                //   HAL_Delay(1);
-                //   getData(&sensoren[LEFT]);
-                //   HAL_Delay(1);
-                //   getData(&sensoren[RIGHT]);
-                //   HAL_Delay(1);
-                //   HAL_Delay(200);
-                //   printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-                // }
-            }
+            performCalibration();
 
             mainState = STATE_START;
             break;
@@ -236,19 +157,12 @@ int main(void)
             switch (gestureControlState)
             {
             case STATE_GC_SAMPLE:
-                sensoren[LEFT].isReady = getData(&sensoren[LEFT]);
-                setMeanVal(&sensoren[LEFT]);
-                sensoren[LEFT].resultaat.meanDistance = getMean(sensoren[LEFT].id);
+                handleData(LEFT);
 
                 if (objectPresent)
                 {
-                    sensoren[CENTER].isReady = getData(&sensoren[CENTER]);
-                    setMeanVal(&sensoren[CENTER]);
-                    sensoren[CENTER].resultaat.meanDistance = getMean(sensoren[CENTER].id);
-
-                    sensoren[RIGHT].isReady = getData(&sensoren[RIGHT]);
-                    setMeanVal(&sensoren[RIGHT]);
-                    sensoren[RIGHT].resultaat.meanDistance = getMean(sensoren[RIGHT].id);
+                    handleData(CENTER);
+                    handleData(RIGHT);
                 }
 
                 gestureControlState = STATE_GC_OBJECT;
@@ -307,61 +221,9 @@ int main(void)
 
             checkResetTimerGesture();
 
-            // Commando resetten
-            if (!timerCommandSet && commando != NONE)
-            {
-                timerCommandSet = true;
-                timerCommand = HAL_GetTick();
-                // printf("command: %2d\r\n", commando);
-            }
-            if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
-            {
-                timerCommandSet = false;
-                commando = NONE;
-            }
+            handleCommandTimer();
             // Commando's uitsturen
-            switch (commando)
-            {
-            case NONE:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-                break;
-            case RL:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-                break;
-            case LR:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-                break;
-            case UD:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-                break;
-            case DU:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-                break;
-            case DIM:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
-                break;
-
-            default:
-                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
-                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
-                break;
-            }
-
-            HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
-            HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
+            handleLed();
 
 #ifdef DATACOLLECTION
             // DataCollection
@@ -372,9 +234,9 @@ int main(void)
             }
 #endif
 
-            //printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+            // printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
             printf("L%d, C%d, R%d\r\n", sensoren[LEFT].resultaat.meanDistance, sensoren[CENTER].resultaat.meanDistance, sensoren[RIGHT].resultaat.meanDistance);
-            //printf("%2d\r\n", commando);
+            // printf("%2d\r\n", commando);
 
             uint8_t buf;
             HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
@@ -474,6 +336,163 @@ int _write(int file, char *data, int len)
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     HAL_I2C_Slave_Transmit(&hi2c2, (uint8_t *)commando, sizeof(commando), 50);
+}
+
+void performInit()
+{
+    sensoren[CENTER].sensorPorts.gpioi_pin = (uint16_t)GPIOI_2_Pin;
+    sensoren[CENTER].sensorPorts.gpioi_port = GPIOI_2_GPIO_Port;
+    sensoren[CENTER].sensorPorts.xshut_pin = XSHUT_2_Pin;
+    sensoren[CENTER].sensorPorts.xshut_port = XSHUT_2_GPIO_Port;
+    sensoren[CENTER].id = CENTER;
+
+    // left -> 1
+    sensoren[LEFT].sensorPorts.gpioi_pin = GPIOI_1_Pin;
+    sensoren[LEFT].sensorPorts.gpioi_port = GPIOI_1_GPIO_Port;
+    sensoren[LEFT].sensorPorts.xshut_pin = XSHUT_1_Pin;
+    sensoren[LEFT].sensorPorts.xshut_port = XSHUT_1_GPIO_Port;
+    sensoren[LEFT].id = LEFT;
+
+    // right -> 2
+    sensoren[RIGHT].sensorPorts.gpioi_pin = GPIOI_3_Pin;
+    sensoren[RIGHT].sensorPorts.gpioi_port = GPIOI_3_GPIO_Port;
+    sensoren[RIGHT].sensorPorts.xshut_pin = XSHUT_3_Pin;
+    sensoren[RIGHT].sensorPorts.xshut_port = XSHUT_3_GPIO_Port;
+    sensoren[RIGHT].id = RIGHT;
+
+    HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, 0);
+    HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, 0);
+    HAL_GPIO_WritePin(XSHUT_2_GPIO_Port, XSHUT_2_Pin, 0);
+    HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, 0);
+    HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, 0);
+
+    HAL_Delay(20);
+
+    CUSTOM_VL53L3CX_I2C_Init();
+
+    // De sensoren initialiseren
+    Init_Sensor(&sensoren[CENTER]);
+    HAL_Delay(2);
+    Init_Sensor(&sensoren[LEFT]);
+    HAL_Delay(2);
+    Init_Sensor(&sensoren[RIGHT]);
+    HAL_Delay(2);
+}
+
+void performCalibration()
+{
+    // Als de drukknop SW_1 actief is, wordt er gekalibreerd
+    if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
+    // if(true)
+    {
+        getCalibrate(&sensoren[CENTER]);
+        getCalibrate(&sensoren[LEFT]);
+        getCalibrate(&sensoren[RIGHT]);
+
+        Start_Sensor(&sensoren[CENTER]);
+        Start_Sensor(&sensoren[LEFT]);
+        Start_Sensor(&sensoren[RIGHT]);
+        while (1)
+        {
+            getData(&sensoren[CENTER]);
+            HAL_Delay(1);
+            getData(&sensoren[LEFT]);
+            HAL_Delay(1);
+            getData(&sensoren[RIGHT]);
+            HAL_Delay(1);
+            HAL_Delay(200);
+            printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+        }
+    }
+    else
+    {
+        setCalibrate(&sensoren[CENTER]);
+        setCalibrate(&sensoren[LEFT]);
+        setCalibrate(&sensoren[RIGHT]);
+
+        // Start_Sensor(&sensoren[CENTER]);
+        // Start_Sensor(&sensoren[LEFT]);
+        // Start_Sensor(&sensoren[RIGHT]);
+        // while (1)
+        // {
+        //   getData(&sensoren[CENTER]);
+        //   HAL_Delay(1);
+        //   getData(&sensoren[LEFT]);
+        //   HAL_Delay(1);
+        //   getData(&sensoren[RIGHT]);
+        //   HAL_Delay(1);
+        //   HAL_Delay(200);
+        //   printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+        // }
+    }
+}
+
+void handleData(uint8_t id)
+{
+    sensoren[id].isReady = getData(&sensoren[id]);
+    setMeanVal(&sensoren[id]);
+    sensoren[id].resultaat.meanDistance = getMean(sensoren[id].id);
+}
+
+void handleCommandTimer()
+{
+    // Commando resetten
+    if (!timerCommandSet && commando != NONE)
+    {
+        timerCommandSet = true;
+        timerCommand = HAL_GetTick();
+        // printf("command: %2d\r\n", commando);
+    }
+    if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
+    {
+        timerCommandSet = false;
+        commando = NONE;
+    }
+}
+
+void handleLed(){
+ switch (commando)
+            {
+            case NONE:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+                break;
+            case RL:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+                break;
+            case LR:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+                break;
+            case UD:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+                break;
+            case DU:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
+                break;
+            case DIM:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_SET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_SET);
+                break;
+
+            default:
+                HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_RESET);
+                HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
+                break;
+            }
+            
+             HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
+            HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 }
 /* USER CODE END 4 */
 
