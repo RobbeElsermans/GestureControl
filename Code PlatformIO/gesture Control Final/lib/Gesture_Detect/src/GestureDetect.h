@@ -24,21 +24,14 @@
 
 /**
   * @brief  Detecteert een gesture 
-  * @param  left De afstandsmeeting van de linkse (onderste) sensor
-  * @param  leftStatus De status (foutcode) van de linkse (onderste) sensor
-  * @param  center De afstandsmeeting van de middelste (bovenste) sensor
-  * @param  centerStatus De status (foutcode) van de middelste (bovenste) sensor
-  * @param  right De afstandsmeeting van de rechtse (middelste) sensor
-  * @param  rightStatus De status (foutcode) van de rechtse (middelste) sensor
+  * @param  sensoren de pointer naar de sensor objecten
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval het commando of -1 bij geen commando
   */
-commands_t detectgesture_oud(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus);
 commands_t detectgesture(sensorData_t* sensoren);
 
 /**
-  * @brief  Bekijkt en (re)set de timer van de commando waarde
-  * @note   timerMeasurmentTimeout zal de timeout
+  * @brief  Bekijkt en (re)set de timer van de flags
   * @retval void
   */
 void checkResetTimerGesture();
@@ -69,8 +62,7 @@ int * getMeans(uint8_t id);
 
 /**
   * @brief  Het opslaan van de raw afstands waardes
-  * @param  id het id van de sensor
-  * @param  distance de raw afstandsmeeting van de sensor
+  * @param  sensor de pointer naar de sensor objecten
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval void
   */

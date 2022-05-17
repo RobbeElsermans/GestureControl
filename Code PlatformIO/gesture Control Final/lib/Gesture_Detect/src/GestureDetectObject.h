@@ -50,31 +50,6 @@ uint16_t get_timerTimeout();
 bool set_timerTimeout(uint16_t *time);
 
 /**
-  * @brief  gets maximaal aantal opslag voor voorgaande waardes
-  * @note   Standaard is dit 10 plaatsen
-  * @retval Geen
-  */
-uint16_t get_maxPrevDistances();
-
-/**
-  * @brief  sets maximaal aantal items voor de buffer
-  * @param  max pointer is de maximale opslag capaciteit van de buffer
-  * @note   Standaard is dit 10 plaatsen
-  * @retval bool dat set is geslaagd of niet
-  */
-bool set_maxPrevDistances(uint16_t *max);
-
-/**
-  * @brief  Initialiseer Object Detect 
-  * 
-  * @param  _maxDistance pointer is de maximale afstand dat een object mag zijn om gedetecteerd te worden in millimeter. -1 is default (1000)
-  * @param  _timerTimeout pointer is de timeout tijd in milliseconden. -1 is default (2000)
-  * @param  _maxPrevDistances pointer is de maximale opslag capaciteit van de buffer. -1 is default (10)
-  * @retval bool success Init
-  */
-bool initObjectPresent(int _maxDistance, int _timerTimeout, int _maxPrevDistances);
-
-/**
   * @brief  Detecteerd een object
   * 
   * @param  Result pointer bevat de afstand van de desbetreffende sensor waarmee we 

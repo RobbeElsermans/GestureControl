@@ -59,17 +59,20 @@
 
 /* USER CODE BEGIN PV */
 
-// Main states
+uint8_t buf;
 
-mainStates_t mainState = STATE_INIT;
-gestureControlStates_t gestureControlState = STATE_GC_SAMPLE;
+// Main states
+static mainStates_t mainState = STATE_INIT;
+
+// gesture Control states
+static gestureControlStates_t gestureControlState = STATE_GC_SAMPLE;
 
 // Sensor define
 static sensorData_t sensoren[AMOUNT_SENSOR_USED];
 
 #ifdef DATACOLLECTION
-long timerDataCollection = 0;
-int timerDataCollectionTimeout = 20; // aantal milliseconden per meeting
+static long timerDataCollection = 0;
+#define TIMER_DATA_COLLECTION_TIMEOUT 20 // aantal milliseconden per meeting
 #endif
 
 bool objectPresent = false;
@@ -78,10 +81,10 @@ bool prevObjectPresent = false;
 // Commando enum waarmee we de commando's opslaan
 commands_t commando = NONE;
 
-// Timer die het commando voor timerCommandTimeout seconden aanhoud
+// Timer die het commando voor TIMER_COMMAND_TIMEOUT seconden aanhoud
 static float timerCommand = 0;
 static bool timerCommandSet = false;   // Start in false state
-static int timerCommandTimeout = 2000; // 2 seconden
+#define TIMER_COMMAND_TIMEOUT 2000 // 2 seconden
 
 /* USER CODE END PV */
 
@@ -230,20 +233,20 @@ int main(void)
 
 #ifdef DATACOLLECTION
             // DataCollection
-            if (((HAL_GetTick() - timerDataCollection) > timerDataCollectionTimeout))
+            if (((HAL_GetTick() - timerDataCollection) > TIMER_DATA_COLLECTION_TIMEOUT))
             {
                 // printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
                 timerDataCollection = HAL_GetTick();
                 // printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-                printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
-                // printf("%2d\r\n", commando);
+                //printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
+                printf("%2d\r\n", buf);
             }
 #endif
 
-            uint8_t buf;
+            //uint8_t buf;
             HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
             // I2C aanzetten om iets te ontvangen in interrupt modus.
-
+            
             /* code */
             break;
         case STATE_STOP:
@@ -335,7 +338,8 @@ int _write(int file, char *data, int len)
 
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-    HAL_I2C_Slave_Transmit(&hi2c2, (uint8_t *)commando, sizeof(commando), 50);
+    //HAL_I2C_Slave_Transmit_IT(&hi2c2, (uint8_t *)commando, sizeof(commando));
+    HAL_I2C_Slave_Transmit_IT(&hi2c2, (uint8_t *)&commando, sizeof(commando));
 }
 
 void performInit()
@@ -443,7 +447,7 @@ void handleCommandTimer()
         timerCommand = HAL_GetTick();
         // printf("command: %2d\r\n", commando);
     }
-    if ((HAL_GetTick() - timerCommand) >= timerCommandTimeout)
+    if ((HAL_GetTick() - timerCommand) >= TIMER_COMMAND_TIMEOUT)
     {
         timerCommandSet = false;
         commando = NONE;
