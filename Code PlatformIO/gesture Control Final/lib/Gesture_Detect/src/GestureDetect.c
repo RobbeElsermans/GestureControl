@@ -30,12 +30,12 @@ bool checkIndex(uint8_t id);
 
 commands_t detectgesture(sensorData_t* sensoren)
 {
-  long left = sensoren[LEFT].resultaat.distance;
-  //long left = sensoren[LEFT].resultaat.meanDistance;
-  long right = sensoren[RIGHT].resultaat.distance;
-  //long right = sensoren[RIGHT].resultaat.meanDistance;
-  long center = sensoren[CENTER].resultaat.distance;
-  //long center = sensoren[CENTER].resultaat.meanDistance;
+  //long left = sensoren[LEFT].resultaat.distance;
+  long left = sensoren[LEFT].resultaat.meanDistance;
+  //long right = sensoren[RIGHT].resultaat.distance;
+  long right = sensoren[RIGHT].resultaat.meanDistance;
+  //long center = sensoren[CENTER].resultaat.distance;
+  long center = sensoren[CENTER].resultaat.meanDistance;
   uint8_t leftStatus = sensoren[LEFT].resultaat.status;
   uint8_t rightStatus = sensoren[RIGHT].resultaat.status;
   uint8_t centerStatus = sensoren[CENTER].resultaat.status;
@@ -126,7 +126,7 @@ commands_t detectgesture(sensorData_t* sensoren)
       return -1;
 }
 
-void checkResetTimer()
+void checkResetTimerGesture()
 {
       // reset gesture flags
     if (!timerMeasurementSet)

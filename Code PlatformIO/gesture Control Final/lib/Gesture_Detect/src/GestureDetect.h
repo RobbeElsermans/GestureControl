@@ -41,7 +41,7 @@ commands_t detectgesture(sensorData_t* sensoren);
   * @note   timerMeasurmentTimeout zal de timeout
   * @retval void
   */
-void checkResetTimer();
+void checkResetTimerGesture();
 
 /**
   * @brief  berekend het gemiddelde a.d.h.v. het gegeven id (sensor) en geeft dit terug

@@ -83,6 +83,29 @@ extern "C"
 #define LEFT 1
 #define RIGHT 2
 #define CENTER 0
+
+    /**
+   * @brief Enum die de statussen van de main loop onder handen neemt
+   */
+  typedef enum{
+    STATE_INIT,
+    STATE_CALIBRATE,
+    STATE_START,
+    STATE_GESTURE_CONTROL,
+    STATE_STOP
+  } mainStates_t;
+
+    /**
+   * @brief Enum die de statussen van de STATE_GESTURE_CONTROL loop onder handen neemt
+   */
+  typedef enum{
+    STATE_GC_SAMPLE,
+    STATE_GC_OBJECT,
+    STATE_GC_START,
+    STATE_GC_DETECT,
+    STATE_GC_STOP
+  } gestureControlStates_t;
+
     /**
    * @brief Enum die de XSHUT en GPIOI pin bevat. Dit maakt de code duidelijker
    */
