@@ -32,64 +32,12 @@ extern "C"
 
   /* Private includes ----------------------------------------------------------*/
   /* USER CODE BEGIN Includes */
-
+#include "stdbool.h"
+#include "vl53l3cx.h"
   /* USER CODE END Includes */
 
   /* Exported types ------------------------------------------------------------*/
   /* USER CODE BEGIN ET */
-
-  typedef enum SensorDev
-  {
-    XSHUT_4 = 4,
-    XSHUT_3 = 3,
-    XSHUT_2 = 2,
-    XSHUT_1 = 1,
-    XSHUT_0 = 0
-  } sensorDev;
-
-  typedef struct Sensor_Definition
-  {
-    sensorDev gpioPin;
-    uint8_t id;
-  } Sensor_Definition_t;
-
-  typedef enum commands
-  {
-    DIM = 0x25,
-    RL = 0x22,
-    LR = 0x21,
-    UD = 0x23,
-    DU = 0x24,
-    NONE = 0x10
-  } commands;
-
-  typedef struct resultaat
-  {
-    long distance;
-    int8_t status;
-    long timestamp;
-  } Resultaat_t;
-  /* USER CODE END ET */
-
-  /* Exported constants --------------------------------------------------------*/
-  /* USER CODE BEGIN EC */
-#define AMOUNT_SENSOR 5
-#define AMOUNT_SENSOR_USED 3
-  /* USER CODE END EC */
-
-  /* Exported macro ------------------------------------------------------------*/
-  /* USER CODE BEGIN EM */
-
-  /* USER CODE END EM */
-
-  /* Exported functions prototypes ---------------------------------------------*/
-  void Error_Handler(void);
-
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
 #define ENABLE_5V_Pin GPIO_PIN_13
 #define ENABLE_5V_GPIO_Port GPIOC
 #define XSHUT_0_Pin GPIO_PIN_0
@@ -131,6 +79,109 @@ extern "C"
 #define GPIOI_4_Pin GPIO_PIN_6
 #define GPIOI_4_GPIO_Port GPIOC
 #define GPIOI_4_EXTI_IRQn EXTI9_5_IRQn
+    /**
+   * @brief Enum die de XSHUT en GPIOI pin bevat. Dit maakt de code duidelijker
+   */
+  typedef enum{
+    XSHUT_4 = 4,
+    XSHUT_3 = 3,
+    XSHUT_2 = 2,
+    XSHUT_1 = 1,
+    XSHUT_0 = 0
+  } sensorDev_t;
+
+  /**
+   * @brief Struct die de sensor pinout bijhoud
+   * @param xshut_port De poort waarop de xshut pin staat
+   * @param xshut_pin De pin nummer waarop de xshut pin staat
+   * @param gpioi_port De poort waarop de gpioi pin staat
+   * @param gpioi_pin De pin nummer waarop de xshut pin staat
+   */
+  typedef struct{
+    uint8_t xshut_port;
+    uint8_t xshut_pin;
+    uint8_t gpioi_port;
+    uint8_t gpioi_pin;
+  } senorPorts_t;
+
+    /**
+   * @brief Struct die plaats en id van de sensor bijhoud 
+   * @param gpioPin zal de XSHUT en GPIOI locatie definiëren
+   * @param id Zal de nummer zijn van de sensor. Dit staat los van de gpioPin
+   */
+  typedef struct
+  {
+    sensorDev_t gpioPin;
+    uint8_t id;
+  } sensorDefinition_t;
+
+  /**
+   * @brief Struct die de meet waardes bijhoud
+   * @param distance zal de ruwe afstand bewaren
+   * @param status zal de ruwe status code bewaren
+   * @param meanDistance zal een gemiddelde bijhouden van de afstand 
+   * @param timestamp het tijdstip waarop de meeting is genomen
+   */
+  typedef struct
+  {
+    long distance;
+    int8_t status;
+    long meanDistance;
+    long timestamp;
+  } resultaat_t;
+
+  /**
+   * @brief Struct die al de sensor gegevens bijhoud
+   * @param isReady De interrupt flag die op true zal staan bij een interrupt
+   * @param hasRead De 1ste meeting overslaan bool
+   * @param resultaat Struct die de meet waardes bijhoud
+   * @param sensorPorts Struct die de sensor pinout bijhoud
+   * @param sensor Struct die het sensor object bevat
+   */
+  typedef struct
+  {
+    volatile bool isReady;
+    volatile bool hasRead;
+    resultaat_t resultaat;
+    senorPorts_t sensorPorts;
+    VL53L3CX_Object_t sensor;
+  } sensorData_t;
+
+    /**
+   * @brief Enum die de mogelijke commando's bevat 
+   */
+  typedef enum
+  {
+    DIM = 0x25,
+    RL = 0x22,
+    LR = 0x21,
+    UD = 0x23,
+    DU = 0x24,
+    NONE = 0x10
+  } commands_t;
+
+  /* USER CODE END ET */
+
+  /* Exported constants --------------------------------------------------------*/
+  /* USER CODE BEGIN EC */
+#define AMOUNT_SENSOR 5
+#define AMOUNT_SENSOR_USED 3
+  /* USER CODE END EC */
+
+  /* Exported macro ------------------------------------------------------------*/
+  /* USER CODE BEGIN EM */
+
+  /* USER CODE END EM */
+
+  /* Exported functions prototypes ---------------------------------------------*/
+  void Error_Handler(void);
+
+/* USER CODE BEGIN EFP */
+
+/* USER CODE END EFP */
+
+/* Private defines -----------------------------------------------------------*/
+
   /* USER CODE BEGIN Private defines */
 
   /* USER CODE END Private defines */

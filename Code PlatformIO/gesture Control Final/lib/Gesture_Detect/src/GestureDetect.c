@@ -28,7 +28,7 @@ int16_t tempMean = 0;
 
 bool checkIndex(uint8_t id);
 
-commands detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus)
+commands_t detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus)
 {
     // DU gesture
       if (left < MAX_DISTANCE && (leftStatus == 0 || leftStatus == 7) && !DU_center && !DU_boven && center > MAX_DISTANCE && right > MAX_DISTANCE)

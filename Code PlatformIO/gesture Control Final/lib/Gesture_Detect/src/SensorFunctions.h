@@ -42,6 +42,6 @@ void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index);
   */
 void Stop_Sensor(VL53L3CX_Object_t *sensor);
 
-bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t* device, Resultaat_t* resultaat, uint8_t* isReadySens);
+bool getData(VL53L3CX_Object_t *sensor, sensorDefinition_t* device, resultaat_t* resultaat, uint8_t* isReadySens);
 
 #endif

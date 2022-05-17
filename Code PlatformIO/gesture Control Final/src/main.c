@@ -46,7 +46,9 @@
 // Toggle for data collection
 #define DATACOLLECTION
 
-// Toggle voor calibrate
+#define LEFT 1
+#define RIGHT 2
+#define CENTER 0
 //#define CALIBRATE
 
 /* USER CODE END PD */
@@ -59,6 +61,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+//Sensor define
+static sensorData_t sensoren[AMOUNT_SENSOR_USED];
+
 volatile uint8_t isReady[AMOUNT_SENSOR] = {false, false, false,false,false};
 volatile uint8_t hasRead[AMOUNT_SENSOR] = {false, false, false, false, false};
 
@@ -69,18 +75,18 @@ int timerDataCollectionTimeout = 20; // aantal milliseconden per meeting
 
 // Aanmaken sensor definities
 //
-Sensor_Definition_t center = {XSHUT_2, 0};
-Sensor_Definition_t left = {XSHUT_1, 1};
-Sensor_Definition_t right = {XSHUT_3, 2};
+sensorDefinition_t center = {XSHUT_2, 0};
+sensorDefinition_t left = {XSHUT_1, 1};
+sensorDefinition_t right = {XSHUT_3, 2};
 
 // Resultaat van de meetingen die de afstand, status en timestamp bevat voor amountSensorUsed aantal keer aangemaakt
-struct resultaat resultaat[AMOUNT_SENSOR_USED];
+resultaat_t resultaat[AMOUNT_SENSOR_USED];
 
 bool objectPresent = false;
 bool prevObjectPresent = false;
 
 // Commando enum waarmee we de commando's opslaan
-commands commando = NONE;
+commands_t commando = NONE;
 
 // Timer die het commando voor timerCommandTimeout seconden aanhoud
 static float timerCommand = 0;
@@ -129,7 +135,27 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
   // Define de sensor objecten amountSensorUsed keer.
-  VL53L3CX_Object_t sensor[AMOUNT_SENSOR_USED];
+  //VL53L3CX_Object_t sensor[AMOUNT_SENSOR_USED];
+
+  //Sensoren initialiseren
+  // center -> 0
+  sensoren[CENTER].sensorPorts.gpioi_pin = GPIOI_2_Pin;
+  sensoren[CENTER].sensorPorts.gpioi_port = GPIOI_2_GPIO_Port;
+  sensoren[CENTER].sensorPorts.xshut_pin = XSHUT_2_Pin;
+  sensoren[CENTER].sensorPorts.xshut_port = XSHUT_2_GPIO_Port;
+
+  // left -> 1
+  sensoren[LEFT].sensorPorts.gpioi_pin = GPIOI_1_Pin;
+  sensoren[LEFT].sensorPorts.gpioi_port = GPIOI_1_GPIO_Port;
+  sensoren[LEFT].sensorPorts.xshut_pin = XSHUT_1_Pin;
+  sensoren[LEFT].sensorPorts.xshut_port = XSHUT_1_GPIO_Port;
+
+  // right -> 2
+  sensoren[RIGHT].sensorPorts.gpioi_pin = GPIOI_3_Pin;
+  sensoren[RIGHT].sensorPorts.gpioi_port = GPIOI_3_GPIO_Port;
+  sensoren[RIGHT].sensorPorts.xshut_pin = XSHUT_3_Pin;
+  sensoren[RIGHT].sensorPorts.xshut_port = XSHUT_3_GPIO_Port;
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -147,12 +173,6 @@ int main(void)
   HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, 0);
 
   HAL_Delay(20);
-
-  // Omdat we in RAM de objecten aanmaken (en niet initializeren) gaat er random waardes insteken.
-  // Isinitialized moet 0 zijn om verder te kunnen.
-  sensor[left.id].IsInitialized = 0;
-  sensor[center.id].IsInitialized = 0;
-  sensor[right.id].IsInitialized = 0;
 
   CUSTOM_VL53L3CX_I2C_Init();
 
@@ -348,7 +368,7 @@ int main(void)
     #pragma endregion
 
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
-
+  
 #ifdef DATACOLLECTION
     // DataCollection
     if (((HAL_GetTick() - timerDataCollection) > timerDataCollectionTimeout))

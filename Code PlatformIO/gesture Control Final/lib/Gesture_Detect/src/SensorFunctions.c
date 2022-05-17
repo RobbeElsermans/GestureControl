@@ -5,7 +5,11 @@ void Wait_For_GPIOI(VL53L3CX_Object_t *sensor, sensorDev index);
 
 void Config_Sensor(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t *address)
 {
+  // Omdat we in RAM de objecten aanmaken (en niet initialiseren) gaat er random waardes insteken.
+  // Isinitialized moet 0 zijn om verder te kunnen.
   sensor->IsInitialized = 0;
+
+  
   sensor->IO.DeInit = CUSTOM_VL53L3CX_I2C_DeInit;
   sensor->IO.Init = CUSTOM_VL53L3CX_I2C_Init;
   sensor->IO.ReadReg = CUSTOM_VL53L3CX_I2C_ReadReg;
@@ -163,7 +167,7 @@ void Stop_Sensor(VL53L3CX_Object_t *sensor)
   VL53L3CX_Stop(sensor); // Sensor staren met meten
 }
 
-bool getData(VL53L3CX_Object_t *sensor, Sensor_Definition_t *device, Resultaat_t *resultaat, uint8_t* isReadySens)
+bool getData(VL53L3CX_Object_t *sensor, sensorDefinition_t *device, resultaat_t *resultaat, uint8_t* isReadySens)
 {
   VL53L3CX_Result_t tempResult;
   bool trigger = false;
