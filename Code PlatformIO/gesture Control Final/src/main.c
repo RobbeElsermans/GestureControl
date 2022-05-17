@@ -152,8 +152,8 @@ int main(void)
             mainState = STATE_START;
             break;
         case STATE_START:
-            if (!sensoren[LEFT].sensor.IsRanging)
-                Start_Sensor(&sensoren[LEFT]);
+            if (!sensoren[CENTER].sensor.IsRanging)
+                Start_Sensor(&sensoren[CENTER]);
             mainState = STATE_GESTURE_CONTROL;
             /* code */
             break;
@@ -163,18 +163,18 @@ int main(void)
             switch (gestureControlState)
             {
             case STATE_GC_SAMPLE:
-                handleData(LEFT);
+                handleData(CENTER);
 
                 if (objectPresent)
                 {
-                    handleData(CENTER);
+                    handleData(LEFT);
                     handleData(RIGHT);
                 }
 
                 gestureControlState = STATE_GC_OBJECT;
                 break;
             case STATE_GC_OBJECT:
-                objectPresent = ckeckObjectPresent(&sensoren[LEFT].resultaat, &objectPresent, &sensoren[LEFT].resultaat.distance);
+                objectPresent = ckeckObjectPresent(&sensoren[CENTER].resultaat, &objectPresent, &sensoren[CENTER].resultaat.distance);
 
                 if (objectPresent && !prevObjectPresent)
                 {
@@ -196,7 +196,7 @@ int main(void)
                 prevObjectPresent = objectPresent;
                 break;
             case STATE_GC_START:
-                Start_Sensor(&sensoren[CENTER]);
+                Start_Sensor(&sensoren[LEFT]);
                 Start_Sensor(&sensoren[RIGHT]);
 
                 gestureControlState = STATE_GC_SAMPLE;
@@ -215,7 +215,7 @@ int main(void)
                 /* code */
                 break;
             case STATE_GC_STOP:
-                Stop_Sensor(&sensoren[CENTER]);
+                Stop_Sensor(&sensoren[LEFT]);
                 Stop_Sensor(&sensoren[RIGHT]);
 
                 gestureControlState = STATE_GC_SAMPLE;
@@ -238,8 +238,8 @@ int main(void)
                 // printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
                 timerDataCollection = HAL_GetTick();
                 //printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-                //printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
-                printf("%2d\r\n", commando);
+                printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
+                //printf("%2d\r\n", commando);
             }
 #endif
 
@@ -251,7 +251,7 @@ int main(void)
             break;
         case STATE_STOP:
             /* code */
-            Stop_Sensor(&sensoren[LEFT]);
+            Stop_Sensor(&sensoren[CENTER]);
             while (1)
                 ;
             break;
