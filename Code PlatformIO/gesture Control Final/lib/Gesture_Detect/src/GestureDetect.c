@@ -161,10 +161,10 @@ int *getMeans(uint8_t id)
 {
     return disMean[id];
 }
-void setMeanVal(uint8_t id, int16_t distance)
+void setMeanVal(sensorData_t* sensor)
 {
-    disMean[id][disMeanindex[id]] = distance;
-    checkIndex(id);
+    disMean[sensor->id][disMeanindex[sensor->id]] = sensor->resultaat.distance;
+    checkIndex(sensor->id);
 }
 uint8_t getMaxMean()
 {

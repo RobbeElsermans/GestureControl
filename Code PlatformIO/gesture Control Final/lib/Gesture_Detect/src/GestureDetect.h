@@ -73,7 +73,7 @@ int * getMeans(uint8_t id);
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval void
   */
-void setMeanVal(uint8_t id, int16_t distance);
+void setMeanVal(sensorData_t* sensor);
 
 /**
   * @brief  geeft het maximale aantal raw afstands opslag terug

@@ -12,7 +12,8 @@
   * @note   Zal de calibrate data over seriële communicatie plotten
   * @retval void
   */
-void getCalibrate(VL53L3CX_Object_t* dev, uint8_t id);
+void getCalibrate_oud(VL53L3CX_Object_t* dev, uint8_t id);
+void getCalibrate(sensorData_t* sensor);
 
 /**
   * @brief  Het calibreren van de sensoren met de opgeslagen setup
@@ -20,6 +21,7 @@ void getCalibrate(VL53L3CX_Object_t* dev, uint8_t id);
   * @param  id de id van de sensor
   * @retval void
   */
-void setCalibrate(VL53L3CX_Object_t* dev, uint8_t id);
+void setCalibrate_oud(VL53L3CX_Object_t* dev, uint8_t id);
+void setCalibrate(sensorData_t* sensor);
 
 #endif

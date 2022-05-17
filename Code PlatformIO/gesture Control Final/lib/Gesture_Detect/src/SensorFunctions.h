@@ -13,35 +13,35 @@
   * @param  isReady Een pointer value dat de waardes van de interrupt flags bevat
   * @retval uint8_t isReady: Zal 1 retourneren bij een set en 0 bij een reset van de interrupt flag
   */
-uint8_t Sensor_Ready(VL53L3CX_Object_t *sensor, sensorDev index, uint8_t* isReady);
+uint8_t Sensor_Ready(sensorData_t* sensor);
 
 /**
   * @brief  Configureerd de sensor bij de opstart van het programma
   * @param  sensor Een pointer naar het sensor object dat wordt geïnitialiseerd 
-  * @param  index De XSHUT & GPIO pin waarop de sensor staat aangesloten
-  * @param  address Een pointer value dat de waarde van het nieuwe adres bij zicht heeft
   * @note   mag maar 1x per sensor object aangeroepen worden
   * @retval void
   */
-void Init_Sensor(VL53L3CX_Object_t *sensor, sensorDev index);
+void Init_Sensor(sensorData_t* sensor);
 
 /**
   * @brief  Start de sensor op
   * @param  sensor Een pointer naar het sensor object dat wordt geïnitialiseerd 
-  * @param  index De XSHUT & GPIO pin waarop de sensor staat aangesloten
-  * @note   mag maar 1x per sensor object aangeroepen worden
   * @retval void
   */
-void Start_Sensor(VL53L3CX_Object_t *sensor, sensorDev index);
+void Start_Sensor(sensorData_t* sensor);
 
 /**
   * @brief  stopt de sensor
   * @param  sensor Een pointer naar het sensor object dat wordt geïnitialiseerd 
-  * @note   mag maar 1x per sensor object aangeroepen worden
   * @retval void
   */
-void Stop_Sensor(VL53L3CX_Object_t *sensor);
+void Stop_Sensor(sensorData_t* sensor);
 
-bool getData(VL53L3CX_Object_t *sensor, sensorDefinition_t* device, resultaat_t* resultaat, uint8_t* isReadySens);
+/**
+  * @brief  Vraagt de data op en bewaard deze
+  * @param  sensor Een pointer naar het sensor object dat wordt geïnitialiseerd 
+  * @retval void
+  */
+bool getData(sensorData_t* sensor);
 
 #endif

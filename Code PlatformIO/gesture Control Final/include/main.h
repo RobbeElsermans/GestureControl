@@ -98,10 +98,10 @@ extern "C"
    * @param gpioi_pin De pin nummer waarop de xshut pin staat
    */
   typedef struct{
-    uint8_t xshut_port;
-    uint8_t xshut_pin;
-    uint8_t gpioi_port;
-    uint8_t gpioi_pin;
+    GPIO_TypeDef* xshut_port;
+    uint16_t xshut_pin;
+    GPIO_TypeDef* gpioi_port;
+    uint16_t gpioi_pin;
   } senorPorts_t;
 
     /**
@@ -137,6 +137,7 @@ extern "C"
    * @param resultaat Struct die de meet waardes bijhoud
    * @param sensorPorts Struct die de sensor pinout bijhoud
    * @param sensor Struct die het sensor object bevat
+   * @param id id van de sensor
    */
   typedef struct
   {
@@ -145,6 +146,7 @@ extern "C"
     resultaat_t resultaat;
     senorPorts_t sensorPorts;
     VL53L3CX_Object_t sensor;
+    uint8_t id;
   } sensorData_t;
 
     /**
