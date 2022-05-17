@@ -1,8 +1,8 @@
 #include "GestureDetect.h"
 
 //variabelen die niet mogen veranderen na weg gaan van methodes
-static int disMean[amountSensorUsed][maxMean];
-static uint8_t disMeanindex[amountSensorUsed];
+static int disMean[AMOUNT_SENSOR_USED][MAX_MEAN];
+static uint8_t disMeanindex[AMOUNT_SENSOR_USED];
 
 static bool LR_links = false;
 static bool LR_rechts = false;
@@ -31,65 +31,65 @@ bool checkIndex(uint8_t id);
 commands detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus)
 {
     // DU gesture
-      if (left < maxDistance && (leftStatus == 0 || leftStatus == 7) && !DU_center && !DU_boven && center > maxDistance && right > maxDistance)
+      if (left < MAX_DISTANCE && (leftStatus == 0 || leftStatus == 7) && !DU_center && !DU_boven && center > MAX_DISTANCE && right > MAX_DISTANCE)
       {
         DU_onder = true;
       }
 
-      if (right < maxDistance && (rightStatus == 0 || rightStatus == 7) && !DU_center && DU_onder && center > maxDistance)
+      if (right < MAX_DISTANCE && (rightStatus == 0 || rightStatus == 7) && !DU_center && DU_onder && center > MAX_DISTANCE)
       {
         DU_center = true;
       }
 
-      if (center < maxDistance && (centerStatus == 0 || centerStatus == 7) && DU_center && DU_onder)
+      if (center < MAX_DISTANCE && (centerStatus == 0 || centerStatus == 7) && DU_center && DU_onder)
       {
         DU_boven = true;
       }
 
       // UD gesture
-      if (center < maxDistance && centerStatus == 0 && !UD_center && !UD_onder && left > maxDistance && right > maxDistance)
+      if (center < MAX_DISTANCE && centerStatus == 0 && !UD_center && !UD_onder && left > MAX_DISTANCE && right > MAX_DISTANCE)
       {
         UD_boven = true;
       }
 
-      if (right < maxDistance && rightStatus == 0 && !UD_onder && UD_boven && left > maxDistance)
+      if (right < MAX_DISTANCE && rightStatus == 0 && !UD_onder && UD_boven && left > MAX_DISTANCE)
       {
         UD_center = true;
       }
 
-      if (left < maxDistance && leftStatus == 0 && UD_center && UD_boven)
+      if (left < MAX_DISTANCE && leftStatus == 0 && UD_center && UD_boven)
       {
         UD_onder = true;
       }
 
       // LR gesture
-      if (left < maxDistance && leftStatus == 0 && !LR_center && !LR_rechts && center > maxDistance && right > maxDistance)
+      if (left < MAX_DISTANCE && leftStatus == 0 && !LR_center && !LR_rechts && center > MAX_DISTANCE && right > MAX_DISTANCE)
       {
         LR_links = true;
       }
 
-      if (center < maxDistance && centerStatus == 0 && !LR_rechts && LR_links && right > maxDistance)
+      if (center < MAX_DISTANCE && centerStatus == 0 && !LR_rechts && LR_links && right > MAX_DISTANCE)
       {
         LR_center = true;
       }
 
-      if (right < maxDistance && rightStatus == 0 && LR_center && LR_links)
+      if (right < MAX_DISTANCE && rightStatus == 0 && LR_center && LR_links)
       {
         LR_rechts = true;
       }
 
       // RL gesture
-      if (right < maxDistance && rightStatus == 0 && !RL_center && !RL_links && center > maxDistance && left > maxDistance)
+      if (right < MAX_DISTANCE && rightStatus == 0 && !RL_center && !RL_links && center > MAX_DISTANCE && left > MAX_DISTANCE)
       {
         RL_rechts = true;
       }
 
-      if (center < maxDistance && centerStatus == 0 && !RL_links && RL_rechts && left > maxDistance)
+      if (center < MAX_DISTANCE && centerStatus == 0 && !RL_links && RL_rechts && left > MAX_DISTANCE)
       {
         RL_center = true;
       }
 
-      if (left < maxDistance && leftStatus == 0 && RL_center && RL_rechts)
+      if (left < MAX_DISTANCE && leftStatus == 0 && RL_center && RL_rechts)
       {
         RL_links = true;
       }
@@ -125,7 +125,7 @@ void checkResetTimer()
       timerMeasurment = HAL_GetTick();
     }
     long temp = HAL_GetTick();
-    if (timerMeasurementSet && (temp - timerMeasurment) > timerMeasurmentTimeout)
+    if (timerMeasurementSet && (temp - timerMeasurment) > TIMER_MEASUREMENT_TIMEOUT)
     {
       timerMeasurementSet = false;
       DU_boven = false;
@@ -146,11 +146,11 @@ void checkResetTimer()
 int16_t getMean(uint8_t id)
 {
     tempMean = 0;
-    for (size_t i = 0; i < maxMean; i++)
+    for (size_t i = 0; i < MAX_MEAN; i++)
     {
         tempMean += disMean[id][i];
     }
-    tempMean /= maxMean;
+    tempMean /= MAX_MEAN;
     return tempMean;
 }
 int getCountMean(uint8_t id)
@@ -168,14 +168,14 @@ void setMeanVal(uint8_t id, int16_t distance)
 }
 uint8_t getMaxMean()
 {
-    return maxMean;
+    return MAX_MEAN;
 }
 uint8_t getMaxDis()
 {
-    return maxDistance;
+    return MAX_DISTANCE;
 }
 bool checkIndex(uint8_t id){
-    if (disMeanindex[id] < maxMean - 1)
+    if (disMeanindex[id] < MAX_MEAN - 1)
         disMeanindex[id]++;
     else
         disMeanindex[id] = 0;

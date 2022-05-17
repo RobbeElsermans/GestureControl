@@ -73,8 +73,8 @@ extern "C"
 
   /* Exported constants --------------------------------------------------------*/
   /* USER CODE BEGIN EC */
-#define amountSensor 5
-#define amountSensorUsed 3
+#define AMOUNT_SENSOR 5
+#define AMOUNT_SENSOR_USED 3
   /* USER CODE END EC */
 
   /* Exported macro ------------------------------------------------------------*/

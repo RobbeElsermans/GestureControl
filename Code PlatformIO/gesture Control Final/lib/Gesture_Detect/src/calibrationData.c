@@ -131,12 +131,12 @@ VL53LX_CalibrationData_t getCalibrationData(VL53L3CX_Object_t *dev)
 }
 void setCalibrationData(VL53L3CX_Object_t *dev, uint8_t index, VL53LX_CalibrationData_t *data)
 {
-    int xtalk_kcps[amountSensorUsed][6] = {
+    int xtalk_kcps[AMOUNT_SENSOR_USED][6] = {
         {8543, 16939, 25335, 33731, 42127, 50523},
         {7912, 15684, 23456, 31228, 39000, 46772},
         {2742, 5456, 8170, 10884, 13598, 16314}};
 
-    int xtalk_bin_data[amountSensorUsed][12] = {
+    int xtalk_bin_data[AMOUNT_SENSOR_USED][12] = {
         {2, 423, 458, 141, 0, 0, 0, 0, 0, 0, 0, 0},
         {20, 446, 447, 111, 0, 0, 0, 0, 0, 0, 0, 0},
         {24, 416, 479, 105, 0, 0, 0, 0, 0, 0, 0, 0}};

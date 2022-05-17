@@ -59,8 +59,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile uint8_t isReady[amountSensor] = {false, false, false,false,false};
-volatile uint8_t hasRead[amountSensor] = {false, false, false, false, false};
+volatile uint8_t isReady[AMOUNT_SENSOR] = {false, false, false,false,false};
+volatile uint8_t hasRead[AMOUNT_SENSOR] = {false, false, false, false, false};
 
 #ifdef DATACOLLECTION
 long timerDataCollection = 0;
@@ -74,7 +74,7 @@ Sensor_Definition_t left = {XSHUT_1, 1};
 Sensor_Definition_t right = {XSHUT_3, 2};
 
 // Resultaat van de meetingen die de afstand, status en timestamp bevat voor amountSensorUsed aantal keer aangemaakt
-struct resultaat resultaat[amountSensorUsed];
+struct resultaat resultaat[AMOUNT_SENSOR_USED];
 
 bool objectPresent = false;
 bool prevObjectPresent = false;
@@ -129,7 +129,7 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
   // Define de sensor objecten amountSensorUsed keer.
-  VL53L3CX_Object_t sensor[amountSensorUsed];
+  VL53L3CX_Object_t sensor[AMOUNT_SENSOR_USED];
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
