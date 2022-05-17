@@ -186,6 +186,7 @@ extern "C"
     LR = 0x21,
     UD = 0x23,
     DU = 0x24,
+    OBJ = 0x20,
     NONE = 0x10
   } commands_t;
 

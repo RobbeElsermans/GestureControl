@@ -1,20 +1,20 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -82,27 +82,26 @@ int led_columns[led_matrix_width][2] = {
 int posx = 0;
 int posy = 0;
 
-enum commands
-{
-  DIM = 0x25,
-  RL = 0x22,
-  LR = 0x21,
-  UD = 0x23,
-  DU = 0x24,
-  NONE = 0x10
-};
+  typedef enum
+  {
+    DIM = 0x25,
+    RL = 0x22,
+    LR = 0x21,
+    UD = 0x23,
+    DU = 0x24,
+    OBJ = 0x20,
+    NONE = 0x10
+  } commands_t;
 
-typedef enum commands command_t;
+commands_t commando = NONE;
+commands_t prevCommando = NONE;
 
-command_t commando = NONE;
-command_t prevCommando = NONE;
+HAL_StatusTypeDef status = HAL_ERROR;
+uint8_t buf = 0;
+uint8_t counter = 0;
+uint8_t addrs = 0x20 << 1;
 
-  HAL_StatusTypeDef status = HAL_ERROR;
-  uint8_t buf = 0;
-  uint8_t counter = 0;
-  uint8_t addrs = 0x20 << 1;
-
-  volatile bool isSend = false;
+volatile bool isSend = false;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -117,9 +116,9 @@ void SystemClock_Config(void);
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -151,17 +150,17 @@ int main(void)
 
   for (uint8_t row = 0; row < led_matrix_height; row++)
   {
-    HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], 1);
+    HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[row][0], led_rows[row][1], 1);
   }
   for (uint8_t col = 0; col < led_matrix_width; col++)
   {
-    HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
+    HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 1);
     HAL_Delay(200);
   }
   HAL_Delay(200);
   for (uint8_t col = 0; col < led_matrix_width; col++)
   {
-    HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 0);
+    HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
   }
   /* USER CODE END 2 */
 
@@ -169,68 +168,75 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  counter++;
+    counter++;
 
-	      // I2C stuff
-		  //HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
+    // I2C stuff
+    // HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
 
-	    status = HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
+    status = HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
 
+    printf("buf: %3d \r\n", buf);
+    commando = (commands_t)buf;
+    // int x = 0;
+    // while (x < 50)
+    // {
 
-	      HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	      printf("buf: %3d \r\n", buf);
-	      commando = (command_t)buf;
-	      // int x = 0;
-	      // while (x < 50)
-	      // {
-	      for (uint8_t col = 0; col < led_matrix_width; col++)
-	      {
-	        // Reset de rijen als commando veranderd is
-	        for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
-	        {
-	          HAL_GPIO_WritePin(led_columns[col1][0], led_columns[col1][1], 0);
-	        }
-	        // Zet de kolommen klaar
-	        for (uint8_t row = 0; row < led_matrix_height; row++)
-	        {
-	          HAL_GPIO_WritePin(led_rows[row][0], led_rows[row][1], led_matrix[row][col]);
-	        }
+    if(commando >= 0x20)
+    {
+    for (uint8_t col = 0; col < led_matrix_width; col++)
+    {
+      // Reset de rijen als commando veranderd is
+      for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
+      {
+        HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col1][0], led_columns[col1][1], 0);
+      }
+      // Zet de kolommen klaar
+      for (uint8_t row = 0; row < led_matrix_height; row++)
+      {
+        HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[row][0], led_rows[row][1], led_matrix[row][col]);
+      }
 
-	        // voer de rij door
-	        HAL_GPIO_WritePin(led_columns[col][0], led_columns[col][1], 1);
-	        HAL_Delay(1);
-	      }
-	      //   x++;
-	      // }
-	      led_matrix[posy][posx] = 0;
+      // voer de rij door
+      HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 1);
+      HAL_Delay(1);
+    }
+    }
+    else
+    {
+      HAL_Delay(500);
+      HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+    }
+    //   x++;
+    // }
+    led_matrix[posy][posx] = 0;
 
-	      // Ontvang data
-	      if (commando == RL && prevCommando == NONE)
-	        posx--;
+    // Ontvang data
+    if (commando == RL && prevCommando == OBJ)
+      posx--;
 
-	      if (commando == LR && prevCommando == NONE)
-	        posx++;
+    if (commando == LR && prevCommando == OBJ)
+      posx++;
 
-	      if (posx >= led_matrix_width)
-	        posx = 0;
-	      if (posx < 0)
-	        posx = led_matrix_width - 1;
+    if (posx >= led_matrix_width)
+      posx = 0;
+    if (posx < 0)
+      posx = led_matrix_width - 1;
 
-	      if (commando == UD && prevCommando == NONE)
-	        posy++;
+    if (commando == UD && prevCommando == OBJ)
+      posy++;
 
-	      if (commando == DU && prevCommando == NONE)
-	        posy--;
+    if (commando == DU && prevCommando == OBJ)
+      posy--;
 
-	      if (posy >= led_matrix_height)
-	        posy = 0;
-	      if (posy < 0)
-	        posy = led_matrix_height - 1;
+    if (posy >= led_matrix_height)
+      posy = 0;
+    if (posy < 0)
+      posy = led_matrix_height - 1;
 
-	      led_matrix[posy][posx] = 1;
+    led_matrix[posy][posx] = 1;
 
-	      prevCommando = commando;
-	      //HAL_Delay(100);
+    prevCommando = commando;
+    // HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -239,21 +245,21 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -268,9 +274,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -300,15 +305,15 @@ int _write(int file, char *data, int len)
 }
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
+  status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
 }
 
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -320,14 +325,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
@@ -336,4 +341,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
