@@ -207,20 +207,20 @@ int main(void)
     setCalibrate(&sensoren[LEFT]);
     setCalibrate(&sensoren[RIGHT]);
 
-    Start_Sensor(&sensoren[CENTER]);
-    Start_Sensor(&sensoren[LEFT]);
-    Start_Sensor(&sensoren[RIGHT]);
-    while (1)
-    {
-      getData(&sensoren[CENTER]);
-      HAL_Delay(1);
-      getData(&sensoren[LEFT]);
-      HAL_Delay(1);
-      getData(&sensoren[RIGHT]);
-      HAL_Delay(1);
-      HAL_Delay(200);
-      printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-    }
+    // Start_Sensor(&sensoren[CENTER]);
+    // Start_Sensor(&sensoren[LEFT]);
+    // Start_Sensor(&sensoren[RIGHT]);
+    // while (1)
+    // {
+    //   getData(&sensoren[CENTER]);
+    //   HAL_Delay(1);
+    //   getData(&sensoren[LEFT]);
+    //   HAL_Delay(1);
+    //   getData(&sensoren[RIGHT]);
+    //   HAL_Delay(1);
+    //   HAL_Delay(200);
+    //   printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+    // }
   }
 
 #pragma endregion
