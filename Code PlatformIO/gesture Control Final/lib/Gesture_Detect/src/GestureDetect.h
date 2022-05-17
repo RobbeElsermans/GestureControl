@@ -33,7 +33,8 @@
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval het commando of -1 bij geen commando
   */
-commands_t detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus);
+commands_t detectgesture_oud(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus);
+commands_t detectgesture(sensorData_t* sensoren);
 
 /**
   * @brief  Bekijkt en (re)set de timer van de commando waarde

@@ -28,8 +28,18 @@ int16_t tempMean = 0;
 
 bool checkIndex(uint8_t id);
 
-commands_t detectgesture(int16_t left, int8_t leftStatus, int16_t center, int8_t centerStatus, int16_t right, int8_t rightStatus)
+commands_t detectgesture(sensorData_t* sensoren)
 {
+  long left = sensoren[LEFT].resultaat.distance;
+  //long left = sensoren[LEFT].resultaat.meanDistance;
+  long right = sensoren[RIGHT].resultaat.distance;
+  //long right = sensoren[RIGHT].resultaat.meanDistance;
+  long center = sensoren[CENTER].resultaat.distance;
+  //long center = sensoren[CENTER].resultaat.meanDistance;
+  uint8_t leftStatus = sensoren[LEFT].resultaat.status;
+  uint8_t rightStatus = sensoren[RIGHT].resultaat.status;
+  uint8_t centerStatus = sensoren[CENTER].resultaat.status;
+
     // DU gesture
       if (left < MAX_DISTANCE && (leftStatus == 0 || leftStatus == 7) && !DU_center && !DU_boven && center > MAX_DISTANCE && right > MAX_DISTANCE)
       {

@@ -79,6 +79,10 @@ extern "C"
 #define GPIOI_4_Pin GPIO_PIN_6
 #define GPIOI_4_GPIO_Port GPIOC
 #define GPIOI_4_EXTI_IRQn EXTI9_5_IRQn
+
+#define LEFT 1
+#define RIGHT 2
+#define CENTER 0
     /**
    * @brief Enum die de XSHUT en GPIOI pin bevat. Dit maakt de code duidelijker
    */

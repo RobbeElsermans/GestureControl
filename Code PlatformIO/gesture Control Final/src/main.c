@@ -46,9 +46,6 @@
 // Toggle for data collection
 #define DATACOLLECTION
 
-#define LEFT 1
-#define RIGHT 2
-#define CENTER 0
 //#define CALIBRATE
 
 /* USER CODE END PD */
@@ -263,7 +260,7 @@ int main(void)
       leftDistance = getMean(sensoren[LEFT].id);
       centerDistance = getMean(sensoren[CENTER].id);
       rightDistance = getMean(sensoren[RIGHT].id);
-      int8_t val = detectgesture(leftDistance, sensoren[LEFT].resultaat.status, centerDistance, sensoren[CENTER].resultaat.status, rightDistance, sensoren[RIGHT].resultaat.status);
+      int8_t val = detectgesture(sensoren);
       if (val != -1)
         commando = val;
     }
