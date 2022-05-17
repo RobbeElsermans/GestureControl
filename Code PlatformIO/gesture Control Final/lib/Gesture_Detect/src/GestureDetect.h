@@ -17,7 +17,7 @@
 #include "main.h"
 #include "stdbool.h"
 
-#define MAX_MEAN 4
+#define MAX_MEAN 2
 #define MAX_DISTANCE 300
 #define TIMER_MEASUREMENT_TIMEOUT 1500U
 
@@ -49,7 +49,7 @@ void checkResetTimerGesture();
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval het gemiddelde in mm
   */
-int16_t getMean(uint8_t id);
+int getMean(uint8_t id);
 
 /**
   * @brief  geeft de index terug van de counter van de gegeven id (sensor)
@@ -81,13 +81,13 @@ void setMeanVal(sensorData_t* sensor);
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval Aantal opslag elementen
   */
-uint8_t getMaxMean();
+int getMaxMean();
 
 /**
   * @brief  geeft het maximale afstand terug waarin een gesture gedetecteerd kan worden
   * @note   Maakt gebruik van de static declaraties en mean values
   * @retval maximale afstand in mm
   */
-uint8_t getMaxDis();
+int getMaxDis();
 
 #endif

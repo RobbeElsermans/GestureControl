@@ -26,7 +26,7 @@ static bool timerMeasurementSet = false;
 
 int16_t tempMean = 0;
 
-bool checkIndex(uint8_t id);
+void checkIndex(uint8_t id);
 
 commands_t detectgesture(sensorData_t* sensoren)
 {
@@ -153,7 +153,7 @@ void checkResetTimerGesture()
     }
 }
 
-int16_t getMean(uint8_t id)
+int getMean(uint8_t id)
 {
     tempMean = 0;
     for (size_t i = 0; i < MAX_MEAN; i++)
@@ -176,15 +176,15 @@ void setMeanVal(sensorData_t* sensor)
     disMean[sensor->id][disMeanindex[sensor->id]] = sensor->resultaat.distance;
     checkIndex(sensor->id);
 }
-uint8_t getMaxMean()
+int getMaxMean()
 {
     return MAX_MEAN;
 }
-uint8_t getMaxDis()
+int getMaxDis()
 {
     return MAX_DISTANCE;
 }
-bool checkIndex(uint8_t id){
+void checkIndex(uint8_t id){
     if (disMeanindex[id] < MAX_MEAN - 1)
         disMeanindex[id]++;
     else
