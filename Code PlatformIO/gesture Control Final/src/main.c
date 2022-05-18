@@ -33,6 +33,7 @@
 #include "GestureDetectObject.h"
 #include "GestureDetect.h"
 #include "SensorFunctions.h"
+#include "calculations.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -91,11 +92,11 @@ static bool timerCommandSet = false;   // Start in false state
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void handleLed();
-void handleCommandTimer();
-void handleData(uint8_t id);
-void performCalibration();
-void performInit();
+void handle_led();
+void handle_commandTimer();
+void handle_data(uint8_t id);
+void perform_calibration();
+void perform_init();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -141,19 +142,19 @@ int main(void)
         {
         case STATE_INIT:
 
-            performInit();
+            perform_init();
 
             mainState = STATE_CALIBRATE;
             break;
         case STATE_CALIBRATE:
 
-            performCalibration();
+            perform_calibration();
 
             mainState = STATE_START;
             break;
         case STATE_START:
             if (!sensoren[CENTER].sensor.IsRanging)
-                Start_Sensor(&sensoren[CENTER]);
+                sensorFunctions_startSensor(&sensoren[CENTER]);
             mainState = STATE_GESTURE_CONTROL;
             /* code */
             break;
@@ -163,18 +164,18 @@ int main(void)
             switch (gestureControlState)
             {
             case STATE_GC_SAMPLE:
-                handleData(CENTER);
+                handle_data(CENTER);
 
                 if (objectPresent)
                 {
-                    handleData(LEFT);
-                    handleData(RIGHT);
+                    handle_data(LEFT);
+                    handle_data(RIGHT);
                 }
 
                 gestureControlState = STATE_GC_OBJECT;
                 break;
             case STATE_GC_OBJECT:
-                objectPresent = ckeckObjectPresent(&sensoren[CENTER].resultaat, &objectPresent, &sensoren[CENTER].resultaat.distance);
+                objectPresent = gestureDetectObject_ckeckObjectPresent(&sensoren[CENTER], &objectPresent);
 
                 if (objectPresent && !prevObjectPresent)
                 {
@@ -196,8 +197,8 @@ int main(void)
                 prevObjectPresent = objectPresent;
                 break;
             case STATE_GC_START:
-                Start_Sensor(&sensoren[LEFT]);
-                Start_Sensor(&sensoren[RIGHT]);
+                sensorFunctions_startSensor(&sensoren[LEFT]);
+                sensorFunctions_startSensor(&sensoren[RIGHT]);
 
                 gestureControlState = STATE_GC_SAMPLE;
                 /* code */
@@ -205,7 +206,7 @@ int main(void)
             case STATE_GC_DETECT:
                 if (commando == OBJ)
                 {
-                    int8_t val = detectgesture(sensoren);
+                    int8_t val = gestureDetect_detectgesture(sensoren);
                     if (val != -1)
                     {
                         commando = val;
@@ -215,8 +216,8 @@ int main(void)
                 /* code */
                 break;
             case STATE_GC_STOP:
-                Stop_Sensor(&sensoren[LEFT]);
-                Stop_Sensor(&sensoren[RIGHT]);
+                sensorFunctions_stopSensor(&sensoren[LEFT]);
+                sensorFunctions_stopSensor(&sensoren[RIGHT]);
 
                 gestureControlState = STATE_GC_SAMPLE;
                 /* code */
@@ -225,11 +226,11 @@ int main(void)
                 break;
             }
 
-            checkResetTimerGesture();
+            gestureDetect_checkResetTimerGesture();
 
-            handleCommandTimer();
+            handle_commandTimer();
             // Commando's uitsturen
-            handleLed();
+            handle_led();
 
 #ifdef DATACOLLECTION
             // DataCollection
@@ -251,7 +252,7 @@ int main(void)
             break;
         case STATE_STOP:
             /* code */
-            Stop_Sensor(&sensoren[CENTER]);
+            sensorFunctions_stopSensor(&sensoren[CENTER]);
             while (1)
                 ;
             break;
@@ -264,50 +265,6 @@ int main(void)
     }
 }
 
-/**
- * @brief System Clock Configuration
- * @retval None
- */
-// void SystemClock_Config(void)
-// {
-//     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-//     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-//     RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-
-//     /** Initializes the RCC Oscillators according to the specified parameters
-//      * in the RCC_OscInitTypeDef structure.
-//      */
-//     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSE;
-//     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-//     RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-//     RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-//     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-//     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-//     {
-//         Error_Handler();
-//     }
-//     /** Initializes the CPU, AHB and APB buses clocks
-//      */
-//     RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-//     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
-//     RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-//     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-//     RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-//     if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
-//     {
-//         Error_Handler();
-//     }
-//     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_USART2 | RCC_PERIPHCLK_I2C1 | RCC_PERIPHCLK_I2C2;
-//     PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
-//     PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
-//     PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_HSI;
-//     PeriphClkInit.I2c2ClockSelection = RCC_I2C2CLKSOURCE_HSI;
-//     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-//     {
-//         Error_Handler();
-//     }
-// }
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -386,7 +343,7 @@ void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
     HAL_I2C_Slave_Transmit_IT(&hi2c2, (uint8_t *)&commando, sizeof(commando));
 }
 
-void performInit()
+void perform_init()
 {
     sensoren[CENTER].sensorPorts.gpioi_pin = (uint16_t)GPIOI_2_Pin;
     sensoren[CENTER].sensorPorts.gpioi_port = GPIOI_2_GPIO_Port;
@@ -419,34 +376,34 @@ void performInit()
     CUSTOM_VL53L3CX_I2C_Init();
 
     // De sensoren initialiseren
-    Init_Sensor(&sensoren[CENTER]);
+    sensorFunctions_initSensor(&sensoren[CENTER]);
     HAL_Delay(2);
-    Init_Sensor(&sensoren[LEFT]);
+    sensorFunctions_initSensor(&sensoren[LEFT]);
     HAL_Delay(2);
-    Init_Sensor(&sensoren[RIGHT]);
+    sensorFunctions_initSensor(&sensoren[RIGHT]);
     HAL_Delay(2);
 }
 
-void performCalibration()
+void perform_calibration()
 {
     // Als de drukknop SW_1 actief is, wordt er gekalibreerd
     if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
     // if(true)
     {
-        getCalibrate(&sensoren[CENTER]);
-        getCalibrate(&sensoren[LEFT]);
-        getCalibrate(&sensoren[RIGHT]);
+        calibrationData_getCalibrate(&sensoren[CENTER]);
+        calibrationData_getCalibrate(&sensoren[LEFT]);
+        calibrationData_getCalibrate(&sensoren[RIGHT]);
 
-        Start_Sensor(&sensoren[CENTER]);
-        Start_Sensor(&sensoren[LEFT]);
-        Start_Sensor(&sensoren[RIGHT]);
+        sensorFunctions_startSensor(&sensoren[CENTER]);
+        sensorFunctions_startSensor(&sensoren[LEFT]);
+        sensorFunctions_startSensor(&sensoren[RIGHT]);
         while (1)
         {
-            getData(&sensoren[CENTER]);
+            sensorFunctions_getData(&sensoren[CENTER]);
             HAL_Delay(1);
-            getData(&sensoren[LEFT]);
+            sensorFunctions_getData(&sensoren[LEFT]);
             HAL_Delay(1);
-            getData(&sensoren[RIGHT]);
+            sensorFunctions_getData(&sensoren[RIGHT]);
             HAL_Delay(1);
             HAL_Delay(200);
             printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
@@ -454,20 +411,20 @@ void performCalibration()
     }
     else
     {
-        setCalibrate(&sensoren[CENTER]);
-        setCalibrate(&sensoren[LEFT]);
-        setCalibrate(&sensoren[RIGHT]);
+        calibrationData_setCalibrate(&sensoren[CENTER]);
+        calibrationData_setCalibrate(&sensoren[LEFT]);
+        calibrationData_setCalibrate(&sensoren[RIGHT]);
 
-        // Start_Sensor(&sensoren[CENTER]);
-        // Start_Sensor(&sensoren[LEFT]);
-        // Start_Sensor(&sensoren[RIGHT]);
+        // sensorFunctions_startSensor(&sensoren[CENTER]);
+        // sensorFunctions_startSensor(&sensoren[LEFT]);
+        // sensorFunctions_startSensor(&sensoren[RIGHT]);
         // while (1)
         // {
-        //   getData(&sensoren[CENTER]);
+        //   sensorFunctions_getData(&sensoren[CENTER]);
         //   HAL_Delay(1);
-        //   getData(&sensoren[LEFT]);
+        //   sensorFunctions_getData(&sensoren[LEFT]);
         //   HAL_Delay(1);
-        //   getData(&sensoren[RIGHT]);
+        //   sensorFunctions_getData(&sensoren[RIGHT]);
         //   HAL_Delay(1);
         //   HAL_Delay(200);
         //   printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
@@ -475,14 +432,14 @@ void performCalibration()
     }
 }
 
-void handleData(uint8_t id)
+void handle_data(uint8_t id)
 {
-    sensoren[id].isReady = getData(&sensoren[id]);
-    setMeanVal(&sensoren[id]);
-    sensoren[id].resultaat.meanDistance = getMean(sensoren[id].id);
+    sensoren[id].isReady = sensorFunctions_getData(&sensoren[id]);
+    calculations_setMeanVal(&sensoren[id]);
+    sensoren[id].resultaat.meanDistance = calculations_getMean(sensoren[id].id);
 }
 
-void handleCommandTimer()
+void handle_commandTimer()
 {
     // Commando resetten
     if (!timerCommandSet && commando != NONE && commando != OBJ)
@@ -501,7 +458,7 @@ void handleCommandTimer()
     }
 }
 
-void handleLed()
+void handle_led()
 {
     switch (commando)
     {

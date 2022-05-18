@@ -1,26 +1,36 @@
 #!/usr/bin/python
+# Made By Robbe Elsermans
+# Dit python script gebruik je wanneer de printf("%d\r\n",waarde); plot naar de seriële monitor.
+
 from datetime import date, datetime
 from csv import writer
 import serial
 
 try:
+    #aantal karakters per meeting (ongeveer)
     _1Measurement = 8
+
+    #Aantal meetingen je wilt opslaan (ongeveer)
     amountReadings = 600
     
     #instelling seriële communicatie met poort: COM6 en baudrate: 115200
     ser = serial.Serial("COM6",115200)
     #tekst = "L156,C152,R875\\r\\nL158,C152,R875\\r\\nL162,C152,R875\\r\\nL164,C152,R875\\r\\nL166,C152,R875\\r\\nL168,C152,R875\\r\\nL587"
     
+    #Een aantal karakters inlezen
     tekst = ser.read((amountReadings*_1Measurement))
-    #print(tekst)
+
     #decoderen naar string
     tekst = str(tekst.decode())
+
     #spaties wegwerken
     tekst = tekst.replace(" ","")
+
+    #communicatie sluiten
     ser.close()
     #print(tekst)
 
-    #Data splitsen bij de return statement
+    #Data splitsen bij het return statement
     meetingen = tekst.split("\r\n")
     #print(meetingen)
 

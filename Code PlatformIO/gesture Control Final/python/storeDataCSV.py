@@ -1,4 +1,8 @@
 #!/usr/bin/python
+
+# Made By Robbe Elsermans
+# Dit python script gebruik je wanneer de printf("L%d,C%d,R%d\r\n",waarde1,waarde2,waarde3); plot naar de seriële monitor.
+
 from datetime import date, datetime
 from csv import writer
 import serial
@@ -67,13 +71,13 @@ try:
     timestamp = f"{date.today()}_{datetime.now().hour}{datetime.now().minute}{datetime.now().second}"
     ##print(timestamp)
 
-    #open (maak) het bestand 
+    #opent (maakt) het bestand 
     file = open(("logs/data_"+timestamp+ ".csv"), 'w', newline='')
 
     #kopel het bestand aan de cvs schrijver
     schrijf = writer(file)
 
-    #header importeren
+    #header en waardes wegschrijven
     schrijf.writerow(headerCSV)
     schrijf.writerows(testData)
 

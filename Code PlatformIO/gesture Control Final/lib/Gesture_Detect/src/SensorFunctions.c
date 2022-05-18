@@ -34,7 +34,7 @@ void Config_Sensor(sensorData_t* sensor, uint8_t *address){
   VL53L3CX_ConfigProfile(&sensor->sensor, &Profile);
 }
 
-uint8_t Sensor_Ready(sensorData_t* sensor)
+uint8_t sensorFunctions_sensorReady(sensorData_t* sensor)
 {
   if (sensor->isReady || (!sensor->isReady && !HAL_GPIO_ReadPin(sensor->sensorPorts.gpioi_port, sensor->sensorPorts.gpioi_pin)))
     return 1;
@@ -50,9 +50,7 @@ void Wait_For_GPIOI(sensorData_t* sensor)
   VL53L3CX_GetDistance(&sensor->sensor, &results); // 1ste meeting weg gooien
 }
 
-void Init_Sensor(sensorData_t* sensor){
-    uint32_t id;
-  int ret;
+void sensorFunctions_initSensor(sensorData_t* sensor){
 
   switch (sensor->id)
   {
@@ -75,28 +73,25 @@ void Init_Sensor(sensorData_t* sensor){
   default:
     break;
   }
-
-  ret = VL53L3CX_ReadID(&sensor->sensor, &id);
-  // printf("%d\r\n", ret);
 }
 
 
-void Start_Sensor(sensorData_t* sensor)
+void sensorFunctions_startSensor(sensorData_t* sensor)
 {
   VL53L3CX_Start(&sensor->sensor, VL53L3CX_MODE_ASYNC_CONTINUOUS); // Sensor staren met meten
   Wait_For_GPIOI(sensor);
 }
 
-void Stop_Sensor(sensorData_t* sensor)
+void sensorFunctions_stopSensor(sensorData_t* sensor)
 {
   VL53L3CX_Stop(&sensor->sensor); // Sensor staren met meten
 }
 
-bool getData(sensorData_t* sensor)
+bool sensorFunctions_getData(sensorData_t* sensor)
 {
   VL53L3CX_Result_t tempResult;
   bool trigger = false;
-  if (Sensor_Ready(sensor))
+  if (sensorFunctions_sensorReady(sensor))
   {
     trigger = true;
     VL53L3CX_GetDistance(&sensor->sensor, &tempResult);

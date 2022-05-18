@@ -3,5 +3,8 @@
         "calibrationdata.h": "c",
         "gesturedetect.h": "c",
         "i2c.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "Elsermans"
+    ]
 }

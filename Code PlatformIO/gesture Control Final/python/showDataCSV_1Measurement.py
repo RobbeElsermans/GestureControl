@@ -1,4 +1,8 @@
 #!/usr/bin/python
+
+# Made By Robbe Elsermans
+# Dit python script gebruik je wanneer je een CSV bestand hebt gegenereerd door storeDataCSV_1Measurement.py.
+
 from csv import reader
 import matplotlib.pyplot as plt
 

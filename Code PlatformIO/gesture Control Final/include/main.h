@@ -106,17 +106,6 @@ extern "C"
     STATE_GC_STOP
   } gestureControlStates_t;
 
-    /**
-   * @brief Enum die de XSHUT en GPIOI pin bevat. Dit maakt de code duidelijker
-   */
-  typedef enum{
-    XSHUT_4 = 4,
-    XSHUT_3 = 3,
-    XSHUT_2 = 2,
-    XSHUT_1 = 1,
-    XSHUT_0 = 0
-  } sensorDev_t;
-
   /**
    * @brief Struct die de sensor pinout bijhoud
    * @param xshut_port De poort waarop de xshut pin staat
@@ -130,17 +119,6 @@ extern "C"
     GPIO_TypeDef* gpioi_port;
     uint16_t gpioi_pin;
   } senorPorts_t;
-
-    /**
-   * @brief Struct die plaats en id van de sensor bijhoud 
-   * @param gpioPin zal de XSHUT en GPIOI locatie definiëren
-   * @param id Zal de nummer zijn van de sensor. Dit staat los van de gpioPin
-   */
-  typedef struct
-  {
-    sensorDev_t gpioPin;
-    uint8_t id;
-  } sensorDefinition_t;
 
   /**
    * @brief Struct die de meet waardes bijhoud

@@ -10,13 +10,13 @@
   * @param  sensor de pointer naar het sensor object
   * @retval void
   */
-void getCalibrate(sensorData_t* sensor);
+void calibrationData_getCalibrate(sensorData_t* sensor);
 
 /**
   * @brief  Het kalibreren van de sensoren met de opgeslagen setup
   * @param  static de pointer naar het sensor object
   * @retval void
   */
-void setCalibrate(sensorData_t* sensor);
+void calibrationData_setCalibrate(sensorData_t* sensor);
 
 #endif

@@ -24,30 +24,14 @@
   * @note   Standaard is dit 1000 millimeter
   * @retval Geen
   */
-uint16_t get_maxDistanceObject();
-
-/**
-  * @brief  sets maximale afstand dat object mag zijn
-  * @param  max pointer is de maximale afstand dat een object mag zijn om gedetecteerd te worden in millimeter
-  * @note   Standaard is dit 1000 millimeter
-  * @retval bool dat set is geslaagd of niet
-  */
-bool set_maxDistanceObject(uint16_t *max);
+uint16_t gestureDetectObject_getMaxDistanceObject();
 
 /**
   * @brief  gets de timer timeout wanneer een object als object wordt herkend 
   * @note   Standaard is dit 2000 milliseconden
   * @retval Geen
   */
-uint16_t get_timerTimeout();
-
-/**
-  * @brief  sets de timer timeout wanneer een object als object wordt herkend 
-  * @param  time pointer is de timeout tijd in milliseconden
-  * @note   Standaard is dit 2000 milliseconden
-  * @retval bool dat set is geslaagd of niet
-  */
-bool set_timerTimeout(uint16_t *time);
+uint16_t gestureDetectObject_getTimerTimeout();
 
 /**
   * @brief  Detecteerd een object
@@ -56,9 +40,9 @@ bool set_timerTimeout(uint16_t *time);
   *         initiele metingen doen.
   * @param  WasObjectPresent pointer bevat een bool dat voorgaande ObjectPresent meegeeft
   * @param  dist pointer bevat een int waarde met de huidige afstand
-  * @note   De maximale afstand dat een object mag hebben is de parameter maxDistanceObject.
-  * @note   De tijd wanneer er een object gedetecteerd wordt is gedefinieerd in timerMeasurmentTimeout.
+  * @note   De maximale afstand dat een object mag hebben is de parameter MAX_DISTANCE_OBJECT.
+  * @note   De tijd wanneer er een object gedetecteerd wordt is gedefinieerd in TIMER_MEASUREMENT_TIMEOUT.
   * @retval bool ObjectPresent
   */
-bool ckeckObjectPresent(resultaat_t *Result, bool *WasObjectPresent, long *dist);
+bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjectPresent);
 #endif

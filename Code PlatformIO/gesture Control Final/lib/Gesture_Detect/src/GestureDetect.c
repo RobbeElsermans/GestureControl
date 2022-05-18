@@ -1,8 +1,6 @@
 #include "GestureDetect.h"
 
 //variabelen die niet mogen veranderen na weg gaan van methodes
-static int disMean[AMOUNT_SENSOR_USED][MAX_MEAN];
-static uint8_t disMeanindex[AMOUNT_SENSOR_USED];
 
 static bool LR_links = false;
 static bool LR_rechts = false;
@@ -22,13 +20,9 @@ static bool UD_center = false;
 
 static float timerMeasurment = 0;
 static bool timerMeasurementSet = false;
-// static int timerMeasurmentTimeout = 1200; // in milliseconden
+// static int TIMER_MEASUREMENT_TIMEOUT = 1200; // in milliseconden
 
-int16_t tempMean = 0;
-
-void checkIndex(uint8_t id);
-
-commands_t detectgesture(sensorData_t* sensoren)
+commands_t gestureDetect_detectgesture(sensorData_t* sensoren)
 {
   //long left = sensoren[LEFT].resultaat.distance;
   long left = sensoren[LEFT].resultaat.meanDistance;
@@ -126,7 +120,7 @@ commands_t detectgesture(sensorData_t* sensoren)
       return -1;
 }
 
-void checkResetTimerGesture()
+void gestureDetect_checkResetTimerGesture()
 {
       // reset gesture flags
     if (!timerMeasurementSet)
@@ -152,41 +146,7 @@ void checkResetTimerGesture()
       RL_center = false;
     }
 }
-
-int getMean(uint8_t id)
-{
-    tempMean = 0;
-    for (size_t i = 0; i < MAX_MEAN; i++)
-    {
-        tempMean += disMean[id][i];
-    }
-    tempMean /= MAX_MEAN;
-    return tempMean;
-}
-int getCountMean(uint8_t id)
-{
-    return disMeanindex[id];
-}
-int *getMeans(uint8_t id)
-{
-    return disMean[id];
-}
-void setMeanVal(sensorData_t* sensor)
-{
-    disMean[sensor->id][disMeanindex[sensor->id]] = sensor->resultaat.distance;
-    checkIndex(sensor->id);
-}
-int getMaxMean()
-{
-    return MAX_MEAN;
-}
-int getMaxDis()
+int gestureDetect_getMaxDis()
 {
     return MAX_DISTANCE;
-}
-void checkIndex(uint8_t id){
-    if (disMeanindex[id] < MAX_MEAN - 1)
-        disMeanindex[id]++;
-    else
-        disMeanindex[id] = 0;
 }
