@@ -15,7 +15,7 @@
   - [Installeer Platform & Board](README.md#installeer-platform--board)
   - [configureer platformio.ini file](README.md#configureer-platformioini-file)
   - [main.h & .c](README.md#mainh--c)
-  - [Overzicht geïmporteerde bestanden](README.md#overzicht-geïmporteerde-bestanden)
+  - [Overzicht Bestanden](#overzicht-bestanden)
   - [Build & Upload](README.md#build--upload)
 - [Hardware Opbouw](README.md#hardware-opbouw)
 - [LED Controller](README.md#led-controller)

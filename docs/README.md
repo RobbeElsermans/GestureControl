@@ -26,7 +26,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Installeer Platform & Board](#installeer-platform--board)
   - [configureer platformio.ini file](#configureer-platformioini-file)
   - [main.h & .c](#mainh--c)
-  - [Overzicht geïmporteerde bestanden](#overzicht-geïmporteerde-bestanden)
+  - [Overzicht Bestanden](#overzicht-bestanden)
   - [Build & Upload](#build--upload)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
@@ -78,7 +78,7 @@ Tijdens het middelbaar en hoger onderwijs heb ik de basis mee gekregen om een or
 
 De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in dit document aangehaald. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
 
-De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook een werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControl/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/Gesture%20Control/lib).
+De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook een werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControlFinal/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/gesture%20Control%20Final/lib).
 
 ----
 
@@ -398,7 +398,7 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
 
    <img src="../foto's/tutorial_Importeer_bestanden_22.jpg" alt="foto declareren peripheral pinnen22" width="30%">
 
-   1. De 2de belangrijkste peripheral is I2C2 die in slave mode zal staan zodat andere toestellen hiermee verbinding kunnen aangaan. Net zoals hierboven gaan we in de zijbalk bij **Connectivity** naar **I2C2** waar we in de dropdown **I2C** selecteren en we stellen zijn adres in op **32** (HEX: 0x20).
+   5. De 2de belangrijkste peripheral is I2C2 die in slave mode zal staan zodat andere toestellen hiermee verbinding kunnen aangaan. Net zoals hierboven gaan we in de zijbalk bij **Connectivity** naar **I2C2** waar we in de dropdown **I2C** selecteren en we stellen zijn adres in op **32** (HEX: 0x20).
 
     <!-- ![foto declareren peripheral pinnen 23](foto's/tutorial_Importeer_bestanden_23.jpg) -->
 
@@ -416,7 +416,11 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
 
     <img src="../foto's/tutorial_Importeer_bestanden_25.jpg" alt="foto declareren peripheral pinnen25" width="30%">
 
-9. De MCU heeft al de aansluitingen gekregen die nodig zijn voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. 
+    6. De klok sources van beide I2C modules staan nog niet juist. Dit doen we in een andere tab (die bovenaan te vinden is) genaamd **Clock Configuration**. Hierin gaan we 2 bolletjes van plaats veranderen. Bij **I2C1 Clock Mux** plaatsen we het bolletje naar **SYSCLK**. Dit doen we ook bij **I2C2 Clock**.
+
+    <img src="../foto's/tutorial_Importeer_bestanden_30.jpg" alt="foto declareren peripheral pinnen25" width="30%">
+
+1. De MCU heeft al de aansluitingen gekregen die nodig zijn voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. 
 
 <!-- ![foto declareren peripheral pinnen 26](foto's/tutorial_Importeer_bestanden_26.jpg) -->
 
@@ -660,7 +664,7 @@ Het main bestand bevat de code die we gebruiken voor de gesture controller. hier
 [main.h](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/gesture%20Control%20Final/include/main.h)
 [main.c](https://github.com/RobbeElsermans/GestureControl/blob/main/Code%20PlatformIO/gesture%20Control%20Final/src/main.c)
 
-## Overzicht geïmporteerde bestanden
+## Overzicht Bestanden
 
 Hier is een schematische voorstelling hoe de bestanden structuur er uit ziet in PlatformIO
 
@@ -714,10 +718,19 @@ De gemaakte PCB V0.3 wordt op een plexiplaat gemonteerd zodat dit kan fungeren a
 
 <img src="../foto's/PCBV0.3_opstelling_trap_3.jpg" alt="foto opstelling" width="30%">
 
+Als eind presentatie hebben we ook nog 2 voetsteunen gemaakt waarin we de Led-Controller en Gesture Controller kunnen plaatsen. Dit zorgt voor een mooi geheel. De verbindingen onderling zijn gemaakt uit een flatcable waaraan we 2 female headers hebben gesoldeerd.
+
+<iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c539478a60867783279f?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+
+<iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c539af058ebe077ce73b?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+
 Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opgeschoven. Dit is makkelijk verholpen door de pads door te lussen die we voorzien hebben tijdens het PCB ontwerpen. We gaan daarom J19 met TP1 verbinden en J18 met TP2 verbinden. Ook halen we R38 en R37 van de PCB af.
 
 <!-- ![I2C verhelpen kicad](foto's/I2C_verhelping_Kicad.jpg) -->
+
+
 <img src="foto's/I2C_verhelping_Kicad.jpg" alt="I2C verhelpen kicad" width="40%">
+
 <img src="foto's/I2C2 verhelping.png" alt="I2C verhelpen kicad" width="40%">
 
 
@@ -1245,7 +1258,7 @@ Wanneer deze opstelling uitvoerig werd getest, merkte ik op dat het niet altijd 
 
 ## Coverglas
 
-Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder kalibratie en cross-talk corrections, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
+Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder kalibratie en cross-talk correction, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
 
 ### plexiplaat
 
@@ -1331,7 +1344,7 @@ Dit lijkt al een betere afstand oms ons onderzoek op uit te voeren.
 
 ### VL53LX_SMUDGE_CORRECTION_SINGLE
 
-Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één malig bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
+Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één maal bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
 
 We voegen, voordat we de sensor aanzetten, wat vingerafdrukken toe op het coverglas. Daarna zetten we de voeding aan en zullen we de resultaten zien in de grafiek. 
 
@@ -1375,7 +1388,7 @@ De curve is zeer stabiel zoals het hoort.
 
 ### VL53LX_SMUDGE_CORRECTION_SINGLE
 
-Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één malig bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
+Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één maal bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
 
 We voegen, voordat we de sensor aanzetten, wat vingerafdrukken toe op het coverglas. Daarna zetten we de voeding aan en zullen we de resultaten zien in de grafiek. 
 
@@ -1571,7 +1584,7 @@ Met deze gegevens kunnen we vaststellen dat we best voor de linker hand een apar
 </table>
 </div>
 
-Bij het vergelijken van de meetingen tussen een hand met duim en zonder duim, is er weinig verschil merkbaar. Enkel is het merkbaar aan de meetingen wanneer ik mijn linker of rechter hand gebruik (zie links-LR en rechts-LR naar de afvlakking naar boven).
+Bij het vergelijken van de metingen tussen een hand met duim en zonder duim, is er weinig verschil merkbaar. Enkel is het merkbaar aan de metingen wanneer ik mijn linker of rechter hand gebruik (zie links-LR en rechts-LR naar de afvlakking naar boven).
 
 ## Bevindingen
 

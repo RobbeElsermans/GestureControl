@@ -418,7 +418,7 @@ We nemen hier 100 als waarde voor *TimingBudget* wat ons een software delay geef
 
 <img src="./foto's/stand_5_sensoren_1.jpg" width="33%">
 
-Zoals besproken in [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit) zijn er enkele mogelijkheden om de sensoren op te stellen. We hebben daarom een plexi glas plaat ontworpen die genoeg mogelijkheden voorziet om de sensoren op verschillende plaatsen te bevestigen.
+Zoals besproken in [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit) zijn er enkele mogelijkheden om de sensoren op te stellen. We hebben daarom een plexiglas plaat ontworpen die genoeg mogelijkheden voorziet om de sensoren op verschillende plaatsen te bevestigen.
 
 <iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c5393429cd8315483a19?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
 
@@ -600,7 +600,7 @@ Dit lijkt al een betere afstand oms ons onderzoek op uit te voeren.
 
 ## VL53LX_SMUDGE_CORRECTION_SINGLE
 
-Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één malig bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
+Allereerst gaan we de mode **VL53LX_SMUDGE_CORRECTION_SINGLE** eens nader bekijken. Deze mode zal wanneer er een start commando wordt gegeven de correctie toepassen als deze eventueel nodig is. Zo'n correctie wordt enkel toegepast bij bepaalde omstandigheden. Het nadeel van deze mode is dat het maar één maal bij de start van de sensor wordt bekeken. Het kan altijd (meestal zal dit het geval zijn) dat de gebruiker het coverglas zal vuil maken tijdens het gebruik.
 
 We voegen, voordat we de sensor aanzetten, wat vingerafdrukken toe op het coverglas. Daarna zetten we de voeding aan en zullen we de resultaten zien in de grafiek. 
 
@@ -832,7 +832,7 @@ Met deze gegevens kunnen we vaststellen dat we best voor de linker hand een apar
 </table>
 </div>
 
-Bij het vergelijken van de meetingen tussen een hand met duim en zonder duim, is er weinig verschil merkbaar. Enkel is het merkbaar aan de meetingen wanneer ik mijn linker of rechter hand gebruik (zie links-LR en rechts-LR naar de afvlakking naar boven).
+Bij het vergelijken van de metingen tussen een hand met duim en zonder duim, is er weinig verschil merkbaar. Enkel is het merkbaar aan de metingen wanneer ik mijn linker of rechter hand gebruik (zie links-LR en rechts-LR naar de afvlakking naar boven).
 
 # Bevindingen
 
