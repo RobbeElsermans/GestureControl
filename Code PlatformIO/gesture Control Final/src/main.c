@@ -21,9 +21,6 @@
 #include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 #include "stm32f3xx_hal.h"
 #include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
 #include <errno.h>
@@ -34,33 +31,9 @@
 #include "GestureDetect.h"
 #include "SensorFunctions.h"
 #include "calculations.h"
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
 
 // Toggle for data collection
 #define DATACOLLECTION
-
-//#define CALIBRATE
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-uint8_t buf;
 
 // Main states
 static mainStates_t mainState = STATE_INIT;
@@ -87,22 +60,13 @@ static float timerCommand = 0;
 static bool timerCommandSet = false;   // Start in false state
 #define TIMER_COMMAND_TIMEOUT 2000 // 2 seconden
 
-/* USER CODE END PV */
-
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
 void handle_led();
 void handle_commandTimer();
 void handle_data(uint8_t id);
 void perform_calibration();
 void perform_init();
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
 
 /**
  * @brief  The application entry point.
@@ -110,17 +74,10 @@ void perform_init();
  */
 int main(void)
 {
-    /* USER CODE BEGIN 1 */
-    /* USER CODE END 1 */
-
     /* MCU Configuration--------------------------------------------------------*/
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
-
-    /* USER CODE BEGIN Init */
-
-    /* USER CODE END Init */
 
     /* Configure the system clock */
     SystemClock_Config();
@@ -132,10 +89,7 @@ int main(void)
 
     MX_USART1_UART_Init();
 
-    /* USER CODE BEGIN SysInit */
-    /* USER CODE END SysInit */
-
-    /* USER CODE BEGIN 3 */
+    //main while loop
     while (1)
     {
         switch (mainState)
@@ -244,14 +198,12 @@ int main(void)
             }
 #endif
 
-            //uint8_t buf;
+            int8_t buf;
             HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
             // I2C aanzetten om iets te ontvangen in interrupt modus.
             
-            /* code */
             break;
         case STATE_STOP:
-            /* code */
             sensorFunctions_stopSensor(&sensoren[CENTER]);
             while (1)
                 ;
@@ -261,7 +213,6 @@ int main(void)
             break;
         }
         HAL_Delay(1);
-        /* USER CODE END 3 */
     }
 }
 
@@ -310,7 +261,6 @@ void SystemClock_Config(void)
   HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_SYSCLK, RCC_MCODIV_1);
 }
 
-/* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     for (uint8_t i = 0; i < AMOUNT_SENSOR_USED; i++)
@@ -503,7 +453,6 @@ void handle_led()
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
 }
-/* USER CODE END 4 */
 
 /**
  * @brief  This function is executed in case of error occurrence.
