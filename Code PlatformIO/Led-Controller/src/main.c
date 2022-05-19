@@ -50,10 +50,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-#define led_matrix_width 5  // 0->4
-#define led_matrix_height 7 // 0->6
+#define LED_MATRIX_WIDTH 5  // 0->4
+#define LED_MATRIX_HEIGHT 7 // 0->6
 
-int led_matrix[led_matrix_height][led_matrix_width] =
+int led_matrix[LED_MATRIX_HEIGHT][LED_MATRIX_WIDTH] =
     {
         {0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0},
@@ -63,21 +63,21 @@ int led_matrix[led_matrix_height][led_matrix_width] =
         {0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0}};
 
-int led_rows[led_matrix_height][2] = {
-    {GPIOC, GPIO_PIN_2},
-    {GPIOC, GPIO_PIN_0},
-    {GPIOC, GPIO_PIN_11},
-    {GPIOC, GPIO_PIN_13},
-    {GPIOA, GPIO_PIN_4},
-    {GPIOC, GPIO_PIN_1},
-    {GPIOB, GPIO_PIN_0}};
+int led_rows[LED_MATRIX_HEIGHT][2] = {
+    {R1_GPIO_Port, R1_Pin},
+    {R2_GPIO_Port, R2_Pin},
+    {R3_GPIO_Port, R3_Pin},
+    {R4_GPIO_Port, R4_Pin},
+    {R5_GPIO_Port, R5_Pin},
+    {R6_GPIO_Port, R6_Pin},
+    {R7_GPIO_Port, R7_Pin}};
 
-int led_columns[led_matrix_width][2] = {
-    {GPIOC, GPIO_PIN_10},
-    {GPIOC, GPIO_PIN_12},
-    {GPIOC, GPIO_PIN_3},
-    {GPIOA, GPIO_PIN_15},
-    {GPIOB, GPIO_PIN_7}};
+int led_columns[LED_MATRIX_WIDTH][2] = {
+    {C1_GPIO_Port, C1_Pin},
+    {C2_GPIO_Port, C2_Pin},
+    {C3_GPIO_Port, C3_Pin},
+    {C4_GPIO_Port, C4_Pin},
+    {C5_GPIO_Port, C5_Pin}};
 
 int posx = 0;
 int posy = 0;
@@ -148,21 +148,6 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-  for (uint8_t row = 0; row < led_matrix_height; row++)
-  {
-    HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[row][0], led_rows[row][1], 1);
-  }
-  for (uint8_t col = 0; col < led_matrix_width; col++)
-  {
-    HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 1);
-    HAL_Delay(200);
-  }
-  HAL_Delay(200);
-  for (uint8_t col = 0; col < led_matrix_width; col++)
-  {
-    HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
-  }
-
   bool hasReset = false;
   /* USER CODE END 2 */
 
@@ -187,22 +172,18 @@ int main(void)
     {
       if (hasReset)
         hasReset = false;
-      for (uint8_t col = 0; col < led_matrix_width; col++)
+      uint8_t i = 0;
+      uint8_t j = 0;
+      for (i = 0; i < LED_MATRIX_HEIGHT; i++)
       {
-        // Reset de rijen als commando veranderd is
-        for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
+        for (j = 0; j < LED_MATRIX_WIDTH; j++)
         {
-          HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col1][0], led_columns[col1][1], 0);
-        }
-        // Zet de kolommen klaar
-        for (uint8_t row = 0; row < led_matrix_height; row++)
-        {
-          HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[row][0], led_rows[row][1], led_matrix[row][col]);
-        }
+          HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[j][0], led_columns[j][1], led_matrix[i][j]);
+          HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[i][0], led_rows[i][1], led_matrix[i][j]);
 
-        // voer de rij door
-        HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 1);
-        HAL_Delay(1);
+          if (led_matrix[i][j])
+            HAL_Delay(1);
+        }
       }
     }
     else
@@ -213,7 +194,7 @@ int main(void)
       if (hasReset == false)
       {
         hasReset = true;
-        for (uint8_t col = 0; col < led_matrix_width; col++)
+        for (uint8_t col = 0; col < LED_MATRIX_WIDTH; col++)
         {
           HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
         }
@@ -240,10 +221,10 @@ int main(void)
     if (commando == LR && prevCommando == OBJ)
       posx++;
 
-    if (posx >= led_matrix_width)
+    if (posx >= LED_MATRIX_WIDTH)
       posx = 0;
     if (posx < 0)
-      posx = led_matrix_width - 1;
+      posx = LED_MATRIX_WIDTH - 1;
 
     if (commando == UD && prevCommando == OBJ)
       posy++;
@@ -251,10 +232,10 @@ int main(void)
     if (commando == DU && prevCommando == OBJ)
       posy--;
 
-    if (posy >= led_matrix_height)
+    if (posy >= LED_MATRIX_HEIGHT)
       posy = 0;
     if (posy < 0)
-      posy = led_matrix_height - 1;
+      posy = LED_MATRIX_HEIGHT - 1;
 
     led_matrix[posy][posx] = 1;
 
