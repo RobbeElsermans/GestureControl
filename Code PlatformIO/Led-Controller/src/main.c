@@ -181,7 +181,7 @@ int main(void)
     // while (x < 50)
     // {
 
-    if(commando >= 0x20)
+    if(commando >= OBJ)
     {
     for (uint8_t col = 0; col < led_matrix_width; col++)
     {
@@ -206,6 +206,16 @@ int main(void)
       HAL_Delay(500);
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     }
+
+    if(commando == OBJ)
+    {
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
+    }
+    else if(commando > OBJ)
+    {
+      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 0);
+    }
+
     //   x++;
     // }
     led_matrix[posy][posx] = 0;

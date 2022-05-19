@@ -198,7 +198,7 @@ int main(void)
             }
 #endif
 
-            int8_t buf;
+            uint8_t buf;
             HAL_I2C_Slave_Receive_IT(&hi2c2, &buf, sizeof(buf));
             // I2C aanzetten om iets te ontvangen in interrupt modus.
             
@@ -340,20 +340,20 @@ void perform_calibration()
     if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
     // if(true)
     {
-        calibrationData_getCalibrate(&sensoren[CENTER]);
+        //calibrationData_getCalibrate(&sensoren[CENTER]);
         calibrationData_getCalibrate(&sensoren[LEFT]);
-        calibrationData_getCalibrate(&sensoren[RIGHT]);
+        //calibrationData_getCalibrate(&sensoren[RIGHT]);
 
-        sensorFunctions_startSensor(&sensoren[CENTER]);
+        //sensorFunctions_startSensor(&sensoren[CENTER]);
         sensorFunctions_startSensor(&sensoren[LEFT]);
-        sensorFunctions_startSensor(&sensoren[RIGHT]);
+        //sensorFunctions_startSensor(&sensoren[RIGHT]);
         while (1)
         {
-            sensorFunctions_getData(&sensoren[CENTER]);
+            //sensorFunctions_getData(&sensoren[CENTER]);
             HAL_Delay(1);
             sensorFunctions_getData(&sensoren[LEFT]);
             HAL_Delay(1);
-            sensorFunctions_getData(&sensoren[RIGHT]);
+            //sensorFunctions_getData(&sensoren[RIGHT]);
             HAL_Delay(1);
             HAL_Delay(200);
             printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
