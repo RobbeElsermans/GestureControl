@@ -96,24 +96,18 @@ typedef enum
 commands_t commando = NONE;
 commands_t prevCommando = NONE;
 
-HAL_StatusTypeDef status = HAL_ERROR;
 uint8_t buf = 0;
 uint8_t counter = 0;
 uint8_t addrs = 0x20 << 1;
 
-volatile bool isSend = false;
-/* USER CODE END PV */
+bool hasReset = false;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+void handle_positieBepaling();
+void handle_objLed();
+void handle_matrix();
+void handle_matrixReset();
 
 /**
  * @brief  The application entry point.
@@ -121,70 +115,34 @@ void SystemClock_Config(void);
  */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
   /* Configure the system clock */
   SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_DMA_Init();
   MX_I2C1_Init();
-  /* USER CODE BEGIN 2 */
-
-  bool hasReset = false;
-  /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
     counter++;
-
-    // I2C stuff
-    // HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
-
-    status = HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
+    HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
 
     printf("buf: %3d \r\n", buf);
     commando = (commands_t)buf;
-    // int x = 0;
-    // while (x < 50)
-    // {
 
     if (commando >= OBJ)
     {
       if (hasReset)
         hasReset = false;
-      uint8_t i = 0;
-      uint8_t j = 0;
-      for (i = 0; i < LED_MATRIX_HEIGHT; i++)
-      {
-        for (j = 0; j < LED_MATRIX_WIDTH; j++)
-        {
-          HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[j][0], led_columns[j][1], led_matrix[i][j]);
-          HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[i][0], led_rows[i][1], led_matrix[i][j]);
-
-          if (led_matrix[i][j])
-            HAL_Delay(1);
-        }
-      }
+      handle_matrix();
     }
     else
     {
@@ -194,58 +152,13 @@ int main(void)
       if (hasReset == false)
       {
         hasReset = true;
-        for (uint8_t col = 0; col < LED_MATRIX_WIDTH; col++)
-        {
-          HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
-        }
+        handle_matrixReset();
       }
     }
-
-    if (commando == OBJ)
-    {
-      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
-    }
-    else if (commando > OBJ)
-    {
-      HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 0);
-    }
-
-    //   x++;
-    // }
-    led_matrix[posy][posx] = 0;
-
-    // Ontvang data
-    if (commando == RL && prevCommando == OBJ)
-      posx--;
-
-    if (commando == LR && prevCommando == OBJ)
-      posx++;
-
-    if (posx >= LED_MATRIX_WIDTH)
-      posx = 0;
-    if (posx < 0)
-      posx = LED_MATRIX_WIDTH - 1;
-
-    if (commando == UD && prevCommando == OBJ)
-      posy++;
-
-    if (commando == DU && prevCommando == OBJ)
-      posy--;
-
-    if (posy >= LED_MATRIX_HEIGHT)
-      posy = 0;
-    if (posy < 0)
-      posy = LED_MATRIX_HEIGHT - 1;
-
-    led_matrix[posy][posx] = 1;
-
-    prevCommando = commando;
-    HAL_Delay(10);
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+    handle_objLed();
+    handle_positieBepaling();
+    HAL_Delay(8);
   }
-  /* USER CODE END 3 */
 }
 
 /**
@@ -309,7 +222,77 @@ int _write(int file, char *data, int len)
 }
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-  status = HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
+  HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
+}
+
+void handle_positieBepaling()
+{
+
+  led_matrix[posy][posx] = 0;
+
+  // Ontvang data
+  if (commando == RL && prevCommando == OBJ)
+    posx--;
+
+  if (commando == LR && prevCommando == OBJ)
+    posx++;
+
+  if (posx >= LED_MATRIX_WIDTH)
+    posx = 0;
+  if (posx < 0)
+    posx = LED_MATRIX_WIDTH - 1;
+
+  if (commando == UD && prevCommando == OBJ)
+    posy++;
+
+  if (commando == DU && prevCommando == OBJ)
+    posy--;
+
+  if (posy >= LED_MATRIX_HEIGHT)
+    posy = 0;
+  if (posy < 0)
+    posy = LED_MATRIX_HEIGHT - 1;
+
+  led_matrix[posy][posx] = 1;
+
+  prevCommando = commando;
+}
+
+void handle_objLed()
+{
+  if (commando == OBJ)
+  {
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
+  }
+  else if (commando > OBJ)
+  {
+    HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 0);
+  }
+}
+
+void handle_matrix()
+{
+  uint8_t i = 0;
+  uint8_t j = 0;
+  for (i = 0; i < LED_MATRIX_HEIGHT; i++)
+  {
+    for (j = 0; j < LED_MATRIX_WIDTH; j++)
+    {
+      HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[j][0], led_columns[j][1], led_matrix[i][j]);
+      HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[i][0], led_rows[i][1], led_matrix[i][j]);
+
+      if (led_matrix[i][j])
+        HAL_Delay(1);
+    }
+  }
+}
+
+void handle_matrixReset()
+{
+  for (uint8_t col = 0; col < LED_MATRIX_WIDTH; col++)
+  {
+    HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
+  }
 }
 
 /* USER CODE END 4 */
