@@ -259,7 +259,7 @@ int main(void)
     led_matrix[posy][posx] = 1;
 
     prevCommando = commando;
-    // HAL_Delay(100);
+    HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
