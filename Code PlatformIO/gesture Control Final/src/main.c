@@ -43,7 +43,7 @@ static gestureControlStates_t gestureControlState = STATE_GC_SAMPLE;
 
 // Sensor define
 static sensorData_t sensoren[AMOUNT_SENSOR_USED];
-
+      
 #ifdef DATACOLLECTION
 static long timerDataCollection = 0;
 #define TIMER_DATA_COLLECTION_TIMEOUT 20 // aantal milliseconden per meeting
@@ -338,25 +338,25 @@ void perform_calibration()
 {
     // Als de drukknop SW_1 actief is, wordt er gekalibreerd
     if (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin))
-    // if(true)
+    //if(true)
     {
-        //calibrationData_getCalibrate(&sensoren[CENTER]);
+        calibrationData_getCalibrate(&sensoren[CENTER]);
         calibrationData_getCalibrate(&sensoren[LEFT]);
-        //calibrationData_getCalibrate(&sensoren[RIGHT]);
+        calibrationData_getCalibrate(&sensoren[RIGHT]);
 
-        //sensorFunctions_startSensor(&sensoren[CENTER]);
+        sensorFunctions_startSensor(&sensoren[CENTER]);
         sensorFunctions_startSensor(&sensoren[LEFT]);
-        //sensorFunctions_startSensor(&sensoren[RIGHT]);
+        sensorFunctions_startSensor(&sensoren[RIGHT]);
         while (1)
         {
-            //sensorFunctions_getData(&sensoren[CENTER]);
-            HAL_Delay(1);
+            sensorFunctions_getData(&sensoren[CENTER]);
+            HAL_Delay(10);
             sensorFunctions_getData(&sensoren[LEFT]);
-            HAL_Delay(1);
-            //sensorFunctions_getData(&sensoren[RIGHT]);
-            HAL_Delay(1);
+            HAL_Delay(10);
+            sensorFunctions_getData(&sensoren[RIGHT]);
+            HAL_Delay(10);
             HAL_Delay(200);
-            printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+            printf("%d,%d\t%d,%d\t%d,%d\r\n",(int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
         }
     }
     else
@@ -371,13 +371,13 @@ void perform_calibration()
         // while (1)
         // {
         //   sensorFunctions_getData(&sensoren[CENTER]);
-        //   HAL_Delay(1);
+        //   HAL_Delay(10);
         //   sensorFunctions_getData(&sensoren[LEFT]);
-        //   HAL_Delay(1);
+        //   HAL_Delay(10);
         //   sensorFunctions_getData(&sensoren[RIGHT]);
-        //   HAL_Delay(1);
+        //   HAL_Delay(10);
         //   HAL_Delay(200);
-        //   printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+        //   printf("%d,%d\t%d,%d\t%d,%d\r\n",(int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
         // }
     }
 }

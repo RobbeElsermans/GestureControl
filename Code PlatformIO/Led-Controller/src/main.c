@@ -82,16 +82,16 @@ int led_columns[led_matrix_width][2] = {
 int posx = 0;
 int posy = 0;
 
-  typedef enum
-  {
-    DIM = 0x25,
-    RL = 0x22,
-    LR = 0x21,
-    UD = 0x23,
-    DU = 0x24,
-    OBJ = 0x20,
-    NONE = 0x10
-  } commands_t;
+typedef enum
+{
+  DIM = 0x25,
+  RL = 0x22,
+  LR = 0x21,
+  UD = 0x23,
+  DU = 0x24,
+  OBJ = 0x20,
+  NONE = 0x10
+} commands_t;
 
 commands_t commando = NONE;
 commands_t prevCommando = NONE;
@@ -162,6 +162,8 @@ int main(void)
   {
     HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
   }
+
+  bool hasReset = false;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -181,37 +183,48 @@ int main(void)
     // while (x < 50)
     // {
 
-    if(commando >= OBJ)
+    if (commando >= OBJ)
     {
-    for (uint8_t col = 0; col < led_matrix_width; col++)
-    {
-      // Reset de rijen als commando veranderd is
-      for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
+      if (hasReset)
+        hasReset = false;
+      for (uint8_t col = 0; col < led_matrix_width; col++)
       {
-        HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col1][0], led_columns[col1][1], 0);
-      }
-      // Zet de kolommen klaar
-      for (uint8_t row = 0; row < led_matrix_height; row++)
-      {
-        HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[row][0], led_rows[row][1], led_matrix[row][col]);
-      }
+        // Reset de rijen als commando veranderd is
+        for (uint8_t col1 = 0; col1 < led_matrix_width; col1++)
+        {
+          HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col1][0], led_columns[col1][1], 0);
+        }
+        // Zet de kolommen klaar
+        for (uint8_t row = 0; row < led_matrix_height; row++)
+        {
+          HAL_GPIO_WritePin((GPIO_TypeDef *)led_rows[row][0], led_rows[row][1], led_matrix[row][col]);
+        }
 
-      // voer de rij door
-      HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 1);
-      HAL_Delay(1);
-    }
+        // voer de rij door
+        HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 1);
+        HAL_Delay(1);
+      }
     }
     else
     {
       HAL_Delay(500);
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+
+      if (hasReset == false)
+      {
+        hasReset = true;
+        for (uint8_t col = 0; col < led_matrix_width; col++)
+        {
+          HAL_GPIO_WritePin((GPIO_TypeDef *)led_columns[col][0], led_columns[col][1], 0);
+        }
+      }
     }
 
-    if(commando == OBJ)
+    if (commando == OBJ)
     {
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
     }
-    else if(commando > OBJ)
+    else if (commando > OBJ)
     {
       HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 0);
     }
