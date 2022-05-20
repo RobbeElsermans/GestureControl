@@ -9,6 +9,11 @@
         "stddef.h": "c",
         "processgpio.h": "c",
         "processtimer.h": "c",
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "stdint.h": "c",
+        "gpiomatrix.h": "c",
+        "processcommand.h": "c",
+        "command.h": "c",
+        "position.h": "c"
     }
 }

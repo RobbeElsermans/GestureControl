@@ -18,14 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "i2c.h"
 #include "usart.h"
 
-//abstracte layers
-#include "processGpiomatrix.h"
-#include "processTimer.h"
-#include "processPosition.h"
+// abstracte layers
+#include "gpioMatrix.h"
+#include "timer.h"
+#include "position.h"
+#include "command.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -86,19 +86,6 @@ int led_matrix[LED_MATRIX_HEIGHT][LED_MATRIX_WIDTH] =
 int posx = 0;
 int posy = 0;
 
-typedef enum
-{
-  RL = 0x22,
-  LR = 0x21,
-  UD = 0x23,
-  DU = 0x24,
-  OBJ = 0x20,
-  NONE = 0x10
-} commands_t;
-
-commands_t commando = NONE;
-commands_t prevCommando = NONE;
-
 uint8_t buf = 0;
 uint8_t counter = 0;
 uint8_t addrs = 0x20 << 1;
@@ -130,33 +117,42 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
 
-  processGpio_initGpio();
+  gpio_initGpio();
 
   position_t pos;
-  processPosition_initPosition(&pos);
-  processPosition_processPosition(&pos);
-  processPosition_turnOn(&pos);
+  command_t command = NONE;
+  position_initPosition(&pos);
+  command_initCommand(&command);
+
+  command_processCommand(&command, &pos);
 
   /* Infinite loop */
   while (1)
   {
-    processGpio_set_gpio(led1, 1);
+    gpio_set_gpio(led1, 1);
     // gpio_matrix_t temp;
     // temp.column = C3;
     // temp.row = R2;
-    // processGpio_set_gpio_matrix(&temp, 1);
+    // gpioMatrix_set_gpio_matrix(&temp, 1);
+    command = OBJ;
+    command_processCommand(&command, &pos);
+    timer_delay(200);
+    gpio_set_gpio(led1, 0);
+    // gpioMatrix_set_gpio_matrix(&temp, 0);
+    command = RL;
+    command_processCommand(&command, &pos);
+    // position_columnLeft(&pos);
+    // position_rowDown(&pos);
+    // position_processPosition(&pos);
+    timer_delay(1000);
 
-    processTimer_delay(200);
-    processGpio_set_gpio(led1, 0);
-    // processGpio_set_gpio_matrix(&temp, 0);
+    command = UD;
+    command_processCommand(&command, &pos);
+    timer_delay(200);
 
-    processPosition_columnLeft(&pos);
-    processPosition_rowDown(&pos);
-    processPosition_processPosition(&pos);
-    processTimer_delay(200);
-
-
-    
+    command = OBJ;
+    command_processCommand(&command, &pos);
+    timer_delay(200);
 
     // counter++;
     // HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
@@ -172,7 +168,6 @@ int main(void)
     // }
     // else
     // {
-
 
     //   if (hasReset == false)
     //   {
@@ -250,51 +245,6 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
   HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
 }
 
-void handle_positieBepaling()
-{
-
-  led_matrix[posy][posx] = 0;
-
-  // Ontvang data
-  if (commando == RL && prevCommando == OBJ)
-    posx--;
-
-  if (commando == LR && prevCommando == OBJ)
-    posx++;
-
-  if (posx >= LED_MATRIX_WIDTH)
-    posx = 0;
-  if (posx < 0)
-    posx = LED_MATRIX_WIDTH - 1;
-
-  if (commando == UD && prevCommando == OBJ)
-    posy++;
-
-  if (commando == DU && prevCommando == OBJ)
-    posy--;
-
-  if (posy >= LED_MATRIX_HEIGHT)
-    posy = 0;
-  if (posy < 0)
-    posy = LED_MATRIX_HEIGHT - 1;
-
-  led_matrix[posy][posx] = 1;
-
-  prevCommando = commando;
-}
-
-void handle_objLed()
-{
-  if (commando == OBJ)
-  {
-    ;
-  }
-  else if (commando > OBJ)
-  {
-    ;
-  }
-}
-
 void handle_matrix()
 {
   uint8_t i = 0;
@@ -303,7 +253,7 @@ void handle_matrix()
   {
     for (j = 0; j < LED_MATRIX_WIDTH; j++)
     {
-      
+
       if (led_matrix[i][j])
         HAL_Delay(1);
     }

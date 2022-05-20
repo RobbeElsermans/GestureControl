@@ -11,3 +11,6 @@ C4_Context.puml
 in de root van uw .puml bestand staan.
 
 Alt+D om preview te zien
+
+LINUX
+sudo apt install graphviz
