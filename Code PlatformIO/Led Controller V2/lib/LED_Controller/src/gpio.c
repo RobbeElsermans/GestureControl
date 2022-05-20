@@ -78,11 +78,37 @@ void gpio_initGpio(){
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
-// void gpio_get_gpio(gpio_matrix_t *gpio){
-// ;;
-// }
 
-void gpio_set_gpio(gpio_t gpio ,int state){
+state_t gpio_get_gpio(gpio_t gpio){
+    if(gpio == led1)
+        return (state_t)HAL_GPIO_ReadPin(LD2_GPIO_Port, LD2_Pin);
+    if(gpio == C1)
+        return (state_t)HAL_GPIO_ReadPin(C1_GPIO_Port, C1_Pin);
+    if(gpio == C2)
+        return (state_t)HAL_GPIO_ReadPin(C2_GPIO_Port, C2_Pin);
+    if(gpio == C3)
+        return (state_t)HAL_GPIO_ReadPin(C3_GPIO_Port, C3_Pin);
+    if(gpio == C4)
+        return (state_t)HAL_GPIO_ReadPin(C4_GPIO_Port, C4_Pin);
+    if(gpio == C5)
+        return (state_t)HAL_GPIO_ReadPin(C5_GPIO_Port, C5_Pin);
+    if(gpio == R1)
+        return (state_t)HAL_GPIO_ReadPin(R1_GPIO_Port, R1_Pin);
+    if(gpio == R2)
+        return (state_t)HAL_GPIO_ReadPin(R2_GPIO_Port, R2_Pin);
+    if(gpio == R3)
+        return (state_t)HAL_GPIO_ReadPin(R3_GPIO_Port, R3_Pin);
+    if(gpio == R4)
+        return (state_t)HAL_GPIO_ReadPin(R4_GPIO_Port, R4_Pin);
+    if(gpio == R5)
+        return (state_t)HAL_GPIO_ReadPin(R5_GPIO_Port, R5_Pin);
+    if(gpio == R6)
+        return (state_t)HAL_GPIO_ReadPin(R6_GPIO_Port, R6_Pin);
+    if(gpio == R7)
+        return (state_t)HAL_GPIO_ReadPin(R7_GPIO_Port, R7_Pin);
+}
+
+void gpio_set_gpio(gpio_t gpio ,state_t state){
     if(gpio == led1)
         HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, (GPIO_PinState)state);
     if(gpio == C1)
@@ -109,6 +135,4 @@ void gpio_set_gpio(gpio_t gpio ,int state){
         HAL_GPIO_WritePin(R6_GPIO_Port, R6_Pin, (GPIO_PinState)state);
     if(gpio == R7)
         HAL_GPIO_WritePin(R7_GPIO_Port, R7_Pin, (GPIO_PinState)state);
-
-    
 }

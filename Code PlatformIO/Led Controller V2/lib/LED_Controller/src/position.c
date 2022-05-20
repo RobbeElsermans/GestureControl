@@ -1,8 +1,5 @@
 #include "position.h"
 
-#include "gpioMatrix.h"
-#include "timer.h"
-
 void set_position(position_t *_pos);
 
 void position_initPosition(position_t *_pos)

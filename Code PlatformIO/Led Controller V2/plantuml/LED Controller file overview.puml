@@ -1,0 +1,37 @@
+@startuml LED Controller file overview
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(led_controller, "Led-Controller"){
+    Container(mainProgram, "main program")
+    Container(command, "command", "", "Bekijkt ofdat er een bepaald commando is gegeven en geeft hierop een actie")
+    Container(position, "position","", "Zal a.d.h.v. de gegeven positie, de led matrix aansturen")
+    Container(gpioMatrix, "gpioMatrix","","Zal de gekregen matrix gpio's omzetten")
+    Container(gpio, "gpio","","Zal de gekregen GPIO aansturen of uitschakelen")
+    Container(timer, "timer","","zal tijds functies bevatten")
+
+
+    ' Container(processConnectivity, "process Requests/ Receives","", "Vraagt en stuurt commando's")
+    ' Container(processI2C, "process I2C","","Zal de gekregen GPIO aansturen of uitschakelen")
+
+    System(BSP, "HAL DRIVER","Gebruikt HAL bibliotheek")
+    Container(HARDWARE, "Hardware")
+}
+
+Rel(mainProgram, command, "set","command_t")
+Rel(mainProgram, position, "get","position_t")
+
+Rel_U(timer, mainProgram, "add","delay")
+
+Rel(gpioMatrix, gpio, "set","gpio_t")
+
+Rel(position, gpioMatrix, "set","gpio_matrix_t")
+Rel_D(timer, position, "add","delay")
+
+Rel(command, position, "set","position_t")
+
+BiRel_U(BSP, gpio, "get/set","functions")
+Rel_U(BSP, timer, "get","ticks")
+
+BiRel_U(HARDWARE, BSP, "get/set","registers")
+
+@enduml

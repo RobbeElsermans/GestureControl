@@ -16,15 +16,26 @@
  ******************************************************************************
  */
 /* USER CODE END Header */
+
+/**
+ * @file main.c
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-05-20
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
 #include "usart.h"
 
 // abstracte layers
-#include "gpioMatrix.h"
-#include "timer.h"
-#include "position.h"
+// #include "gpioMatrix.h"
+// #include "timer.h"
+// #include "position.h"
 #include "command.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -117,67 +128,71 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
 
+/**
+ * @brief Construct a new gpio initGpio object
+ * 
+ */
+
+
+  //GPIO initializeren via hal_lib
   gpio_initGpio();
 
+
+  //struct (object) pos aanmaken
   position_t pos;
+
+  //enum command aanmaken met initiële waard NONE
   command_t command = NONE;
+
+  //positie initialiseren
   position_initPosition(&pos);
+
+  //command initialiseren
   command_initCommand(&command);
 
+  //Update het commando (niet perse nodig hier)
   command_processCommand(&command, &pos);
 
   /* Infinite loop */
   while (1)
   {
+    //set led1
     gpio_set_gpio(led1, 1);
-    // gpio_matrix_t temp;
-    // temp.column = C3;
-    // temp.row = R2;
-    // gpioMatrix_set_gpio_matrix(&temp, 1);
+
+    //Maak een UD command
     command = OBJ;
+    //Update het commando
     command_processCommand(&command, &pos);
+
+    //delay
     timer_delay(200);
+
+    //reset led1
     gpio_set_gpio(led1, 0);
-    // gpioMatrix_set_gpio_matrix(&temp, 0);
+
+    //Maak een UD command
     command = RL;
+    //Update het commando
     command_processCommand(&command, &pos);
-    // position_columnLeft(&pos);
-    // position_rowDown(&pos);
-    // position_processPosition(&pos);
+
+    //delay
     timer_delay(1000);
 
+    //Maak een UD command
     command = UD;
+    //Update het commando
     command_processCommand(&command, &pos);
+
+    //delay
     timer_delay(200);
 
+    //Maak een UD command
     command = OBJ;
+    //Update het commando
     command_processCommand(&command, &pos);
+
+    //delay
     timer_delay(200);
-
-    // counter++;
-    // HAL_I2C_Master_Transmit_IT(&hi2c1, addrs, &counter, 1);
-
-    // printf("buf: %3d \r\n", buf);
-    // commando = (commands_t)buf;
-
-    // if (commando >= OBJ)
-    // {
-    //   if (hasReset)
-    //     hasReset = false;
-    //   handle_matrix();
-    // }
-    // else
-    // {
-
-    //   if (hasReset == false)
-    //   {
-    //     hasReset = true;
-    //     handle_matrixReset();
-    //   }
-    // }
-    // handle_objLed();
-    // handle_positieBepaling();
-    // HAL_Delay(8);
   }
 }
 
