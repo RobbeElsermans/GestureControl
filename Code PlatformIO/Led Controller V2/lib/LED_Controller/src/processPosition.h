@@ -15,9 +15,12 @@
 typedef struct{
     int8_t x;
     int8_t y;
+    bool state;
 } position_t;
 
 void processPosition_initPosition(position_t *_pos);
+void processPosition_turnOn(position_t *_pos);
+void processPosition_turnOff(position_t *_pos);
 void processPosition_processPosition(position_t *_pos);
 // void processPosition_set_position(position_t *_pos);
 void processPosition_rowDown(position_t *_pos);

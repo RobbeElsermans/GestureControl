@@ -8,9 +8,21 @@ void processPosition_initPosition(position_t *_pos)
 {
     _pos->x = C1;
     _pos->y = R1;
+    _pos->state = false;
 }
+
+void processPosition_turnOn(position_t *_pos){
+    _pos->state = true;
+}
+
+void processPosition_turnOff(position_t *_pos){
+    _pos->state = false;
+}
+
 void processPosition_processPosition(position_t *_pos)
 {
+    if(_pos->state)
+    {
     gpio_matrix_t temp;
     uint8_t i = 0;
     // clear de pinnen
@@ -31,6 +43,7 @@ void processPosition_processPosition(position_t *_pos)
     processGpio_set_gpio_matrix(&temp, setPin);
 
     processTimer_delay(1);
+    }
 }
 // position_t processPosition_get_position()
 // {

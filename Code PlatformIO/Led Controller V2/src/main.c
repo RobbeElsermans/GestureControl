@@ -135,11 +135,11 @@ int main(void)
   position_t pos;
   processPosition_initPosition(&pos);
   processPosition_processPosition(&pos);
+  processPosition_turnOn(&pos);
 
   /* Infinite loop */
   while (1)
   {
-
     processGpio_set_gpio(led1, 1);
     // gpio_matrix_t temp;
     // temp.column = C3;
