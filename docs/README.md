@@ -69,16 +69,16 @@ Het is de bedoeling dat dit document gebruikt kan worden om van scratch heel de 
 Ook wordt er een sectie voorzien over de hardware aanpassingen die gebeurd zijn doorlopen het project.
 Als laatste wordt er een sectie voorzien hoe dit systeem met een ander systeem kan communiceren met voorbeeld code.
 
-Helemaal onderaan is een link naar de onderzoekspagina waar ik sommige zaken dieper heb bekeken en onderzocht. Dit zijn zaken zoals het testen van de soorten modi waarin de sensor kon gebruikt worden en het soort coverglas (glas of plexi).
+Helemaal onderaan staan de uitgewerkte onderzoeken die ik terloops dit project heb uitgezocht. Dit zijn zaken zoals het testen van de soorten modi waarin de sensor kon gebruikt worden en het soort coverglas (glas of plexi).
 
 Bij het begin van dit project had ik geen kennis over het programmeren van 32-bit microcontrollers. 
 STM32CUBEIDE was me destijds ook onbekend. Gaandeweg dit project zijn beide items duidelijk geworden.
 
 Tijdens het middelbaar en hoger onderwijs heb ik de basis mee gekregen om een ordelijke PCB op te stellen. in dit project is de zelfzekerheid en het kritisch denken over hoe je het best een PCB opbouwt verhoogt.
 
-De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in dit document aangehaald. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
+De API geschreven door ST-Elektronics ([hier](https://www.st.com/content/st_com/en/products/embedded-software/imaging-software/stsw-img015.html) te vinden) zal in dit document niet volledig beschreven worden. Enkel de gebruikte calls worden in de code wat verduidelijkt. De handleiding om met de gegeven API te werken is [hier](https://www.st.com/resource/en/data_brief/stsw-img015.pdf) te vinden.
 
-De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook een werkende bibliotheek aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControlFinal/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/gesture%20Control%20Final/lib).
+De gebruikte bibliotheek wordt in dit document opgesteld zodat deze stap voor stap na gebouwd kan worden. Er is ook een werkende bibliotheek (en source code) aanwezig in de repo onder [GestureControl/Code PlatformIO/GestureControlFinal/lib](https://github.com/RobbeElsermans/GestureControl/tree/main/Code%20PlatformIO/gesture%20Control%20Final/lib).
 
 ----
 
@@ -101,9 +101,9 @@ Deze sectie zal de gebruikte software bevatten en waarom we deze gebruikt hebben
 | -------- |: ------    | ------------  | ----      |
 | STM32CubeIDE   |  V1.4.0    |De software geschreven door ST. Hiermee is het makkelijk om de MCU te pre-configureren zonder 1 lijn code te schrijven. Zo worden alle peripherals en GPIO gebruik, automatisch gegenereerd op basis van een userinterface. Op deze manier kunnen we een clean start maken van het project zonder te veel code te schrijven voor het initialiseren van de MCU.|[link](https://www.st.com/en/development-tools/stm32cubeide.html)|
 |   Visual Code   |V1.65.2   | Een "open source" editor die een groot ecosysteem heeft van plugins. Deze editor is vooral gekozen omdat ik hier ervaring mee heb. Ook omdat dit draait op Linux.|[link](https://code.visualstudio.com/)|
-| PlatformIO  IDE | Home: V3.4.1  Core: V5.2.5 | Een plugin van Visual Code om de STM32Nucleo te programmeren en hardware debugging uit te voeren.  | [link](https://platformio.org/install/ide?install=vscode)
+| PlatformIO  IDE | Home: V3.x.x  Core: V6.x.x | Een plugin van Visual Code om de STM32Nucleo te programmeren en hardware debugging uit te voeren.  | [link](https://platformio.org/install/ide?install=vscode)
 |Docsify|V4.4.4|Om deze documentatie te schrijven is er gebruik gemaakt van Docsify die de markdown bestanden omzet in een interactieve website. |[link](https://docsify.js.org/)|
-|ST STM32 Platform| V15.2.0 | PlatformIO ST STM32 platform | [link](https://github.com/platformio/platform-ststm32?utm_source=platformio&utm_medium=piohome)|
+|ST STM32 Platform| V15.x.x | PlatformIO ST STM32 platform | [link](https://github.com/platformio/platform-ststm32?utm_source=platformio&utm_medium=piohome)|
 </div>
 
 ----
@@ -259,9 +259,9 @@ ST Morpho Extention pin header
 
 ## genereer code
 
-Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tools die voor ons de code genereren.
+Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tools die voor ons de code genereert.
 
-?> Om de foto's te vergroten kan u hierop drukken.
+?> Om de foto's te vergroten kan u er op drukken.
 
 1. Installeer [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) en open dit in een directory naar keuzen.
 
@@ -315,7 +315,7 @@ Wanneer de installatie voltooid is, zou het vinkje volledig groen moeten zijn. S
 
 7. Vervolgens plaatsen we de pin gegevens (die te vinden zijn in hoofdstuk [PinOut](#pinout) meer bepaald in foto **PCB Pinout F302Rx** en in hoofdstuk [Pin description](#pin-description)) in de grafische editor. Zoals de opmerking zegt, is I2C2 op een andere pin dan de MCU's die we in gedachten hadden om te gebruiken. Dit wordt in hoofdstuk [Hardware Opbouw](#hardware-opbouw) beschreven hoe we dit aanpassen met PCBV0.3.
 
-Om een pin de definiëren gaan we met de cursor van de muis op de desbetreffende pin staan. Met de linker muisknop komt er een dropdown waarin alle opties staan die de geselecteerde pin kan hebben. Hieronder een voorbeeld hoe we XSHUT_0 - dat een GPIO_Output is en zich op PC0 bevindt - definiëren. We geven de pin ook een naam zodat dit later in de code leesbaar is.
+Om een pin te definiëren gaan we met de cursor van de muis op de desbetreffende pin staan. Met de linker muisknop komt er een dropdown waarin alle opties staan die de geselecteerde pin kan hebben. Hieronder een voorbeeld hoe we XSHUT_0 - dat een GPIO_Output is en zich op PC0 bevindt - definiëren. We geven de pin ook een naam zodat dit later in de code leesbaar is.
 
 <!-- ![foto declareren pinnen 8](foto's/tutorial_Importeer_bestanden_8.jpg) -->
 
@@ -366,7 +366,7 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
       - Mode: Asynchronous
       - Hardware Flow Control (RS232): CTS/RTS
       - Baud Rate: 115200
-      - TX and RX Pins Swapping: Enable
+      - TX and RX Pins Swapping: Enable (We wisselen de pinnen omdat dit tijdens het tekenen van het schema niet juist is gebeurd)
     
     <!-- ![foto declareren peripheral pinnen 17](foto's/tutorial_Importeer_bestanden_17.jpg)
     ![foto declareren peripheral pinnen 18](foto's/tutorial_Importeer_bestanden_18.jpg) -->
@@ -374,7 +374,7 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
     <img src="../foto's/tutorial_Importeer_bestanden_17.jpg" alt="foto declareren peripheral pinnen17" width="30%">
     <img src="../foto's/tutorial_Importeer_bestanden_18.jpg" alt="foto declareren peripheral pinnen18" width="30%">
 
-    Zoals te zien op de foto zijn er weer enkele pinnen groen geworden met hun bijhorende naam. Merk op dat USART1_RX en USART1_TX niet op de juiste plaatst staat. Om de pin op de juiste plaats te zetten, gaan we met de muis over de pin staan en we drukken Ctrl+linker muisknop. nu zal je pinnen zien pinken. Deze pinnen kunnen de functie (USART1_RX) eveneens aansturen.
+    Zoals te zien op de foto zijn er weer enkele pinnen groen geworden met hun bijhorende naam. Merk op dat USART1_RX en USART1_TX niet op de juiste plaatst staat. Om de pin op de juiste plaats te zetten, gaan we met de muis over de pin USART1_RX staan en we drukken Ctrl+linker muisknop. nu zal je andere pinnen zien pinken. Deze pinnen kunnen de functie (USART1_RX) eveneens aansturen.
 
     <!-- ![foto declareren peripheral pinnen 19](foto's/tutorial_Importeer_bestanden_19.jpg) -->
 
@@ -432,7 +432,7 @@ De rij **STMicroelektronics.X-CUBE-TOF1** vouwen we open om dan door te gaan naa
 
 <img src="../foto's/tutorial_Importeer_bestanden_27.jpg" alt="foto declareren peripheral pinnen27" width="30%">
 
-De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STMicroelectronics.X-CUBE-TOF1.3.0.0**. Hier Gaan we het eerste vinkjes selecteren in de kader **Mode**. In de kader **Configuration** stellen we in welke pin voor wat in staat. Omdat we onze pinnen al gedefinieerd hebben is het enkel maar de dropdown open doen en een correcte pin selecteren. We nemen in dit geval voor XSHUT pin PC0 en voor I2C nemen we I2C1 met adres 82 (HEX: 0x52) dat het default adres is van de ToF-sensoren. Later in de code wordt er bijna geen gebruik gemaakt van deze instellingen. Dit moet gewoon ingevuld zijn zodat ST de code voor ons kan genereren.
+De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STMicroelectronics.X-CUBE-TOF1.3.0.0**. Hier gaan we het eerste vinkjes selecteren in de kader **Mode**. In de kader **Configuration** stellen we in welke pin voor wat in staat. Omdat we onze pinnen al gedefinieerd hebben is het enkel maar de dropdown open doen en een correcte pin selecteren. We nemen in dit geval voor XSHUT pin PC0 en voor I2C nemen we I2C1 met adres 82 (HEX: 0x52) dat het default adres is van de ToF-sensoren. Later in de code wordt er bijna geen gebruik gemaakt van deze instellingen. Dit moet gewoon ingevuld zijn zodat ST de code voor ons kan genereren.
 
 <!-- ![foto declareren peripheral pinnen 28](foto's/tutorial_Importeer_bestanden_28.jpg) -->
 
@@ -444,9 +444,9 @@ De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STM
 
 <img src="../foto's/tutorial_Importeer_bestanden_29.jpg" alt="foto declareren peripheral pinnen29" width="30%">
 
-Nu is het tijd om de code te genereren. Als we op ctrl+S (opslaan) drukken, dan zal er een popup verschijnen om de code te genereren. Nadien volgt een andere popup om het perspectief om te zetten naar C/C++ perspectief. Bij de 2 popups druk je op **Yes**. De code wordt gegenereerd. 
+Nu is het tijd om de code te genereren. Als we op ctrl+s (opslaan) drukken, dan zal er een popup verschijnen om de code te genereren. Nadien volgt een andere popup om het perspectief om te zetten naar C/C++ perspectief. Bij de 2 popups druk je op **Yes**. De code wordt gegenereerd. 
 
-Omdat ik mijn project in PlatformIO heb gemaakt, zal ik hier nog verder beschrijven hoe we dit daarin importeren. Men kan vanaf hieruit ook alles in STM32CubeIDE uitvoeren net zoals in PlatformIO.
+Omdat ik mijn project in PlatformIO heb gemaakt, zal ik hier nog verder beschrijven hoe we dit daarin importeren. Men kan vanaf hieruit ook alles in STM32CubeIDE uitvoeren net zoals in PlatformIO (mits het toevoegen van de zelf gemaakte bestanden).
 
 ----
 
@@ -454,6 +454,8 @@ Omdat ik mijn project in PlatformIO heb gemaakt, zal ik hier nog verder beschrij
 ## Importeer API VL53LXC
 
 Zoals gezegd in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **modules** en **porting** folder onder **BSP/Components/vl53l3cx** waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we al de bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
+
+<img src="../foto's/tutorial_Importeer_bestanden_31.jpg" alt="fot folder lib">
 
 Wanneer we het gegenereerde project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden onder **BSP/Components/vl53l3cx.h & .c** en **TOF/Target** in die van belang zijn:
 
@@ -476,64 +478,13 @@ In het bestand **custom_tof_conf.h** moeten we nog een lijn code toevoegen tusse
 
 ``` 
 
-
-<!-- Omdat het example project gebruik maakt van het [X-NUCLEO-53L3A2](https://www.st.com/en/evaluation-tools/x-nucleo-53l3a2.html) development kit, moeten we in bepaalde bestanden nog wat wijzigingen doorvoeren. 
-
-?> De development kit maakt gebruik van een [STMP1600](https://html.alldatasheet.com/html-pdf/942880/STMICROELECTRONICS/STMPE1600/1946/1/STMPE1600.html) GPIO Expander die d.m.v. I²C communiceert. Ze gaan namelijk de XSHUT pinnen van de ToF-sensoren hiermee aansturen (Zie [hier](https://www.st.com/resource/en/user_manual/um2757-getting-started-with-xnucleo53l3a2-multi-target-ranging-tof-sensor-expansion-board-based-on-vl53l3cx-for-stm32-nucleo-stmicroelectronics.pdf) op pagina 5). Ook gebruikt deze development kit maar 3 ToF-sensoren (LEFT, CENTER, RIGHT) waar we in dit project er 5 gaan gebruiken (LEFT, CENTER, RIGHT, TOP, BOTTOM).
-
-De veranderingen die we dus moeten doorvoeren is de manier waarop we de XSHUT pinnen gaan aansturen. Dit zal i.p.v. via de GPIO Expanders (die I²C verbinding hebben met de MCU) via gewone GPIO pinnen verlopen op de MCU.
-
-Het desbetreffende bestand is *53l3a2.c* waarin we de wijzigingen gaan doorvoeren. De methode genaamd *int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)* gaan we vervangen door een switch case waarin we de HAL bibliotheek gebruiken om de GPIO's op *state* te plaatsen.
-
-``` 53l3a2.h
-int32_t VL53L3A2_ResetId(uint8_t DevNo, uint8_t state)
-{
-  int32_t status;
-
-  switch (DevNo)
-  {
-  case VL53L3A2_DEV_CENTER:
-
-    HAL_GPIO_WritePin(XSHUT_1_Port, XSHUT_1_Pin, state);
-    status = 1;
-    break;
-
-    ...
-
-  }
-  return status;
-}
-```
-
-!> Zoals de [documentatie](https://www.st.com/resource/en/user_manual/um2778-vl53l3cx-timeofflight-ranging-module-with-multi-object-detection-stmicroelectronics.pdf) ons voorschrijft gebruiken we de XSHUT pin om de ToF-sensor in HW-Standby te plaatsen. We gebruiken deze methode later in ons programma om de ToF-sensoren van een uniek adres te voorzien. We moeten dit dus voor elke XSHUT pin doen!
-
-Om het aantal ToF-sensoren te verhogen naar 5 i.p.v. 3, gaan we in de bestanden *53l3a2_conf.h* en in *53l3a2.h* enkele wijzigingen doorvoeren.
-
-In het bestand *53l3a2_conf.h* veranderen we de parameter *RANGING_SENSOR_INSTANCES_NBR* van (3U) naar (5U).
-
-``` 53l3a2_conf.h
-#define RANGING_SENSOR_INSTANCES_NBR    (5U)
-```
-
-in het bestand *53l3a2.h* veranderen we de enum *VL53L3A2_dev_e* zodat deze ook de TOP en BOTTOM bevat waarvan TOP gelijk is aan 3 en bottom gelijk is aan 4. 
-``` 53l3a2.h
-enum VL53L3A2_dev_e
-{
-  VL53L3A2_DEV_LEFT    =  0,
-  VL53L3A2_DEV_CENTER  =  1,
-  VL53L3A2_DEV_RIGHT   =  2,
-  VL53L3A2_DEV_TOP     =  3,
-  VL53L3A2_DEV_BOTTOM  =  4
-};
-```
-
----- -->
-
-----
-
 ## importeren include & src bestanden
 
-Als laatste gaan we de bestanden importeren die het eigenlijke project tot leven brengen. Dit zijn al de bestanden die te vinden zijn onder de folder **Core/Inc** en **Core/Src**. We plaatsen al de bestanden van **Core/Inc** in de **include** folder en de **Core/Src** in de **src** folder. Dit zijn de bestanden:
+We importeren de bestanden die het eigenlijke project (deels) tot leven brengen. Dit zijn al de bestanden die te vinden zijn onder de folder **Core/Inc** en **Core/Src**. We plaatsen al de bestanden van **Core/Inc** in de **include** folder en de **Core/Src** in de **src** folder. 
+
+<img src="../foto's/tutorial_Importeer_bestanden_32.jpg" alt="foto folder src en inc">
+
+Dit zijn de bestanden:
 
 * main.h
 * custom_bus.h
@@ -583,7 +534,7 @@ style=" display: block;
 
 In de figuur (die linksboven afgebeeld is) is de 1<sup>ste</sup> kader, de kader om de dropdown te openen waarin we de 2<sup>de</sup> kader vinden. We selecteren hier *platforms*.
 
-Nadien komen we op de figuur rechtsboven uit. We selecteren *Embedded* bovenaan en we zoeken naar *ST*. We zien dan in de lijst *ST STM32* verschijnen. Wanneer we hier op drukken, kunnen we het platform installeren met de juiste versie gebruikt in dit project (V15.2.0).
+Nadien komen we op de figuur rechtsboven uit. We selecteren *Embedded* bovenaan en we zoeken naar *ST*. We zien dan in de lijst *ST STM32* verschijnen. Wanneer we hier op drukken, kunnen we het platform installeren met de juiste versie (V15.3.0).
 
 ----
 
@@ -708,11 +659,15 @@ Het project is nu compleet om gebuild en nadien geüpload te worden naar het bor
 Op bovenstaande foto is te zien dat we enkele knoppen ter beschikking hebben om zaken uit te voeren. Zo staat er naast het **huisje** een **vinkje** dat de code zal compileren.
 Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 
+Het uploaden gebeurd met een ST-Link V2 programmer. Hierbij hebben we een flatcable ontworpen waarmee het makkelijk is om de 2 toestellen (ST-Link V2 en PCBV0.3) te verbinden. Hieronder laten we de connectie zien:
+
+![foto upload pinout](foto's/upload_schematic.jpg)
+
 ----
 
 # Hardware Opbouw
 
-De gemaakte PCB V0.3 wordt op een plexiplaat gemonteerd zodat dit kan fungeren als een coverglas. In het [onderzoek document](Onderzoek.md) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn.
+De gemaakte PCB V0.3 wordt op een plexiplaat gemonteerd zodat dit kan fungeren als een coverglas. In de paragraaf [onderzoek](#onderzoek) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn.
 
 <!-- ![foto opstelling](foto's/PCBV0.3_opstelling_trap_3.jpg) -->
 
@@ -724,7 +679,9 @@ Als eind presentatie hebben we ook nog 2 voetsteunen gemaakt waarin we de Led-Co
 
 <iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c539af058ebe077ce73b?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
 
-Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opgeschoven. Dit is makkelijk verholpen door de pads door te lussen die we voorzien hebben tijdens het PCB ontwerpen. We gaan daarom J19 met TP1 verbinden en J18 met TP2 verbinden. Ook halen we R38 en R37 van de PCB af.
+<img src="../foto's/finale opstelling.jpg" alt="foto opstelling" width="50%">
+
+Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opgeschoven. Dit is makkelijk verholpen door de pads door te lussen die we voorzien hebben tijdens het PCB ontwerpen. We gaan daarom J19 (PA10) met TP1 (SDA2) verbinden en J18 (PA9) met TP2 (SCL2) verbinden. Ook halen we R38 en R37 van de PCB af.
 
 <!-- ![I2C verhelpen kicad](foto's/I2C_verhelping_Kicad.jpg) -->
 
@@ -742,7 +699,7 @@ Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opge
 
 <img src="./foto's/Smart Object.jpg" width="49%">
 
-In bovenstaande foto is te zien hoe we de Gesture Controller (Systeem B) aansluiten met de LED Controller. De communicatie verloopt over I²C waarbij de LED Controller de master is en de Gesture Controller de slave. 
+In bovenstaande foto is te zien hoe we de Gesture Controller (Systeem B) aansluiten met de LED Controller. De communicatie verloopt over I²C waarbij de LED Controller de master is en de Gesture Controller de slave (0x20). 
 
 Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de master een commando versturen *(0x01)* waarop de slave een aantal commando's kan terug sturen.
 
@@ -752,8 +709,6 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 * **0x22** -> Er is in de afgelopen 3 seconden een gesture geweest die van recht naar links ging.
 * **0x23** -> Er is in de afgelopen 3 seconden een gesture geweest die van boven naar onder ging.
 * **0x24** -> Er is in de afgelopen 3 seconden een gesture geweest die van onder naar boven ging.
-* **0x25** -> Er is een hand op en neer aan het bewegen. Dit wordt gevolgd door een waarde van 10-bits groot. (0->1024)
-* **0x26** -> ... 
 
 De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een NUCLEO_F401RE die zich gedraagt als LED-Controller.
 
