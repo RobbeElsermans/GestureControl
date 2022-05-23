@@ -8,7 +8,7 @@ System_Boundary(led_controller, "Led-Controller"){
     Container(gpioMatrix, "gpioMatrix","","Zal de gekregen matrix gpio's omzetten")
     Container(gpio, "gpio","","Zal de gekregen GPIO aansturen of uitschakelen")
     Container(timer, "timer","","zal tijds functies bevatten")
-
+    Container(globalDefines, "global defines","","bevat globaal gebruikte structs en enums")
 
     ' Container(processConnectivity, "process Requests/ Receives","", "Vraagt en stuurt commando's")
     ' Container(processI2C, "process I2C","","Zal de gekregen GPIO aansturen of uitschakelen")
@@ -18,7 +18,6 @@ System_Boundary(led_controller, "Led-Controller"){
 }
 
 Rel(mainProgram, command, "set","command_t")
-Rel(mainProgram, position, "get","position_t")
 
 Rel_U(timer, mainProgram, "add","delay")
 

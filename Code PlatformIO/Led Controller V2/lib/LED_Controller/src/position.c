@@ -19,8 +19,6 @@ void position_turnOff(position_t *_pos){
 
 void position_processPosition(position_t *_pos)
 {
-    if(_pos->state)
-    {
     gpio_matrix_t temp;
     uint8_t i = 0;
     // clear de pinnen
@@ -35,6 +33,8 @@ void position_processPosition(position_t *_pos)
         gpioMatrix_set_gpio_matrix(&temp, resetPin);
     }
 
+    if(_pos->state)
+    {
     // Schrijf naar GPIO
     temp.column = _pos->x;
     temp.row = _pos->y;

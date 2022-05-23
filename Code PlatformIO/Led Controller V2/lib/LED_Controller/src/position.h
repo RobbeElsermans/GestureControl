@@ -17,30 +17,8 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-#include "gpioMatrix.h"
+#include "globalDefines.h"
 #include "timer.h"
-
-/**
- * @brief De maximale kolom breedte van de gebruikte matrix
- * 
- */
-#define MAX_X_POS 5
-
-/**
- * @brief De maximale rij hoogte van de gebruikte matrix
- * 
- */
-#define MAX_Y_POS 7
-
-/**
- * @brief Struct die de positie onderhoud van de matrix dot met een status flag erbij
- * 
- */
-typedef struct{
-    int8_t x;
-    int8_t y;
-    bool state;
-} position_t;
 
 /**
  * @brief Initialiseren van de struct position_t

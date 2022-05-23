@@ -15,21 +15,8 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "globalDefines.h"
 #include "position.h"
-
-/**
- * @brief De commando's die de Gesture Controller kan versturen
- * 
- */
-typedef enum
-{
-    RL = 0x22,
-    LR = 0x21,
-    UD = 0x23,
-    DU = 0x24,
-    OBJ = 0x20,
-    NONE = 0x10
-} command_t;
 
 /**
  * @brief Initialiseer commando functie

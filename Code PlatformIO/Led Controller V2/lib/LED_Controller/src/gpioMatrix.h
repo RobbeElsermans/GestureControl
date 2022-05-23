@@ -13,16 +13,7 @@
 #ifndef GPIO_MATRIX_H
 #define GPIO_MATRIX_H
 
-#include "gpio.h"
-
-/**
- * @brief Een struct dat de rijen en kolommen bevat van de matrix
- * 
- */
-typedef struct{
-gpio_t column;
-gpio_t row;
-}gpio_matrix_t;
+#include "globalDefines.h"
 
 /**
  * @brief stuurt de meegeleverde rij en kolom aan

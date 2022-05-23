@@ -15,36 +15,7 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-
-/**
- * @brief De mogelijke input en output pinnen die we gebruiken in dit project
- * 
- */
-typedef enum{
-    led1,
-    btn1,
-     R1,
-    R2,
-    R3,
-    R4,
-    R5,
-    R6,
-    R7,
-    C1,
-    C2,
-    C3,
-    C4,
-    C5,
-} gpio_t;
-
-/**
- * @brief De mogelijke statussen die de output pinnen kunnen hebben
- * 
- */
-typedef enum{
-    resetPin,
-    setPin,
-} state_t;
+#include "globalDefines.h"
 
 /**
  * @brief Initialisatie van de gpio pinnen met gebruik maken van de HAL_lib

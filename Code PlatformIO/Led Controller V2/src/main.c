@@ -20,12 +20,12 @@
 /**
  * @file main.c
  * @author your name (you@domain.com)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2022-05-20
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -33,10 +33,11 @@
 #include "usart.h"
 
 // abstracte layers
-// #include "gpioMatrix.h"
-// #include "timer.h"
-// #include "position.h"
 #include "command.h"
+#include "position.h"
+#include "gpioMatrix.h"
+#include "gpio.h"
+#include "globalDefines.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -65,37 +66,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-#define LED_MATRIX_WIDTH 5  // 0->4
-#define LED_MATRIX_HEIGHT 7 // 0->6
-
-int led_matrix[LED_MATRIX_HEIGHT][LED_MATRIX_WIDTH] =
-    {
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0}};
-
-// int led_rows[LED_MATRIX_HEIGHT][2] = {
-//     {R1_GPIO_Port, R1_Pin},
-//     {R2_GPIO_Port, R2_Pin},
-//     {R3_GPIO_Port, R3_Pin},
-//     {R4_GPIO_Port, R4_Pin},
-//     {R5_GPIO_Port, R5_Pin},
-//     {R6_GPIO_Port, R6_Pin},
-//     {R7_GPIO_Port, R7_Pin}};
-
-// int led_columns[LED_MATRIX_WIDTH][2] = {
-//     {C1_GPIO_Port, C1_Pin},
-//     {C2_GPIO_Port, C2_Pin},
-//     {C3_GPIO_Port, C3_Pin},
-//     {C4_GPIO_Port, C4_Pin},
-//     {C5_GPIO_Port, C5_Pin}};
-
-int posx = 0;
-int posy = 0;
 
 uint8_t buf = 0;
 uint8_t counter = 0;
@@ -128,71 +98,66 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
 
-/**
- * @brief Construct a new gpio initGpio object
- * 
- */
-
-
-  //GPIO initializeren via hal_lib
+  /**
+   * @brief Construct a new gpio initGpio object
+   *
+   */
   gpio_initGpio();
 
-
-  //struct (object) pos aanmaken
+  // struct (object) pos aanmaken
   position_t pos;
 
-  //enum command aanmaken met initiële waard NONE
+  // enum command aanmaken met initiële waard NONE
   command_t command = NONE;
 
-  //positie initialiseren
+  /**
+   * @brief Construct a new position initPosition object
+   *
+   */
   position_initPosition(&pos);
 
-  //command initialiseren
+  /**
+   * @brief Construct a new command initCommand object
+   *
+   */
   command_initCommand(&command);
 
-  //Update het commando (niet perse nodig hier)
+  // Update het commando (niet perse nodig hier)
   command_processCommand(&command, &pos);
 
   /* Infinite loop */
   while (1)
   {
-    //set led1
+    if(HAL_I2C_Master_Transmit(&hi2c1, addrs, 0x10, 1, 100)== HAL_OK){
+      HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
+    }
+
+    if(!buf)
+      command = NONE;
+    else
+      command = buf;
+    printf("%2d\r\n", command);
+    // set led1Z
+
+    if(command != NONE){
+    if(command == OBJ)
     gpio_set_gpio(led1, 1);
-
-    //Maak een UD command
-    command = OBJ;
-    //Update het commando
-    command_processCommand(&command, &pos);
-
-    //delay
-    timer_delay(200);
-
-    //reset led1
+    else if(command >= OBJ)
     gpio_set_gpio(led1, 0);
+    // Update het commando
 
-    //Maak een UD command
-    command = RL;
-    //Update het commando
+    timer_delay(500);
+    }
+    else
+    {
+      gpio_set_gpio(led1, 1);
+      timer_delay(500);
+      gpio_set_gpio(led1, 0);
+      timer_delay(500);
+    }
     command_processCommand(&command, &pos);
 
-    //delay
-    timer_delay(1000);
-
-    //Maak een UD command
-    command = UD;
-    //Update het commando
-    command_processCommand(&command, &pos);
-
-    //delay
-    timer_delay(200);
-
-    //Maak een UD command
-    command = OBJ;
-    //Update het commando
-    command_processCommand(&command, &pos);
-
-    //delay
-    timer_delay(200);
+    // delay
   }
 }
 
@@ -255,33 +220,10 @@ int _write(int file, char *data, int len)
   // return # of bytes written - as best we can tell
   return (status == HAL_OK ? len : 0);
 }
-void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
-{
-  HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
-}
-
-void handle_matrix()
-{
-  uint8_t i = 0;
-  uint8_t j = 0;
-  for (i = 0; i < LED_MATRIX_HEIGHT; i++)
-  {
-    for (j = 0; j < LED_MATRIX_WIDTH; j++)
-    {
-
-      if (led_matrix[i][j])
-        HAL_Delay(1);
-    }
-  }
-}
-
-void handle_matrixReset()
-{
-  for (uint8_t col = 0; col < LED_MATRIX_WIDTH; col++)
-  {
-    ;
-  }
-}
+// void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
+// {
+  
+// }
 
 /* USER CODE END 4 */
 
