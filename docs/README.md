@@ -30,7 +30,6 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Build & Upload](#build--upload)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
-- [Bevindingen & Upgrades](#bevindingen--upgrades)
 - [Onderzoek](#onderzoek)
   - [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit)
   - [Snelheid Metingen Development Kit](#snelheid-metingen-development-kit)
@@ -59,7 +58,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [Trap in software verwerkt](#trap-in-software-verwerkt)
     - [Op papier](#op-papier)
     - [Met Data](#met-data)
-  - [Bevindingen](#bevindingen)
+  - [Bevindingen & Upgrades](#bevindingen--upgrades)
 
 ----
 
@@ -712,25 +711,8 @@ Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureCont
 
 De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende commando's kan uitbeelden d.m.v. een dot op de matrix die beweegt te gevolgen van het commando. We gebruiken hiervoor [deze](https://docs.rs-online.com/9319/0900766b814a9f89.pdf) led matrix die we connecteren met een NUCLEO_F401RE die zich gedraagt als LED-Controller.
 
-----
-
-# Bevindingen & Upgrades 
-
-Het project is gestart met een idee waar een mogelijke toekomst in zit. Omdat dit project vanaf 0 is opgestart, is het op dit moment ook niet markt waardig. De genomen beslissingen kunnen nog in twijfel genomen worden net zoals de geschreven software. Dit project is ontwikkeld om aan te tonen dat er toekomst in zit mits het verdere onderzoeken.
-
-Zo zijn er enkele zaken die ik tijdens het maken van het project heb ondervonden.
-
-De genomen sensor VL53L3CX is een mogelijke kandidaat om gesture te detecteren. Enkel bestaat er een ToF-sensor die misschien nog beter geschikt is namelijk de [VL53L1X](https://www.st.com/en/imaging-and-photonics-solutions/vl53l1x.html). 
-
-Deze sensor zijn kijkveld kunnen we opdelen in 2 aparte kijkvelden. Dit is ideaal om gesture detectie uit te voeren. De sensor heeft ook een ingebouwde MCU die al de data verwerkt (in tegenstelling tot de VL53L3CX die dit niet heeft) zodat de host hier minder rekenkracht moet uitvoeren. ST heeft voor deze sensor ook een ULD (Ultra-Low Driver) API gemaakt.
-
-De [VL53L5CX](https://www.st.com/en/imaging-and-photonics-solutions/vl53l5cx.html#overview) sensor is ook een optie. Deze sensor heeft een 8x8 array waarop hij een detectie kan uitvoeren. op deze moment zijn er ook tal van examples door ST beschikbaar gesteld waarmee hand gesture wordt mogelijk gemaakt.
-
-Dit project ging enkel over ToF-sensoren. uiteraard zijn dit niet de enige sensoren waarmee we dit kunnen doen. Zo bestaat er een druksensor genaamd [ILPS22QS](https://www.st.com/en/mems-and-sensors/ilps22qs.html) die een waardige tegenhanger kan zijn om de gestures te detecteren. Omdat deze een nauwkeurigheid heeft van 0.5hPa, is het mogelijk om voorbijgaande zaken te detecteren. Dit zou, in combinatie met de ToF-sensor, de gestures kunnen herkennen.
-
-Op gebied van software kan er ook geëxperimenteerd worden met Machine Learning. We werken tenslotte met data. Op deze manier kunnen we met genoeg data, een model creëren die nog beter de verschillende gestures kan onderscheiden van elkaar. 
-
-De genomen eindpositie waarin de sensoren staan, zijn niet perfect. Het geef een weergaven van hoe we met 3 sensoren de x & y as kunnen monitororen. In een latere fase kan hier een aparte studie over gedaan worden om de ideale opstelling te bedenken.
+**LED Controller Schematic**
+<img src="./foto's/Led_Controller_Schematic.jpg" width="100%">
 
 ----
 
@@ -1541,11 +1523,29 @@ Met deze gegevens kunnen we vaststellen dat we best voor de linker hand een apar
 
 Bij het vergelijken van de metingen tussen een hand met duim en zonder duim, is er weinig verschil merkbaar. Enkel is het merkbaar aan de metingen wanneer ik mijn linker of rechter hand gebruik (zie links-LR en rechts-LR naar de afvlakking naar boven).
 
-## Bevindingen
+## Bevindingen & Upgrades 
+
+Het project is gestart met een idee waar een mogelijke toekomst in zit. Omdat dit project vanaf 0 is opgestart, is het op dit moment ook niet markt waardig. De genomen beslissingen kunnen nog in twijfel genomen worden net zoals de geschreven software. Dit project is ontwikkeld om aan te tonen dat er toekomst in zit mits het verdere onderzoeken.
+
+Zo zijn er enkele zaken die ik tijdens het maken van het project heb ondervonden.
 
 De plaatsing van de sensoren onderling is een moeilijk maar zeer belangrijk aspect in dit project. Er zijn oneindig mogelijke manieren hoe dat we de sensoren onderling van elkaar kunnen plaatsen. Omdat dit project niet zozeer gefocust is op het plaatsen van de sensoren, is de genomen keuzen niet geperfectioneerd. De genomen keuzen werkt wel en kan de basis zijn van het verdere onderzoek. 
 
 Zoals te zien in paragraaf [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit) en [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03) zijn er wel drastische wijzigingen gebeurd. We zijn van 5 sensoren naar 3 sensoren overgestapt. Voor de simpele gestures zal de code gelijklopend zijn. Wanneer we complexere gestures (tabs, hovers) moeten herkennen, kan het zijn dat hiervoor nog wat wijzigingen moeten gebeuren op gebied van layout en aantal sensoren.
 
 De snelheid (tijd die nodig is om de meeting te starten en te voltooien) is ook een belangrijk gegeven in deze applicatie. Vandaar dat interrupts gebruikt worden in het project. Op deze manier zal de main loop niet vast hangen wanneer deze een meeting opvraagt maar gebeurd dit on the fly.
+
+De genomen sensor VL53L3CX is een mogelijke kandidaat om gesture te detecteren. Enkel bestaat er een ToF-sensor die misschien nog beter geschikt is namelijk de [VL53L1X](https://www.st.com/en/imaging-and-photonics-solutions/vl53l1x.html). 
+
+Deze sensor zijn kijkveld kunnen we opdelen in 2 aparte kijkvelden. Dit is ideaal om gesture detectie uit te voeren. De sensor heeft ook een ingebouwde MCU die al de data verwerkt (in tegenstelling tot de VL53L3CX die dit niet heeft) zodat de host hier minder rekenkracht moet uitvoeren. ST heeft voor deze sensor ook een ULD (Ultra-Low Driver) API gemaakt.
+
+De [VL53L5CX](https://www.st.com/en/imaging-and-photonics-solutions/vl53l5cx.html#overview) sensor is ook een optie. Deze sensor heeft een 8x8 array waarop hij een detectie kan uitvoeren. op deze moment zijn er ook tal van examples door ST beschikbaar gesteld waarmee hand gesture wordt mogelijk gemaakt.
+
+Dit project ging enkel over ToF-sensoren. uiteraard zijn dit niet de enige sensoren waarmee we dit kunnen doen. Zo bestaat er een druksensor genaamd [ILPS22QS](https://www.st.com/en/mems-and-sensors/ilps22qs.html) die een waardige tegenhanger kan zijn om de gestures te detecteren. Omdat deze een nauwkeurigheid heeft van 0.5hPa, is het mogelijk om voorbijgaande zaken te detecteren. Dit zou, in combinatie met de ToF-sensor, de gestures kunnen herkennen.
+
+Op gebied van software kan er ook geëxperimenteerd worden met Machine Learning. We werken tenslotte met data. Op deze manier kunnen we met genoeg data, een model creëren die nog beter de verschillende gestures kan onderscheiden van elkaar. 
+
+De genomen eindpositie waarin de sensoren staan, zijn niet perfect. Het geef een weergaven van hoe we met 3 sensoren de x & y as kunnen monitororen. In een latere fase kan hier een aparte studie over gedaan worden om de ideale opstelling te bedenken.
+
+----
 

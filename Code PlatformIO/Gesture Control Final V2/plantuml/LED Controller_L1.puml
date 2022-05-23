@@ -1,0 +1,10 @@
+@startuml L1
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Gebruiker")
+System(gesture, "gesture controller", "communication between user and application")
+System(led, "Led Controller", "Displays a dot on a led matrix")
+Rel(user, gesture, "uses", "hand gesture")
+BiRel(gesture, led, "communicates", "I2C")
+Rel(led, user, "gets feedback", "led position")
+@enduml

@@ -1,0 +1,18 @@
+Om een jpg aan te maken
+
+java -jar plantuml.jar -DRELATIVE_INCLUDE="."  {naam}.puml
+
+Zorg dat de bestanden 
+
+C4_Component.puml, 
+C4_Container.puml, 
+C4_Context.puml 
+
+in de root van uw .puml bestand staan.
+
+Alt+D om preview te zien
+
+website: https://github.com/plantuml-stdlib/C4-PlantUML#getting-started
+
+LINUX
+sudo apt install graphviz

@@ -1,0 +1,30 @@
+@startuml L2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(led_controller, "Led-Controller"){
+    Container(mainProgram, "main program")
+    Container(processCommand, "process command", "", "Bekijkt ofdat er een bepaald commando is gegeven en geeft hierop een actie")
+    Container(posController, "position Controller","", "Zal a.d.h.v. de gegeven positie, de led matrix aansturen")
+    Container(processGPIOMatrix, "process GPIO matrix","","Zal de gekregen matrix gpio's omzetten")
+    Container(processGPIO, "process GPIO","","Zal de gekregen GPIO aansturen of uitschakelen")
+
+
+    ' Container(processConnectivity, "process Requests/ Receives","", "Vraagt en stuurt commando's")
+    ' Container(processI2C, "process I2C","","Zal de gekregen GPIO aansturen of uitschakelen")
+
+    System(BSP, "HAL DRIVER","Gebruikt HAL bibliotheek")
+    Container(HARDWARE, "Hardware")
+}
+
+Rel(mainProgram, processCommand, "set", "command_t")
+Rel(processCommand, posController, "set", "position_t")
+Rel(posController, processGPIOMatrix, "set", "pin_t")
+Rel(processGPIOMatrix, processGPIO, "set", "pin_t")
+Rel(processGPIO, BSP, "set", "GPIO")
+Rel(BSP, HARDWARE, "set", "register")
+
+' BiRel(mainProgram, processConnectivity, "get/set", "commands_t")
+' BiRel(processConnectivity, processI2C, "get/set", "byte")
+' BiRel(processI2C, BSP, "get/set", "byte")
+
+@enduml
