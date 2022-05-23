@@ -71,14 +71,8 @@ uint8_t buf = 0;
 uint8_t counter = 0;
 uint8_t addrs = 0x20 << 1;
 
-bool hasReset = false;
-
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void handle_positieBepaling();
-void handle_objLed();
-void handle_matrix();
-void handle_matrixReset();
 
 /**
  * @brief  The application entry point.
@@ -128,36 +122,35 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-    if(HAL_I2C_Master_Transmit(&hi2c1, addrs, 0x10, 1, 100)== HAL_OK){
+    // Moet nog abstractie krijgen
+    if (HAL_I2C_Master_Transmit(&hi2c1, addrs, 0x10, 1, 100) == HAL_OK)
+    {
       HAL_I2C_Master_Receive(&hi2c1, addrs, &buf, 1, 100);
     }
 
-    if(!buf)
+    if (!buf)
       command = NONE;
     else
       command = buf;
+
     printf("%2d\r\n", command);
-    // set led1Z
 
-    if(command != NONE){
-    if(command == OBJ)
-    gpio_set_gpio(led1, 1);
-    else if(command >= OBJ)
-    gpio_set_gpio(led1, 0);
-    // Update het commando
-
-    timer_delay(500);
+    if (command != NONE)
+    {
+      if (command == OBJ)
+        gpio_set_gpio(led1, 1);
+      else if (command >= OBJ)
+        gpio_set_gpio(led1, 0);
+      // Update het commando
     }
     else
     {
       gpio_set_gpio(led1, 1);
       timer_delay(500);
       gpio_set_gpio(led1, 0);
-      timer_delay(500);
     }
     command_processCommand(&command, &pos);
-
-    // delay
+    timer_delay(500);
   }
 }
 
@@ -222,7 +215,7 @@ int _write(int file, char *data, int len)
 }
 // void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 // {
-  
+
 // }
 
 /* USER CODE END 4 */
