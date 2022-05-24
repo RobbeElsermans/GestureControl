@@ -145,11 +145,12 @@ int main(void)
     else
     {
       gpio_set_gpio(led1, 1);
-      timer_delay(500);
+      timer_delay(200);
       gpio_set_gpio(led1, 0);
+      timer_delay(200);
     }
     command_processCommand(&command, &pos);
-    timer_delay(500);
+    timer_delay(20);
   }
 }
 

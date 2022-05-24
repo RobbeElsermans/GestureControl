@@ -51,7 +51,7 @@ uint8_t buf;
 // Timer die het commando voor TIMER_COMMAND_TIMEOUT seconden aanhoud
 static float timerCommand = 0;
 static bool timerCommandSet = false;   // Start in false state
-#define TIMER_COMMAND_TIMEOUT 2000 // 2 seconden
+#define TIMER_COMMAND_TIMEOUT 1500 // 2 seconden
 
 /* Private function prototypes -----------------------------------------------*/
 void handle_led();
