@@ -1,0 +1,33 @@
+@startuml Gesture Controller file overview
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+System_Boundary(gestureController, "Gesture-Controller"){
+    Container(mainProgram, "main program")
+    Container(gestureDetect, "gestureDetect", "", "Bekijkt ofdat er een bepaald commando is gegeven en geeft hierop een actie")
+    Container(objectDetect, "objectDetect","", "Zal kijken ofdat er een object aanwezig is")
+    Container(calibration, "calibration","", "calibreert de sensor(en)")
+    Container(globalDefines, "global defines","","bevat globaal gebruikte structs en enums")
+    System(BSP, "HAL DRIVER","Gebruikt HAL bibliotheek")
+    System_Boundary(BSP, "High Level Driver"){
+        Container(gpio, "gpio","","Zal de gekregen GPIO aansturen of uitschakelen")
+        Container(timer, "timer","","zal tijds functies bevatten")
+        Container(i2c, "i2c","","zal de I2C functies bevatten")
+        Container(uart, "uart","","zal de uart functies bevatten")
+        System(HAL, "HAL DRIVER","Gebruikt HAL bibliotheek")
+    }
+}
+
+System(HARDWARE, "Hardware")
+
+Rel_D(timer, HAL, "get")
+BiRel_D(gpio, HAL, "get/set")
+BiRel_D(i2c, HAL, "get/set")
+BiRel_D(uart, HAL, "get/set")
+BiRel_D(HAL, HARDWARE, "registers")
+
+BiRel(mainProgram, gestureDetect, "detection")
+BiRel(mainProgram, objectDetect, "detection")
+Rel(mainProgram, calibration, "calibration")
+BiRel(mainProgram, BSP, "communicate")
+
+@enduml

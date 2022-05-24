@@ -28,6 +28,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [main.h & .c](#mainh--c)
   - [Overzicht Bestanden](#overzicht-bestanden)
   - [Build & Upload](#build--upload)
+  - [full project](#full-project)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
 - [Onderzoek](#onderzoek)
@@ -661,6 +662,15 @@ Daarnaast staat een **pijl naar rechts** die de code zal uploaden.
 Het uploaden gebeurd met een ST-Link V2 programmer. Hierbij hebben we een flatcable ontworpen waarmee het makkelijk is om de 2 toestellen (ST-Link V2 en PCBV0.3) te verbinden. Hieronder laten we de connectie zien:
 
 ![foto upload pinout](foto's/upload_schematic.jpg)
+
+
+## full project
+
+Er staat op GitHub onder de map **Final** 2 projecten. Het 1ne project (Gesture Control Final) bevat het geen dat we hierboven hebben gegenereerd en geïmporteerd. Het andere project (Gesture Control Final V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
+
+Hieronder een weergaven van de abstractie gemaakt in Gesture Control Final V2:
+
+<img src="/foto's/GestureControlAbstraction.png" alt="foto abstractie laag" width="30%">
 
 ----
 

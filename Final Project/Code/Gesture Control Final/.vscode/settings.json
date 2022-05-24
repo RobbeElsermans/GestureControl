@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "calibrationdata.h": "c",
+        "gesturedetect.h": "c",
+        "i2c.h": "c"
+    },
+    "cSpell.words": [
+        "Elsermans"
+    ],
+    "c-cpp-flylint.flexelint.enable": false,
+    "c-cpp-flylint.clang.enable": false,
+    "c-cpp-flylint.cppcheck.executable": "C:\\Program Files\\Cppcheck\\cppcheck.exe",
+    "c-cpp-flylint.cppcheck.standard": [
+        "c++03",
+        "c99"
+    ],
+    "c-cpp-flylint.lizard.enable": true,
+    "c-cpp-flylint.lizard.executable": "C:\\Python310\\Lib\\site-packages\\lizard.py",
+    "c-cpp-flylint.flawfinder.enable": true,
+    "c-cpp-flylint.flawfinder.executable": "C:\\Python310\\Lib\\site-packages\\flawfinder.py",
+}
