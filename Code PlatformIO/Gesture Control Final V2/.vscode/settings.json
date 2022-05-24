@@ -11,7 +11,14 @@
         "vl53l3cx.h": "c",
         "stm32f3xx_hal.h": "c",
         "gesturedetectobject.h": "c",
-        "globaldef.h": "c"
+        "globaldef.h": "c",
+        "vl53lx_api.h": "c",
+        "vl53lx_api_core.h": "c",
+        "vl53lx_platform.h": "c",
+        "custom_bus.h": "c",
+        "bsp.h": "c",
+        "custom_errno.h": "c",
+        "custom_conf.h": "c"
     },
     "cSpell.words": [
         "Elsermans"

@@ -27,10 +27,14 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal.h"
+#include "stdbool.h"
 
 
 extern I2C_HandleTypeDef hi2c2;
-void MX_I2C2_Init(void);
+void I2C2_init(void);
+bool I2C2_readIt(uint8_t* data);
+bool I2C2_writeIt(uint8_t* data);
+
 
 
 #ifdef __cplusplus

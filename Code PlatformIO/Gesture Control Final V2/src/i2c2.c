@@ -18,7 +18,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "i2c.h"
+#include "i2c2.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -27,7 +27,7 @@
 I2C_HandleTypeDef hi2c2;
 
 /* I2C2 init function */
-void MX_I2C2_Init(void)
+void I2C2_init(void)
 {
 
   /* USER CODE BEGIN I2C2_Init 0 */
@@ -49,19 +49,28 @@ void MX_I2C2_Init(void)
   hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
   if (HAL_I2C_Init(&hi2c2) != HAL_OK)
   {
-    Error_Handler();
+    __disable_irq();
+    while (1)
+    {
+    }
   }
   /** Configure Analogue filter
   */
   if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
   {
-    Error_Handler();
+    __disable_irq();
+    while (1)
+    {
+    }
   }
   /** Configure Digital filter
   */
   if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
   {
-    Error_Handler();
+    __disable_irq();
+    while (1)
+    {
+    }
   }
   /* USER CODE BEGIN I2C2_Init 2 */
 
@@ -127,4 +136,16 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
 
   /* USER CODE END I2C2_MspDeInit 1 */
   }
+}
+
+bool I2C2_readIt(uint8_t* data){
+
+  if(HAL_I2C_Slave_Receive_IT(&hi2c2, data, sizeof(*data)) == HAL_OK)
+    return true;
+  return false;
+}
+bool I2C2_writeIt(uint8_t* data){
+  if(HAL_I2C_Slave_Transmit_IT(&hi2c2, data, sizeof(*data)) == HAL_OK)
+    return true;
+  return false;
 }

@@ -22,43 +22,12 @@
 
 __weak HAL_StatusTypeDef MX_I2C1_Init(I2C_HandleTypeDef* hi2c);
 
-/** @addtogroup BSP
-  * @{
-  */
-
-/** @addtogroup CUSTOM
-  * @{
-  */
-
-/** @defgroup CUSTOM_BUS CUSTOM BUS
-  * @{
-  */
-
-/** @defgroup CUSTOM_BUS_Exported_Variables BUS Exported Variables
-  * @{
-  */
-
 I2C_HandleTypeDef hi2c1;
-/**
-  * @}
-  */
-
-/** @defgroup CUSTOM_BUS_Private_Variables BUS Private Variables
-  * @{
-  */
 
 #if (USE_HAL_I2C_REGISTER_CALLBACKS == 1U)
 static uint32_t IsI2C1MspCbValid = 0;
 #endif /* USE_HAL_I2C_REGISTER_CALLBACKS */
 static uint32_t I2C1InitCounter = 0;
-
-/**
-  * @}
-  */
-
-/** @defgroup CUSTOM_BUS_Private_FunctionPrototypes  BUS Private Function
-  * @{
-  */
 
 static void I2C1_MspInit(I2C_HandleTypeDef* hI2c);
 static void I2C1_MspDeInit(I2C_HandleTypeDef* hI2c);
@@ -67,18 +36,6 @@ static uint32_t I2C_GetTiming(uint32_t clock_src_hz, uint32_t i2cfreq_hz);
 static void Compute_PRESC_SCLDEL_SDADEL(uint32_t clock_src_freq, uint32_t I2C_Speed);
 static uint32_t Compute_SCLL_SCLH (uint32_t clock_src_freq, uint32_t I2C_speed);
 #endif
-
-/**
-  * @}
-  */
-
-/** @defgroup CUSTOM_LOW_LEVEL_Private_Functions CUSTOM LOW LEVEL Private Functions
-  * @{
-  */
-
-/** @defgroup CUSTOM_BUS_Exported_Functions CUSTOM_BUS Exported Functions
-  * @{
-  */
 
 /* BUS IO driver over I2C Peripheral */
 /*******************************************************************************

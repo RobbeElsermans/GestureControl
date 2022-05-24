@@ -121,7 +121,7 @@
 //   /* Initialize all configured peripherals */
 //   MX_GPIO_Init();
 
-//   MX_I2C2_Init();
+//   I2C2_init();
 
 //   MX_USART1_UART_Init();
 

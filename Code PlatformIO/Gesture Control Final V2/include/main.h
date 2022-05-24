@@ -32,8 +32,7 @@ extern "C"
   /* Private includes ----------------------------------------------------------*/
   /* USER CODE BEGIN Includes */
 #include "globalDef.h"
-#include "gpio.h"
-#include "timer.h"
+#include "BSP.h"
   /* USER CODE END Includes */
 
   /* Exported types ------------------------------------------------------------*/
