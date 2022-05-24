@@ -4,6 +4,9 @@
 #include "vl53lx_api.h"			   //Om calibration methodes te kunnen gebruiken
 #include "main.h"
 #include "stdbool.h"
+#include "globalDef.h"
+#include "gpio.h"
+#include "timer.h"
 
 /**
   * @brief  Het kalibreren van de sensoren met een nieuwe setup en nadien plotten in terminal

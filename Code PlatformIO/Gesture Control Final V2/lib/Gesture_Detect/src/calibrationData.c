@@ -26,10 +26,10 @@ VL53LX_CalibrationData_t callData;
     printf("Calibrating sensor %2d in 16 seconds... \r\n\r\n", sensor->id);
     for (uint8_t i = 0; i < 16; i++)
     {
-        HAL_GPIO_TogglePin(LED_0_GPIO_Port, LED_0_Pin);
-        HAL_Delay(1000);
+        gpio_toggle_gpio(LED0);
+        timer_delay(1000);
     }
-    HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, 0);
+    gpio_set_gpio(LED0, resetPin);
 
     // printf("Sensor %2d\r\n", center.gpioPin);
     printf("refspad\r\n");
@@ -40,7 +40,7 @@ VL53LX_CalibrationData_t callData;
     // HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, 1);
     printf("offset\r\n");
     //offsetPerVcselCal(&sensor->sensor, 600);
-    HAL_Delay(2);
+    timer_delay(2);
     // HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
     callData = getCalibrationData(&sensor->sensor);
 

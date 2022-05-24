@@ -126,9 +126,9 @@ void gestureDetect_checkResetTimerGesture()
     if (!timerMeasurementSet)
     {
       timerMeasurementSet = true;
-      timerMeasurment = HAL_GetTick();
+      timerMeasurment = timer_getTicks();
     }
-    long temp = HAL_GetTick();
+    long temp = timer_getTicks();
     if (timerMeasurementSet && (temp - timerMeasurment) > TIMER_MEASUREMENT_TIMEOUT)
     {
       timerMeasurementSet = false;

@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include "stm32f3xx_hal.h"
 
 
 extern I2C_HandleTypeDef hi2c2;

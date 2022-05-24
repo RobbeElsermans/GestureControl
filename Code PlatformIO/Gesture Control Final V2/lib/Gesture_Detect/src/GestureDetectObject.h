@@ -14,10 +14,7 @@
 #ifndef _GESTUREDETECTOBJECT_H
 #define _GESTUREDETECTOBJECT_H
 
-#include "stm32f3xx_hal.h"
-#include "stdbool.h" //Nodig om bool te kunnen gebruiken
 #include "main.h"
-#include "vl53l3cx.h"
 
 /**
   * @brief  gets maximale afstand dat object mag zijn

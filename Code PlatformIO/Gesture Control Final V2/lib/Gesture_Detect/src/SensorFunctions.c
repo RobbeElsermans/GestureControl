@@ -15,9 +15,9 @@ void Config_Sensor(sensorData_t* sensor, uint8_t *address){
   sensor->sensor.IO.GetTick = CUSTOM_VL53L3CX_I2C_GetTick;
   sensor->sensor.IO.Address = 0x52;
 
-  HAL_GPIO_WritePin(sensor->sensorPorts.xshut_port, sensor->sensorPorts.xshut_pin, 1);
+  gpio_set_gpio(sensor->sensorPorts.xshut, setPin);
 
-  HAL_Delay(2);
+  timer_delay(2);
   VL53L3CX_Init(&sensor->sensor);
   // VL53LX_SetMeasurementTimingBudgetMicroSeconds(sensor, 8000);
   VL53L3CX_SetAddress(&sensor->sensor, (uint32_t)address);
@@ -36,7 +36,7 @@ void Config_Sensor(sensorData_t* sensor, uint8_t *address){
 
 uint8_t sensorFunctions_sensorReady(sensorData_t* sensor)
 {
-  if (sensor->isReady || (!sensor->isReady && !HAL_GPIO_ReadPin(sensor->sensorPorts.gpioi_port, sensor->sensorPorts.gpioi_pin)))
+  if (sensor->isReady || !gpio_get_gpio(sensor->sensorPorts.gpioi))
     return 1;
   return 0;
 }
@@ -45,7 +45,7 @@ void Wait_For_GPIOI(sensorData_t* sensor)
 {
   VL53L3CX_Result_t results;
 
-  while (HAL_GPIO_ReadPin(sensor->sensorPorts.gpioi_port, sensor->sensorPorts.gpioi_pin)); // Zolang wachten totdat de GPIOI is af gegaan
+  while (gpio_get_gpio(sensor->sensorPorts.gpioi)); // Zolang wachten totdat de GPIOI is af gegaan
 
   VL53L3CX_GetDistance(&sensor->sensor, &results); // 1ste meeting weg gooien
 }
@@ -95,11 +95,9 @@ bool sensorFunctions_getData(sensorData_t* sensor)
   {
     trigger = true;
     VL53L3CX_GetDistance(&sensor->sensor, &tempResult);
-    // HAL_Delay(2);
       sensor->resultaat.distance = (long)tempResult.ZoneResult[0].Distance[0];
       sensor->resultaat.status = tempResult.ZoneResult[0].Status[0];
-      sensor->resultaat.timestamp = HAL_GetTick();
-    // HAL_Delay(2);
+      sensor->resultaat.timestamp = timer_getTicks();
   }
 
   if (trigger)

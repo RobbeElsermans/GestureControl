@@ -12,7 +12,6 @@
  */
 
 #include "GestureDetectObject.h"
-#include "vl53l3cx.h"
 
 // De maximale afstand dat een object kan staan om gedetecteerd te worden.
 #define MAX_DISTANCE_OBJECT 1000            // Maximale afstand dat een object mag zijn om als object gedetecteerd te worden
@@ -93,10 +92,10 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
         if (!timerMeasurementSet)
         {
             timerMeasurementSet = true;
-            timerMeasurment = HAL_GetTick();
+            timerMeasurment = timer_getTicks();
         }
 
-        if (HAL_GetTick() - timerMeasurment >= TIMER_MEASUREMENT_TIMEOUT)
+        if (timer_getTicks() - timerMeasurment >= TIMER_MEASUREMENT_TIMEOUT)
         {
             printf("Object! \r\n");
             timerMeasurementSet = false;
@@ -121,10 +120,10 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
         if (timerMeasurementSet == false)
         {
             timerMeasurementSet = true;
-            timerMeasurment = HAL_GetTick();
+            timerMeasurment = timer_getTicks();
         }
 
-        if ((HAL_GetTick() - timerMeasurment) >= TIMER_MEASUREMENT_TIMEOUT)
+        if ((timer_getTicks() - timerMeasurment) >= TIMER_MEASUREMENT_TIMEOUT)
         {
             timerMeasurementSet = false;
             return false;

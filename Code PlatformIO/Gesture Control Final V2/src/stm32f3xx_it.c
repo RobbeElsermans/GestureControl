@@ -18,8 +18,24 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "stm32f3xx_it.h"
+#include "stm32f3xx_hal.h"
+
+#define GPIOI_0_Pin GPIO_PIN_12
+#define GPIOI_0_GPIO_Port GPIOB
+#define GPIOI_0_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_1_Pin GPIO_PIN_13
+#define GPIOI_1_GPIO_Port GPIOB
+#define GPIOI_1_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_2_Pin GPIO_PIN_14
+#define GPIOI_2_GPIO_Port GPIOB
+#define GPIOI_2_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_3_Pin GPIO_PIN_15
+#define GPIOI_3_GPIO_Port GPIOB
+#define GPIOI_3_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_4_Pin GPIO_PIN_6
+#define GPIOI_4_GPIO_Port GPIOC
+#define GPIOI_4_EXTI_IRQn EXTI9_5_IRQn
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -203,13 +219,7 @@ void SysTick_Handler(void)
   */
 void EXTI9_5_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI9_5_IRQn 0 */
-
-  /* USER CODE END EXTI9_5_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(LED_2_Pin);
-  /* USER CODE BEGIN EXTI9_5_IRQn 1 */
-
-  /* USER CODE END EXTI9_5_IRQn 1 */
+  HAL_GPIO_EXTI_IRQHandler(GPIOI_4_Pin);
 }
 
 /**
@@ -221,7 +231,7 @@ void EXTI15_10_IRQHandler(void)
 
   /* USER CODE END EXTI15_10_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIOI_0_Pin);
-  HAL_GPIO_EXTI_IRQHandler(ENABLE_5V_Pin);
+  HAL_GPIO_EXTI_IRQHandler(GPIOI_1_Pin);
   HAL_GPIO_EXTI_IRQHandler(GPIOI_2_Pin);
   HAL_GPIO_EXTI_IRQHandler(GPIOI_3_Pin);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */

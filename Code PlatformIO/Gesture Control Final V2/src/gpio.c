@@ -1,46 +1,50 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file    gpio.c
-  * @brief   This file provides code for the configuration
-  *          of all used GPIO pins.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
-/* Includes ------------------------------------------------------------------*/
 #include "gpio.h"
 
-/* USER CODE BEGIN 0 */
+#include "stm32f3xx_hal.h"
 
-/* USER CODE END 0 */
+#define ENABLE_5V_Pin GPIO_PIN_13
+#define ENABLE_5V_GPIO_Port GPIOC
+#define XSHUT_0_Pin GPIO_PIN_0
+#define XSHUT_0_GPIO_Port GPIOC
+#define XSHUT_1_Pin GPIO_PIN_1
+#define XSHUT_1_GPIO_Port GPIOC
+#define XSHUT_2_Pin GPIO_PIN_2
+#define XSHUT_2_GPIO_Port GPIOC
+#define XSHUT_3_Pin GPIO_PIN_3
+#define XSHUT_3_GPIO_Port GPIOC
+#define LED_0_Pin GPIO_PIN_0
+#define LED_0_GPIO_Port GPIOA
+#define LED_1_Pin GPIO_PIN_1
+#define LED_1_GPIO_Port GPIOA
+#define LED_2_Pin GPIO_PIN_6
+#define LED_2_GPIO_Port GPIOA
+#define LED_3_Pin GPIO_PIN_7
+#define LED_3_GPIO_Port GPIOA
+#define XSHUT_4_Pin GPIO_PIN_4
+#define XSHUT_4_GPIO_Port GPIOC
+#define LED_4_Pin GPIO_PIN_0
+#define LED_4_GPIO_Port GPIOB
+#define SW_1_Pin GPIO_PIN_1
+#define SW_1_GPIO_Port GPIOB
+#define SW_2_Pin GPIO_PIN_2
+#define SW_2_GPIO_Port GPIOB
+#define GPIOI_0_Pin GPIO_PIN_12
+#define GPIOI_0_GPIO_Port GPIOB
+#define GPIOI_0_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_1_Pin GPIO_PIN_13
+#define GPIOI_1_GPIO_Port GPIOB
+#define GPIOI_1_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_2_Pin GPIO_PIN_14
+#define GPIOI_2_GPIO_Port GPIOB
+#define GPIOI_2_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_3_Pin GPIO_PIN_15
+#define GPIOI_3_GPIO_Port GPIOB
+#define GPIOI_3_EXTI_IRQn EXTI15_10_IRQn
+#define GPIOI_4_Pin GPIO_PIN_6
+#define GPIOI_4_GPIO_Port GPIOC
+#define GPIOI_4_EXTI_IRQn EXTI9_5_IRQn
 
-/*----------------------------------------------------------------------------*/
-/* Configure GPIO                                                             */
-/*----------------------------------------------------------------------------*/
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
-
-/** Configure pins as
-        * Analog
-        * Input
-        * Output
-        * EVENT_OUT
-        * EXTI
-*/
-void MX_GPIO_Init(void)
-{
+void gpio_initGpio(){
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -110,6 +114,102 @@ void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 2 */
+state_t gpio_get_gpio(gpio_t gpio){
+    if(gpio == SW0)
+        return (state_t)HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin);
+    if(gpio == SW1)
+        return (state_t)HAL_GPIO_ReadPin(SW_2_GPIO_Port, SW_2_Pin);
+    if(gpio == LED0)
+        return (state_t)HAL_GPIO_ReadPin(LED_0_GPIO_Port, LED_0_Pin);
+    if(gpio == LED1)
+        return (state_t)HAL_GPIO_ReadPin(LED_1_GPIO_Port, LED_1_Pin);
+    if(gpio == LED2)
+        return (state_t)HAL_GPIO_ReadPin(LED_2_GPIO_Port, LED_2_Pin);
+    if(gpio == LED3)
+        return (state_t)HAL_GPIO_ReadPin(LED_3_GPIO_Port, LED_3_Pin);
+    if(gpio == LED4)
+        return (state_t)HAL_GPIO_ReadPin(LED_4_GPIO_Port, LED_4_Pin);
+    if(gpio == XSHUT0)
+        return (state_t)HAL_GPIO_ReadPin(XSHUT_0_GPIO_Port, XSHUT_0_Pin);
+    if(gpio == XSHUT1)
+        return (state_t)HAL_GPIO_ReadPin(XSHUT_1_GPIO_Port, XSHUT_1_Pin);
+    if(gpio == XSHUT2)
+        return (state_t)HAL_GPIO_ReadPin(XSHUT_2_GPIO_Port, XSHUT_2_Pin);
+    if(gpio == XSHUT3)
+        return (state_t)HAL_GPIO_ReadPin(XSHUT_3_GPIO_Port, XSHUT_3_Pin);
+    if(gpio == XSHUT4)
+        return (state_t)HAL_GPIO_ReadPin(XSHUT_4_GPIO_Port, XSHUT_4_Pin);
+    if(gpio == GPIOI0)
+        return (state_t)HAL_GPIO_ReadPin(GPIOI_0_GPIO_Port, GPIOI_0_Pin);
+    if(gpio == GPIOI1)
+        return (state_t)HAL_GPIO_ReadPin(GPIOI_1_GPIO_Port, GPIOI_1_Pin);
+    if(gpio == GPIOI2)
+        return (state_t)HAL_GPIO_ReadPin(GPIOI_2_GPIO_Port, GPIOI_2_Pin);
+    if(gpio == GPIOI3)
+        return (state_t)HAL_GPIO_ReadPin(GPIOI_3_GPIO_Port, GPIOI_3_Pin);
+    if(gpio == GPIOI4)
+        return (state_t)HAL_GPIO_ReadPin(GPIOI_4_GPIO_Port, GPIOI_4_Pin);
+    if(gpio == EN5V)
+        return (state_t)HAL_GPIO_ReadPin(ENABLE_5V_GPIO_Port, ENABLE_5V_Pin);
+    return resetPin;
+}
 
-/* USER CODE END 2 */
+void gpio_set_gpio(gpio_t gpio ,state_t state){
+    if(gpio == SW0)
+        HAL_GPIO_WritePin(SW_1_GPIO_Port, SW_1_Pin, (GPIO_PinState)state);
+    if(gpio == SW1)
+        HAL_GPIO_WritePin(SW_2_GPIO_Port, SW_2_Pin, (GPIO_PinState)state);
+    if(gpio == LED0)
+        HAL_GPIO_WritePin(LED_0_GPIO_Port, LED_0_Pin, (GPIO_PinState)state);
+    if(gpio == LED1)
+        HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, (GPIO_PinState)state);
+    if(gpio == LED2)
+        HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, (GPIO_PinState)state);
+    if(gpio == LED3)
+        HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, (GPIO_PinState)state);
+    if(gpio == LED4)
+        HAL_GPIO_WritePin(LED_4_GPIO_Port, LED_4_Pin, (GPIO_PinState)state);
+    if(gpio == XSHUT0)
+        HAL_GPIO_WritePin(XSHUT_0_GPIO_Port, XSHUT_0_Pin, (GPIO_PinState)state);
+    if(gpio == XSHUT1)
+        HAL_GPIO_WritePin(XSHUT_1_GPIO_Port, XSHUT_1_Pin, (GPIO_PinState)state);
+    if(gpio == XSHUT2)
+        HAL_GPIO_WritePin(XSHUT_2_GPIO_Port, XSHUT_2_Pin, (GPIO_PinState)state);
+    if(gpio == XSHUT3)
+        HAL_GPIO_WritePin(XSHUT_3_GPIO_Port, XSHUT_3_Pin, (GPIO_PinState)state);
+    if(gpio == XSHUT4)
+        HAL_GPIO_WritePin(XSHUT_4_GPIO_Port, XSHUT_4_Pin, (GPIO_PinState)state);
+    if(gpio == GPIOI0)
+        HAL_GPIO_WritePin(GPIOI_0_GPIO_Port, GPIOI_0_Pin, (GPIO_PinState)state);
+    if(gpio == GPIOI1)
+        HAL_GPIO_WritePin(GPIOI_1_GPIO_Port, GPIOI_1_Pin, (GPIO_PinState)state);
+    if(gpio == GPIOI2)
+        HAL_GPIO_WritePin(GPIOI_2_GPIO_Port, GPIOI_2_Pin, (GPIO_PinState)state);
+    if(gpio == GPIOI3)
+        HAL_GPIO_WritePin(GPIOI_3_GPIO_Port, GPIOI_3_Pin, (GPIO_PinState)state);
+    if(gpio == GPIOI4)
+        HAL_GPIO_WritePin(GPIOI_4_GPIO_Port, GPIOI_4_Pin, (GPIO_PinState)state);
+    if(gpio == EN5V)
+        HAL_GPIO_WritePin(ENABLE_5V_GPIO_Port, ENABLE_5V_Pin, (GPIO_PinState)state);
+
+}
+
+void gpio_toggle_gpio(gpio_t gpio){
+    
+    gpio_set_gpio(gpio, !gpio_get_gpio(gpio));
+}
+
+gpio_t gpio_callBack_gpio(uint16_t gpio){
+    if(gpio == GPIOI_0_Pin)
+        return GPIOI0;
+    if(gpio == GPIOI_1_Pin)
+        return GPIOI1;
+    if(gpio == GPIOI_2_Pin)
+        return GPIOI2;
+    if(gpio == GPIOI_3_Pin)
+        return GPIOI3;
+    if(gpio == GPIOI_4_Pin)
+        return GPIOI4;
+    
+    return GPIOI0;
+}
