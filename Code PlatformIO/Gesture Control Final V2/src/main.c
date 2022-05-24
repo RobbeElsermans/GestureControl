@@ -18,8 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
-#include <errno.h>
 #include "calibrationData.h" //bevat methodes en instellingen om de sensoren te calibreren.
 #include "GestureDetectObject.h"
 #include "GestureDetect.h"
@@ -144,17 +142,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 int _write(int file, char *data, int len)
 {
-    if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
-    {
-        errno = EBADF;
-        return -1;
-    }
-
-    // arbitrary timeout 1000
-    HAL_StatusTypeDef status = HAL_UART_Transmit(&huart1, (uint8_t *)data, len, 1000);
-
-    // return # of bytes written - as best we can tell
-    return (status == HAL_OK ? len : 0);
+    return Usart1_Send(file, data, len);
 }
 
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)

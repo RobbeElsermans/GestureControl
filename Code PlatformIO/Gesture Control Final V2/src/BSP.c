@@ -17,10 +17,15 @@ void SystemClock_Config(void);
 void BSP_initBSP(){
     HAL_Init();
     SystemClock_Config();
+    timer_delay(1);
     gpio_initGpio();
+    timer_delay(1);
     I2C2_init();
-    MX_USART1_UART_Init();
+    timer_delay(1);
+    USART1_initUart();
+    timer_delay(1);
     BSP_I2C1_Init();
+    timer_delay(1);
 }
 
 

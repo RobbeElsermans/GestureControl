@@ -16,7 +16,7 @@
 #include "gpio.h"
 #include "timer.h"
 #include "i2c2.h"
-#include "usart.h"
+#include "usart1.h"
 #include "custom_bus.h" //Sensor I2C stuff
 
 /**

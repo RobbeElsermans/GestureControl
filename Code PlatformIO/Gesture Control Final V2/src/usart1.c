@@ -18,7 +18,9 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "usart.h"
+#include "usart1.h"
+#include <sys/unistd.h> // STDOUT_FILENO, STDERR_FI
+#include <errno.h>
 
 /* USER CODE BEGIN 0 */
 
@@ -28,7 +30,7 @@ UART_HandleTypeDef huart1;
 
 /* USART1 init function */
 
-void MX_USART1_UART_Init(void)
+void USART1_initUart(void)
 {
 
   /* USER CODE BEGIN USART1_Init 0 */
@@ -51,7 +53,10 @@ void MX_USART1_UART_Init(void)
   huart1.AdvancedInit.Swap = UART_ADVFEATURE_SWAP_ENABLE;
   if (HAL_UART_Init(&huart1) != HAL_OK)
   {
-    Error_Handler();
+    __disable_irq();
+    while (1)
+    {
+    }
   }
   /* USER CODE BEGIN USART1_Init 2 */
 
@@ -112,6 +117,16 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   }
 }
 
-/* USER CODE BEGIN 1 */
+int Usart1_Send(int file, char *data, int len){
+  if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
+    {
+        errno = EBADF;
+        return -1;
+    }
 
-/* USER CODE END 1 */
+    // arbitrary timeout 1000
+    HAL_StatusTypeDef status = HAL_UART_Transmit(&huart1, (uint8_t *)data, len, 1000);
+
+    // return # of bytes written - as best we can tell
+    return (status == HAL_OK ? len : 0);
+}

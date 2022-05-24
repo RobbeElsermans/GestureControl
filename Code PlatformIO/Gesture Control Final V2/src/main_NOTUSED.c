@@ -123,7 +123,7 @@
 
 //   I2C2_init();
 
-//   MX_USART1_UART_Init();
+//   USART1_initUart();
 
 //   /* USER CODE BEGIN SysInit */
   

@@ -18,7 +18,8 @@
         "custom_bus.h": "c",
         "bsp.h": "c",
         "custom_errno.h": "c",
-        "custom_conf.h": "c"
+        "custom_conf.h": "c",
+        "usart1.h": "c"
     },
     "cSpell.words": [
         "Elsermans"
