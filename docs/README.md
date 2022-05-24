@@ -31,6 +31,7 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
   - [full project](#full-project)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
+  - [full project](#full-project-1)
 - [Onderzoek](#onderzoek)
   - [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit)
   - [Snelheid Metingen Development Kit](#snelheid-metingen-development-kit)
@@ -666,25 +667,31 @@ Het uploaden gebeurd met een ST-Link V2 programmer. Hierbij hebben we een flatca
 
 ## full project
 
-Er staat op GitHub onder de map **Final** 2 projecten. Het 1ne project (Gesture Control Final) bevat het geen dat we hierboven hebben gegenereerd en geïmporteerd. Het andere project (Gesture Control Final V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
+Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/Code) 2 projecten. Het 1ne project (Gesture Control Final) bevat het geen dat we hierboven hebben gegenereerd en geïmporteerd. Het andere project (Gesture Control Final V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
 
 Hieronder een weergaven van de abstractie gemaakt in Gesture Control Final V2:
 
 <img src="/foto's/GestureControlAbstraction.png" alt="foto abstractie laag" width="30%">
 
+gegenereerd door [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML)
+
 ----
 
 # Hardware Opbouw
 
-De gemaakte PCB V0.3 wordt op een plexiplaat gemonteerd zodat dit kan fungeren als een coverglas. In de paragraaf [onderzoek](#onderzoek) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn.
+De gemaakte PCB V0.3 wordt op een plexiplaat gemonteerd zodat dit kan fungeren als een coverglas. In de paragraaf [onderzoek](#onderzoek) is meer informatie terug te vinden hoe we uiteindelijk bij deze opstelling geraakt zijn. [hier](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/PCB%20V0.3) zijn de PCBV0.3 source files. PCBV0.3 is gemaakt in [KiCAD 6](https://www.kicad.org/).
 
 <!-- ![foto opstelling](foto's/PCBV0.3_opstelling_trap_3.jpg) -->
 
 <img src="../foto's/PCBV0.3_opstelling_trap_3.jpg" alt="foto opstelling" width="30%">
 
-Als eind presentatie hebben we ook nog 2 voetsteunen gemaakt waarin we de Led-Controller en Gesture Controller kunnen plaatsen. Dit zorgt voor een mooi geheel. De verbindingen onderling zijn gemaakt uit een flatcable waaraan we 2 female headers hebben gesoldeerd.
+De gefreesde plexiplaat is [hier]() te vinden.
+
+Als eind presentatie hebben we ook nog 2 voetsteunen gemaakt waarin we de Led-Controller en Gesture Controller kunnen plaatsen. Dit zorgt voor een mooi geheel. De verbindingen onderling zijn gemaakt uit een flatcable waaraan we 2 female headers hebben gesoldeerd. Beide designs zijn gemaakt in FreeCAD.
 
 <iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c539478a60867783279f?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
+
+[link](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/3D%20Design) 
 
 <iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c539af058ebe077ce73b?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
 
@@ -723,6 +730,18 @@ De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende comm
 
 **LED Controller Schematic**
 <img src="./foto's/Led_Controller_Schematic.jpg" width="100%">
+
+## full project
+
+Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/Code) 2 projecten. Het 1ne project (Led Controller) bevat het geen dat we hierboven hebben gegenereerd en geïmporteerd. Het andere project (Led Controller V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
+
+Hieronder een weergaven van de abstractie gemaakt in Led Controller V2:
+
+<img src="/foto's/LedControllerAbstractie.png" alt="foto abstractie laag" width="30%">
+
+gegenereerd door [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML)
+
+
 
 ----
 

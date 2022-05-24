@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "led_matrx TA07-11SEKWA")(type "KiCad")(uri "${KIPRJMOD}/lib/led_matrx TA07-11SEKWA.kicad_sym")(options "")(descr ""))
+)
