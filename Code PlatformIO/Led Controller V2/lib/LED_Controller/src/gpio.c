@@ -106,6 +106,8 @@ state_t gpio_get_gpio(gpio_t gpio){
         return (state_t)HAL_GPIO_ReadPin(R6_GPIO_Port, R6_Pin);
     if(gpio == R7)
         return (state_t)HAL_GPIO_ReadPin(R7_GPIO_Port, R7_Pin);
+    
+    return resetPin;
 }
 
 void gpio_set_gpio(gpio_t gpio ,state_t state){
@@ -135,4 +137,9 @@ void gpio_set_gpio(gpio_t gpio ,state_t state){
         HAL_GPIO_WritePin(R6_GPIO_Port, R6_Pin, (GPIO_PinState)state);
     if(gpio == R7)
         HAL_GPIO_WritePin(R7_GPIO_Port, R7_Pin, (GPIO_PinState)state);
+}
+
+void gpioMatrix_set_gpio_matrix(gpio_matrix_t *gpio, state_t state){
+    gpio_set_gpio(gpio->column, state);
+    gpio_set_gpio(gpio->row, state);
 }

@@ -67,6 +67,7 @@ void handle_commandTimer();
 void handle_data(uint8_t id);
 void perform_calibration();
 void perform_init();
+void handle_gestureDetection();
 
 /**
  * @brief  The application entry point.
@@ -115,70 +116,7 @@ int main(void)
         case STATE_GESTURE_CONTROL:
             // Doe alles van meetingen, detectie, commands
 
-            switch (gestureControlState)
-            {
-            case STATE_GC_SAMPLE:
-                handle_data(CENTER);
-
-                if (objectPresent)
-                {
-                    handle_data(LEFT);
-                    handle_data(RIGHT);
-                }
-
-                gestureControlState = STATE_GC_OBJECT;
-                break;
-            case STATE_GC_OBJECT:
-                objectPresent = gestureDetectObject_ckeckObjectPresent(&sensoren[CENTER], &objectPresent);
-
-                if (objectPresent && !prevObjectPresent)
-                {
-                    gestureControlState = STATE_GC_START;
-                }
-                else if (!objectPresent && prevObjectPresent)
-                {
-                    gestureControlState = STATE_GC_STOP;
-                }
-                else if (objectPresent && prevObjectPresent)
-                {
-                    gestureControlState = STATE_GC_DETECT;
-                }
-                else
-                {
-                    gestureControlState = STATE_GC_SAMPLE;
-                }
-
-                prevObjectPresent = objectPresent;
-                break;
-            case STATE_GC_START:
-                sensorFunctions_startSensor(&sensoren[LEFT]);
-                sensorFunctions_startSensor(&sensoren[RIGHT]);
-
-                gestureControlState = STATE_GC_SAMPLE;
-                /* code */
-                break;
-            case STATE_GC_DETECT:
-                if (commando == OBJ)
-                {
-                    int8_t val = gestureDetect_detectgesture(sensoren);
-                    if (val != -1)
-                    {
-                        commando = val;
-                    }
-                }
-                gestureControlState = STATE_GC_SAMPLE;
-                /* code */
-                break;
-            case STATE_GC_STOP:
-                sensorFunctions_stopSensor(&sensoren[LEFT]);
-                sensorFunctions_stopSensor(&sensoren[RIGHT]);
-
-                gestureControlState = STATE_GC_SAMPLE;
-                /* code */
-                break;
-            default:
-                break;
-            }
+            handle_gestureDetection();
 
             gestureDetect_checkResetTimerGesture();
 
@@ -452,6 +390,73 @@ void handle_led()
 
     HAL_GPIO_WritePin(LED_3_GPIO_Port, LED_3_Pin, objectPresent);
     HAL_GPIO_TogglePin(LED_4_GPIO_Port, LED_4_Pin);
+}
+
+void handle_gestureDetection(){
+    switch (gestureControlState)
+            {
+            case STATE_GC_SAMPLE:
+                handle_data(CENTER);
+
+                if (objectPresent)
+                {
+                    handle_data(LEFT);
+                    handle_data(RIGHT);
+                }
+
+                gestureControlState = STATE_GC_OBJECT;
+                break;
+            case STATE_GC_OBJECT:
+                objectPresent = gestureDetectObject_ckeckObjectPresent(&sensoren[CENTER], &objectPresent);
+
+                if (objectPresent && !prevObjectPresent)
+                {
+                    gestureControlState = STATE_GC_START;
+                }
+                else if (!objectPresent && prevObjectPresent)
+                {
+                    gestureControlState = STATE_GC_STOP;
+                }
+                else if (objectPresent && prevObjectPresent)
+                {
+                    gestureControlState = STATE_GC_DETECT;
+                }
+                else
+                {
+                    gestureControlState = STATE_GC_SAMPLE;
+                }
+
+                prevObjectPresent = objectPresent;
+                break;
+            case STATE_GC_START:
+                sensorFunctions_startSensor(&sensoren[LEFT]);
+                sensorFunctions_startSensor(&sensoren[RIGHT]);
+
+                gestureControlState = STATE_GC_SAMPLE;
+                /* code */
+                break;
+            case STATE_GC_DETECT:
+                if (commando == OBJ)
+                {
+                    int8_t val = gestureDetect_detectgesture(sensoren);
+                    if (val != -1)
+                    {
+                        commando = val;
+                    }
+                }
+                gestureControlState = STATE_GC_SAMPLE;
+                /* code */
+                break;
+            case STATE_GC_STOP:
+                sensorFunctions_stopSensor(&sensoren[LEFT]);
+                sensorFunctions_stopSensor(&sensoren[RIGHT]);
+
+                gestureControlState = STATE_GC_SAMPLE;
+                /* code */
+                break;
+            default:
+                break;
+            }
 }
 
 /**

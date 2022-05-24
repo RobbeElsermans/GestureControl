@@ -24,6 +24,14 @@
 void gpio_initGpio();
 
 /**
+ * @brief stuurt de meegeleverde rij en kolom aan
+ * 
+ * @param gpio een struct van het typen gpio_matrix_t dat de rij en kolom bevat die aangestuurd moet worden
+ * @param state de state van de desbetreffende rij en kolom
+ */
+void gpioMatrix_set_gpio_matrix(gpio_matrix_t *gpio, state_t state);
+
+/**
  * @brief Een gpio pin van state veranderen
  * 
  * @param gpio een enum van het typen gpio_t die een pin voorstelt

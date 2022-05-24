@@ -35,7 +35,6 @@
 // abstracte layers
 #include "command.h"
 #include "position.h"
-#include "gpioMatrix.h"
 #include "gpio.h"
 #include "globalDefines.h"
 
@@ -103,7 +102,7 @@ int main(void)
 
   // enum command aanmaken met initiële waard NONE
   command_t command = NONE;
-
+  
   /**
    * @brief Construct a new position initPosition object
    *
