@@ -731,17 +731,25 @@ De LED Controller heeft uiteraard een LED Matrix waarop hij de uitgeoefende comm
 **LED Controller Schematic**
 <img src="./foto's/Led_Controller_Schematic.jpg" width="100%">
 
+De build in led op het nucleo bordje gaan we gebruiken om aan te geven aan de gebruiker wanneer er een nieuw commando ingegeven mag en kan worden en wanneer er geen object aanwezig is.
+
+Wanneer deze led statisch brand, dan kunnen we een commando ingeven. Na het ingeven van het commando zal de led voor 2 seconden uit gaan. In deze periode kan de gebruiker geen commando ingeven. Wanneer de led terug aan gaat, kan er opnieuw een commando ingegeven worden.
+
+Als er geen object aanwezig is, dan zal de led van state veranderen om de halve seconden. Ook zal de led matrix niet aanstaan.
+
+Met deze 2 indicatoren kunnen we het doel van de gesture controller duidelijk maken.
+
+We kunnen namelijk een systeem "wakker maken" en hier acties op uitvoeren.
+
 ## full project
 
-Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/Code) 2 projecten. Het 1ne project (Led Controller) bevat het geen dat we hierboven hebben gegenereerd en geïmporteerd. Het andere project (Led Controller V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
+Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/Code) 2 projecten. Het 1ne project (Led Controller) bevat het normale project. Het andere project (Led Controller V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
 
 Hieronder een weergaven van de abstractie gemaakt in Led Controller V2:
 
 <img src="/foto's/LedControllerAbstractie.png" alt="foto abstractie laag" width="30%">
 
 gegenereerd door [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML)
-
-
 
 ----
 

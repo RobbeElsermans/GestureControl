@@ -84,10 +84,10 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
 {
     // De afstand en zone results ophalen uit Result
     int8_t zone = sensor->resultaat.status;
-    long dist = sensor->resultaat.distance;
+    long dist = sensor->resultaat.meanDistance;
     //long dist = sensor->resultaat.meanDistance;
 
-    if (((dist <= MAX_DISTANCE_OBJECT) && (zone <= 1 ||zone == 6) && !*WasObjectPresent))
+    if (((dist <= MAX_DISTANCE_OBJECT) && (zone <= 1 ||zone == 6) && !*WasObjectPresent) && dist != 0)
     {
         if (!timerMeasurementSet)
         {
@@ -97,7 +97,7 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
 
         if (timer_getTicks() - timerMeasurment >= TIMER_MEASUREMENT_TIMEOUT)
         {
-            printf("Object! \r\n");
+            //printf("Object! \r\n");
             timerMeasurementSet = false;
             return true;
         }
@@ -115,7 +115,7 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
      *   of als er een foutcode 12 of 4 is en de Objectresult is true, dan is het object weg.
      */
     //if (((dist >= MAX_DISTANCE_OBJECT) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent) || (prevDistancesEqual && *WasObjectPresent))
-    if (((dist >= MAX_DISTANCE_OBJECT) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent))
+    if ((((dist >= MAX_DISTANCE_OBJECT) && *WasObjectPresent) || ((zone == 12 || zone == 4 || zone == 14) && *WasObjectPresent)) || dist > 5000)
     {
         if (timerMeasurementSet == false)
         {
@@ -123,7 +123,7 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
             timerMeasurment = timer_getTicks();
         }
 
-        if ((timer_getTicks() - timerMeasurment) >= TIMER_MEASUREMENT_TIMEOUT)
+        if ((timer_getTicks() - timerMeasurment) >= TIMER_MEASUREMENT_TIMEOUT || dist > 5000)
         {
             timerMeasurementSet = false;
             return false;
