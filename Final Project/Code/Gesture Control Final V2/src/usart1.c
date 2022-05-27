@@ -117,7 +117,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   }
 }
 
-int Usart1_Send(int file, char *data, int len){
+int Usart1_send(int file, char *data, int len){
   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
     {
         errno = EBADF;

@@ -735,7 +735,7 @@ De build in led op het nucleo bordje gaan we gebruiken om aan te geven aan de ge
 
 Wanneer deze led statisch brand, dan kunnen we een commando ingeven. Na het ingeven van het commando zal de led voor 2 seconden uit gaan. In deze periode kan de gebruiker geen commando ingeven. Wanneer de led terug aan gaat, kan er opnieuw een commando ingegeven worden.
 
-Als er geen object aanwezig is, dan zal de led van state veranderen om de halve seconden. Ook zal de led matrix niet aanstaan.
+Als er geen object aanwezig is, dan zal de led van state veranderen om de 200 milliseconden. Ook zal de led matrix niet aanstaan.
 
 Met deze 2 indicatoren kunnen we het doel van de gesture controller duidelijk maken.
 

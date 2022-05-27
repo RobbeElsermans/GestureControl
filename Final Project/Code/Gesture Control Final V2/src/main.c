@@ -144,7 +144,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 int _write(int file, char *data, int len)
 {
-    return Usart1_Send(file, data, len);
+    return Usart1_send(file, data, len);
 }
 
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)

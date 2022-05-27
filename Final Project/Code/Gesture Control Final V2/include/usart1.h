@@ -37,7 +37,7 @@ extern "C" {
 /* USER CODE END Private defines */
 
 void USART1_initUart(void);
-void Usart1_send(int file, char *data, int len);
+int Usart1_send(int file, char *data, int len);
 
 /* USER CODE BEGIN Prototypes */
 
@@ -47,5 +47,5 @@ void Usart1_send(int file, char *data, int len);
 }
 #endif
 
-#endif /* __USART_H__ */
+#endif /* __USART1_H__ */
 
