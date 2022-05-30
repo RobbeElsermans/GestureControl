@@ -232,6 +232,7 @@ int main(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+    //Wanneer er een interrupt gegenereerd is door een GPIO, kijken we welke GPIO dit was en plaatsen we de respectievelijke flag op true.
     for (uint8_t i = 0; i < AMOUNT_SENSOR_USED; i++)
     {
         if (sensoren[i].sensorPorts.gpioi == gpio_callBack_gpio(GPIO_Pin))
@@ -248,12 +249,17 @@ int _write(int file, char *data, int len)
 
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-    // HAL_I2C_Slave_Transmit_IT(&hi2c2, (uint8_t *)commando, sizeof(commando));
+    //Bij een RX (receive) callback gaan we het commando terug sturen.
     I2C2_writeIt((uint8_t *)&commando);
 }
 
 void handle_stateGc()
 {
+    /* Wanneer er een object aanwezig is en in de vorige loop was er nog geen object dan gaan we naar STATE_GC_START.
+     * Of wanneer er geen object meer aanwezig is en in vorige loop was er nog een object aanwezig, gaan we naar STATE_GC_STOP.
+     * Of wanneer er een object aanwezig is en in vorige loop was dit ook, dan gaan we naar STATE_GC_DETECT.
+     * Wanneer alles niet waar is, gaan we naar STATE_GC_SAMPLE.
+     */
     if (objectPresent && !prevObjectPresent)
     {
         gestureControlState = STATE_GC_START;
@@ -271,11 +277,13 @@ void handle_stateGc()
         gestureControlState = STATE_GC_SAMPLE;
     }
 
+    //De huidige warade in de vorige waarden steken.
     prevObjectPresent = objectPresent;
 }
 
 void perform_initSensor()
 {
+    //De sensoren koppelen aan hun pinnen en id.
     // center -> 0
     sensoren[CENTER].sensorPorts.gpioi = GPIOI2;
     sensoren[CENTER].sensorPorts.xshut = XSHUT2;
@@ -291,6 +299,7 @@ void perform_initSensor()
     sensoren[RIGHT].sensorPorts.xshut = XSHUT3;
     sensoren[RIGHT].id = RIGHT;
 
+    // Al de XSHUTS op 0 plaatsen. Dit zet alle sensoren op Hardware Standby.
     gpio_set_gpio(XSHUT0, resetPin);
     gpio_set_gpio(XSHUT1, resetPin);
     gpio_set_gpio(XSHUT2, resetPin);
@@ -314,13 +323,17 @@ void perform_calibration()
     if (gpio_get_gpio(SW1))
     // if(true)
     {
+        // de sensoren kalibreren en dit plotten naar seriële monitor
         calibrationData_getCalibrate(&sensoren[CENTER]);
         calibrationData_getCalibrate(&sensoren[LEFT]);
         calibrationData_getCalibrate(&sensoren[RIGHT]);
 
+        // de sensoren opstarten
         sensorFunctions_startSensor(&sensoren[CENTER]);
         sensorFunctions_startSensor(&sensoren[LEFT]);
         sensorFunctions_startSensor(&sensoren[RIGHT]);
+
+        // Oneindige loop waarbij we kunnen kijken of dat de nieuwe kalibratie parameters een succes zijn
         while (1)
         {
             sensorFunctions_getData(&sensoren[CENTER]);
@@ -335,13 +348,17 @@ void perform_calibration()
     }
     else
     {
+        // De hardcoded parameters importeren in de sensor
         calibrationData_setCalibrate(&sensoren[CENTER]);
         calibrationData_setCalibrate(&sensoren[LEFT]);
         calibrationData_setCalibrate(&sensoren[RIGHT]);
+        
+        /* DEBUG CODE WANNEER WE DE SENSOR KALIBREREN */
+        /* op deze manier kunnen we snel kijken of dat de kalibratie een succes was  */
 
-        sensorFunctions_startSensor(&sensoren[CENTER]);
-        sensorFunctions_startSensor(&sensoren[LEFT]);
-        sensorFunctions_startSensor(&sensoren[RIGHT]);
+        // sensorFunctions_startSensor(&sensoren[CENTER]);
+        // sensorFunctions_startSensor(&sensoren[LEFT]);
+        // sensorFunctions_startSensor(&sensoren[RIGHT]);
         // uint8_t x = 0;
         // while (x < 20)
         // {
@@ -359,24 +376,32 @@ void perform_calibration()
         // sensorFunctions_stopSensor(&sensoren[CENTER]);
         // sensorFunctions_stopSensor(&sensoren[LEFT]);
         // sensorFunctions_stopSensor(&sensoren[RIGHT]);
+
+        /* DEBUG CODE WANNEER WE DE SENSOR KALIBREREN */
     }
 }
 
 void handle_data(uint8_t id)
 {
+    //De data opvragen en opslaan in het gegeven sensor object.
     sensoren[id].isReady = sensorFunctions_getData(&sensoren[id]);
+
+    //Bereken het gemiddelde van het gegeven sensor object
     calculations_setMeanVal(&sensoren[id]);
+
+    //sla het gemiddelde op van het gegeven sensor object
     sensoren[id].resultaat.meanDistance = calculations_getMean(sensoren[id].id);
 }
 
 void handle_commandTimer()
 {
-    // Commando resetten
+    // timerCommandSet setten wanneer er een ander commando is gegeven dan NONE en OBJ en als timerCommandSet niet geset is 
+    // Commando resetten wanneer timer_getTicks() - timerCommand boven TIMER_COMMAND_TIMEOUT valt.
+
     if (!timerCommandSet && commando != NONE && commando != OBJ)
     {
         timerCommandSet = true;
         timerCommand = timer_getTicks();
-        // printf("command: %2d\r\n", commando);
     }
     if ((timer_getTicks() - timerCommand) >= TIMER_COMMAND_TIMEOUT)
     {
