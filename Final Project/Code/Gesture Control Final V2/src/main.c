@@ -146,7 +146,7 @@ int main(void)
             mainState = STATE_GESTURE_CONTROL;
             break;
         case STATE_GESTURE_CONTROL:
-            // Doe alles van meetingen, detectie, commands
+            // Doe alles van metingen, detectie, commands
 
             switch (gestureControlState)
             {
