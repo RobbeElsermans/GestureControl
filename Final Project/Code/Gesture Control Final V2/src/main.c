@@ -205,8 +205,8 @@ int main(void)
             {
                 // printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
                 timerDataCollection = timer_getTicks();
-                // printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-                printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
+                printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+                // printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
                 // printf("D%d, S%d, \r\n", (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.status);
                 //  printf("%2d\r\n", commando);
             }

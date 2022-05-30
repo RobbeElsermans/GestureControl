@@ -87,7 +87,8 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
     long dist = sensor->resultaat.meanDistance;
     //long dist = sensor->resultaat.meanDistance;
 
-    if (((dist <= MAX_DISTANCE_OBJECT) && (zone <= 1 ||zone == 6) && !*WasObjectPresent) && dist != 0)
+    if (((dist <= MAX_DISTANCE_OBJECT) && ((zone <= 1 && zone >=0) || zone == 6) && !*WasObjectPresent) && 
+        dist != 0)
     {
         if (!timerMeasurementSet)
         {
@@ -112,10 +113,10 @@ bool gestureDetectObject_ckeckObjectPresent(sensorData_t* sensor, bool *WasObjec
 
     /*
      *   als het object verder is dan MAX_DISTANCE_OBJECT en het object was er dan is het object weg
-     *   of als er een foutcode 12 of 4 is en de Objectresult is true, dan is het object weg.
+     *   of als er een foutcode 12, 4 of 14 is en de Objectresult is true of de afstand is groter dan 5000, dan is het object weg.
      */
     //if (((dist >= MAX_DISTANCE_OBJECT) && *WasObjectPresent) || ((zone == 12 || zone == 4) && *WasObjectPresent) || (prevDistancesEqual && *WasObjectPresent))
-    if ((((dist >= MAX_DISTANCE_OBJECT) && *WasObjectPresent) || ((zone == 12 || zone == 4 || zone == 14) && *WasObjectPresent)) || dist > 5000)
+    if ((((dist >= MAX_DISTANCE_OBJECT) && *WasObjectPresent) || ((zone == 12 || zone == 4 || zone == 14) && *WasObjectPresent)) || dist > 5000 || dist < 0)
     {
         if (timerMeasurementSet == false)
         {
