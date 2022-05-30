@@ -268,7 +268,7 @@ Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tool
 
 <!-- ![foto opstart popup 0](foto's/tutorial_Importeer_bestanden_0.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_0.jpg" alt="foto opstart popup 0" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_0.jpg" alt="foto opstart popup 0" width="30%">
 
 2. Start een nieuw project op. Dit kan even duren vooraleer een nieuwe window verschijnt.
 
