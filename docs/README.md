@@ -266,22 +266,21 @@ Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tool
 
 1. Installeer [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) en open dit in een directory naar keuzen.
 
-![foto opstart popup 0](foto's/tutorial_Importeer_bestanden_0.jpg)
+<!-- ![foto opstart popup 0](foto's/tutorial_Importeer_bestanden_0.jpg) -->
 
-<!-- <img src="./foto's/tutorial_Importeer_bestanden_0.jpg" alt="foto opstart popup 0" width="30%">
-![] -->
+<img src="./foto's/tutorial_Importeer_bestanden_0.jpg" alt="foto opstart popup 0" width="30%">
 
 2. Start een nieuw project op. Dit kan even duren vooraleer een nieuwe window verschijnt.
 
 <!-- ![foto opstart project 1](foto's/tutorial_Importeer_bestanden_1.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_1.jpg" alt="foto opstart project 1" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_1.jpg" alt="foto opstart project 1" width="30%">
 
 1. Type in **Part Number** het volgende: *stm32f302rc*. Nadien selecteer je in de tabel de 1ste rij om nadien op **Next** te drukken.
 
 <!-- ![foto opstart project 2](foto's/tutorial_Importeer_bestanden_2.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_2.jpg" alt="foto opstart project 2" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_2.jpg" alt="foto opstart project 2" width="30%">
 
 
 4. Een nieuw venster verschijnt waarin we de naam, de locatie en de programmeer taal dat we willen gebruiken instellen. De naam is vrij te kiezen net zoals de locatie van het project. Ik neem hier *GestureController* als naam en de locatie laat ik op default staan. Als programmeer taal gaan we C nemen. Nu drukken we op **Finish** zodat ons project wordt aangemaakt. Men zal vragen of dat men het **Device Configuration Tool perspective** mag openen. Druk hierbij op **Yes**.
@@ -290,8 +289,8 @@ Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tool
 ![foto opstart project 4](foto's/tutorial_Importeer_bestanden_4.jpg) -->
 
 
-<img src="../foto's/tutorial_Importeer_bestanden_3.jpg" alt="foto opstart project 3" width="30%">
-<img src="../foto's/tutorial_Importeer_bestanden_4.jpg" alt="foto opstart project 4" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_3.jpg" alt="foto opstart project 3" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_4.jpg" alt="foto opstart project 4" width="30%">
 
 ?> Nu bevinden we ons in ST's hun (mijn mening) handigste tool ooit. Hier kunnen we op grafischer wijze heel ons project opbouwen zonder 1 lijn code te schrijven.
 
@@ -299,13 +298,13 @@ Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tool
 
 <!-- ![foto opstart project 5](foto's/tutorial_Importeer_bestanden_5.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_5.jpg" alt="foto opstart project 5" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_5.jpg" alt="foto opstart project 5" width="30%">
 
 1. In het popup-venster **Embedded Software packages Manager** gaan we bovenaan naar de 2de tab **STMicroelektronics** en zoeken we in de lijst naar **X-CUBE-TOF1** waar we vervolgens in de dropdown versie 1.0.0 aanvinken & versie 3.0.0 aanvinken. Installeer deze.
 
 <!-- ![foto opstart project 6](foto's/tutorial_Importeer_bestanden_6.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_6.jpg" alt="foto opstart project 6" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_6.jpg" alt="foto opstart project 6" width="30%">
 
 !> men vraagt voor akkoord (of niet akkoord) te gaan met de licentie van de software. Als we niet akkoord gaan kunnen we uiteraard de software niet gebruiken. Ik ga dus akkoord.
 
@@ -313,7 +312,7 @@ Wanneer de installatie voltooid is, zou het vinkje volledig groen moeten zijn. S
 
 <!-- ![foto opstart project 7](foto's/tutorial_Importeer_bestanden_7.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_7.jpg" alt="foto opstart project 7" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_7.jpg" alt="foto opstart project 7" width="30%">
 
 7. Vervolgens plaatsen we de pin gegevens (die te vinden zijn in hoofdstuk [PinOut](#pinout) meer bepaald in foto **PCB Pinout F302Rx** en in hoofdstuk [Pin description](#pin-description)) in de grafische editor. Zoals de opmerking zegt, is I2C2 op een andere pin dan de MCU's die we in gedachten hadden om te gebruiken. Dit wordt in hoofdstuk [Hardware Opbouw](#hardware-opbouw) beschreven hoe we dit aanpassen met PCBV0.3.
 
@@ -321,48 +320,48 @@ Om een pin te definiëren gaan we met de cursor van de muis op de desbetreffende
 
 <!-- ![foto declareren pinnen 8](foto's/tutorial_Importeer_bestanden_8.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_8.jpg" alt="foto declareren pinnen8" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_8.jpg" alt="foto declareren pinnen8" width="30%">
 
 Om een naam te geven klikken we met de rechter muisknop op de aangemaakte GPIO pin en selecteren we **Enter User label** om dan een naam in te kunnen geven.
 
 <!-- ![foto declareren pinnen 9](foto's/tutorial_Importeer_bestanden_9.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_9.jpg" alt="foto declareren pinnen9" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_9.jpg" alt="foto declareren pinnen9" width="30%">
 
 Dit herhalen we totdat we al de XSHUT, GPIOI, LED en SW pinnen hebben gedeclareerd. Dit resulteert in onderstaande foto:
 
 <!-- ![foto declareren pinnen 10](foto's/tutorial_Importeer_bestanden_10.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_10.jpg" alt="foto declareren pinnen10" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_10.jpg" alt="foto declareren pinnen10" width="30%">
 
 Nu rest ons nog om voor de interrupts (GPIOI_0->4) code te laten genereren. Dit vinden we in de zijbalk onder **System Core** -> **NVIC** die ons een ander zijbalk 
 toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts** aanvinken. Dit zal later voor ons de code activeren.
 
 <!-- ![foto declareren peripheral pinnen 11](foto's/tutorial_Importeer_bestanden_11.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_11.jpg" alt="foto declareren peripheral pinnen11" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_11.jpg" alt="foto declareren peripheral pinnen11" width="30%">
 
 8. Na het plaatsen van de input, output en interrupt pinnen, moeten de peripheral pinnen nog gedeclareerd worden (zoals I2C1, I2C2, Externe clock, UART, ...). Dit vergt iets meer werk dan voorgaande stap.
    1. Als eerste gaan we de programming peripheral activeren genaamd **Async Serial Wire**. Dit doen we door in de zijbalk onder **System Core** -> **SYS** bij de dropdown **Debug** de laatste optie **Trace Asynchronous Sw** te selecteren. Na de selectie zullen er enkele pinnen groen worden en een naam krijgen.
 <!--  ![foto declareren peripheral pinnen 12](foto's/tutorial_Importeer_bestanden_12.jpg)
    ![foto declareren peripheral pinnen 13](foto's/tutorial_Importeer_bestanden_13.jpg) -->
 
-   <img src="../foto's/tutorial_Importeer_bestanden_12.jpg" alt="foto declareren peripheral pinnen12" width="30%">
-   <img src="../foto's/tutorial_Importeer_bestanden_13.jpg" alt="foto declareren peripheral pinnen13" width="30%">
+   <img src="./foto's/tutorial_Importeer_bestanden_12.jpg" alt="foto declareren peripheral pinnen12" width="30%">
+   <img src="./foto's/tutorial_Importeer_bestanden_13.jpg" alt="foto declareren peripheral pinnen13" width="30%">
    
    2. Het volgende dat we gaan instellen zijn de externe klok kristallen. Hiervoor gaan we ook onder **System Core** naar **RCC** waar we dan de HSE (High Speed Clock) en de LSE (Low Speed Clock) kunnen instellen. Beiden worden geplaatst op **Crystal/Ceramic Resonator**. Wederom worden er enkele pinnen groen met een naam.
     
     <!-- ![foto declareren peripheral pinnen 14](foto's/tutorial_Importeer_bestanden_14.jpg)
     ![foto declareren peripheral pinnen 15](foto's/tutorial_Importeer_bestanden_15.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_14.jpg" alt="foto declareren peripheral pinnen14" width="30%">
-    <img src="../foto's/tutorial_Importeer_bestanden_15.jpg" alt="foto declareren peripheral pinnen15" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_14.jpg" alt="foto declareren peripheral pinnen14" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_15.jpg" alt="foto declareren peripheral pinnen15" width="30%">
     
     Nu dat de pinnen gedefinieerd zijn, kunnen we de klok zelf definiëren. Dit doen we in een andere tab (die bovenaan te vinden is) genaamd **Clock Configuration**. Hierin gaan we 2 bolletjes van plaats veranderen. Bij **PLL Source Mux** veranderen we het bolletje van **HSI** naar **HSE**. Bij **System Clock Mux** veranderen we het bolletje van **HSI** naar **PLLCLK**. Later komen we hier nog enkele zaken aanpassen.
 
     <!-- ![foto declareren peripheral pinnen 16](foto's/tutorial_Importeer_bestanden_16.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_16.jpg" alt="foto declareren peripheral pinnen16" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_16.jpg" alt="foto declareren peripheral pinnen16" width="30%">
 
    3. We keren terug naar de **Pinout & Configuration** tab bovenaan. Nu gaan we de FTDI peripheral aanmaken op **USART1**. Hiervoor gaan we onder **Connectivity** -> **USART1** de volgende zaken wijzigen:
       - Mode: Asynchronous
@@ -373,78 +372,78 @@ toont waarin we **EXTI line [9:5] interrupts** en **EXTI line [15:10] interrupts
     <!-- ![foto declareren peripheral pinnen 17](foto's/tutorial_Importeer_bestanden_17.jpg)
     ![foto declareren peripheral pinnen 18](foto's/tutorial_Importeer_bestanden_18.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_17.jpg" alt="foto declareren peripheral pinnen17" width="30%">
-    <img src="../foto's/tutorial_Importeer_bestanden_18.jpg" alt="foto declareren peripheral pinnen18" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_17.jpg" alt="foto declareren peripheral pinnen17" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_18.jpg" alt="foto declareren peripheral pinnen18" width="30%">
 
     Zoals te zien op de foto zijn er weer enkele pinnen groen geworden met hun bijhorende naam. Merk op dat USART1_RX en USART1_TX niet op de juiste plaatst staat. Om de pin op de juiste plaats te zetten, gaan we met de muis over de pin USART1_RX staan en we drukken Ctrl+linker muisknop. nu zal je andere pinnen zien pinken. Deze pinnen kunnen de functie (USART1_RX) eveneens aansturen.
 
     <!-- ![foto declareren peripheral pinnen 19](foto's/tutorial_Importeer_bestanden_19.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_19.jpg" alt="foto declareren peripheral pinnen19" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_19.jpg" alt="foto declareren peripheral pinnen19" width="30%">
 
     We slepen dus de vastgenomen pin naar PB7. Dit doen we ook voor USART1_TX maar dan naar PB6. Nu staat de pin juist.
       
     <!-- ![foto declareren peripheral pinnen 20](foto's/tutorial_Importeer_bestanden_20.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_20.jpg" alt="foto declareren peripheral pinnen20" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_20.jpg" alt="foto declareren peripheral pinnen20" width="30%">
 
    4. Een van de belangrijkste peripheral is toch I2C1 die in communicatie gaat met de ToF-sensoren. Deze stellen we in via **Connectivity** -> **I2C1** waar we de dropdown op **I2C** plaatsen. De snelheid van de klok stellen we in op **Fast Mode Plus** (1MHz frequentie).
    
    <!-- ![foto declareren peripheral pinnen 21](foto's/tutorial_Importeer_bestanden_21.jpg) -->
 
-   <img src="../foto's/tutorial_Importeer_bestanden_21.jpg" alt="foto declareren peripheral pinnen21" width="30%">
+   <img src="./foto's/tutorial_Importeer_bestanden_21.jpg" alt="foto declareren peripheral pinnen21" width="30%">
 
    Net zoals bij de USART1 peripheral staan de pinnen niet zoals we het willen. Hier wordt hetzelfde gedaan als met USART1_RX & USART1_TX maar dit dan met I2C1_SCL. We verplaatsen I2C1_SCL van PA15 naar PB8.
 
    <!-- ![foto declareren peripheral pinnen 22](foto's/tutorial_Importeer_bestanden_22.jpg) -->
 
-   <img src="../foto's/tutorial_Importeer_bestanden_22.jpg" alt="foto declareren peripheral pinnen22" width="30%">
+   <img src="./foto's/tutorial_Importeer_bestanden_22.jpg" alt="foto declareren peripheral pinnen22" width="30%">
 
    5. De 2de belangrijkste peripheral is I2C2 die in slave mode zal staan zodat andere toestellen hiermee verbinding kunnen aangaan. Net zoals hierboven gaan we in de zijbalk bij **Connectivity** naar **I2C2** waar we in de dropdown **I2C** selecteren en we stellen zijn adres in op **32** (HEX: 0x20).
 
     <!-- ![foto declareren peripheral pinnen 23](foto's/tutorial_Importeer_bestanden_23.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_23.jpg" alt="foto declareren peripheral pinnen23" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_23.jpg" alt="foto declareren peripheral pinnen23" width="30%">
 
     Omdat we met de gesture controller niet willen wachten totdat de master iets stuurt, zal dit over een interrupt verlopen. Hiervoor gaan we naar de tab **NVIC Settings** waar we **I2C2 event global interrupt / I2C2 wake-up interrupt through EXTI line 24** aanvinken.
 
     <!-- ![foto declareren peripheral pinnen 24](foto's/tutorial_Importeer_bestanden_24.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_24.jpg" alt="foto declareren peripheral pinnen24" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_24.jpg" alt="foto declareren peripheral pinnen24" width="30%">
 
     De pinnen worden nu wel juist geplaatst. Later worden de pinnen doorverbonden op de PCBV0.3 (zie [Hardware Opbouw](#hardware-opbouw)).
 
     <!-- ![foto declareren peripheral pinnen 25](foto's/tutorial_Importeer_bestanden_25.jpg) -->
 
-    <img src="../foto's/tutorial_Importeer_bestanden_25.jpg" alt="foto declareren peripheral pinnen25" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_25.jpg" alt="foto declareren peripheral pinnen25" width="30%">
 
     6. De klok sources van beide I2C modules staan nog niet juist. Dit doen we in een andere tab (die bovenaan te vinden is) genaamd **Clock Configuration**. Hierin gaan we 2 bolletjes van plaats veranderen. Bij **I2C1 Clock Mux** plaatsen we het bolletje naar **SYSCLK**. Dit doen we ook bij **I2C2 Clock**.
 
-    <img src="../foto's/tutorial_Importeer_bestanden_30.jpg" alt="foto declareren peripheral pinnen25" width="30%">
+    <img src="./foto's/tutorial_Importeer_bestanden_30.jpg" alt="foto declareren peripheral pinnen25" width="30%">
 
 1. De MCU heeft al de aansluitingen gekregen die nodig zijn voor de GestureController. De ToF-sensor bibliotheek gaan we nu importeren om dan automatisch te laten integreren met de genomen MCU. Hiervoor gaan we naar **Software Packs** -> **Select Components** (of Alt+O). Er komt een tabel tevoorschijn. 
 
 <!-- ![foto declareren peripheral pinnen 26](foto's/tutorial_Importeer_bestanden_26.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_26.jpg" alt="foto declareren peripheral pinnen26" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_26.jpg" alt="foto declareren peripheral pinnen26" width="30%">
 
 De rij **STMicroelektronics.X-CUBE-TOF1** vouwen we open om dan door te gaan naar **Board Part Ranging** waar we **VL53L3CX** selecteren. We vouwen ook **Device ToF1_Applications** open om daar in de dropdown **VL53L3CX_SimpleRanging** te selecteren. Dit zal een oranje driehoek tevoorschijn laten komen. Wanneer we op deze driehoek klikken met de linker muisknop, zal er onderaan in de kader **Component dependencies** informatie tevoorschijn komen. Hier klikken we met de linker muisknop op **Resolve** wat automatisch voor ons de dependencies zal oplossen.
 
 <!-- ![foto declareren peripheral pinnen 27](foto's/tutorial_Importeer_bestanden_27.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_27.jpg" alt="foto declareren peripheral pinnen27" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_27.jpg" alt="foto declareren peripheral pinnen27" width="30%">
 
 De ToF-sensor bibliotheek is te configureren in de tab **Software Packs**->**STMicroelectronics.X-CUBE-TOF1.3.0.0**. Hier gaan we het eerste vinkjes selecteren in de kader **Mode**. In de kader **Configuration** stellen we in welke pin voor wat in staat. Omdat we onze pinnen al gedefinieerd hebben is het enkel maar de dropdown open doen en een correcte pin selecteren. We nemen in dit geval voor XSHUT pin PC0 en voor I2C nemen we I2C1 met adres 82 (HEX: 0x52) dat het default adres is van de ToF-sensoren. Later in de code wordt er bijna geen gebruik gemaakt van deze instellingen. Dit moet gewoon ingevuld zijn zodat ST de code voor ons kan genereren.
 
 <!-- ![foto declareren peripheral pinnen 28](foto's/tutorial_Importeer_bestanden_28.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_28.jpg" alt="foto declareren peripheral pinnen28" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_28.jpg" alt="foto declareren peripheral pinnen28" width="30%">
 
 10. Een laatste wijziging voeren we door zodat al de peripherals in apare c en h bestanden geplaatst worden. Dit is overzichtelijker maar niet noodzakelijk. Hiervoor ga je naar **Project manager**->**Code Generation** waar we de regel **Generate peripheral initialization as a pair of '.c/.h' files per peripheral** aanvinken.
 
 <!-- ![foto declareren peripheral files 29](foto's/tutorial_Importeer_bestanden_29.jpg) -->
 
-<img src="../foto's/tutorial_Importeer_bestanden_29.jpg" alt="foto declareren peripheral pinnen29" width="30%">
+<img src="./foto's/tutorial_Importeer_bestanden_29.jpg" alt="foto declareren peripheral pinnen29" width="30%">
 
 Nu is het tijd om de code te genereren. Als we op ctrl+s (opslaan) drukken, dan zal er een popup verschijnen om de code te genereren. Nadien volgt een andere popup om het perspectief om te zetten naar C/C++ perspectief. Bij de 2 popups druk je op **Yes**. De code wordt gegenereerd. 
 
@@ -457,7 +456,7 @@ Omdat ik mijn project in PlatformIO heb gemaakt, zal ik hier nog verder beschrij
 
 Zoals gezegd in de [inleiding](#inleiding) hebben we voor de ToF-sensoren een API ter beschikking geschreven door ST zelf. Hier hebben we de **modules** en **porting** folder onder **BSP/Components/vl53l3cx** waarin de .h en .c  bestanden staan. Deze bestanden gaan we overbrengen naar de **lib** folder waar we al de bestanden kopiëren in de map **BSP_vl53l3cx** onder de folder **src**. 
 
-<img src="../foto's/tutorial_Importeer_bestanden_31.jpg" alt="fot folder lib">
+<img src="./foto's/tutorial_Importeer_bestanden_31.jpg" alt="fot folder lib">
 
 Wanneer we het gegenereerde project opendoen met de VL53L3CX sensoren, staan er nog enkele andere bestanden onder **BSP/Components/vl53l3cx.h & .c** en **TOF/Target** in die van belang zijn:
 
@@ -484,7 +483,7 @@ In het bestand **custom_tof_conf.h** moeten we nog een lijn code toevoegen tusse
 
 We importeren de bestanden die het eigenlijke project (deels) tot leven brengen. Dit zijn al de bestanden die te vinden zijn onder de folder **Core/Inc** en **Core/Src**. We plaatsen al de bestanden van **Core/Inc** in de **include** folder en de **Core/Src** in de **src** folder. 
 
-<img src="../foto's/tutorial_Importeer_bestanden_32.jpg" alt="foto folder src en inc">
+<img src="./foto's/tutorial_Importeer_bestanden_32.jpg" alt="foto folder src en inc">
 
 Dit zijn de bestanden:
 
@@ -526,10 +525,10 @@ De bestanden die het project tot leven brengen zijn nog niet geïmporteerd. We h
 Om PlatformIO goed te kunnen gebruiken moeten we het platform **ST STM32** installeren zodat we de software kunnen compileren.
 
 <div style="display:inline">
-<img src="../foto's/platformio_platforms.jpg" alt="picture of monitor"width="25%">
-<img src="../foto's/platformio_platforms_2.jpg" alt="picture of monitor" width="70%">
+<img src="./foto's/platformio_platforms.jpg" alt="picture of monitor"width="25%">
+<img src="./foto's/platformio_platforms_2.jpg" alt="picture of monitor" width="70%">
 </div>
-<!-- <img src="../foto's/platformio_platforms.jpg" alt="picture of monitor"
+<!-- <img src="./foto's/platformio_platforms.jpg" alt="picture of monitor"
 style=" display: block;
         margin-left: auto;
         margin-right: auto;"> -->
@@ -684,7 +683,7 @@ De gemaakte PCB V0.3 wordt op een plexiplaat gemonteerd zodat dit kan fungeren a
 
 <!-- ![foto opstelling](foto's/PCBV0.3_opstelling_trap_3.jpg) -->
 
-<img src="../foto's/PCBV0.3_opstelling_trap_3.jpg" alt="foto opstelling" width="30%">
+<img src="./foto's/PCBV0.3_opstelling_trap_3.jpg" alt="foto opstelling" width="30%">
 
 De gefreesde plexiplaat is [hier]() te vinden.
 
@@ -696,7 +695,7 @@ Als eind presentatie hebben we ook nog 2 voetsteunen gemaakt waarin we de Led-Co
 
 <iframe src="https://myhub.autodesk360.com/ue2fad720/shares/public/SH9285eQTcf875d3c539af058ebe077ce73b?mode=embed" width="800" height="600" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"  frameborder="0"></iframe>
 
-<img src="../foto's/finale opstelling.jpg" alt="foto opstelling" width="50%">
+<img src="./foto's/finale opstelling.jpg" alt="foto opstelling" width="50%">
 
 Zoals beschreven in [PinOut](#pinout) zijn de SDA & SCL van I2C2 een plaats opgeschoven. Dit is makkelijk verholpen door de pads door te lussen die we voorzien hebben tijdens het PCB ontwerpen. We gaan daarom J19 (PA10) met TP1 (SDA2) verbinden en J18 (PA9) met TP2 (SCL2) verbinden. Ook halen we R38 en R37 van de PCB af.
 
