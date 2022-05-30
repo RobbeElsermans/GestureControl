@@ -24,63 +24,113 @@
 #include "SensorFunctions.h"
 #include "calculations.h"
 
-// Toggle for data collection
+/**
+ * @brief Deze define wordt gebruikt om de data te plotten over seriële communicatie. Dit kan dan nadien gebruikt worden
+ * met de gemaakte python scripts om de data op te slaan en te visualiseren.
+ */
 #define DATACOLLECTION
 
-// Main states
+/**
+ * @brief Deze mainStates_t enum bevat de statussen die de main loop kan bevatten
+ *
+ */
 static mainStates_t mainState = STATE_INIT;
 
-// gesture Control states
+/**
+ * @brief Deze gestureControlStates_t enum bevat de statussen die binnenin de status STATE_GESTURE_CONTROL worden overlopen
+ *
+ */
 static gestureControlStates_t gestureControlState = STATE_GC_SAMPLE;
 
-// Sensor define
+/**
+ * @brief Sensor definitie
+ *
+ */
 static sensorData_t sensoren[AMOUNT_SENSOR_USED];
-      
+
 #ifdef DATACOLLECTION
 static long timerDataCollection = 0;
 #define TIMER_DATA_COLLECTION_TIMEOUT 20 // aantal milliseconden per meeting
 #endif
 
+/**
+ * @brief flag dat bijhoud of dat er een object aanwezig is
+ *
+ */
 bool objectPresent = false;
 bool prevObjectPresent = false;
 
-// Commando enum waarmee we de commando's opslaan
+/**
+ * @brief command_t enum waarmee we de huidige commando bewaren
+ *
+ */
 commands_t commando = NONE;
 uint8_t buf;
 
-// Timer die het commando voor TIMER_COMMAND_TIMEOUT seconden aanhoud
+/**
+ * @brief Timer die het commando voor TIMER_COMMAND_TIMEOUT seconden aanhoud
+ *
+ */
 static float timerCommand = 0;
-static bool timerCommandSet = false;   // Start in false state
-#define TIMER_COMMAND_TIMEOUT 1500 // 2 seconden
+static bool timerCommandSet = false; // Start in false state
+#define TIMER_COMMAND_TIMEOUT 1500   // 2 seconden
 
-/* Private function prototypes -----------------------------------------------*/
+/**
+ * @brief handles de led aansturingen d.m.v. het commando
+ *
+ */
 void handle_led();
+
+/**
+ * @brief Zal het commando resetten wanneer deze voor x milliseconden actief was.
+ *
+ */
 void handle_commandTimer();
+
+/**
+ * @brief De data opvragen + opslaan en het gemiddelden berekenen + opslaan
+ *
+ * @param id dat het id voorstelt van de sensor. (CENTER, LEFT, RIGHT)
+ */
 void handle_data(uint8_t id);
+
+/**
+ * @brief Kalibratie uitvoeren van de sensoren
+ *
+ */
 void perform_calibration();
-void perform_init();
-void handle_gestureControl();
+
+/**
+ * @brief initialiseren van de sensor
+ *
+ */
+void perform_initSensor();
+
+/**
+ * @brief De state van gestureControlState bekijken in functie van het objectpresent boolean
+ *
+ */
+void handle_stateGc();
 
 /**
  * @brief  The application entry point.
  * @retval int
  */
 int main(void)
-
 {
     /* MCU Configuration--------------------------------------------------------*/
 
     /* Reset of all peripherals, Initializes all pheripherals. */
     BSP_initBSP();
 
-    //main while loop
+    // main while loop
     while (1)
     {
         switch (mainState)
         {
         case STATE_INIT:
 
-            perform_init();
+            perform_initSensor();
 
             mainState = STATE_CALIBRATE;
             break;
@@ -94,12 +144,60 @@ int main(void)
             if (!sensoren[CENTER].sensor.IsRanging)
                 sensorFunctions_startSensor(&sensoren[CENTER]);
             mainState = STATE_GESTURE_CONTROL;
-            /* code */
             break;
         case STATE_GESTURE_CONTROL:
             // Doe alles van meetingen, detectie, commands
 
-            handle_gestureControl();
+            switch (gestureControlState)
+            {
+            case STATE_GC_SAMPLE:
+                handle_data(CENTER);
+
+                if (objectPresent)
+                {
+                    handle_data(LEFT);
+                    handle_data(RIGHT);
+                }
+
+                gestureControlState = STATE_GC_OBJECT;
+                break;
+            case STATE_GC_OBJECT:
+                objectPresent = gestureDetectObject_ckeckObjectPresent(&sensoren[CENTER], &objectPresent);
+
+                handle_stateGc();
+                break;
+            case STATE_GC_START:
+                sensorFunctions_startSensor(&sensoren[LEFT]);
+                sensorFunctions_startSensor(&sensoren[RIGHT]);
+
+                gestureControlState = STATE_GC_SAMPLE;
+                break;
+            case STATE_GC_DETECT:
+                if (commando == OBJ)
+                {
+                    int8_t val = gestureDetect_detectgesture(sensoren);
+                    if (val != -1)
+                    {
+                        commando = val;
+                    }
+                }
+                gestureControlState = STATE_GC_SAMPLE;
+                break;
+            case STATE_GC_STOP:
+                sensorFunctions_stopSensor(&sensoren[LEFT]);
+                sensorFunctions_stopSensor(&sensoren[RIGHT]);
+
+                gestureControlState = STATE_GC_SAMPLE;
+                break;
+            default:
+                break;
+            }
+            gestureDetect_checkResetTimerGesture();
+
+            handle_commandTimer();
+
+            // Commando's uitsturen
+            handle_led();
 
 #ifdef DATACOLLECTION
             // DataCollection
@@ -107,21 +205,22 @@ int main(void)
             {
                 // printf("L%d, C%d, R%d\r\n", leftDistance, centerDistance, rightDistance);
                 timerDataCollection = timer_getTicks();
-                //printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
-                //printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
-                printf("D%d, S%d, \r\n", (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.status);
-                //printf("%2d\r\n", commando);
+                // printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+                printf("L%d, C%d, R%d\r\n", (int)sensoren[LEFT].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[RIGHT].resultaat.meanDistance);
+                // printf("D%d, S%d, \r\n", (int)sensoren[CENTER].resultaat.meanDistance, (int)sensoren[CENTER].resultaat.status);
+                //  printf("%2d\r\n", commando);
             }
 #endif
 
             I2C2_readIt(&buf);
             // I2C aanzetten om iets te ontvangen in interrupt modus.
-            
+
             break;
         case STATE_STOP:
             sensorFunctions_stopSensor(&sensoren[CENTER]);
             while (1)
                 ;
+            return 1;
             break;
 
         default:
@@ -149,12 +248,35 @@ int _write(int file, char *data, int len)
 
 void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-    //HAL_I2C_Slave_Transmit_IT(&hi2c2, (uint8_t *)commando, sizeof(commando));
-    I2C2_writeIt((uint8_t*)&commando);
+    // HAL_I2C_Slave_Transmit_IT(&hi2c2, (uint8_t *)commando, sizeof(commando));
+    I2C2_writeIt((uint8_t *)&commando);
 }
 
-void perform_init()
+void handle_stateGc()
 {
+    if (objectPresent && !prevObjectPresent)
+    {
+        gestureControlState = STATE_GC_START;
+    }
+    else if (!objectPresent && prevObjectPresent)
+    {
+        gestureControlState = STATE_GC_STOP;
+    }
+    else if (objectPresent && prevObjectPresent)
+    {
+        gestureControlState = STATE_GC_DETECT;
+    }
+    else
+    {
+        gestureControlState = STATE_GC_SAMPLE;
+    }
+
+    prevObjectPresent = objectPresent;
+}
+
+void perform_initSensor()
+{
+    // center -> 0
     sensoren[CENTER].sensorPorts.gpioi = GPIOI2;
     sensoren[CENTER].sensorPorts.xshut = XSHUT2;
     sensoren[CENTER].id = CENTER;
@@ -167,7 +289,6 @@ void perform_init()
     // right -> 2
     sensoren[RIGHT].sensorPorts.gpioi = GPIOI3;
     sensoren[RIGHT].sensorPorts.xshut = XSHUT3;
-
     sensoren[RIGHT].id = RIGHT;
 
     gpio_set_gpio(XSHUT0, resetPin);
@@ -191,7 +312,7 @@ void perform_calibration()
 {
     // Als de drukknop SW_1 actief is, wordt er gekalibreerd
     if (gpio_get_gpio(SW1))
-    //if(true)
+    // if(true)
     {
         calibrationData_getCalibrate(&sensoren[CENTER]);
         calibrationData_getCalibrate(&sensoren[LEFT]);
@@ -209,7 +330,7 @@ void perform_calibration()
             sensorFunctions_getData(&sensoren[RIGHT]);
             timer_delay(10);
             timer_delay(200);
-            printf("%d,%d\t%d,%d\t%d,%d\r\n",(int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+            printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
         }
     }
     else
@@ -218,20 +339,26 @@ void perform_calibration()
         calibrationData_setCalibrate(&sensoren[LEFT]);
         calibrationData_setCalibrate(&sensoren[RIGHT]);
 
-        // sensorFunctions_startSensor(&sensoren[CENTER]);
-        // sensorFunctions_startSensor(&sensoren[LEFT]);
-        // sensorFunctions_startSensor(&sensoren[RIGHT]);
-        // while (1)
+        sensorFunctions_startSensor(&sensoren[CENTER]);
+        sensorFunctions_startSensor(&sensoren[LEFT]);
+        sensorFunctions_startSensor(&sensoren[RIGHT]);
+        // uint8_t x = 0;
+        // while (x < 20)
         // {
-        //   sensorFunctions_getData(&sensoren[CENTER]);
-        //   timer_delay(10);
-        //   sensorFunctions_getData(&sensoren[LEFT]);
-        //   timer_delay(10);
-        //   sensorFunctions_getData(&sensoren[RIGHT]);
-        //   timer_delay(10);
-        //   timer_delay(200);
-        //   printf("%d,%d\t%d,%d\t%d,%d\r\n",(int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+        //     sensorFunctions_getData(&sensoren[CENTER]);
+        //     timer_delay(10);
+        //     sensorFunctions_getData(&sensoren[LEFT]);
+        //     timer_delay(10);
+        //     sensorFunctions_getData(&sensoren[RIGHT]);
+        //     timer_delay(10);
+        //     timer_delay(200);
+        //     printf("%d,%d\t%d,%d\t%d,%d\r\n", (int)sensoren[CENTER].resultaat.distance, (int)sensoren[CENTER].resultaat.status, (int)sensoren[LEFT].resultaat.distance, (int)sensoren[LEFT].resultaat.status, (int)sensoren[RIGHT].resultaat.distance, (int)sensoren[RIGHT].resultaat.status);
+        //     x++;
         // }
+
+        // sensorFunctions_stopSensor(&sensoren[CENTER]);
+        // sensorFunctions_stopSensor(&sensoren[LEFT]);
+        // sensorFunctions_stopSensor(&sensoren[RIGHT]);
     }
 }
 
@@ -254,7 +381,7 @@ void handle_commandTimer()
     if ((timer_getTicks() - timerCommand) >= TIMER_COMMAND_TIMEOUT)
     {
         timerCommandSet = false;
-        if(objectPresent)
+        if (objectPresent)
             commando = OBJ;
         else
             commando = NONE;
@@ -305,94 +432,6 @@ void handle_led()
 
     gpio_set_gpio(LED3, (state_t)objectPresent);
     gpio_toggle_gpio(LED4);
-}
-
-void handle_gestureControl(){
-    switch (gestureControlState)
-            {
-            case STATE_GC_SAMPLE:
-                handle_data(CENTER);
-
-                if (objectPresent)
-                {
-                    handle_data(LEFT);
-                    handle_data(RIGHT);
-                }
-
-                gestureControlState = STATE_GC_OBJECT;
-                break;
-            case STATE_GC_OBJECT:
-                objectPresent = gestureDetectObject_ckeckObjectPresent(&sensoren[CENTER], &objectPresent);
-
-                if (objectPresent && !prevObjectPresent)
-                {
-                    gestureControlState = STATE_GC_START;
-                }
-                else if (!objectPresent && prevObjectPresent)
-                {
-                    gestureControlState = STATE_GC_STOP;
-                }
-                else if (objectPresent && prevObjectPresent)
-                {
-                    gestureControlState = STATE_GC_DETECT;
-                }
-                else
-                {
-                    gestureControlState = STATE_GC_SAMPLE;
-                }
-
-                prevObjectPresent = objectPresent;
-                break;
-            case STATE_GC_START:
-                sensorFunctions_startSensor(&sensoren[LEFT]);
-                sensorFunctions_startSensor(&sensoren[RIGHT]);
-
-                gestureControlState = STATE_GC_SAMPLE;
-                /* code */
-                break;
-            case STATE_GC_DETECT:
-                if (commando == OBJ)
-                {
-                    int8_t val = gestureDetect_detectgesture(sensoren);
-                    if (val != -1)
-                    {
-                        commando = val;
-                    }
-                }
-                gestureControlState = STATE_GC_SAMPLE;
-                /* code */
-                break;
-            case STATE_GC_STOP:
-                sensorFunctions_stopSensor(&sensoren[LEFT]);
-                sensorFunctions_stopSensor(&sensoren[RIGHT]);
-
-                gestureControlState = STATE_GC_SAMPLE;
-                /* code */
-                break;
-            default:
-                break;
-            }
-
-            gestureDetect_checkResetTimerGesture();
-
-            handle_commandTimer();
-            // Commando's uitsturen
-            handle_led();
-}
-
-/**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
-void Error_Handler(void)
-{
-    /* USER CODE BEGIN Error_Handler_Debug */
-    /* User can add his own implementation to report the HAL error return state */
-    __disable_irq();
-    while (1)
-    {
-    }
-    /* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef USE_FULL_ASSERT

@@ -138,12 +138,25 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   }
 }
 
+/**
+ * @brief Slave Read Interrupt
+ * 
+ * @param data De pointer waarin de ontvangen data wordt opgeslagen
+ * @return bool dat het succes(true) of fail(false) weergeeft
+ */
 bool I2C2_readIt(uint8_t* data){
 
   if(HAL_I2C_Slave_Receive_IT(&hi2c2, data, sizeof(*data)) == HAL_OK)
     return true;
   return false;
 }
+
+/**
+ * @brief Slave Write Interrupt
+ * 
+ * @param data De pointer waarin de te verzenden data wordt bewaard
+ * @return bool dat het succes(true) of fail(false) weergeeft
+ */
 bool I2C2_writeIt(uint8_t* data){
   if(HAL_I2C_Slave_Transmit_IT(&hi2c2, data, sizeof(*data)) == HAL_OK)
     return true;

@@ -117,6 +117,15 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   }
 }
 
+
+/**
+ * @brief Versturen van data over usart1
+ * 
+ * @param file moet gebruikt worden bij _write
+ * @param data De te verzenden data
+ * @param len De lengte van de te verzenden data
+ * @return int de lengte van de verzenden data
+ */
 int Usart1_send(int file, char *data, int len){
   if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
     {
