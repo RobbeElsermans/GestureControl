@@ -671,7 +671,7 @@ Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeEls
 
 Hieronder een weergaven van de abstractie gemaakt in Gesture Control Final V2:
 
-<img src="/foto's/GestureControlAbstraction.png" alt="foto abstractie laag" width="30%">
+<img src="./foto's/GestureControlAbstraction.png" alt="foto abstractie laag" width="30%">
 
 gegenereerd door [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML)
 
@@ -747,7 +747,7 @@ Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeEls
 
 Hieronder een weergaven van de abstractie gemaakt in Led Controller V2:
 
-<img src="/foto's/LedControllerAbstractie.png" alt="foto abstractie laag" width="30%">
+<img src="./foto's/LedControllerAbstractie.png" alt="foto abstractie laag" width="30%">
 
 gegenereerd door [C4-PlantUML](https://github.com/plantuml-stdlib/C4-PlantUML)
 
