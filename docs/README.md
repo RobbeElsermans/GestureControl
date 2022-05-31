@@ -18,27 +18,27 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
 - [Gebruikte Hardware](#gebruikte-hardware)
 - [Opbouw Project](#opbouw-project)
   - [PinOut](#pinout)
-    - [Pin description](#pin-description)
-  - [genereer code](#genereer-code)
+    - [Pin Description](#pin-description)
+  - [Genereer Code](#genereer-code)
   - [Importeer API VL53LXC](#importeer-api-vl53lxc)
-  - [importeren include & src bestanden](#importeren-include--src-bestanden)
+  - [Importeren Include & Src Bestanden](#importeren-include--src-bestanden)
   - [Importeer Andere Bestanden](#importeer-andere-bestanden)
   - [Installeer Platform & Board](#installeer-platform--board)
-  - [configureer platformio.ini file](#configureer-platformioini-file)
-  - [main.h & .c](#mainh--c)
+  - [Configureer platformio.ini File](#configureer-platformioini-file)
+  - [Main.h & .c](#mainh--c)
   - [Overzicht Bestanden](#overzicht-bestanden)
   - [Build & Upload](#build--upload)
-  - [full project](#full-project)
+  - [Full Project](#full-project)
 - [Hardware Opbouw](#hardware-opbouw)
 - [LED Controller](#led-controller)
-  - [full project](#full-project-1)
+  - [Full Project](#full-project-1)
 - [Onderzoek](#onderzoek)
   - [Plaats Sensoren Development Kit](#plaats-sensoren-development-kit)
   - [Snelheid Metingen Development Kit](#snelheid-metingen-development-kit)
-    - [Eén sensor](#eén-sensor)
+    - [Eén Sensor](#eén-sensor)
       - [BLOCKING_CONTINUOUS](#blocking_continuous)
       - [ASYNC_CONTINUOUS](#async_continuous)
-    - [Vijf sensoren](#vijf-sensoren)
+    - [Vijf Sensoren](#vijf-sensoren)
       - [BLOCKING_CONTINUOUS](#blocking_continuous-1)
       - [ASYNC_CONTINUOUS](#async_continuous-1)
   - [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03)
@@ -47,17 +47,17 @@ Graag bedank ik al de collega's die me - tijdens deze leerrijke periode - hebben
     - [Trap](#trap)
   - [Snelheid Metingen PCBV0.3](#snelheid-metingen-pcbv03)
   - [Coverglas](#coverglas)
-    - [plexiplaat](#plexiplaat)
-    - [glasplaat](#glasplaat)
-  - [Smudge Detection plexiplaat](#smudge-detection-plexiplaat)
-    - [Normale werking](#normale-werking)
+    - [Plexiplaat](#plexiplaat)
+    - [Glasplaat](#glasplaat)
+  - [Smudge Detection Plexiplaat](#smudge-detection-plexiplaat)
+    - [Normale Werking](#normale-werking)
     - [VL53LX_SMUDGE_CORRECTION_SINGLE](#vl53lx_smudge_correction_single)
     - [VL53LX_SMUDGE_CORRECTION_CONTINUOUS](#vl53lx_smudge_correction_continuous)
-  - [Smudge Detection glasplaat](#smudge-detection-glasplaat)
-    - [Normale werking](#normale-werking-1)
+  - [Smudge Detection Glasplaat](#smudge-detection-glasplaat)
+    - [Normale Werking](#normale-werking-1)
     - [VL53LX_SMUDGE_CORRECTION_SINGLE](#vl53lx_smudge_correction_single-1)
     - [VL53LX_SMUDGE_CORRECTION_CONTINUOUS](#vl53lx_smudge_correction_continuous-1)
-  - [Trap in software verwerkt](#trap-in-software-verwerkt)
+  - [Trap In Software Verwerkt](#trap-in-software-verwerkt)
     - [Op papier](#op-papier)
     - [Met Data](#met-data)
   - [Bevindingen & Upgrades](#bevindingen--upgrades)
@@ -154,7 +154,7 @@ ST Morpho Extention pin header
 <iframe width="768" height="600" src="https://miro.com/app/live-embed/uXjVOF_cksw=/?moveToViewport=-1651,-1262,3867,2149" frameBorder="0" scrolling="no" allowFullScreen></iframe>
 
 
-### Pin description 
+### Pin Description 
 
 <div style="display:inline-block; background-color:white">
 <table style="background-color: white; color: black; display:inline;">
@@ -258,7 +258,7 @@ ST Morpho Extention pin header
 
 ----
 
-## genereer code
+## Genereer Code
 
 Om het onszelf makkelijk te maken gaan we gebruik maken van de STM32CubeIDE tools die voor ons de code genereert.
 
@@ -479,7 +479,7 @@ In het bestand **custom_tof_conf.h** moeten we nog een lijn code toevoegen tusse
 
 ``` 
 
-## importeren include & src bestanden
+## Importeren Include & Src Bestanden
 
 We importeren de bestanden die het eigenlijke project (deels) tot leven brengen. Dit zijn al de bestanden die te vinden zijn onder de folder **Core/Inc** en **Core/Src**. We plaatsen al de bestanden van **Core/Inc** in de **include** folder en de **Core/Src** in de **src** folder. 
 
@@ -539,7 +539,7 @@ Nadien komen we op de figuur rechtsboven uit. We selecteren *Embedded* bovenaan 
 
 ----
 
-## configureer platformio.ini file
+## Configureer platformio.ini File
 
 Het platform.ini bestand is een belangrijk bestand. Hierin wordt de configuratie van het project geplaatst.
 
@@ -609,7 +609,7 @@ Voor meer informatie zie de [documentatie](https://docs.platformio.org/en/stable
 
 ----
 
-## main.h & .c
+## Main.h & .c
 
 Het main bestand bevat de code die we gebruiken voor de gesture controller. hieronder is een link die leid naar de bestanden op GitHub.
 
@@ -665,7 +665,7 @@ Het uploaden gebeurd met een ST-Link V2 programmer. Hierbij hebben we een flatca
 ![foto upload pinout](foto's/upload_schematic.jpg)
 
 
-## full project
+## Full Project
 
 Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/Code) 2 projecten. Het 1ne project (Gesture Control Final) bevat het geen dat we hierboven hebben gegenereerd en geïmporteerd. Het andere project (Gesture Control Final V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
 
@@ -741,7 +741,7 @@ Met deze 2 indicatoren kunnen we het doel van de gesture controller duidelijk ma
 
 We kunnen namelijk een systeem "wakker maken" en hier acties op uitvoeren.
 
-## full project
+## Full Project
 
 Er staat op GitHub onder de map [Final Project/Code](https://github.com/RobbeElsermans/GestureControl/tree/main/Final%20Project/Code) 2 projecten. Het 1ne project (Led Controller) bevat het normale project. Het andere project (Led Controller V2) is een experiment met abstractie in C. Deze code doet hetzelfde als degene hierboven gegenereerd, enkel zit hier een laag abstractie in.
 
@@ -798,7 +798,7 @@ De printplaat waarop de Nucleo-F401RE bevestigd is, wordt op een houten plaat be
 
 !> De I2C klok frequentie is bij deze metingen ingesteld op 100kHz. Later wanneer PCBV0.3 onder handen wordt genomen, gaan we de klok frequentie proberen te verhogen naar 1MHz.
 
-### Eén sensor
+### Eén Sensor
 
 #### BLOCKING_CONTINUOUS
 
@@ -975,7 +975,7 @@ while (1)
 
 Voor onze applicatie is snelheid van metingen belangrijk zodat de user hier geen hinder door vind.
 
-### Vijf sensoren
+### Vijf Sensoren
 
 Omdat ons systeem met 5 sensoren werkt zullen we dit ook even onderzoeken of dat we wel degelijk met interrupts de snelheid verhogen of niet. Idem als hierboven laten we eerst de terminal screenshots zien in modus *BLOCKING_CONTINUOUS* en nadien de modus *ASYNC_CONTINUOUS* die met interrupts werkt.
 
@@ -1234,7 +1234,7 @@ Wanneer deze opstelling uitvoerig werd getest, merkte ik op dat het niet altijd 
 
 Zoals beschreven in de [blueprint](https://github.com/RobbeElsermans/GestureControl/blob/main/docs/Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf) (<a href="./Documenten/Blueprint_V1.1_Robbe_Elsermans.pdf" download>download</a>) zal de opstelling zich achter en cover glas bevinden. De sensor zal, zonder kalibratie en cross-talk correction, het coverglas aanschouwen als object. Dit moeten we uiteraard voorkomen. Omdat de afstand tussen ToF-sensor en coverglas niet oneindig variabel zal zijn, is het goed dat we dit eens onderzoeken hoe ver we zo'n coverglas kunnen plaatsen en hoe goed de metingen blijven.
 
-### plexiplaat
+### Plexiplaat
 
 Eerst hebben we met een plexiplaat gewerkt. Dit was gemakkelijker in omgang en we konden hier ook enkelen gaten in boren om alles op te monteren. Bij de plexiplaat hebben we een plaatdikte van 4 millimeter genomen. De afstand tussen de sensor en de plexiplaat bedraagt ~4mm. Wanneer we de sensor kalibreerde, waren dit enkel waardes tussen de 20mm en 40mm. De sensor kon niet verder kijken dan het coverglas en beschouwde het coverglas als object.
 
@@ -1250,7 +1250,7 @@ Nu meten we op een afstand van ~1250mm.
 
 De metingen lopen van 1245mm <-> 1290mm wat een verschil is van 45mm (4.5cm). De foutcode is over heel de grafiek 0 wat resulteert in geen fouten.
 
-### glasplaat
+### Glasplaat
 
 Omdat de metingen nog niet 100% correct waren (en omdat het wel interessant kon zijn), hebben we de plexiplaat vervangen door een glasplaat van 4mm dikte. De mogelijkheid was er niet om gaten te boren voor de sensoren te bevestigen. Om dit op te lossen hebben we creatief moeten omgaan met het probleem. We hebben een *glasklever* ontworpen waarin we de sensor inbrengen en dan nadien op de glasplaat kleven. Deze zijn beiden geprint met de 3D printer.
 
@@ -1281,7 +1281,7 @@ Er is geen groot verschil t.o.v. het plexiglas. We zien wel dat de 1.4mm glascov
 
 Omdat er bij beide metingen telkens pieken zijn, is het best dat we van x-aantal metingen een gemiddelde nemen en hiermee verder werken.
 
-## Smudge Detection plexiplaat
+## Smudge Detection Plexiplaat
 
 !> Deze meeting is uitgevoerd op een zonnige dag. Het coverglas is plexiglas en deze is gereinigd met water en een doekje.
 
@@ -1300,7 +1300,7 @@ Om de data visueel te representeren heb ik een python script gemaakt dat te vind
 * 12: Indicate that there is a target, but signal is too low to report ranging,
 * 14: Ranging data is negative and has to be ignored.
 
-### Normale werking
+### Normale Werking
 
 hieronder is een screenshot te zien van een normale werking met een proper coverglas over x aantal metingen. De sensor werd op een blauwe muur gefixeerd op een afstand van +- 1200mm. De metingen zijn een gemiddelde van 4 metingen achtereenvolgens.
 
@@ -1348,11 +1348,11 @@ Zoals bij Single mode is hier ook goed op te merken dat het glas vuil is. We nem
 
 Dit geeft geen verschil.
 
-## Smudge Detection glasplaat
+## Smudge Detection Glasplaat
 
 Tijdens het onderzoek in paragraaf [Coverglas](#coverglas) is het duidelijk geworden dat de plexiplaat en de glasplaat weinig verschil geven qua nauwkeurigheid. Daarom gaan we eens onderzoeken of dat er een verschil is tussen beiden wanneer we de oppervlakte vuil maken.
 
-### Normale werking
+### Normale Werking
 
 Allereerst starten we met een proper oppervlakte waar we onze eerste metingen laten tonen. Idem als bij de plexiplaat, gaan we 4 metingen opnemen en hiervan het gemiddelde bepalen. We werken op FiFo (First in First out) principe wanneer we de data opslaan.
 
@@ -1400,7 +1400,7 @@ Het is een duidelijk verschil met de plexiplaat. We gaan daarom ook een opstelli
 
 Er is ook te zien dat wanneer we de glazen plaat gebruiken, er minder uitschieters aanwezig zijn in de metingen dan als bij de plexiplaat.
 
-## Trap in software verwerkt
+## Trap In Software Verwerkt
 
 De genomen sensor positie (zie [Plaats Sensoren PCBV0.3](#plaats-sensoren-pcbv03)) is in de perfecte omstandigheden een goede keuzen om te gebruiken. hier hebben we 4 onafhankelijke statussen voor de 4 gestures die we willen detecteren.
 
